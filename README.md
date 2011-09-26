@@ -14,7 +14,7 @@ Please see [LICENSE](https://github.com/rdrake/Molly/blob/master/LICENSE.md) for
 
 Currently there is no documentation available.  Whenever any does become available, it will be available in several locations:
 
-* `doc` - Any documents such as the thesis itself will be placed here.
+* `docs` - Any documents such as the thesis itself will be placed here.
 * [Wiki](https://github.com/rdrake/Molly/wiki) - Project management materials will typically appear here.
 * [Project Site](http://rdrake.github.com/Molly) - Project progress, updates, etc. will be posted here.
 
