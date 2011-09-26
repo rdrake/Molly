@@ -4,11 +4,11 @@ Molly is a product of my (Richard Drake) MSc research under the supervision of D
 
 ## Contributors ##
 
-Please see the AUTHORS file for a listing of all contributors.
+Please see the [AUTHORS](https://github.com/rdrake/Molly/blob/master/AUTHORS.md) file for a listing of all contributors.
 
 ## License ##
 
-Please see LICENSE for licensing terms.
+Please see [LICENSE](https://github.com/rdrake/Molly/blob/master/LICENSE.md) for licensing terms.
 
 ## Documentation ##
 
