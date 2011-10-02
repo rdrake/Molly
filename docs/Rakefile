@@ -1,0 +1,4 @@
+task :test, [:lol, :wut] do |t, args|
+	puts args.lol
+	puts args.wut
+end
