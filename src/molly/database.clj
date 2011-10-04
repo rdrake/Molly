@@ -8,4 +8,4 @@
 	(sql/with-connection conn
 		(cql/with-results [rs query]
 			(doseq [res rs]
-				(apply f res)))))
+				(f res)))))
