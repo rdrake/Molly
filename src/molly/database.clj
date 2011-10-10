@@ -9,6 +9,5 @@
 	[conn query f]
 	(sql/with-connection conn
 		(cql/with-results [rs query]
-      (clucy/add f rs))))
-			;(doseq [res rs]
-				;(f res)))))
+			(doseq [res rs]
+				(f res)))))

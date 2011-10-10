@@ -1,10 +1,12 @@
 (ns molly.core
-	(:use molly.mycampus)
-	(:use molly.database))
+  (:use [clojure.tools.cli :as cli]))
 
-(defn -main [& args]
-	(println "lolwut"))
+(defn main
+  [args]
+  (let [opts (cli/cli args
+                      (cli/required ["--dir" "index location"]))]
+    ))
 
-(-main)
-
-(println ((entities :course) :sql))
+(defn -main
+  [& args]
+  (main (flatten args)))

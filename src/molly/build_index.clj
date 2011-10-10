@@ -1,13 +1,38 @@
 (ns molly.build-index
-  (:require [clucy.core :as clucy])
   (:use molly.database
-        molly.mycampus))
+        molly.lucene
+        molly.mycampus)
+  (:use [clojure.tools.cli :only (cli required)]))
 
-(def index (clucy/disk-index "entity.idx"))
+(defn parse-args
+  [args]
+  (cli args
+       (required ["--dir" "Index location."])
+       (required ["--db" "Database location."])))
 
-(defn f
-  [row]
-  (clucy/add index row))
+(defn main
+  [args]
+  (let [opts (parse-args args)
+        index (clucy/disk-index (opts ;dir))
+        f (fn [row] (println row))]
+    (doseq [entity (vals (config :entities))]
+      (execute-query db (entity :sql) f))
+    ))
 
-(doseq [entity (vals (config :entities))]
-  (execute-query db (entity :sql) index))
+(defn -main
+  [& args]
+  (main (flatten args)))
+;(ns molly.build-index
+;  (:require [clucy.core :as clucy])
+;  (:use molly.database
+;        molly.mycampus))
+;
+;(def index (clucy/disk-index "entity.idx"))
+;
+;(defn f
+;  [row]
+;  (clucy/add index row))
+;
+
+;(doseq [entity (vals (config :entities))]
+;  (execute-query db (entity :sql) index))
