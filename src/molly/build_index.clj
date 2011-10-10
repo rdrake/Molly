@@ -11,7 +11,7 @@
 (defn parse-args
   [args]
   (cli args
-       (required ["--dir" "Index location."])
+       (required ["--idx-prefix" "Prefix for index name."])
        (required ["--db" "Database location."])))
 
 (defn process-row
@@ -20,14 +20,30 @@
         doc (entity-to-doc entity)]
     (add-doc index doc)))
 
+(defn process-value
+  [index ent-def col row]
+  (let [value (row-to-value ent-def col row)
+        doc (value-to-doc value)]
+    (println value)
+    (add-doc index doc)))
+
 (defn main
   [args]
   (let [opts (parse-args args)
-        index (mk-index-writer (opts :dir))]
-    (doseq [entity (vals (config :entities))]
-      (
-      (execute-query db (entity :sql) process-row index ent-def))
-    (close-index-writer index)))
+        value-index (mk-index-writer
+                      (str (opts :idx-prefix) "-value.idx"))
+        entity-index (mk-index-writer
+                       (str (opts :idx-prefix) "-entity.idx"))]
+    (doseq [ent-def (vals (config :entities))]
+      ; Entities first.
+      (execute-query db (ent-def :sql)
+                     #(process-row entity-index ent-def %))
+      ; Now values.
+      (doseq [value (ent-def :values)]
+        (execute-query db (distinct-value (ent-def :sql) value)
+                       #(process-value value-index ent-def value %))))
+    (close-index-writer entity-index)
+    (close-index-writer value-index)))
 
 (defn -main
   [& args]

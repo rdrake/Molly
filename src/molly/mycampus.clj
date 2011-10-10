@@ -19,7 +19,7 @@
       :sql (->
              (cql/table :courses)
              (cql/project [[:code :as :id] :title :description]))
-      :values [:code :title :desc]}
+      :values [:code :title :description]}
    :schedule
      {:name "Schedule"
       :id "id"
@@ -32,7 +32,7 @@
                  (cql/table :sections)
                  (cql/project [:id :campus]))
               (cql/where (= :schedules.id :sections.id))))
-      :values [:location :campus]}
+      :values [:location :sections.campus]}
    :person
      {:name "Person"
       :id "id"

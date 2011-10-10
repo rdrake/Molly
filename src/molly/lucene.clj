@@ -52,9 +52,9 @@
     (Field.
       (str (field :name))
       (str (field :value))
-      (if (and meta-data (meta-data :store))
-        Field$Store/YES
-        Field$Store/NO)
+      (if (and meta-data (not (meta-data :store)))
+        Field$Store/NO
+        Field$Store/YES)
       (if meta-data
         (if (meta-data :index)
           (if (meta-data :tokenize)
