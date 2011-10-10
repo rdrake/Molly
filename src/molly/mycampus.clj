@@ -14,12 +14,16 @@
 (def entities
   ;^{:private true}
   {:course
-     {:sql (->
+     {:name "Course"
+      :id "id"
+      :sql (->
              (cql/table :courses)
              (cql/project [[:code :as :id] :title :description]))
       :values [:code :title :desc]}
    :schedule
-     {:sql (->
+     {:name "Schedule"
+      :id "id"
+      :sql (->
              (cql/join
                (->
                  (cql/table :schedules)
@@ -30,7 +34,9 @@
               (cql/where (= :schedules.id :sections.id))))
       :values [:location :campus]}
    :person
-     {:sql (->
+     {:name "Person"
+      :id "id"
+      :sql (->
              (cql/table :instructors)
              (cql/project [:id :name]))
       :values [:name]}})

@@ -1,8 +1,9 @@
 (ns molly.build-index
   (:use molly.database
         molly.lucene
-        molly.mycampus)
-  (:use [clojure.tools.cli :only (cli required)]))
+        molly.mycampus
+        molly.converter
+        [clojure.tools.cli :only (cli required)]))
 
 (def meta-data
   {:store false :index true :tokenize true})
@@ -13,10 +14,10 @@
        (required ["--dir" "Index location."])
        (required ["--db" "Database location."])))
 
-(defn add-row-to-index
-  [index row]
-  (let [fields (for [[k v] row] {:name (name k) :value v})
-        doc (mk-doc fields)]
+(defn process-row
+  [index ent-def row]
+  (let [entity (row-to-entity ent-def row)
+        doc (entity-to-doc entity)]
     (add-doc index doc)))
 
 (defn main
@@ -24,7 +25,8 @@
   (let [opts (parse-args args)
         index (mk-index-writer (opts :dir))]
     (doseq [entity (vals (config :entities))]
-      (execute-query db (entity :sql) add-row-to-index index))
+      (
+      (execute-query db (entity :sql) process-row index ent-def))
     (close-index-writer index)))
 
 (defn -main
