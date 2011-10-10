@@ -6,7 +6,7 @@
     (org.apache.lucene.index IndexReader IndexWriter IndexWriter$MaxFieldLength)
     (org.apache.lucene.queryParser QueryParser)
     (org.apache.lucene.search IndexSearcher)
-    (org.apache.lucene.store NIOFSDirectory)
+    (org.apache.lucene.store SimpleFSDirectory)
     (org.apache.lucene.util Version)))
 
 (def lucene-version
@@ -19,11 +19,14 @@
   IndexWriter$MaxFieldLength/UNLIMITED)
 
 (defn mk-index-writer
-  ([path analyzer]
-   (let [dir (-> path File. NIOFSDirectory.)]
-     (IndexWriter. dir analyzer unlimited-fields)))
+;  [path]
+;  (let [dir (-> path File. SimpleFSDirectory.)]
+;    (IndexWriter. dir default-analyzer unlimited-fields)))
   ([path]
-   (mk-index-writer path default-analyzer)))
+   (mk-index-writer path default-analyzer))
+  ([path analyzer]
+   (let [dir (-> path File. SimpleFSDirectory.)]
+     (IndexWriter. dir analyzer unlimited-fields))))
 
 (defn close-index-writer
   [idx-writer]
@@ -34,7 +37,7 @@
 
 (defn mk-index-searcher
   [path]
-  (IndexSearcher. (IndexReader/open (-> path File. NIOFSDirectory.))))
+  (IndexSearcher. (IndexReader/open (-> path File. SimpleFSDirectory.))))
 
 (defn close-index-searcher
   [idx-searcher]
@@ -47,8 +50,8 @@
   [field]
   (let [meta-data (meta field)]
     (Field.
-      (field :name)
-      (field :value)
+      (str (field :name))
+      (str (field :value))
       (if (and meta-data (meta-data :store))
         Field$Store/YES
         Field$Store/NO)
@@ -58,12 +61,16 @@
             Field$Index/ANALYZED
             Field$Index/NOT_ANALYZED)
           Field$Index/NO)
-        Field$Index/NO))))
+        Field$Index/ANALYZED))))
 
 (defn mk-doc
-  [& fields]
+  [fields]
   (let [doc (Document.)]
     (do
       (doseq [field fields]
         (.add doc (mk-field field)))
       doc)))
+
+(defn add-doc
+  [index doc]
+  (.addDocument index doc))

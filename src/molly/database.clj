@@ -6,8 +6,8 @@
 
 (defn execute-query
 	"Executes the specified query on the given connection and executes a callback on the results."
-	[conn query f]
+	[conn query f index]
 	(sql/with-connection conn
 		(cql/with-results [rs query]
 			(doseq [res rs]
-				(f res)))))
+				(f index res)))))

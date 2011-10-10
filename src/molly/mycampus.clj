@@ -35,15 +35,13 @@
              (cql/project [:id :name]))
       :values [:name]}})
 
-;(def indices
-;  ;^{:private true}
-;  {:value   (clucy/disk-index (str dataset-name "-value.idx"))
-;   :entity  (clucy/disk-index (str dataset-name "-entity.idx"))
-;   :group   (clucy/disk-index (str dataset-name "-group.idx"))})
+(def indices
+  ;^{:private true}
+  {:value   (str dataset-name "-value.idx")
+   :entity  (str dataset-name "-entity.idx")
+   :group   (str dataset-name "-group.idx")})
 
 (def config
   {:db db
-   :entities entities})
-;   :indices indices})
-
-(println (config :db))
+   :entities entities
+   :indices indices})
