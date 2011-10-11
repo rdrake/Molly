@@ -16,10 +16,6 @@ Alternatively, just running `cake` should also pull down all dependencies.
 
 ### Running ###
 
-Simply use Cake to run the `main.clj` file in the sub-project of interest.
+Simply use the following command to run it:
 
-eg.
-
-    cake run src/ca/uoit/molly/crawler/mycampus/main.clj
-
-
+    cake run -m
