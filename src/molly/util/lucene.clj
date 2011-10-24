@@ -1,12 +1,14 @@
-(ns molly.lucene
+(ns molly.util.lucene
+  "A simple and thin wrapper around Lucene's native Java API."
   (:import
-    (java.io File)
+    (java.io File StringReader)
     (org.apache.lucene.analysis WhitespaceAnalyzer)
     (org.apache.lucene.document Document Field Field$Index Field$Store)
-    (org.apache.lucene.index IndexReader IndexWriter IndexWriter$MaxFieldLength)
+    (org.apache.lucene.index IndexReader IndexWriter IndexWriter$MaxFieldLength Term)
     (org.apache.lucene.queryParser QueryParser)
-    (org.apache.lucene.search IndexSearcher)
+    (org.apache.lucene.search IndexSearcher BooleanQuery TermQuery BooleanClause$Occur)
     (org.apache.lucene.store SimpleFSDirectory)
+    (org.apache.lucene.analysis.tokenattributes OffsetAttribute TermAttribute)
     (org.apache.lucene.util Version)))
 
 (def lucene-version
@@ -19,9 +21,6 @@
   IndexWriter$MaxFieldLength/UNLIMITED)
 
 (defn mk-index-writer
-;  [path]
-;  (let [dir (-> path File. SimpleFSDirectory.)]
-;    (IndexWriter. dir default-analyzer unlimited-fields)))
   ([path]
    (mk-index-writer path default-analyzer))
   ([path analyzer]
@@ -42,6 +41,32 @@
 (defn close-index-searcher
   [idx-searcher]
   (.close idx-searcher))
+
+(defn analyze-str
+  [analyzer string]
+  (let [token-stream (. analyzer tokenStream nil (StringReader. string))
+        termAttribute (.getAttribute token-stream TermAttribute)]
+    (loop [result []]
+      (if (.incrementToken token-stream)
+        (recur (conj result (.term termAttribute)))
+        result))))
+
+(defn mk-simple-query
+  ([q-str field]
+   (let [q (BooleanQuery.)
+         analyzer (WhitespaceAnalyzer. lucene-version)]
+     (do
+       (doseq [token (analyze-str analyzer q-str)]
+         (. q add (TermQuery. (Term. field token))
+            BooleanClause$Occur/SHOULD))
+       q)))
+  ([q-str]
+   (mk-simple-query q-str "__content__")))
+
+(defn index-search [idx-searcher query topk]
+  (let [topdocs (. idx-searcher search query topk)]
+    (for [scoredoc (. topdocs scoreDocs)]
+      (. idx-searcher doc (. scoredoc doc)))))
 
 (defn- mk-field
   "Creates a field given a key, value pair and (optionally) metadata.

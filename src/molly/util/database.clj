@@ -1,4 +1,5 @@
-(ns molly.database
+(ns molly.util.database
+  "Functions that interact with the database live here."
 	(:require
     [clojure.java.jdbc :as sql]
 		[clojureql.core :as cql]

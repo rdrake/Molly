@@ -1,5 +1,6 @@
-(ns molly.converter
-  (:use molly.lucene
+(ns molly.util.converter
+  "Utility functions which convert to and from entities."
+  (:use molly.util.lucene
         [clojure.string :only (join)]))
 
 (defn row-to-entity
