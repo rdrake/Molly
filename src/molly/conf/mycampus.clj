@@ -7,32 +7,29 @@
    :subprotocol "sqlite"})
 
 (def entities
-  {:course
-     {:name   :course
-      :id     :id
-      :sql    (->
-                (cql/table :courses)
-                (cql/project [[:code :as :id] :code :title :description]))
-      :values [:code :title :description]}
-   :schedule
-     {:name   :schedule
-      :id     :id
-      :sql    (->
-                (cql/join
-                  (->
-                    (cql/table :schedules)
-                    (cql/project [:id :date_start :date_end :hour_start
-                                  :min_start :hour_end :min_end
-                                  :location]))
-                  (->
-                    (cql/table :sections)
-                    (cql/project [:id :campus]))
-                  (cql/where (= :schedules.id :sections.id))))
-      :values [:location :campus]}
-   :person
-     {:name   :person
-      :id     :id
-      :sql    (->
-                (cql/table :instructors)
-                (cql/project [:id :name]))
-      :values [:name]}})
+  [{:name   :course
+    :id     :id
+    :sql    (->
+              (cql/table :courses)
+              (cql/project [[:code :as :id] :code :title :description]))
+    :values [:code :title :description]}
+   {:name   :schedule
+    :id     :id
+    :sql    (->
+              (cql/join
+                (->
+                  (cql/table :schedules)
+                  (cql/project [:id :date_start :date_end :hour_start
+                                :min_start :hour_end :min_end
+                                :location]))
+                (->
+                  (cql/table :sections)
+                  (cql/project [:id :campus]))
+                (cql/where (= :schedules.id :sections.id))))
+    :values [:location :campus]}
+   {:name   :person
+    :id     :id
+    :sql    (->
+              (cql/table :instructors)
+              (cql/project [:id :name]))
+    :values [:name]}])

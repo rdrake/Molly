@@ -20,7 +20,7 @@
         id        (row (ent-def :id))
         attr_keys (for [[k v] row :when (not= k (ent-def :id))] k)
         attrs     (select-keys row attr_keys)
-        entity    (any->entity T id attrs)
+        entity    (row->entity T id attrs)
         doc       (entity->doc entity)]
     (add-doc index doc)))
 
@@ -29,11 +29,13 @@
   (let [opts    (parse-args args)
         prefix  ((opts :index) :prefix)
         db      (into (config :db) {:subname (opts :db)})
-        index (mk-index-writer (str prefix "-entity.idx"))]
-    (doseq [ent-def (vals (config :entities))]
+        path    (str prefix "-entity.idx")
+        index   (mk-index-writer path)]
+    (doseq [ent-def (config :entities)]
       (execute-query db (ent-def :sql)
                      #(process-row index ent-def %)))
-    (close-index-writer index)))
+    (close-index-writer index)
+    (add-spelling-correction path)))
 
 (defn -main
   [& args]

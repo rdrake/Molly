@@ -4,14 +4,12 @@
         molly.util.nlp
         [clojure.string :only (join)]))
 
-(defn any->entity
-  "Converts either a value or entity row into an entity.
+(defn row->entity
+  "Converts a row into an entity.
    
    * T - type (usually the table name)
    * id - a unique ID (usually the :id column of the row)
-   * attrs - attributes to add to the entity
-  
-  In the case of (= T :value), there is only one attribute."
+   * attrs - attributes to add to the entity"
   [T id attrs]
   {:__type__  T
    :__id__    id
@@ -25,8 +23,3 @@
                           [(entity :__attr__) {:__all__ all}])
         field-map   (for [[k v] flat-entity] {:name (name k) :value (str v)})]
     (mk-doc field-map)))
-
-;(defn doc->entity
-;  [doc]
-;  (for [field (.getFields doc)]
-;    

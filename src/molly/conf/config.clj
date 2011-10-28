@@ -5,3 +5,11 @@
 (def config
   {:db        db
    :entities  entities})
+
+(defn all-value-fields
+  []
+  (distinct
+    (flatten
+      (for [ent-def (config :entities)]
+        (for [value (ent-def :values)]
+          (name value))))))

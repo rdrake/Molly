@@ -1,5 +1,6 @@
 (ns molly.util.lucene
   "A simple and thin wrapper around Lucene's native Java API."
+  (:use molly.conf.config)
   (:import
     (java.io File StringReader)
     (org.apache.lucene.analysis WhitespaceAnalyzer)
@@ -7,6 +8,7 @@
     (org.apache.lucene.index IndexReader IndexWriter IndexWriter$MaxFieldLength Term)
     (org.apache.lucene.queryParser QueryParser)
     (org.apache.lucene.search IndexSearcher)
+    (org.apache.lucene.search.spell SpellChecker LuceneDictionary)
     (org.apache.lucene.store SimpleFSDirectory)
     (org.apache.lucene.util Version)))
 
@@ -19,12 +21,15 @@
 (def unlimited-fields
   IndexWriter$MaxFieldLength/UNLIMITED)
 
+(defn mk-directory
+  [path]
+  (-> path File. SimpleFSDirectory.))
+
 (defn mk-index-writer
   ([path]
    (mk-index-writer path default-analyzer))
   ([path analyzer]
-   (let [dir (-> path File. SimpleFSDirectory.)]
-     (IndexWriter. dir analyzer unlimited-fields))))
+   (IndexWriter. (mk-directory path) analyzer unlimited-fields)))
 
 (defn close-index-writer
   [idx-writer]
@@ -33,9 +38,13 @@
     (.optimize)
     (.close)))
 
+(defn mk-index-reader
+  [path]
+  (IndexReader/open (mk-directory path)))
+
 (defn mk-index-searcher
   [path]
-  (IndexSearcher. (IndexReader/open (-> path File. SimpleFSDirectory.))))
+  (IndexSearcher. (mk-index-reader path)))
 
 (defn mk-simple-query
   ([q-str field]
@@ -80,3 +89,10 @@
 (defn add-doc
   [index doc]
   (.addDocument index doc))
+
+(defn add-spelling-correction
+  [path]
+  (let [spl (SpellChecker. (mk-directory path))
+        rdr (mk-index-reader path)]
+    (doseq [field (all-value-fields)]
+      (. spl indexDictionary (LuceneDictionary. rdr field)))))
