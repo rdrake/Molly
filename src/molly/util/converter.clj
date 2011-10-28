@@ -1,37 +1,32 @@
 (ns molly.util.converter
   "Utility functions which convert to and from entities."
   (:use molly.util.lucene
+        molly.util.nlp
         [clojure.string :only (join)]))
 
-(defn row-to-entity
-  "Converts a row into an entity.  An entity has the following properties:
-   * Type
-   * ID
-   * Attributes (except the ID field)"
-  [ent-def row]
-  (array-map :__type__ (ent-def :name)
-             :__id__ (row (keyword (ent-def :id)))
-             :__attrib__
-                (select-keys row (for [[k v] row :when (not= k :id)] k))))
+(defn any->entity
+  "Converts either a value or entity row into an entity.
+   
+   * T - type (usually the table name)
+   * id - a unique ID (usually the :id column of the row)
+   * attrs - attributes to add to the entity
+  
+  In the case of (= T :value), there is only one attribute."
+  [T id attrs]
+  {:__type__  T
+   :__id__    id
+   :__attr__  attrs})
 
-(defn row-to-value
-  [ent-def col value]
-  [{:name "__type__" :value (ent-def :name)}
-   {:mame "__attr__" :value (name col)}
-   {:name "__val__" :value (value col)}])
-
-(defn entity-to-doc
-  "Flattens an entity, converts the entity entries into fields, then returns a document."
+(defn entity->doc
+  "Converts an entity into a document.  It essentially flattens it and creates a special sequence of maps (k, v) that mk-doc can interpret."
   [entity]
-  (let [content (join " " (vals (entity :__attrib__)))
-        flat-entity (into {:__type__ (entity :__type__)
-                           :__id__ (entity :__id__)
-                           :__content__ content}
-                          (entity :__attrib__))
-        field-map (for [[k v] flat-entity]
-                    {:name (name k) :value (str v)})]
+  (let [all         (join " " (vals (entity :__attr__)))
+        flat-entity (into (dissoc entity :__attr__)
+                          [(entity :__attr__) {:__all__ all}])
+        field-map   (for [[k v] flat-entity] {:name (name k) :value (str v)})]
     (mk-doc field-map)))
 
-(defn value-to-doc
-  [value]
-  (mk-doc value))
+;(defn doc->entity
+;  [doc]
+;  (for [field (.getFields doc)]
+;    

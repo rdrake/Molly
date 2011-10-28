@@ -2,24 +2,17 @@
   "Configuration file for the mycampus dataset."
 	(:require [clojureql.core :as cql]))
 
-(def dataset-name
-  ;^{:private true}
-  "mycampus")
-
 (def db
-  ;^{:private true}
   {:classname   "org.sqlite.JDBC"
-   :subprotocol "sqlite"
-   :subname     (str "data/" dataset-name ".sq3")})
+   :subprotocol "sqlite"})
 
 (def entities
-  ;^{:private true}
   {:course
      {:name   :course
       :id     :id
       :sql    (->
                 (cql/table :courses)
-                (cql/project [[:code :as :id] :title :description]))
+                (cql/project [[:code :as :id] :code :title :description]))
       :values [:code :title :description]}
    :schedule
      {:name   :schedule
@@ -35,7 +28,7 @@
                     (cql/table :sections)
                     (cql/project [:id :campus]))
                   (cql/where (= :schedules.id :sections.id))))
-      :values [:location :sections.campus]}
+      :values [:location :campus]}
    :person
      {:name   :person
       :id     :id

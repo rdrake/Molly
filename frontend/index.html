@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Project Molly</title>
+
+		<link href="assets/css/bootstrap.css" rel="stylesheet">
+		<link href="assets/css/style.css" rel="stylesheet">
+	</head>
+	<body>
+		<div id="about-box" class="modal hide fade">
+			<div class="modal-header">
+				<a href="#" class="close">&times;</a>
+				<h3>About</h3>
+			</div>
+			<div class="modal-body">
+				<p>Project Molly is a showcase of the cumulation of <a href="http://me.rdrake.org/">my</a> Masters of Science thesis research.  If you have an interest in the code, it is publically accessible on <a href="https://github.com/rdrake/Molly">Github</a>.</p>
+
+				<p>If you have an interest in what others in my group are doing, check out the site of my supervisor, <a href="http://leda.science.uoit.ca/kenpu/">Dr. Ken Pu</a>.</p>
+
+				<p>This site's frontend is built on Twitter's <a href="http://twitter.github.com/bootstrap/">Bootstrap</a>, <a href="http://jquery.com/">jQuery</a>, <a href="http://jqueryui.com/">jQuery UI</a>, and <a href="http://knockoutjs.com/">KnockoutJS</a>.  The backend is mainly <a href="http://clojure.org/">Clojure</a> with <a href="http://compojure.org/">Compojure</a> handling routing, <a href="http://jetty.codehaus.org/jetty/">Jetty</a> serving the dynamic information, and <a href="http://nginx.org/">nginx</a> serving static files and acting as a proxy to Jetty.
+			</div>
+			<div class="modal-footer">
+				<button class="btn close">OK!</button>
+			</div>
+		</div>
+
+		<div class="topbar">
+			<div class="fill">
+				<div class="container">
+					<h3><a href="#">Project Molly</a></h3>
+					<ul class="nav">
+						<li><a class="active" href="#">Home</a></li>
+						<li><a href="#about" data-controls-modal="about-box" data-backdrop="true" data-keyboard="true">About</a></li>
+					</ul>
+					<form class="pull-left" action>
+						<input name="q" type="text" placeholder="Search">
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid">
+			<div class="sidebar">
+				<!-- Empty sidebar for now -->
+			</div>
+
+			<div class="content">
+				<div class="page-header">
+					<h1>Project Molly <small>Automated knowledge discovery</small></h1>
+				</div>
+
+				<!-- OMG CONTENT -->
+					Hm.
+				<!-- OMG CONTENT -->
+			</div>
+
+			<footer>
+				<p>Copyright &copy; Richard Drake 2011</p>
+			</footer>
+		</div>
+
+		<script src="assets/js/jquery-1.6.4.js"></script>
+		<script src="assets/js/bootstrap-modal.js"></script>
+	</body>
+</html>

@@ -6,9 +6,8 @@
     (org.apache.lucene.document Document Field Field$Index Field$Store)
     (org.apache.lucene.index IndexReader IndexWriter IndexWriter$MaxFieldLength Term)
     (org.apache.lucene.queryParser QueryParser)
-    (org.apache.lucene.search IndexSearcher BooleanQuery TermQuery BooleanClause$Occur)
+    (org.apache.lucene.search IndexSearcher)
     (org.apache.lucene.store SimpleFSDirectory)
-    (org.apache.lucene.analysis.tokenattributes OffsetAttribute TermAttribute)
     (org.apache.lucene.util Version)))
 
 (def lucene-version
@@ -38,30 +37,12 @@
   [path]
   (IndexSearcher. (IndexReader/open (-> path File. SimpleFSDirectory.))))
 
-(defn close-index-searcher
-  [idx-searcher]
-  (.close idx-searcher))
-
-(defn analyze-str
-  [analyzer string]
-  (let [token-stream (. analyzer tokenStream nil (StringReader. string))
-        termAttribute (.getAttribute token-stream TermAttribute)]
-    (loop [result []]
-      (if (.incrementToken token-stream)
-        (recur (conj result (.term termAttribute)))
-        result))))
-
 (defn mk-simple-query
   ([q-str field]
-   (let [q (BooleanQuery.)
-         analyzer (WhitespaceAnalyzer. lucene-version)]
-     (do
-       (doseq [token (analyze-str analyzer q-str)]
-         (. q add (TermQuery. (Term. field token))
-            BooleanClause$Occur/SHOULD))
-       q)))
+   (let [qp (QueryParser. lucene-version field default-analyzer)]
+     (. qp parse q-str)))
   ([q-str]
-   (mk-simple-query q-str "__content__")))
+   (mk-simple-query q-str "__all__")))
 
 (defn index-search [idx-searcher query topk]
   (let [topdocs (. idx-searcher search query topk)]
