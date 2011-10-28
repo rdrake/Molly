@@ -1,6 +1,6 @@
 (ns molly.util.converter
   "Utility functions which convert to and from entities."
-  (:use molly.util.lucene
+  (:use molly.search.lucene
         molly.util.nlp
         [clojure.string :only (join)]))
 
@@ -23,3 +23,13 @@
                           [(entity :__attr__) {:__all__ all}])
         field-map   (for [[k v] flat-entity] {:name (name k) :value (str v)})]
     (mk-doc field-map)))
+
+(defn doc->entity
+  [doc]
+  (println "Called!")
+  (let [T         (. doc get "__type__")
+        id        (. doc get "__id__")
+        m         (into {} (for [field (.getFields doc)]
+                             [(keyword (.name field)) (.stringValue field)]))
+        attrs     (dissoc m :__type__ :__id__ :__all__)]
+    (row->entity T id attrs)))

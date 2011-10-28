@@ -3,7 +3,7 @@
   (:use molly.conf.config
         molly.util.converter
         molly.util.database
-        molly.util.lucene
+        molly.search.lucene
         [clojure.tools.cli :only (cli required optional group)]))
 
 (defn parse-args

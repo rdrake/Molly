@@ -1,4 +1,4 @@
-(ns molly.util.lucene
+(ns molly.search.lucene
   "A simple and thin wrapper around Lucene's native Java API."
   (:use molly.conf.config)
   (:import
@@ -59,24 +59,13 @@
       (. idx-searcher doc (. scoredoc doc)))))
 
 (defn- mk-field
-  "Creates a field given a key, value pair and (optionally) metadata.
-
-    ^{:store bool :index bool :tokenize bool}"
+  "Creates a field given a key, value pair."
   [field]
-  (let [meta-data (meta field)]
-    (Field.
-      (str (field :name))
-      (str (field :value))
-      (if (and meta-data (not (meta-data :store)))
-        Field$Store/NO
-        Field$Store/YES)
-      (if meta-data
-        (if (meta-data :index)
-          (if (meta-data :tokenize)
-            Field$Index/ANALYZED
-            Field$Index/NOT_ANALYZED)
-          Field$Index/NO)
-        Field$Index/ANALYZED))))
+  (Field.
+    (str (field :name))
+    (str (field :value))
+    Field$Store/YES
+    Field$Index/ANALYZED))
 
 (defn mk-doc
   [fields]
@@ -86,13 +75,17 @@
         (.add doc (mk-field field)))
       doc)))
 
+(defn mk-spell-checker
+  [path]
+  (SpellChecker. (mk-directory path)))
+
 (defn add-doc
   [index doc]
   (.addDocument index doc))
 
 (defn add-spelling-correction
   [path]
-  (let [spl (SpellChecker. (mk-directory path))
+  (let [spl (mk-spell-checker path)
         rdr (mk-index-reader path)]
     (doseq [field (all-value-fields)]
       (. spl indexDictionary (LuceneDictionary. rdr field)))))
