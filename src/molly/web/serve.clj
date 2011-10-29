@@ -23,7 +23,7 @@
   [data]
   {:status  200
    :headers {"Content-Type" "application/json"}
-   :body    (json-str {:data data})})
+   :body    (json-str data)})
 
 (def path "mycampus-entity.idx")
 (def idx (mk-index-searcher path))
@@ -31,10 +31,13 @@
 (defroutes main-routes
            (GET "/entity/"
                 [q topk]
-                (json-response (map doc->entity (get-entities idx q (topk-or-default topk)))))
+                (let [k (topk-or-default topk)]
+                  (json-response
+                    {:entities (map doc->entity (get-entities idx q k))})))
            (GET "/suggest/"
                 [q topk]
-                (json-response (get-suggestions path q (topk-or-default topk)))))
+                (let [k (topk-or-default topk)]
+                  (json-response {:suggestions (get-suggestions path q k)}))))
 
 (def app
   (handler/site main-routes))

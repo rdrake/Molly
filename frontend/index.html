@@ -5,6 +5,7 @@
 		<title>Project Molly</title>
 
 		<link href="assets/css/bootstrap.css" rel="stylesheet">
+		<link href="assets/css/jquery-ui.css" rel="stylesheet">
 		<link href="assets/css/style.css" rel="stylesheet">
 	</head>
 	<body>
@@ -33,8 +34,8 @@
 						<li><a class="active" href="#">Home</a></li>
 						<li><a href="#about" data-controls-modal="about-box" data-backdrop="true" data-keyboard="true">About</a></li>
 					</ul>
-					<form class="pull-left" action>
-						<input name="q" type="text" placeholder="Search">
+					<form id="search" class="pull-left">
+						<input id="search-box" tabindex="1" type="text" placeholder="Search">
 					</form>
 				</div>
 			</div>
@@ -60,7 +61,12 @@
 			</footer>
 		</div>
 
-		<script src="assets/js/jquery-1.6.4.js"></script>
+		<script src="assets/js/jquery-1.7rc1.js"></script>
+		<script src="assets/js/jquery-ui.js"></script>
 		<script src="assets/js/bootstrap-modal.js"></script>
+		<script src="assets/js/knockout-1.2.js"></script>
+		<script src="assets/js/knockout.mapping-latest.js"></script>
+		<script src="assets/js/model.js"></script>
+		<script src="assets/js/app.js"></script>
 	</body>
 </html>
