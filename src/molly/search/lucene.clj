@@ -3,7 +3,7 @@
   (:use molly.conf.config)
   (:import
     (java.io File StringReader)
-    (org.apache.lucene.analysis WhitespaceAnalyzer)
+    (org.apache.lucene.analysis KeywordAnalyzer PerFieldAnalyzerWrapper WhitespaceAnalyzer)
     (org.apache.lucene.document Document Field Field$Index Field$Store)
     (org.apache.lucene.index IndexReader IndexWriter IndexWriter$MaxFieldLength Term)
     (org.apache.lucene.queryParser QueryParser)
@@ -29,7 +29,10 @@
   ([path]
    (mk-index-writer path default-analyzer))
   ([path analyzer]
-   (IndexWriter. (mk-directory path) analyzer unlimited-fields)))
+   (let [analyzer (PerFieldAnalyzerWrapper. default-analyzer)]
+     (doseq [field (all-value-fields)]
+       (. analyzer addAnalyzer field (KeywordAnalyzer.)))
+     (IndexWriter. (mk-directory path) analyzer unlimited-fields))))
 
 (defn close-index-writer
   [idx-writer]
