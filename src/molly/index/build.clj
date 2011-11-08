@@ -24,18 +24,32 @@
         doc       (entity->doc entity)]
     (add-doc index doc)))
 
+(defn process-group
+  [index ids row]
+  (let [entry (for [id ids] (entry->uid (first id) (row (second id))))]
+    (add-doc index (group-row->doc entry))))
+
 (defn main
   [args]
-  (let [opts    (parse-args args)
-        prefix  ((opts :index) :prefix)
-        db      (into (config :db) {:subname (opts :db)})
-        path    (str prefix "-entity.idx")
-        index   (mk-index-writer path)]
+  (let [opts      (parse-args args)
+        prefix    ((opts :index) :prefix)
+        db        (into (config :db) {:subname (opts :db)})
+        e_path    (str prefix "-entity.idx")
+        g_path    (str prefix "-groups.idx")
+        e_index   (mk-index-writer e_path)
+        g_index   (mk-index-writer g_path)
+        hierarchy (config :hierarchy)]
+    ; Entities
     (doseq [ent-def (config :entities)]
       (execute-query db (ent-def :sql)
-                     #(process-row index ent-def %)))
-    (close-index-writer index)
-    (add-spelling-correction path)))
+                     #(process-row e_index ent-def %)))
+    (close-index-writer e_index)
+    (add-spelling-correction e_path)
+
+    ; Groups
+    (execute-query db (hierarchy :sql)
+                   #(process-group g_index (hierarchy :ids) %))
+    (close-index-writer g_index)))
 
 (defn -main
   [& args]

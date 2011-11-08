@@ -4,7 +4,8 @@
 
 (def config
   {:db        db
-   :entities  entities})
+   :entities  entities
+   :hierarchy hierarchy})
 
 (defn all-value-fields
   []

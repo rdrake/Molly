@@ -24,12 +24,21 @@
         field-map   (for [[k v] flat-entity] {:name (name k) :value (str v)})]
     (mk-doc field-map)))
 
+(defn group-row->doc
+  "Converts a row representing a group into a document."
+  [entry]
+  (let [contents (join " " entry)]
+    (mk-doc [{:name "contents" :value contents}])))
+
 (defn doc->entity
   [doc]
-  (println "Called!")
   (let [T         (. doc get "__type__")
         id        (. doc get "__id__")
         m         (into {} (for [field (.getFields doc)]
                              [(keyword (.name field)) (.stringValue field)]))
         attrs     (dissoc m :__type__ :__id__ :__all__)]
     (row->entity T id attrs)))
+
+(defn entry->uid
+  [entity id]
+  (str (name entity) ":" (clojure.string/replace id " " "_")))
