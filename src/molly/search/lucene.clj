@@ -29,7 +29,7 @@
   ([path]
    (mk-index-writer path default-analyzer))
   ([path analyzer]
-   (let [analyzer (PerFieldAnalyzerWrapper. default-analyzer)]
+   (let [analyzer (PerFieldAnalyzerWrapper. analyzer)]
      (doseq [field (all-value-fields)]
        (. analyzer addAnalyzer field (KeywordAnalyzer.)))
      (IndexWriter. (mk-directory path) analyzer unlimited-fields))))

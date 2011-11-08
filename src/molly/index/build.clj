@@ -17,7 +17,7 @@
 (defn process-row
   [index ent-def row]
   (let [T         (name (ent-def :name))
-        id        (row (ent-def :id))
+        id        (entry->uid T (row (ent-def :id)))
         attr_keys (for [[k v] row :when (not= k (ent-def :id))] k)
         attrs     (select-keys row attr_keys)
         entity    (row->entity T id attrs)

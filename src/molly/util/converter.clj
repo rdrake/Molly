@@ -28,17 +28,17 @@
   "Converts a row representing a group into a document."
   [entry]
   (let [contents (join " " entry)]
-    (mk-doc [{:name "contents" :value contents}])))
+    (mk-doc [{:name "__content__" :value contents}])))
 
 (defn doc->entity
   [doc]
-  (let [T         (. doc get "__type__")
-        id        (. doc get "__id__")
-        m         (into {} (for [field (.getFields doc)]
+  (let [T     (. doc get "__type__")
+        id    (. doc get "__id__")
+        m     (into {} (for [field (.getFields doc)]
                              [(keyword (.name field)) (.stringValue field)]))
-        attrs     (dissoc m :__type__ :__id__ :__all__)]
+        attrs (dissoc m :__type__ :__id__ :__all__)]
     (row->entity T id attrs)))
 
 (defn entry->uid
   [entity id]
-  (str (name entity) ":" (clojure.string/replace id " " "_")))
+  (str (name entity) "/" (clojure.string/replace id " " "_")))
