@@ -8,7 +8,7 @@
     (org.apache.lucene.index IndexReader IndexWriter IndexWriter$MaxFieldLength Term)
     (org.apache.lucene.queryParser QueryParser)
     (org.apache.lucene.search IndexSearcher)
-    (org.apache.lucene.search.spell SpellChecker LuceneDictionary)
+    (org.apache.lucene.search.spell SpellChecker LuceneDictionary NGramDistance)
     (org.apache.lucene.store SimpleFSDirectory)
     (org.apache.lucene.util Version)))
 
@@ -80,7 +80,7 @@
 
 (defn mk-spell-checker
   [path]
-  (SpellChecker. (mk-directory path)))
+  (SpellChecker. (mk-directory path) (NGramDistance.)))
 
 (defn add-doc
   [index doc]

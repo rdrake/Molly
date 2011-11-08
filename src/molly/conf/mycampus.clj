@@ -28,19 +28,23 @@
                   (cql/project  [:id :name]))})
 
 (def entities
-  [{:name   :course
-    :id     :id
+  [{:name   :courses
+    :id     :code
     :sql    (tables :courses)
     :values [:code :title]}
-   {:name   :schedule
+   {:name   :schedules
     :id     :id
-    :sql    (->
-              (cql/join
-                (tables :schedules)
-                (tables :sections)
-                (cql/where (= :schedules.id :sections.id))))
+    :sql    (tables :schedules)
     :values [:location]}
-   {:name   :person
+   {:name   :sections
+    :id     :id
+    :sql    (tables :sections)
+    :values [:semester]}
+   {:name   :teaches
+    :id     :id
+    :sql    (tables :teaches)
+    :values []}
+   {:name   :instructors
     :id     :id
     :sql    (tables :instructors)
     :values [:name]}])

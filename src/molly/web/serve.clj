@@ -40,10 +40,12 @@
 
 (defroutes main-routes
            (GET "/entity/"
-                [q topk]
-                (json-response
-                  {:entities
-                   (map doc->entity (doit get-entities (idx :entity) q topk))}))
+                [q id topk]
+                (let [f     (if (empty? id) get-entities get-entities-by-id)
+                      query (if (empty? id) q id)]
+                  (json-response
+                    {:entities
+                     (map doc->entity (doit f (idx :entity) query topk))})))
            (GET "/suggest/"
                 [q topk]
                 (json-response {:suggestions
