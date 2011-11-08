@@ -9,37 +9,61 @@
   (:require [compojure.route :as route])
   (:require [compojure.handler :as handler]))
 
-(defn topk-or-default
-  [k]
-  (let [default-topk 25]
-    (if (empty? k)
-      default-topk
-      (let [topk (Integer/parseInt k)]
-        (if (<= topk 50)
-          topk
-          default-topk)))))
-
 (defn json-response
   [data]
   {:status  200
    :headers {"Content-Type" "application/json"}
    :body    (json-str data)})
 
-(def path "mycampus-entity.idx")
-(def idx (mk-index-searcher path))
+(def paths
+  {:entity "mycampus-entity.idx"
+   :groups "mycampus-groups.idx"})
+
+(def idx
+  {:entity (mk-index-searcher (paths :entity))
+   :groups (mk-index-searcher (paths :groups))})
+
+(defn doit
+  [f index q topk]
+  (let [def-k   25
+        max-k   (* def-k 2)
+        k       (if (empty? topk)
+                  def-k
+                  (let [_topk (Integer/parseInt topk)]
+                    (if (<= _topk max-k)
+                      _topk
+                      def-k)))
+        results (if (empty? q)
+                  '()
+                  (f index q k))]
+    results))
 
 (defroutes main-routes
            (GET "/entity/"
                 [q topk]
-                (let [k (topk-or-default topk)]
-                  (json-response
-                    {:entities (map doc->entity (get-entities idx q k))})))
+                (json-response
+                  {:entities
+                   (map doc->entity (doit get-entities (idx :entity) q topk))}))
            (GET "/suggest/"
                 [q topk]
-                (let [k (topk-or-default topk)]
-                  (json-response {:suggestions (get-suggestions path q k)}))))
+                (json-response {:suggestions
+                                (doit get-suggestions (paths :entity) q topk)}))
+           (GET "/group/"
+                [id topk]
+                (println id " " topk)
+                (json-response
+                  {:groups
+                   (let [results  (doit get-groups (idx :groups) id topk)
+                         grp->lst (fn [grp]
+                                    (clojure.string/split
+                                      (.
+                                        (. grp getFieldable "__content__")
+                                        stringValue)
+                                      #"\s+"))]
+                     (map grp->lst results))})))
 
 (def app
   (handler/site main-routes))
 
+(println "Starting server...")
 (run-jetty app {:port 8000})

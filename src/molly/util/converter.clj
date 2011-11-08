@@ -41,4 +41,4 @@
 
 (defn entry->uid
   [entity id]
-  (str (name entity) "/" (clojure.string/replace id " " "_")))
+  (str (name entity) "|" (clojure.string/replace id " " "_")))

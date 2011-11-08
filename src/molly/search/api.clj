@@ -12,5 +12,9 @@
   [idx q topk]
   (index-search idx (mk-simple-query q) topk))
 
+(defn get-groups
+  [idx id topk]
+  (index-search idx (mk-simple-query id "__content__") topk))
+
 (for [suggestion (get-suggestions "mycampus-entity.idx" "dtabse")]
   (println suggestion))
