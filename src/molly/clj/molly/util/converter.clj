@@ -39,6 +39,11 @@
         attrs (dissoc m :__type__ :__id__ :__all__)]
     (row->entity T id attrs)))
 
+(defn grp->lst
+  [grp]
+  (clojure.string/split
+    (. (. grp getFieldable "__content__") stringValue) #"\s+"))
+
 (defn entry->uid
   [entity id]
   (str (name entity) "|" (clojure.string/replace id " " "_")))
