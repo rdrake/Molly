@@ -13,4 +13,6 @@
     [org.clojure/data.json "0.1.1"]
 		[org.clojars.mccraigmccraig/clojureql "1.1.0-SNAPSHOT"]
     [ring "1.0.0-RC1"]
-    [compojure "0.6.5"]])
+    [compojure "0.6.5"]
+    [noir "1.2.1"]
+    [pinot "0.1.1-SNAPSHOT"]])
