@@ -1,4 +1,4 @@
-  var Renderer = function(canvas) {
+var Renderer = function(canvas) {
     var canvas = $(canvas).get(0)
     var ctx = canvas.getContext("2d");
     var particleSystem
@@ -42,8 +42,9 @@
           // pt2:  {x:#, y:#}  target position in screen coords
 
           // draw a line from pt1 to pt2
-          ctx.strokeStyle = "rgba(0,0,0, .333)"
-          ctx.lineWidth = 1
+          //ctx.strokeStyle = "rgba(0,0,0, .333)"
+					ctx.strokeStyle = "rgba(0, 0, 0, 0.1)"
+					ctx.lineWidth = 2
           ctx.beginPath()
           ctx.moveTo(pt1.x, pt1.y)
           ctx.lineTo(pt2.x, pt2.y)
@@ -55,15 +56,18 @@
           // pt:   {x:#, y:#}  node position in screen coords
 
           // draw a rectangle centered at pt
-          var w = 4
-          ctx.fillStyle = (node.data.alone) ? "orange" : "black"
-					//ctx.align = "center";
+          var w = 100
+					var h = 20
+          ctx.fillStyle = "#fff"
+					ctx.align = "center"
+					ctx.fillRect(pt.x - w / 2, pt.y - h / 2, w, h)
           //ctx.fillCircle(pt.x-w/2, pt.y-w/2, w,w)
-					//ctx.fillText(node.name, pt.x - 50, pt.y);
-					ctx.beginPath();
-					ctx.arc(pt.x - w / 2, pt.y - w / 2, w, Math.PI * 2, 0, true);
-					ctx.closePath();
-					ctx.fill();
+					ctx.fillStyle = "#000"
+					ctx.fillText(node.name, pt.x - w / 2, pt.y + h / 5)
+					//ctx.beginPath();
+					//ctx.arc(pt.x - w / 2, pt.y - w / 2, w, Math.PI * 2, 0, true);
+					//ctx.closePath();
+					//ctx.fill();
         })    			
       },
       

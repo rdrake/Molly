@@ -14,7 +14,7 @@
   {:entity (mk-index-searcher (paths :entity))
    :groups (mk-index-searcher (paths :groups))})
 
-(def topk 25)
+(def topk 10)
 
 (remotes/defremote suggestions
                    [q]
