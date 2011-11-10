@@ -20,13 +20,15 @@
                    [q]
                    (get-suggestions (paths :entity) q topk))
 
-(remotes/defremote entities-by-query
+(remotes/defremote entities
                    [q]
                    (map doc->entity (get-entities (idx :entity) q topk)))
 
-(remotes/defremote entities-by-id
+; Something's broken.  This shoudl return a single entity, not a list.  It's
+; working for now at least.
+(remotes/defremote entity
                    [id]
-                   (get-entities-by-id (idx :groups) id topk))
+                   (map doc->entity (get-entity (idx :entity) id topk)))
 
 (remotes/defremote groups
                    [id]
