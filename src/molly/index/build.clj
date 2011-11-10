@@ -26,8 +26,11 @@
 
 (defn process-group
   [index ids row]
+  ; (first id) -> entity
+  ; (second id) -> entity's id key
   (let [entry (for [id ids] (entry->uid (first id) (row (second id))))]
-    (add-doc index (group-row->doc entry))))
+    ; Don't forget to get rid of nil values!
+    (add-doc index (group-row->doc (filter identity entry)))))
 
 (defn main
   [args]

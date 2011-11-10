@@ -14,12 +14,6 @@
 (def parts (ParticleSystem. 1000 600 0.5))
 
 (set! (. parts renderer) (Renderer. "#content"))
-;(set! (. parts parameters) {:gravity true :stiffness 1})
-
-;(def radius 5)
-;(def paper (js/Raphael 0 0 500 500))
-(def colours
-  ["#f8f3ca" "#e8eafa" "#e5afaa" "#c5dfe1" "#9cede9" "#f8d0c1" "#e7a7bf"])
 
 (defn add-node
   [entity]
