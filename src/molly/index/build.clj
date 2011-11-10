@@ -1,5 +1,6 @@
 (ns molly.index.build
   "A collection of functions which build the Lucene index."
+  (:gen-class)
   (:use molly.conf.config
         molly.util.converter
         molly.util.database

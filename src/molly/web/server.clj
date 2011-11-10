@@ -1,4 +1,6 @@
 (ns molly.web.server
+  "Services requests from clients for entity/group information."
+  (:gen-class)
   (:use molly.conf.config
         molly.search.api
         molly.search.lucene
@@ -24,7 +26,7 @@
                    [q]
                    (map doc->entity (get-entities (idx :entity) q topk)))
 
-; Something's broken.  This shoudl return a single entity, not a list.  It's
+; Something's broken.  This should return a single entity, not a list.  It's
 ; working for now at least.
 (remotes/defremote entity
                    [id]
@@ -34,5 +36,10 @@
                    [id]
                    (map grp->lst (get-groups (idx :groups) id topk)))
 
-(server/add-middleware remotes/wrap-remotes)
-(server/start 8000 {:mode :dev :ns 'molly})
+
+(defn -main
+  []
+  (let [app-port  (get (System/getenv) "APP_PORT")
+        port      (if (nil? app-port) 8000 (Integer/parseInt app-port))]
+    (server/add-middleware remotes/wrap-remotes)
+    (server/start port {:mode :dev :ns 'molly})))
