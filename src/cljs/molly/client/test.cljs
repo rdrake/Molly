@@ -9,11 +9,32 @@
 (defn log [s]
   (.log js/console s))
 
+(defn rand-color
+  []
+  (let [n-clr 256
+        rnd   {:r (rand-int n-clr) :g (rand-int n-clr) :b (rand-int n-clr)}
+        mix   {:r (dec n-clr) :g (dec n-clr) :b (dec n-clr)}
+        final {:r (/ (+ (rnd :r) (mix :r)) 2)
+               :g (/ (+ (rnd :g) (mix :g)) 2)
+               :b (/ (+ (rnd :b) (mix :b)) 2)}]
+    (str "rgba(" (final :r) "," (final :g) "," (final :b) ",1)")))
+
 (def ParticleSystem (js* "arbor.ParticleSystem"))
 (def Renderer (js* "Renderer"))
 (def parts (ParticleSystem. 1000 600 0.5))
 
 (set! (. parts renderer) (Renderer. "#content"))
+
+(defn map->jsobj
+  "Convert a clojure map into a JavaScript object"
+  [obj]
+  (.strobj (into {} (map (fn [[k v]]
+                           (let [k (if (keyword? k) (name k) k)
+                                 v (if (keyword? v) (name v) v)]
+                             (if (map? v)
+                               [k (map->jsobj v)]
+                               [k v])))
+                         obj))))
 
 (defn add-node
   [entity]
@@ -30,13 +51,13 @@
                nil)))
 
 (defn add-edge
-  [from to]
-  (. parts addEdge from to))
+  [from to color]
+  (. parts addEdge from to (map->jsobj {:color color})))
 
 (defn add-to-graph
-  [ent-id entry]
+  [ent-id entry color]
   (add-node-from-id entry)
-  (add-edge ent-id entry))
+  (add-edge ent-id entry color))
 
 (defn expand-entity
   [ent-id]
@@ -44,18 +65,15 @@
   (pm/remote (groups ent-id)
              [groups]
              (doseq [group groups]
-               (let [gid (clojure.string/join "" group)]
-                 (add-to-graph ent-id gid)
+               (let [gid    (clojure.string/join "" group)
+                     color  (rand-color)]
+                 (add-to-graph ent-id gid color)
                  (doseq [e group]
                    (if (not (= ent-id e))
-                     (add-to-graph gid e)
+                     (add-to-graph gid e color)
                      nil))))))
 
-(expand-entity "instructors|75")
-
-;(def paper (js/Raphael 0 0 500 500))
-;(def circle (. paper (circle 50 50 10)))
-;(. circle (attr "fill" "#f00"))
+(expand-entity "instructors|74")
 
 (def jquery (js* "$"))
 (jquery
