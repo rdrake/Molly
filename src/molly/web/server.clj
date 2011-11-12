@@ -5,8 +5,10 @@
         molly.search.api
         molly.search.lucene
         molly.util.converter)
-  (:require [noir.server :as server]
-            [noir.pinot.remotes :as remotes]))
+  (:require [noir.core :as core]
+            [noir.pinot.remotes :as remotes]
+            [noir.response :as response]
+            [noir.server :as server]))
 
 (def paths
   {:entity "mycampus-entity.idx"
@@ -36,6 +38,10 @@
                    [id]
                    (map grp->lst (get-groups (idx :groups) id topk)))
 
+; Redirect users to the actual index page.
+(core/defpage "/"
+         []
+         (response/redirect "/index.html"))
 
 (defn -main
   []
