@@ -53,15 +53,19 @@
     :values [:name]}])
 
 (def hierarchy
-  {:ids  [[:courses     :course_id]
-          [:section     :schedules_id]
-          [:instructors :instructors_id]]
-   :sql   (->
-            (cql/join
-              (tables :courses)
-              (->
+  {:ids       [[:courses     :course_id]
+               [:section     :schedules_id]
+               [:instructors :instructors_id]]
+   :top-level {:id    :code
+               :sql   (->
+                        (tables :courses)
+                        (cql/project :code))}
+   :sql       (->
                 (cql/join
-                  (tables :section)
-                  (tables :instructors)
-                  (cql/where (= :instructor_id :instructors_id))))
-              (cql/where (= :course_id :course))))})
+                  (tables :courses)
+                  (->
+                    (cql/join
+                      (tables :section)
+                      (tables :instructors)
+                      (cql/where (= :instructor_id :instructors_id))))
+                  (cql/where (= :course_id :course))))})

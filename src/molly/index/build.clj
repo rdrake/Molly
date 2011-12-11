@@ -17,13 +17,12 @@
 
 (defn process-row
   [index ent-def row]
-  (let [T         (name (ent-def :name))
-        id        (entry->uid T (row (ent-def :id)))
-        attr_keys (for [[k v] row :when (not= k (ent-def :id))] k)
-        attrs     (select-keys row attr_keys)
-        entity    (row->entity T id attrs)
-        doc       (entity->doc entity)]
-    (add-doc index doc)))
+  (let [T       (name (ent-def :name))
+        id      (entry->uid T (row (ent-def :id)))
+        attrs   (select-keys row (for [[k v] row :when (not= k (ent-def :id))] k))
+        entity  (a->entity T id attrs)]
+    ;(println entity)
+    (add-doc index (entity->doc entity))))
 
 (defn process-group
   [index ids row]
@@ -38,22 +37,44 @@
   (let [opts      (parse-args args)
         prefix    ((opts :index) :prefix)
         db        (into (config :db) {:subname (opts :db)})
-        e_path    (str prefix "-entity.idx")
-        g_path    (str prefix "-groups.idx")
-        e_index   (mk-index-writer e_path)
-        g_index   (mk-index-writer g_path)
-        hierarchy (config :hierarchy)]
-    ; Entities
+        paths     {:entity (str prefix "-entity.idx")
+                   :groups (str prefix "-groups.idx")}
+        index     {:entity (mk-index-writer (paths :entity))
+                   :groups (mk-index-writer (paths :groups))}
+        hierarchy (config :hierarchy)
+        top-level (hierarchy :top-level)
+        ext-row   (fn [row] (row (top-level :id)))]
+    (println "Indexing entities...")
     (doseq [ent-def (config :entities)]
-      (execute-query db (ent-def :sql)
-                     #(process-row e_index ent-def %)))
-    (close-index-writer e_index)
-    (add-spelling-correction e_path)
+      ;(println ent-def)
+      (execute-query db (ent-def :sql) #(process-row (index :entity) ent-def %)))
+
+    (println "Building index of groups...")
+    (println " just kidding!")
+    ;(execute-query db (hierarchy :sql)
+    ;               #(process-group (index :groups) (hierarchy :ids)))
+
+    ; Close all index writers)))
+    (doseq [[_ writer] index] (close-index-writer writer))
+
+    (println "Building phrase completion index...")
+    (add-spelling-correction (paths :entity))
+    
+    ))
+;          ids       (map ext-row (execute-query db (top-level :sql))
+;                         (execute-query db (top-level :sql) (fn [row] row)))]
+    ;  (doseq [id ids] (println id)))))
+    ; Entities
+    ;(doseq [ent-def (config :entities)]
+    ;  (execute-query db (ent-def :sql)
+    ;                 #(process-row e_index ent-def %)))
+    ;(close-index-writer e_index)
+    ;(add-spelling-correction e_path)
 
     ; Groups
-    (execute-query db (hierarchy :sql)
-                   #(process-group g_index (hierarchy :ids) %))
-    (close-index-writer g_index)))
+    ;(execute-query db (hierarchy :sql)
+    ;               #(process-group g_index (hierarchy :ids) %))
+    ;(close-index-writer g_index)))
 
 (defn -main
   [& args]

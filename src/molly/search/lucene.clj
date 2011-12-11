@@ -64,18 +64,34 @@
 (defn- mk-field
   "Creates a field given a key, value pair."
   [field]
-  (Field.
-    (str (field :name))
-    (str (field :value))
-    Field$Store/YES
-    Field$Index/ANALYZED))
+  (if (nil? (meta field))
+    (Field. (name (first field))
+            (str (second field))
+            Field$Store/YES
+            Field$Index/ANALYZED)
+    (Field. (name (first field))
+            (str (second field))
+            ((meta field) :store)
+            ((meta field) :index))))
+
+(defn- special
+  [S]
+  (and (.startsWith S "__") (.endsWith S "__")))
 
 (defn mk-doc
-  [fields]
-  (let [doc (Document.)]
+  [entity]
+  (let [doc (Document.)
+        all (into entity (meta entity))]
     (do
-      (doseq [field fields]
-        (.add doc (mk-field field)))
+      (doseq [attr entity]
+        (.add doc (mk-field
+                    (if (special (name (first attr)))
+                      ; Bug, fixme.
+                      ;(with-meta attr {:store Field$Store/YES
+                      ;                  :index Field$Index/NOT_ANALYZED})
+                      ;(with-meta attr {})
+                      attr
+                      attr))))
       doc)))
 
 (defn mk-spell-checker
