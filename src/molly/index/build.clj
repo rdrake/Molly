@@ -21,7 +21,6 @@
         id      (entry->uid T (row (ent-def :id)))
         attrs   (select-keys row (for [[k v] row :when (not= k (ent-def :id))] k))
         entity  (a->entity T id attrs)]
-    ;(println entity)
     (add-doc index (entity->doc entity))))
 
 (defn process-group
@@ -46,36 +45,17 @@
         ext-row   (fn [row] (row (top-level :id)))]
     (println "Indexing entities...")
     (doseq [ent-def (config :entities)]
-      ;(println ent-def)
       (execute-query db (ent-def :sql) #(process-row (index :entity) ent-def %)))
 
     (println "Building index of groups...")
     (println " just kidding!")
-    ;(execute-query db (hierarchy :sql)
-    ;               #(process-group (index :groups) (hierarchy :ids)))
 
-    ; Close all index writers)))
+    ; Close all index writers
     (doseq [[_ writer] index] (close-index-writer writer))
 
     (println "Building phrase completion index...")
-    (add-spelling-correction (paths :entity))
+    (add-spelling-correction (paths :entity))))
     
-    ))
-;          ids       (map ext-row (execute-query db (top-level :sql))
-;                         (execute-query db (top-level :sql) (fn [row] row)))]
-    ;  (doseq [id ids] (println id)))))
-    ; Entities
-    ;(doseq [ent-def (config :entities)]
-    ;  (execute-query db (ent-def :sql)
-    ;                 #(process-row e_index ent-def %)))
-    ;(close-index-writer e_index)
-    ;(add-spelling-correction e_path)
-
-    ; Groups
-    ;(execute-query db (hierarchy :sql)
-    ;               #(process-group g_index (hierarchy :ids) %))
-    ;(close-index-writer g_index)))
-
 (defn -main
   [& args]
   (let [start (System/currentTimeMillis)]
