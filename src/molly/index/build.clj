@@ -2,7 +2,10 @@
   (:require [clojureql.core :as cql])
   (:use molly.datatypes.database
         molly.datatypes.entity
-        molly.datatypes.index))
+        molly.datatypes.index)
+  (:import (molly.datatypes.database Sqlite)
+           (molly.datatypes.entity Entity)
+           (molly.datatypes.index Lucene)))
 
 (defn build
   []
@@ -11,13 +14,13 @@
               :subprotocol "sqlite"
               :subname "data/mycampus.sq3"}
         path "mycampus.idx"
-        db (molly.datatypes.database.Sqlite. conn)
+        db (Sqlite. conn)
         tables [{:sql (->
                         (cql/table :instructors)
                         (cql/project [:id :name]))
                  :name :instructor
                  :id :id}]
-        lucene (molly.datatypes.index.Lucene. path)
+        lucene (Lucene. path)
         idx (open-writer lucene)
         insert  (fn [row]
                   (let [doc (document (init row))]
