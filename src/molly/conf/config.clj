@@ -1,6 +1,7 @@
 (ns molly.conf.config)
 
-(defprotocol Config
+(defprotocol IConfig
   (connection [this])
   (tables [this])
+  (groups [this])
   (index [this]))
