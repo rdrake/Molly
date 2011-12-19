@@ -6,6 +6,7 @@
   (attributes [this]))
 
 (defrecord Group [desc sql attributes]
+  IGroup
   (description
     [this]
     desc)

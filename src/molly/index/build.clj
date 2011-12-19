@@ -1,4 +1,4 @@
-(println "wuuuuut")(ns molly.index.build
+(ns molly.index.build
   (:use molly.conf.config
         molly.conf.mycampus
         molly.datatypes.database
