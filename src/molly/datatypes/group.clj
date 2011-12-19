@@ -1,11 +1,14 @@
-(ns molly.datatypes.group)
+(ns molly.datatypes.group
+  (:import
+    (org.apache.lucene.document Document Field Field$Index Field$Store)))
 
 (defprotocol IGroup
   (description [this])
   (sql [this])
+  (ids [this])
   (attributes [this]))
 
-(defrecord Group [desc sql attributes]
+(deftype Group [desc sql ids attributes]
   IGroup
   (description
     [this]
@@ -13,6 +16,9 @@
   (sql
     [this]
     sql)
+  (ids
+    [this]
+    ids)
   (attributes
     [this]
     attributes))

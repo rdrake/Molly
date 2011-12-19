@@ -38,9 +38,9 @@
     (Entity. ent-type ent-id ent-attrs)))
 (defmethod init IPersistentMap [row]
   (let [ent-type  ((meta row) :__type__)
-        ent-id    (row :id)
+        ent-id    ((meta row) :__id__)
         ent-attrs (select-keys
                     row
                     (for [[k v] row
-                          :when (not= k :id)] k))]
+                          :when (not= k ent-id)] k))]
     (Entity. ent-type ent-id ent-attrs)))
