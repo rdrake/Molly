@@ -67,25 +67,23 @@
    (Group.
      "Instructor Schedule"
      (->
-       (->
-         (join
-           (->
-             (table :instructors)
-             (project [:id]))
-           (->
-             (join
-               (->
-                 (table :teaches)
-                 (project [:schedule_id :instructor_id :position]))
-               (->
-                 (table :schedules)
-                 (project [:id]))
-               (where (= :schedule_id :schedules.id))))
-           (where (= :instructors.id :instructor_id))))
-       (project [:teaches.instructor_id :teaches.schedule_id [:teaches.id :as :teach_id]]))
-     [[:instructors :instructor.id]
-      [:schedules :teaches.schedule_id]
-      [:teaches :teaches.teach_id]]
+       (join
+         (->
+           (table :instructors)
+           (project [[:id :as :instructor_id]]))
+         (->
+           (join
+             (->
+               (table :teaches)
+               (project [[:id :as :teach_id] :schedule_id :instructor_id :position]))
+             (->
+               (table :schedules)
+               (project [:id]))
+             (where (= :schedule_id :schedules.id))))
+         (where (= :instructors.id :instructor_id))))
+     [[:instructors :instructor_id]
+      [:schedules :schedule_id]
+      [:teaches :teach_id]]
      [])])
 
 (deftype Mycampus [db-path idx-path]

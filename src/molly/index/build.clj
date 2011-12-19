@@ -9,7 +9,7 @@
 
 (defn uid
   [T id]
-  (str T "|" id))
+  (str T "|" (clojure.string/replace id #"\s+" "_")))
 
 (defn process-entity
   [ft-db idx-w ent-def row]

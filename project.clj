@@ -10,4 +10,4 @@
                [org.clojure/java.jdbc                 "0.0.6"]
                [org.clojure/tools.cli                 "0.2.1"]
                [org.clojars.mccraigmccraig/clojureql  "1.1.0-SNAPSHOT"]]
-            :main         molly.index.build)
+            :main         molly.core)
