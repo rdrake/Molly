@@ -1,13 +1,16 @@
-(ns molly.index.build
+(println "wuuuuut")(ns molly.index.build
   (:use molly.conf.config
         molly.conf.mycampus
         molly.datatypes.database
         molly.datatypes.entity
+        molly.datatypes.group
         molly.datatypes.index)
-  (:import (molly.conf.mycampus Mycampus)
-           (molly.datatypes.database Sqlite)
-           (molly.datatypes.entity Entity)
-           (molly.datatypes.index Lucene)))
+  (:import (molly.conf.mycampus Mycampus)))
+
+(defn process-row
+  [ft-db idx-w ent-def row]
+  (let [row (with-meta row {:__type__ (name (ent-def :name))})]
+    (add-doc ft-db idx-w (document (init row)))))
 
 (defn build
   [db-path idx-path]
@@ -19,9 +22,10 @@
         groups  (groups conf)]            ; Groups defined in configuration
     (doseq [[_ ent-def] tables]
       (println (str "Indexing " (name (ent-def :name)) "..."))
-      (execute-query db-conn
-                     (ent-def :sql)
-                     (fn [row]
-                      (let [row (with-meta row {:__type__ (name (ent-def :name))})]
-                        (add-doc ft-db idx-w (document (init row)))))))
+      (execute-query db-conn (ent-def :sql) #(process-row ft-db idx-w ent-def %)))
+    
+    ;(doseq [group (groups conf)]
+    ;  (println (str "Grouping " (description group) "..."))
+    ;  )
+
     (close-writer ft-db idx-w)))

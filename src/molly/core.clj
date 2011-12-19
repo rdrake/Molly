@@ -11,6 +11,7 @@
 
 (defn main
   [args]
+  (println "WUUUUUT")
   (let [[opts arguments banner] (parse-args args)
         database  (opts :database)
         index     (opts :index)]
