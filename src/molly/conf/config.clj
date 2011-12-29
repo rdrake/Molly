@@ -2,6 +2,5 @@
 
 (defprotocol IConfig
   (connection [this])
-  (tables [this])
-  (groups [this])
+  (schema [this])
   (index [this]))

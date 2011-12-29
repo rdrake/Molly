@@ -1,48 +1,45 @@
 (ns molly.conf.mycampus
   (:use molly.conf.config
         molly.datatypes.database
-        molly.datatypes.group
         molly.datatypes.index
+        molly.datatypes.schema
         [clojureql.core :only (table project join where rename)])
   (:import (molly.datatypes.database Sqlite)
-           (molly.datatypes.group Group)
-           (molly.datatypes.index Lucene)))
+           (molly.datatypes.index Lucene)
+           (molly.datatypes.schema EntitySchema)))
 
-(def tbls
-  {:courses
-   {:name :courses
-    :id   :code
-    :sql  (->
-            (table    :courses)
-            (project  [:code :title :description]))}
-   :instructors
-   {:name :instructors
-    :id   :id
-    :sql  (->
-            (table    :instructors)
-            (project  [:id :name]))}
-   :schedules
-   {:name :schedules
-    :id   :id
-    :sql  (->
-            (table    :schedules)
-            (project  [:id :date_start :date_end :day :schedtype :hour_start :hour_end :min_start :min_end :classtype :location :section_id]))}
-   :sections
-   {:name :sections
-    :id   :id
-    :sql  (->
-            (table    :sections)
-            (project  [:id :actual :campus :capacity :credits :levels :registration_start :registration_end :semester :sec_code :sec_number :year :course]))}
-   :teaches
-   {:name :teaches
-    :id   :id
-    :sql  (->
-            (table    :teaches)
-            (project  [:id :schedule_id :instructor_id :position]))}})
-
-(def grps
-  [(Group.
-     "Course Sections"
+(def mycampus-schema
+  [(EntitySchema.
+     :entity
+     :courses
+     (table :courses)
+     :code
+     [:code :title :description]
+     [:title])
+   (EntitySchema.
+     :entity
+     :instructors
+     (table :instructors)
+     :id
+     [:name]
+     [:name])
+   (EntitySchema.
+     :entity
+     :schedules
+     (table :schedules)
+     :id
+     [:id :date_start :date_end :day :schedtype :hour_start :hour_end :min_start :min_end :classtype :location :section_id]
+     [:location])
+   (EntitySchema.
+     :entity
+     :sections
+     (table :sections)
+     :id
+     [:id :actual :campus :capacity :credits :levels :registration_start :registration_end :semester :sec_code :sec_number :year :course]
+     [:campus :semester])
+   (EntitySchema.
+     :group
+     "Course Section Schedules"
      (->
        (->
          (join
@@ -60,12 +57,14 @@
                (where (= :sections.id :section_id))))
            (where (= :code :course))))
        (project [:code [:schedules.id :as :schedule_id] [:sections.id :as :section_id]]))
-     [[:courses :code]
-      [:schedules :schedule_id]
-      [:sections :section_id]]
+     [[:courses :code "Course code"]
+      [:schedules :schedule_id "Schedule ID"]
+      [:sections :section_id "Section ID"]]
+     []
      [])
-   (Group.
-     "Instructor Schedule"
+   (EntitySchema.
+     :group
+     "Instructor schedules"
      (->
        (join
          (->
@@ -81,10 +80,11 @@
                (project [:id]))
              (where (= :schedule_id :schedules.id))))
          (where (= :instructors.id :instructor_id))))
-     [[:instructors :instructor_id]
-      [:schedules :schedule_id]
-      [:teaches :teach_id]]
-     [])])
+     [[:instructors :instructor_id "Instructor ID"]
+      [:schedules :schedule_id "Schedule ID"]
+      [:teaches :id "Teaches ID"]]
+     [:position]
+     [:position])])
 
 (deftype Mycampus [db-path idx-path]
   IConfig
@@ -93,12 +93,9 @@
     (Sqlite. {:classname "org.sqlite.JDBC"
               :subprotocol "sqlite"
               :subname db-path}))
-  (tables
+  (schema
     [this]
-    tbls)
-  (groups
-    [this]
-    grps)
+    mycampus-schema)
   (index
     [this]
     (Lucene. idx-path)))
