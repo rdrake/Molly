@@ -7,17 +7,14 @@
   (crawl [this db-conn ft-db idx-w])
   (klass [this]))
 
-(deftype EntitySchema [T C sql ID attr values]
+(deftype EntitySchema [schema];[T C sql ID attr values]
   Schema
   (crawl
     [this db-conn ft-db idx-w]
-    (execute-query db-conn sql
+    (execute-query db-conn (schema :sql)
                    (fn [row]
-                     (let [row (with-meta row {:__type__ T
-                                               :__class__ C
-                                               :__id__ ID})]
-                       (add-doc ft-db idx-w (document (init row)))))))
+                       (add-doc ft-db idx-w (document (encode row schema))))))
   (klass
     [this]
-    C))
+    (schema :C)))
 
