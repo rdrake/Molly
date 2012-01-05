@@ -10,4 +10,5 @@
                [org.clojure/java.jdbc                 "0.0.6"]
                [org.clojure/tools.cli                 "0.2.1"]
                [org.clojars.mccraigmccraig/clojureql  "1.1.0-SNAPSHOT"]]
+            :dev-dependencies [[org.clojars.ibdknox/lein-nailgun "1.1.1"]]
             :main         molly.core)

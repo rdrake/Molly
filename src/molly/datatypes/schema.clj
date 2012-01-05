@@ -5,16 +5,19 @@
 
 (defprotocol Schema
   (crawl [this db-conn ft-db idx-w])
-  (klass [this]))
+  (klass [this])
+  (schema-map [this]))
 
-(deftype EntitySchema [schema];[T C sql ID attr values]
+(deftype EntitySchema [S]
   Schema
   (crawl
     [this db-conn ft-db idx-w]
-    (execute-query db-conn (schema :sql)
+    (execute-query db-conn (S :sql)
                    (fn [row]
-                       (add-doc ft-db idx-w (document (encode row schema))))))
+                       (add-doc ft-db idx-w (document (encode row S))))))
   (klass
     [this]
-    (schema :C)))
-
+    ((schema-map this) :C))
+  (schema-map
+    [this]
+    S))

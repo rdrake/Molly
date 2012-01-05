@@ -2,17 +2,50 @@
 <html>
 	<head>
 		<title>Molly :: Home</title>
-		<link rel="stylesheet" type="text/css" href="/public/css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="/css/custom-theme/jq-twitter-bs.css">
 		<style type="text/css">
-			body {
-				margin-top: 40px;
-			}
+html, body {
+	background-color: #eee;
+}
+
+body {
+	padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
+}
+
+.container > footer p {
+	text-align: center; /* center align it with the container */
+}
+
+.container {
+	width: 820px; /* downsize our container to make the content feel a bit tighter and more cohesive. NOTE: this removes two full columns from the grid, meaning you only go to 14 columns and not 16. */
+}
+
+/* The white background content wrapper */
+.container > .content {
+	background-color: #fff;
+	padding: 20px;
+	margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+	-webkit-border-radius: 0 0 6px 6px;
+	-moz-border-radius: 0 0 6px 6px;
+	border-radius: 0 0 6px 6px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+	box-shadow: 0 1px 2px rgba(0,0,0,.15);
+}
+
+/* Page header tweaks */
+.page-header {
+	background-color: #f5f5f5;
+	padding: 20px 20px 10px;
+	margin: -20px -20px 20px;
+}
 		</style>
 	</head>
 	<body>
 		<div class="topbar">
 			<div class="topbar-inner">
-				<div class="container-fluid">
+				<div class="container">
 					<a class="brand" href="/">Molly</a>
 					<form class="pull-left" action>
 						<input type="text" placeholder="Search">
@@ -20,10 +53,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="container-fluid">
-			<div class="sidebar">
-				lolwut
-			</div>
+		<div class="container">
 			<div class="content">
 				<div class="page-header">
 					<h1>Molly
@@ -33,10 +63,13 @@
 			</div>
 		</div>
 		<footer class="footer">
-			<div class="container-fluid">
+			<div class="container">
 				<p class="pull-right"><a href="http://github.com/rdrake/Molly">Fork Me</a></p>
 				<p>Built by <a href="http://me.rdrake.org/">Richard Drake</a> as a graduate research project.  Supervised by <a href="http://leda.science.uoit.ca/kenpu/">Dr. Ken Pu</a> of <a href="http://uoit.ca/">UOIT</a>.</p>
 			</div>
 		</footer>
+
+		<script src="/js/jquery-1.6.2.min.js"></script>
+		<script src="/js/jquery-ui-1.8.16.custom.min.js"></script>
 	</body>
 </html>

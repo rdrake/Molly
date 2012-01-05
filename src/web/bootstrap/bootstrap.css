@@ -133,6 +133,8 @@ img {
   border: 0;
   -ms-interpolation-mode: bicubic;
 }
+
+/*
 button,
 input,
 select,
@@ -165,7 +167,7 @@ input[type="search"] {
 }
 input[type="search"]::-webkit-search-decoration {
   -webkit-appearance: none;
-}
+}*/
 textarea {
   overflow: auto;
   vertical-align: top;
@@ -389,6 +391,8 @@ a:hover {
 /* Typography.less
  * Headings, body text, lists, code, and more for a versatile and durable typography system
  * ---------------------------------------------------------------------------------------- */
+
+ 
 p {
   font-size: 13px;
   font-weight: normal;
@@ -399,6 +403,7 @@ p small {
   font-size: 11px;
   color: #bfbfbf;
 }
+
 h1,
 h2,
 h3,
@@ -599,6 +604,8 @@ form .clearfix:before, form .clearfix:after {
 form .clearfix:after {
   clear: both;
 }
+
+/*
 label,
 input,
 select,
@@ -648,7 +655,6 @@ input[type=checkbox], input[type=radio] {
   padding: 0;
   margin: 3px 0;
   *margin-top: 0;
-  /* IE6-7 */
 
   line-height: normal;
   border: none;
@@ -671,9 +677,9 @@ select, input[type=file] {
   *height: auto;
   line-height: 27px;
   *margin-top: 4px;
-  /* For IE7, add top margin to align select with labels */
 
 }
+*/
 select[multiple] {
   height: inherit;
   background-color: #ffffff;

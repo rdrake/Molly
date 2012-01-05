@@ -1,13 +1,15 @@
 (ns molly.datatypes.index
   (:import
     (java.io File)
-    (org.apache.lucene.analysis WhitespaceAnalyzer)
+    (org.apache.lucene.analysis PerFieldAnalyzerWrapper)
+    (org.apache.lucene.analysis.standard StandardAnalyzer)
     (org.apache.lucene.index IndexReader IndexWriter IndexWriter$MaxFieldLength)
+    (org.apache.lucene.search.spell LuceneDictionary NGramDistance SpellChecker)
     (org.apache.lucene.store SimpleFSDirectory)
     (org.apache.lucene.util Version)))
 
-(def lucene-version Version/LUCENE_35)
-(def default-analyzer (WhitespaceAnalyzer. lucene-version))
+(def default-analyzer
+  (-> Version/LUCENE_35 (StandardAnalyzer.) (PerFieldAnalyzerWrapper.)))
 (def unlimited-fields IndexWriter$MaxFieldLength/UNLIMITED)
 
 (defprotocol Index
@@ -16,7 +18,8 @@
     [this]
     [this analyzer])
   (close-writer [this idx])
-  (add-doc [this idx doc]))
+  (add-doc [this idx doc])
+  (spell-check [this fields]))
 
 (deftype Lucene [idx-path]
   Index
@@ -37,4 +40,10 @@
       (.close)))
   (add-doc
     [this idx doc]
-    (.addDocument idx doc)))
+    (.addDocument idx doc))
+  (spell-check
+    [this fields]
+    (let [spell-checker (SpellChecker. (path this) (NGramDistance. 3))
+          rdr (IndexReader/open (path this))]
+      (doseq [field fields]
+        (.indexDictionary (LuceneDictionary. rdr (name field)) spell-checker)))))

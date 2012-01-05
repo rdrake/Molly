@@ -20,8 +20,6 @@
   [field-name field-value]
   (Field. field-name field-value Field$Store/YES Field$Index/ANALYZED))
 
-;(defmulti document :__type__)
-;(defmethod document :entity
 (defn document
   [fields]
   (let [doc (Document.)]
@@ -29,9 +27,6 @@
       (doseq [[field-name field-value] fields]
         (.add doc (field (name field-name) (str field-value))))
       doc)))
-
-;(defmethod document :group
-;  [this]
 
 (defmulti encode (fn [x & _] (class x)))
 
@@ -53,26 +48,3 @@
 
 (defmethod encode Document
   [this] nil)
-
-(defmethod encode :default
-  [this schema]
-  (throw (Exception. "Default called")))
-
-;(defmulti init type)
-;(defmethod init Document [doc]
-;  (let [ent-type  (.get doc "__type__")
-;        ent-class (.get doc "__class__")
-;        ent-id    (.get doc "__id__")
-;        ent-map   (into {} (for [field (.getFields doc)]
-;                             [(keyword (.name field)) (.stringValue field)]))]
-;    (Entity. ent-type ent-class ent-id (filter (fn [itm] (not (special? itm)))) [])))
-;(defmethod init IPersistentMap [row]
-;  (let [ent-type  ((meta row) :__type__)
-;        ent-class ((meta row) :__class__)
-;        ent-id    ((meta row) :__id__)]
-;    (let [eid (if (seq? ent-id)
-;                (uid row ent-id)
-;                (uid row ent-class ent-id))]
-;      (Entity. ent-type ent-class eid row))))
-  ;      ID        (uid row ent-class ent-id)]
-;    (Entity. ent-type ent-class ID row)))
