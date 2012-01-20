@@ -1,5 +1,6 @@
 (ns molly.datatypes.entity
-  (:use molly.util.nlp)
+  (:use molly.util.nlp
+        clojure.pprint)
   (:import
     [clojure.lang IPersistentMap IPersistentList]
     [org.apache.lucene.document Document Field Field$Index Field$Store]))
@@ -23,8 +24,7 @@
 
 (defn document
   [fields]
-  (println (str "*** CLASS *** " (.getClass fields)))
-  (println (str "*** FIELDS *** " (doall (map println fields))))
+  (pprint fields)
   (let [doc (Document.)]
     (do
       (doseq [[field-name field-value] fields]
@@ -67,13 +67,9 @@
         luc-meta  [[:__type__  T]
                    [:__class__ (int-meta :class)]
                    [:__all__   (let [all (clojure.string/join " " (vals this))]
-                                 all)]]
-                                 ;;(if (not= T :value)
-                                 ;;  all
-                                 ;;  clojure.string/join " " q-gram(all)))]]
-                                 ;(if (= T :value)
-                                 ;  q-gram(all)
-                                 ;  all))]]
+                                 (if (= T :value)
+                                   (q-gram all)
+                                   all))]]
         raw-doc   (concat luc-meta
                           this
                           [(condp = (int-meta :type)
