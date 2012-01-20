@@ -24,6 +24,7 @@
 (defn document
   [fields]
   (println (str "*** CLASS *** " (.getClass fields)))
+  (println (str "*** FIELDS *** " (doall (map println fields))))
   (let [doc (Document.)]
     (do
       (doseq [[field-name field-value] fields]
@@ -75,10 +76,10 @@
                                  ;  all))]]
         raw-doc   (concat luc-meta
                           this
-                          (condp (int-meta :type)
-                            :value   []
-                            :entity  [:__id__ (int-meta :id)]
-                            :group   [:__entities__ (int-meta :entities)]))]
+                          [(condp = (int-meta :type)
+                             :value   []
+                             :entity  [:__id__ (int-meta :id)]
+                             :group   [:__entities__ (int-meta :entities)])])]
     (document raw-doc)))
 
 (defmethod encode Document

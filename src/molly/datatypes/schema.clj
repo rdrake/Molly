@@ -18,12 +18,7 @@
     (let [sql (S :sql)]
       (execute-query db-conn sql
                      (fn [row]
-                       (println "Decoding...")
-                       (let [decoded (decode row S)]
-                         (println "Encoding...")
-                         (let [encoded (encode decoded)]
-                           (println "Adding document...")
-                           (add-doc ft-db idx-w encoded)))))))
+                       (add-doc ft-db idx-w (encode (decode row S)))))))
 ;      
 ;      (if (= (S :T) :entity)
 ;        (doseq [value (S :values)]
