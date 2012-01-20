@@ -37,32 +37,32 @@
       :ID :id
       :attrs [:actual :campus :capacity :credits :levels :registration_start :registration_end :semester :sec_code :sec_number :year]
       :values []})
-   (EntitySchema.
-     {:T :group
-      :C "Course Section Schedules"
-      :sql (->
-             (->
-               (join
-                 (->
-                   (table :courses)
-                   (project [:code]))
-                 (->
-                   (join
-                     (->
-                       (table :sections)
-                       (project [:id :course]))
-                     (->
-                       (table :schedules)
-                       (project [:id :section_id]))
-                     (where (= :sections.id :section_id))))
-                 (where (= :code :course))))
-             (project [:code [:schedules.id :as :schedule_id] [:sections.id :as :section_id]]))
-      :ID [[:courses :code "Course code"]
-           [:schedules :schedule_id "Schedule ID"]
-           [:sections :section_id "Section ID"]]
-      :attrs []
-      :values []
-     })
+;   (EntitySchema.
+;     {:T :group
+;      :C "Course Section Schedules"
+;      :sql (->
+;             (->
+;               (join
+;                 (->
+;                   (table :courses)
+;                   (project [:code]))
+;                 (->
+;                   (join
+;                     (->
+;                       (table :sections)
+;                       (project [:id :course]))
+;                     (->
+;                       (table :schedules)
+;                       (project [:id :section_id]))
+;                     (where (= :sections.id :section_id))))
+;                 (where (= :code :course))))
+;             (project [:code [:schedules.id :as :schedule_id] [:sections.id :as :section_id]]))
+;      :ID [[:courses :code "Course code"]
+;           [:schedules :schedule_id "Schedule ID"]
+;           [:sections :section_id "Section ID"]]
+;      :attrs []
+;      :values []
+;     })
    (EntitySchema.
      {:T :group
       :C "Instructor schedules"

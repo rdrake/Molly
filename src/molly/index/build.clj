@@ -15,15 +15,7 @@
         idx-w   (open-writer ft-db) ; Index writer for FTS database
         schemas (schema conf)]
     (doseq [ent-def schemas]
-      (if (nil? ent-def)
-        (println "Entity definition is nil.")
-        (println "Working on it."))
       (println "Indexing " (name (klass ent-def)) "...")
       (crawl ent-def db-conn ft-db idx-w))
-    
-    (close-writer ft-db idx-w)
 
-    (let [schema-maps (for [S schemas]
-                        (schema-map S))
-          fields (flatten (map :values schema-maps))]
-      (spell-check ft-db fields))))
+    (close-writer ft-db idx-w)))
