@@ -2,15 +2,20 @@
   (:use [speclj.core]
         [molly.datatypes.entity]))
 
-(comment(def schema {:T      :entity
+(def schema {:T      :entity
              :C      :courses
              :ID     :code
              :attrs  [:code :title :description]})
 
-(let row {:code         "csci 2020u"
+(def row {:code         "csci 2020u"
           :title        "Software Systems Dev. and Int."
-          :description  "I do magic tricks for the entertainment of students."}))
+          :description  "I do magic tricks for the entertainment of students."})
 
+(def data (row->data row schema))
+
+(def doc (data->doc data))
+
+(def new-data (doc->data doc))
 
 (describe "Is it special?"
           (it "is special"
@@ -25,10 +30,10 @@
           (it "is not special"
               (should-not (special? "all"))))
 
-(comment (describe "UID generation"
+(describe "UID generation"
           (it "should correctly generate UIDs for a single row"
               (let [C   (schema :C)
-                    id  (schema :ID)
+                    id  (schema :ID)]
                     (should (= (uid row C id) "courses|csci_2020u"))))
 
           (it "should correctly generate UIDs for a number of rows"
@@ -36,4 +41,17 @@
                     ids [[:schedule :sch_id]
                          [:section :sec_id]
                          [:instructor :ins_id]]]
-                (should (= (uid row ids) "schedule|1 section|1 instructor|1"))))))
+                (should (= (uid row ids) "schedule|1 section|1 instructor|1")))))
+
+(describe "Row to internal representation"
+          (it "must convert a row to a Clojure object with correct metadata"
+              (let [meta-data (meta data)]
+                (should (every? #(contains? meta-data %)
+                                [:type :class :id]))))
+          (it "must convert a row to a Clojure object correctly having correct attributes"
+              (should (every? #(contains? data %)
+                              (schema :attrs)))))
+
+(describe "Internal representation should be able to be transformed into a doc and back again"
+          (it "must transform correctly"
+              (should (= data new-data))))
