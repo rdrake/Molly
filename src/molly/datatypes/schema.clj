@@ -4,7 +4,6 @@
         molly.datatypes.index
         molly.util.nlp)
   (:require [clojureql.core :as cql]))
-; Remember that ClojureQL replaces some clojure.core functions!
 
 (defprotocol Schema
   (crawl [this db-conn ft-db idx-w])
@@ -18,7 +17,7 @@
     (let [sql (S :sql)]
       (execute-query db-conn sql
                      (fn [row]
-                       (add-doc ft-db idx-w (encode (decode row S)))))
+                       (add-doc ft-db idx-w (data->doc (row->data row S)))))
       
       (if (= (S :T) :entity)
         (doseq [value (S :values)]
@@ -28,8 +27,8 @@
                         (cql/grouped [value]))]
             (execute-query db-conn query
                            (fn [row]
-                             (add-doc ft-db idx-w (encode
-                                                    (decode row
+                             (add-doc ft-db idx-w (data->doc
+                                                    (row->data row
                                                             (assoc S
                                                                    :T :value)))))))))))
   (klass

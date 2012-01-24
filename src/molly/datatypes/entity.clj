@@ -26,17 +26,11 @@
   (let [doc (Document.)]
     (do
       (doseq [[field-name field-value] fields]
-        (if (nil? field-name)
-          (do
-            (println "It's NIL, why!?")
-            (println (str field-name)))
-          nil)
         (.add doc (field (name field-name) (str field-value))))
       doc)))
 
-(defmulti decode (fn [x & _] (class x)))
-
-(defmethod decode IPersistentMap
+(defn row->data
+  ^{:doc "Transforms a row into the internal representation."}
   [this schema]
   (let [T         (schema :T)
         C         (schema :C)
@@ -54,21 +48,29 @@
                                                       (map name
                                                            [C
                                                             (first attr-cols)])))
-                 :entity  (assoc meta-data :id (uid this T id-col))
+                 :entity  (assoc meta-data :id (uid this C id-col))
                  :group   (assoc meta-data :entities (uid this id-col))
                  (throw (IllegalArgumentException. "I only know how to deal with types :value, :entity, and :group"))))))
 
-(defmethod decode Document
-  [this] nil)
+(defn doc->data
+  ^{:doc "Transforms a Document into the internal representation."}
+  [this]
+  (let [fields (.getFields this)]
+    (with-meta (map (fn [x] (hash-map (keyword (.name x)) (.stringValue x)))
+                    (filter (fn [x] (not (special? (.name x)))) fields))
+               (map (fn [x] (hash-map
+                              (keyword (clojure.string/replace
+                                         (.name x) "_" ""))
+                              (.stringValue x)))
+                    (filter (fn [x] (special? (.name x))) fields)))))
 
-(defmulti encode (fn [x & _] (class x)))
-
-(defmethod encode IPersistentMap
+(defn data->doc
+  ^{:doc "Transforms the internal representation into a Document."}
   [this]
   (let [int-meta  (meta this)
         T         (int-meta :type)
-        luc-meta  [[:__type__  T]
-                   [:__class__ (int-meta :class)]
+        luc-meta  [[:__type__  (name T)]
+                   [:__class__ (name (int-meta :class))]
                    [:__all__   (let [all (clojure.string/join " " (vals this))]
                                  (if (= T :value)
                                    (q-gram all)
@@ -80,6 +82,3 @@
                             :entity  [[:__id__ (int-meta :id)]]
                             :group   [[:__entities__ (int-meta :entities)]]))]
     (document raw-doc)))
-
-(defmethod encode Document
-  [this] nil)
