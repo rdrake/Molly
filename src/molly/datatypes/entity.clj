@@ -60,10 +60,10 @@
                                           (.name x) "_" "")) (.stringValue x)])
         check-special (fn [x] (special? (.name x)))
         filter-fn     (fn [f] (apply hash-map (flatten
-                                                (map extract f))))]
-    (with-meta
-      (filter-fn (filter (fn [x] (not (check-special x))) fields))
-      (filter-fn (filter check-special fields)))))
+                                                (map extract
+                                                     (filter f fields)))))]
+    (with-meta (filter-fn (fn [x] (not (check-special x))))
+               (filter-fn check-special))))
 
 (defn data->doc
   ^{:doc "Transforms the internal representation into a Document."}
