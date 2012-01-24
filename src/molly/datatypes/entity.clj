@@ -58,14 +58,12 @@
   (let [fields        (.getFields this)
         extract       (fn [x] [(keyword (clojure.string/replace
                                           (.name x) "_" "")) (.stringValue x)])
-        check-special (fn [x] (special? (.name x)))]
+        check-special (fn [x] (special? (.name x)))
+        filter-fn     (fn [f] (apply hash-map (flatten
+                                                (map extract f))))]
     (with-meta
-      (apply hash-map (flatten
-                        (map extract
-                             (filter (fn [x] (not (check-special x))) fields))))
-      (apply hash-map (flatten
-                        (map extract
-                             (filter check-special fields)))))))
+      (filter-fn (filter (fn [x] (not (check-special x))) fields))
+      (filter-fn (filter check-special fields)))))
 
 (defn data->doc
   ^{:doc "Transforms the internal representation into a Document."}
