@@ -53,7 +53,7 @@
     [this searcher query analyzer]
     (let [qp (QueryParser. version "__all__" analyzer)
           q (. qp parse query)]
-      (. searcher search query nil 100)))
+      (. searcher search q 100)))
   (add-doc
     [this idx doc]
     (.addDocument idx doc)))
