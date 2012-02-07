@@ -1,23 +1,24 @@
 (ns molly.datatypes.schema 
   (:use molly.datatypes.database
         molly.datatypes.entity
-        molly.datatypes.index
+        ;molly.datatypes.index
+        molly.search.lucene
         molly.util.nlp)
   (:require [clojureql.core :as cql]))
 
 (defprotocol Schema
-  (crawl [this db-conn ft-db idx-w])
+  (crawl [this db-conn idx-w])
   (klass [this])
   (schema-map [this]))
 
 (deftype EntitySchema [S]
   Schema
   (crawl
-    [this db-conn ft-db idx-w]
+    [this db-conn idx-w]
     (let [sql (S :sql)]
       (execute-query db-conn sql
                      (fn [row]
-                       (add-doc ft-db idx-w (data->doc (row->data row S)))))
+                       (add-doc idx-w (data->doc (row->data row S)))))
       
       (if (= (S :T) :entity)
         (doseq [value (S :values)]
@@ -27,10 +28,10 @@
                         (cql/grouped [value]))]
             (execute-query db-conn query
                            (fn [row]
-                             (add-doc ft-db idx-w (data->doc
-                                                    (row->data row
-                                                            (assoc S
-                                                                   :T :value)))))))))))
+                             (add-doc idx-w (data->doc
+                                              (row->data row
+                                                         (assoc S
+                                                                :T :value)))))))))))
   (klass
     [this]
     ((schema-map this) :C))

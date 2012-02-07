@@ -100,4 +100,4 @@
     mycampus-schema)
   (index
     [this]
-    (Lucene. idx-path)))
+    idx-path))
