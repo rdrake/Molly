@@ -31,12 +31,12 @@
         searcher  (idx-searcher path)
         q1        (query :type :entity)
         q2        (query :class :courses)
-        q3        (query :code "csci")
+        ;q3        (query :code "csci")
         q4        (query :code "3030u")
         bq        (boolean-query
                     [q1 :and]
                     [q2 :and]
-                    [q3 :and]
+                    ;[q3 :and]
                     [q4 :and])
         results   (map doc->data (idx-search searcher bq))]
     (doseq [result results]
