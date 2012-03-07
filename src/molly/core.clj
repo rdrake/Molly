@@ -1,10 +1,17 @@
 (ns molly.core
   (:gen-class)
-  (:use molly.datatypes.entity
-        molly.index.build
-        molly.search.lucene
-        molly.search.query-builder
-        [clojure.tools.cli :only (cli)]))
+  (:use molly.server.serve))
+
+(defn -main
+  [& args]
+  (println "Starting Molly...")
+  (start!))
+
+  ;(:use molly.datatypes.entity
+  ;      molly.index.build
+  ;      molly.search.lucene
+  ;      molly.search.query-builder
+  ;      [clojure.tools.cli :only (cli)]))
 
 (comment
 (defn parse-args
@@ -24,7 +31,7 @@
   [& args]
   (main (flatten args)))
 )
-
+(comment
 (defn -main
   [& args]
   (let [path      (idx-path "mycampus.idx")
@@ -41,4 +48,4 @@
         results   (map doc->data (idx-search searcher bq))]
     (doseq [result results]
       (doseq [[K V] result]
-        (println (str (name K) ": " V))))))
+        (println (str (name K) ": " V)))))))

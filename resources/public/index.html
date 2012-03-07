@@ -2,8 +2,7 @@
 <html>
 	<head>
 		<title>Molly :: Home</title>
-		<link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap.css">
-		<link rel="stylesheet" type="text/css" href="/css/custom-theme/jq-twitter-bs.css">
+		<link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.css">
 		<style type="text/css">
 html, body {
 	background-color: #eee;
@@ -15,6 +14,10 @@ body {
 
 .container > footer p {
 	text-align: center; /* center align it with the container */
+}
+
+.footer .container {
+	margin-top: 1em;
 }
 
 .container {
@@ -40,15 +43,27 @@ body {
 	padding: 20px 20px 10px;
 	margin: -20px -20px 20px;
 }
+
+form {
+	height: 20px;
+}
+
+input {
+	margin-top: 5px;
+}
+
+.loader {
+	display: none;
+}
 		</style>
 	</head>
 	<body>
-		<div class="topbar">
-			<div class="topbar-inner">
+		<div class="navbar navbar-fixed-top">
+			<div class="navbar-inner">
 				<div class="container">
 					<a class="brand" href="/">Molly</a>
-					<form class="pull-left" action>
-						<input type="text" placeholder="Search">
+					<form id="search-form" class="pull-left" action>
+						<input type="search" placeholder="Search" data-provide="typeahead" class="typeahead" id="value" tabindex="1">
 					</form>
 				</div>
 			</div>
@@ -60,6 +75,12 @@ body {
 						<small> Automated knowledge discovery</small>
 					</h1>
 				</div>
+				<h3 class="loader">
+					<img src="/img/ajax-loader.gif">
+					Loading results...
+				</h3>
+				<div id="results">
+				</div>
 			</div>
 		</div>
 		<footer class="footer">
@@ -69,7 +90,40 @@ body {
 			</div>
 		</footer>
 
-		<script src="/js/jquery-1.6.2.min.js"></script>
-		<script src="/js/jquery-ui-1.8.16.custom.min.js"></script>
+		<script src="/js/jquery-1.7.1.js"></script>
+		<script src="/bootstrap/js/bootstrap.js"></script>
+
+		<script>
+			var typeahead = $("#value");
+			var form = $("#search-form");
+
+			form.submit(function(e) {
+				var val = typeahead.val();
+
+				if (val != "") {
+					$.getJSON("/entity/" + val, function(data) {
+						$(".well").remove();
+						$(".loader").show();
+
+						$.each(data, function(i, val) {
+							var div = $("<div/>", {
+								class: "well"
+							}).appendTo("#results");
+
+							for (var propName in val) {
+								if (val.hasOwnProperty(propName)) {
+									div.append("<strong>" + propName +
+										"</strong>: " + val[propName] + "<br>");
+								}
+							}
+						});
+					}).complete(function() {
+						$(".loader").hide();
+					});
+				}
+				
+				return false;
+			});
+		</script>
 	</body>
 </html>

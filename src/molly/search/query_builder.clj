@@ -22,7 +22,7 @@
     phrase-query))
 
 (defn boolean-query
-  [& args]
+  [args]
   (let [query (BooleanQuery.)]
     (doseq [[q op] args]
       (. query add q (condp = op
