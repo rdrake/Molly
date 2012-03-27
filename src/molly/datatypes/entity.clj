@@ -40,7 +40,9 @@
                     (select-keys this attr-cols))
         meta-data {:type T :class C}
         id-col    (schema :ID)]
-    (with-meta attrs
+    (with-meta (if (= T :group)
+                 (conj attrs {:entities (uid this id-col)})
+                 attrs)
                (condp = T
                  :value   (assoc meta-data
                                  :class
@@ -49,7 +51,7 @@
                                                            [C
                                                             (first attr-cols)])))
                  :entity  (assoc meta-data :id (uid this C id-col))
-                 :group   (assoc meta-data :entities (uid this id-col))
+                 :group   meta-data
                  (throw (IllegalArgumentException. "I only know how to deal with types :value, :entity, and :group"))))))
 
 (defn doc->data
@@ -81,5 +83,5 @@
                           (condp = (int-meta :type)
                             :value   []
                             :entity  [[:__id__ (int-meta :id)]]
-                            :group   [[:__entities__ (int-meta :entities)]]))]
+                            :group   [[:entities (int-meta :entities)]]))]
     (document raw-doc)))
