@@ -15,10 +15,8 @@
 
 (defn -main
   [& args]
-  (println "args")
   (let [[opts arguments banner] (parse-args (flatten args))
         action                  (opts :action)]
-    (println "if")
     (if (= action "serve")
       ((println "Starting Molly...")
        (start!))

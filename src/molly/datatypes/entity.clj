@@ -51,7 +51,7 @@
                                                            [C
                                                             (first attr-cols)])))
                  :entity  (assoc meta-data :id (uid this C id-col))
-                 :group   meta-data
+                 :group   (assoc meta-data :entities (uid this id-col))
                  (throw (IllegalArgumentException. "I only know how to deal with types :value, :entity, and :group"))))))
 
 (defn doc->data
@@ -83,5 +83,5 @@
                           (condp = (int-meta :type)
                             :value   []
                             :entity  [[:__id__ (int-meta :id)]]
-                            :group   [[:entities (int-meta :entities)]]))]
+                            :group   []))];[[:entities (int-meta :entities)]]))]
     (document raw-doc)))
