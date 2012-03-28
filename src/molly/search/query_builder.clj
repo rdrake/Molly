@@ -9,7 +9,7 @@
   (let [field-name    (condp      = kind
                         :type     "__type__"
                         :class    "__class__"
-                        :id       "__ID__"
+                        :id       "__id__"
                         :text     "__all__"
                         ; Assume "kind" is an attribute name.
                         (condp = (type kind)

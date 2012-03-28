@@ -30,8 +30,8 @@
   (defpage "/entity/:q" {:keys [q]}
            (response/json
              (dox (query :type :entity)
-                  :text
-                  (clojure.string/split q #"\s{1}") :or)))
+                  :id
+                  (clojure.string/split q #"\s{1}") :and)))
 
   (defpage "/group/:q" {:keys [q]}
            (println q)
