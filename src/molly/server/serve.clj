@@ -11,12 +11,12 @@
   []
   (let [searcher (idx-searcher (idx-path "mycampus.idx"))]
     (defn dox
-    [q1 field S op]
-    (let [bq (boolean-query
-               (concat [[q1 :and]]
-                       (for [s S]
-                         [(query field s) op])))]
-      (map doc->data (idx-search searcher bq)))))
+      [q1 field S op]
+      (let [bq (boolean-query
+                 (concat [[q1 :and]]
+                         (for [s S]
+                           [(query field s) op])))]
+        (map doc->data (idx-search searcher bq)))))
 
   (defpage "/" []
            (response/redirect "/index.html"))

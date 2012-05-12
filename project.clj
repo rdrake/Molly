@@ -12,4 +12,5 @@
                [noir                                  "1.3.0-alpha10"]]
             :dev-dependencies [[speclj "2.1.1"]]
             :test-path    "spec/"
-            :main         molly.core)
+            :main         molly.core
+            :jvm-opts     ["-Xss1024m"])
