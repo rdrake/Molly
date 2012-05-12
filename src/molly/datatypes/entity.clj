@@ -9,13 +9,20 @@
   (and (.startsWith field-name "__") (.endsWith field-name "__")))
 
 (defn uid
+  "Possible inputs include:
+    row :T :ID
+    row [[:T :ID] [:T :ID]]
+    row [[:T :ID :desc] [:T :ID :desc]]"
   ([row C id]
    (if (nil? (row id))
-     (throw (Exception. (str "ID column " id " does not exist in row " row "."))))
-   (str (name C) "|" (clojure.string/replace (row id) #"\s+" "_")))
+     (throw (Exception. (str "ID column " id " does not exist in row " row ".")))
+     (str (name C) "|" (clojure.string/replace (row id) #"\s+" "_"))))
   ([row Tids]
-   (clojure.string/join " " (for [[C id] Tids]
-                              (uid row C id)))))
+   (clojure.string/join (if (= (count (first Tids)) 3)
+                          " "
+                          "")
+                        (for [[C id] Tids]
+                          (uid row C id)))))
 
 (defn field
   [field-name field-value]
@@ -50,7 +57,10 @@
                                                       (map name
                                                            [C
                                                             (first attr-cols)])))
-                 :entity  (assoc meta-data :id (uid this C id-col))
+                 :entity  (assoc meta-data :id
+                                 (if (coll? id-col)
+                                   (uid this id-col)
+                                   (uid this C id-col)))
                  :group   (assoc meta-data :entities (uid this id-col))
                  (throw (IllegalArgumentException. "I only know how to deal with types :value, :entity, and :group"))))))
 

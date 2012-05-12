@@ -16,7 +16,6 @@
   (crawl
     [this db-conn idx-w]
     (let [sql (S :sql)]
-      (println (S :sql))
       (execute-query db-conn sql
                      (fn [row]
                        (add-doc idx-w (data->doc (row->data row S)))))
@@ -25,7 +24,7 @@
         (doseq [value (S :values)]
           (let [query (->
                         sql
-                        (cql/project [(S :ID) value])
+                        (cql/project [value])
                         (cql/grouped [value]))]
             (execute-query db-conn query
                            (fn [row]
