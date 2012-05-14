@@ -16,6 +16,7 @@
   (crawl
     [this db-conn idx-w]
     (let [sql (S :sql)]
+      (println sql)
       (execute-query db-conn sql
                      (fn [row]
                        (add-doc idx-w (data->doc (row->data row S)))))

@@ -15,6 +15,13 @@
        ["-d" "--database" "Database location."]
        ["-i" "--index" "Index location."]))
 
+(defn print-path
+  [dist prev dest]
+  (let [prev-dest (prev dest)]
+    (if (not (nil? dest))
+      (println dest)
+      (print-path dist prev prev-dest))))
+
 (defn -main
   [& args]
   (let [[opts arguments banner] (parse-args (flatten args))
@@ -27,4 +34,6 @@
                 (build database index))
       "algo"  (let [G (idx-searcher (idx-path "mycampus.idx"))]
                 (println "Running Ford-Fulkerson...")
-                (pprint (ford-fulkerson nil "courses|csci_3030u"))))))
+                (let [[dist prev] (ford-fulkerson G "courses|csci_3030u")
+                      dest (prev "instructors|70")]
+                  (print-path dist prev "instructors|74"))))))

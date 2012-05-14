@@ -14,16 +14,12 @@
     row [[:T :ID] [:T :ID]]
     row [[:T :ID :desc] [:T :ID :desc]]"
   ([row C id]
-   (if (nil? (row id))
-     (throw (Exception. (str "ID column " id " does not exist in row " row ".")))
-     (str (name C) "|" (clojure.string/replace (row id) #"\s+" "_"))))
+     (if (nil? (row id))
+       (throw (Exception. (str "ID column " id " does not exist in row " row ".")))
+       (str (name C) "|" (clojure.string/replace (row id) #"\s+" "_"))))
   ([row Tids]
-   (clojure.string/join (if (= (count (first Tids)) 3)
-                          " "
-                          "")
-                        (for [[C id] Tids]
-                          (uid row C id)))))
-
+   (clojure.string/join " " (for [[C id] Tids]
+                              (uid row C id)))))
 (defn field
   [field-name field-value]
   (Field. field-name field-value Field$Store/YES Field$Index/ANALYZED))
