@@ -40,7 +40,7 @@
          dist  {src 0}
          prev  {src nil}]
     (if (empty? queue)
-      [dist prev]
+      [dist prev seen-all]
       (let [v1 (first queue)
             queue (rest queue)
             [seen seen-all dist prev add-to-q]

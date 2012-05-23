@@ -1,0 +1,134 @@
+% Change "draft" to "final" when you're done.
+\documentclass[12pt,letterpaper,oneside,draft]{report}
+
+\usepackage[top=1in, left=1.5in, right=1in, bottom=1in]{geometry}
+
+\usepackage{fontspec,lipsum}
+\usepackage{mathpazo}
+\defaultfontfeatures{Ligatures=TeX}
+\usepackage[small,sf,bf]{titlesec}
+
+%\DisemulatePackage{setspace}
+\usepackage{setspace}
+\onehalfspacing
+
+\usepackage{titling}
+
+\usepackage{unicode-math}
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\setmainfont[
+	Numbers=OldStyle,
+	Kerning=Uppercase,
+	SizeFeatures={
+		{Size={8-10}, Font=* Caption},
+		{Size={10.01-}, Font=*}
+	}]{Garamond Premier Pro}
+\setsansfont{Futura Std}
+\setmathfont{STIXGeneral}
+
+\pagenumbering{roman}
+
+\newcommand{\thesistitle}[8]{
+	\title{#1}
+	\author{#2}
+
+	\begin{titlepage}
+		\centering
+		\vspace{2cm}
+			{\huge\sc #1}\\[1cm]
+
+			by\\[1cm]
+
+			{\Large #2}\\[2cm]
+
+			\singlespacing{A Thesis Submitted in Partial Fulfillment\\of the Requirements for the Degree of}\\[1cm]
+
+			#3\\[0.5cm]
+
+			in\\[0.5cm]
+
+			Faculty of #4\\[0.5cm]
+
+			#5\\[1.5cm]
+
+			University of Ontario Institute of Technology\\[1.5cm]
+
+			Supervisor:  #6\\[1.5cm]
+
+			#7 #8\\[3cm]
+
+			Copyright \copyright\ #2 #8
+	\end{titlepage}}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+
+\begin{document}
+	\thesistitle{Molly}{Richard Drake}{Masters of Science}{Science}{Computer Science}{Dr. Ken Q. Pu}{September}{2012}
+
+	\begin{abstract}
+		\lipsum[2]
+	\end{abstract}
+
+%	\begin{acknowledgements}
+%		\lipsum[2]
+%	\end{acknowledgements}
+
+	\tableofcontents
+	\listoffigures
+	\listoftables
+
+	\clearpage
+	\pagenumbering{arabic}
+
+	\chapter{Introduction}
+
+		\section{Data Representation}
+			The data from the database is represented in various data structures.  There are separate representations for each type of data:  values, entities, and entity groups.
+
+			\subsection{Value}
+				\begin{defn}
+					A \textbf{Value} represents a single piece of information.  To avoid repetition, each value is unique.  That is, $\exists! v \in V$, where $v$ is a value in the set $V$ of all values.
+				\end{defn}
+
+			\subsection{Entity}
+				\begin{defn}
+					An \textbf{Entity} is a collection of attributes, $a_n$, each mapped to a single value, $v_n$.  An entity also includes additional information such as a unique identifier.
+
+					\begin{figure}[!ht]
+						\centering
+						\[
+							\begin{array}{ll}
+								\mathrm{id} & T_n|v_{id} \\
+								a_1 & v_1 \\
+								a_2 & v_2 \\
+								\vdots & \vdots \\
+								a_n & v_n
+							\end{array}
+						\]
+						\caption{The structure of an entity}
+						\label{fig:entity-rep}
+					\end{figure}
+
+					Entities are analogous to rows in a database table.  Thus, the unique identifier is generated based on the table name, $T_n$, as well as unique key in the table, $v_{id}$.  The unique key identifies the row, and the table name identifies the table.  Together they uniquely identify the entity within the entire database.
+
+					$\exists! e_{id} \in E$, where $E$ is the set of all entities in a data set.
+				\end{defn}
+
+			\subsection{Entity Group}
+				\begin{defn}
+					An \textbf{Entity Group}
+				\end{defn}
+
+		\section{Ford-Fulkerson}
+			\begin{algorithm}
+				\begin{algorithmic}
+					\ENSURE $1=1$
+				\end{algorithmic}
+			\end{algorithm}
+\end{document}
