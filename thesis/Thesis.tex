@@ -8,6 +8,9 @@
 \defaultfontfeatures{Ligatures=TeX}
 \usepackage[small,sf,bf]{titlesec}
 
+\usepackage{xltxtra}
+\usepackage{xunicode}
+
 %\DisemulatePackage{setspace}
 \usepackage{setspace}
 \onehalfspacing
@@ -21,6 +24,11 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 
+\usepackage{minted}
+\usepackage{tikz}
+
+\usepackage{nag}
+
 \setmainfont[
 	Numbers=OldStyle,
 	Kerning=Uppercase,
@@ -30,6 +38,7 @@
 	}]{Garamond Premier Pro}
 \setsansfont{Futura Std}
 \setmathfont{STIXGeneral}
+\setmonofont{Consolas}
 
 \pagenumbering{roman}
 
@@ -117,12 +126,41 @@
 
 					Entities are analogous to rows in a database table.  Thus, the unique identifier is generated based on the table name, $T_n$, as well as unique key in the table, $v_{id}$.  The unique key identifies the row, and the table name identifies the table.  Together they uniquely identify the entity within the entire database.
 
-					$\exists! e_{id} \in E$, where $E$ is the set of all entities in a data set.
+					$\exists! e_{id} \in E$, where $E$ is the set of all entities.
 				\end{defn}
 
 			\subsection{Entity Group}
 				\begin{defn}
-					An \textbf{Entity Group}
+					An \textbf{Entity Group} joins together two or more entities.  These entity groups can also have attributes, $a_n$, and values, $v_n$, associated with them much like entities.
+
+					\begin{figure}[!ht]
+						\centering
+						\[
+							\begin{array}{ll}
+								e_L & \left[ e_1, e_2, \ldots, e_n \right] \\
+								a_1 & v_1 \\
+								a_2 & v_2 \\
+								\vdots & \vdots \\
+								a_n & v_n
+							\end{array}
+						\]
+						\caption{The structure of an entity group}
+						\label{fig:entity-group-rep}
+					\end{figure}
+
+					\begin{tikzpicture}
+						[scale=.8,auto=left,every node/.style={circle}]
+  \node (e1) at (1,1) {$e_1$};
+  \node (e2) at (4,2)  {$e_2$};
+  \node (e3) at (7,3)  {$e_3$};
+  \node (e4) at (10,3) {$e_4$};
+  \node (e5) at (13,2)  {$e_5$};
+  \node (e6) at (16,1)  {$e_6$};
+
+  \foreach \from/\to in {e1/e2,e2/e3,e3/e4,e4/e5,e5/e6}
+    \draw (\from) -- (\to);
+
+\end{tikzpicture}
 				\end{defn}
 
 		\section{Ford-Fulkerson}
@@ -131,4 +169,23 @@
 					\ENSURE $1=1$
 				\end{algorithmic}
 			\end{algorithm}
+
+	\chapter{Moar Source Code}
+		\section{Ford-Fulkerson}
+			\begin{minted}{clj}
+(defn ford-fulkerson
+  [G src]
+  (loop [queue [src]
+         seen  #{src}
+         seen-all #{}
+         dist  {src 0}
+         prev  {src nil}]
+    (if (empty? queue)
+      [dist prev seen-all]
+      (let [v1 (first queue)
+            queue (rest queue)
+            [seen seen-all dist prev add-to-q]
+              (update-neighbours G v1 seen seen-all dist prev)]
+        (recur (concat queue add-to-q) seen seen-all dist prev)))))
+			\end{minted}
 \end{document}
