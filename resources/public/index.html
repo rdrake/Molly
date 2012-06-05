@@ -16,7 +16,7 @@ body {
 	text-align: center; /* center align it with the container */
 }
 
-.footer .container {
+.container .footer {
 	margin-top: 1em;
 }
 
@@ -31,7 +31,7 @@ body {
 	margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
 	-webkit-border-radius: 0 0 6px 6px;
 	-moz-border-radius: 0 0 6px 6px;
-	border-radius: 0 0 6px 6px;
+	border-radius: 0 0 6px 6px;i
 	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
 	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
 	box-shadow: 0 1px 2px rgba(0,0,0,.15);
@@ -67,23 +67,19 @@ body {
 						<small> Automated knowledge discovery</small>
 					</h1>
 				</div>
-				<h3 class="loader">
-					<img src="/img/ajax-loader.gif">
-					Loading results...
-				</h3>
-				<form class="form-horizontal">
+				<form id="spanning" class="form-horizontal">
 					<fieldset>
 						<div class="control-group">
 							<label class="control-label" for="e0">e<sub>0</sub></label>
 							<div class="controls">
-								<input type="text" class="input-xlarge" id="e0">
+								<input type="text" class="input-xlarge" id="e0" value="instructors|74">
 								<span class="help-block">The entity to begin the search at</span>
 							</div>
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="eL">e<sub>L</sub></label>
 							<div class="controls">
-								<input type="text" class="input-xlarge" id="eL">
+								<input type="text" class="input-xlarge" id="eL" value="instructors|75,instructors|77">
 								<span class="help-block">A comma-separated list of entities that must be in the results</span>
 							</div>
 						</div>
@@ -93,6 +89,11 @@ body {
 						</div>
 					</fieldset>
 				</form>
+				<h3 class="loader">
+					<img src="/img/ajax-loader.gif">
+					Loading results...
+				</h3>
+				<div id="results"></div>
 			</div>
 		</div>
 		<div class="container">
@@ -103,6 +104,70 @@ body {
 
 		<script src="/js/jquery-1.7.1.js"></script>
 		<script src="/bootstrap/js/bootstrap.js"></script>
+
+		<script>
+			var form = $("#spanning"),
+				e0 = $("#e0"),
+				eL = $("#eL"),
+				cont = true;
+
+			form.submit(function(e) {
+				if (e0.val() == "") {
+					e0.parent().parent().addClass("error");
+					cont = false;
+				} else {
+					e0.parent().parent().removeClass("error");
+					cont = true;
+				}
+				
+				if (eL.val() == "") {
+					eL.parent().parent().addClass("error");
+					cont = false;
+				} else {
+					eL.parent().parent().removeClass("error");
+					cont = true;
+				}
+
+				//
+				if (cont) {
+					$("#results").empty();
+
+					$.getJSON("/span",
+						{e0: e0.val(), eL: eL.val().split(",")},
+						function(data) {
+							$(".loader").hide();
+							
+							var fst = eL.val().split(",");
+							var results = [];
+							
+							for (e in fst) {
+								var result = [];
+								var next = fst[e];
+
+								do {
+									result.push(next);
+									next = data.prev[next];
+								} while (next != e0.val());
+
+								result.push(next);
+
+								results.push(result);
+							}
+
+							$("#results").empty();
+
+							for (result in results) {
+								$("<p/>").append(results[result].join(" &rarr; ")).appendTo("#results");
+							}
+						}
+					);
+
+					$(".loader").show();
+				}
+
+				return false;
+			});
+		</script>
 
 		<!--<script>
 			var typeahead = $("#value");
