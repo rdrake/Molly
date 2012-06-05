@@ -44,14 +44,6 @@ body {
 	margin: -20px -20px 20px;
 }
 
-form {
-	height: 20px;
-}
-
-input {
-	margin-top: 5px;
-}
-
 .loader {
 	display: none;
 }
@@ -62,9 +54,9 @@ input {
 			<div class="navbar-inner">
 				<div class="container">
 					<a class="brand" href="/">Molly</a>
-					<form id="search-form" class="pull-left" action>
+					<!--<form id="search-form" class="pull-left" action>
 						<input type="search" placeholder="Search" data-provide="typeahead" class="typeahead" id="value" tabindex="1">
-					</form>
+					</form>-->
 				</div>
 			</div>
 		</div>
@@ -79,21 +71,40 @@ input {
 					<img src="/img/ajax-loader.gif">
 					Loading results...
 				</h3>
-				<div id="results">
-				</div>
+				<form class="form-horizontal">
+					<fieldset>
+						<div class="control-group">
+							<label class="control-label" for="e0">e<sub>0</sub></label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" id="e0">
+								<span class="help-block">The entity to begin the search at</span>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="eL">e<sub>L</sub></label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" id="eL">
+								<span class="help-block">A comma-separated list of entities that must be in the results</span>
+							</div>
+						</div>
+						<div class="form-actions">
+							<button id="submit-btn" type="submit" class="btn btn-primary">Search</button>
+							<button id="clear-btn" class="btn">Clear</button>
+						</div>
+					</fieldset>
+				</form>
 			</div>
 		</div>
-		<footer class="footer">
-			<div class="container">
-				<p class="pull-right"><a href="http://github.com/rdrake/Molly">Fork Me</a></p>
+		<div class="container">
+			<footer class="footer">
 				<p>Built by <a href="http://me.rdrake.org/">Richard Drake</a> as a graduate research project.  Supervised by <a href="http://leda.science.uoit.ca/kenpu/">Dr. Ken Pu</a> of <a href="http://uoit.ca/">UOIT</a>.</p>
-			</div>
-		</footer>
+			</footer>
+		</div>
 
 		<script src="/js/jquery-1.7.1.js"></script>
 		<script src="/bootstrap/js/bootstrap.js"></script>
 
-		<script>
+		<!--<script>
 			var typeahead = $("#value");
 			var form = $("#search-form");
 
@@ -124,6 +135,6 @@ input {
 				
 				return false;
 			});
-		</script>
+		</script>-->
 	</body>
 </html>

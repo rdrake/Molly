@@ -2,7 +2,7 @@
             :description  "Knowledge discovery engine."
             :source-path  "src"
             :dependencies
-              [[org.clojure/clojure                   "1.4.0-beta1"]
+              [[org.clojure/clojure                   "1.4.0"]
                [org.apache.lucene/lucene-core         "3.5.0"]
                [org.apache.lucene/lucene-analyzers    "3.5.0"]
                [sqlitejdbc                            "0.5.6"]
