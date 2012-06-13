@@ -41,3 +41,18 @@ body {
 .loader {
 	display: none;
 }
+
+.entity {
+	min-height: 50px;
+	min-width: 200px;
+	padding: 10px;
+}
+
+#entity-list > .entity {
+	width: 90%;
+}
+
+#entity-list {
+	height: 400px;
+	overflow-y: scroll;
+}

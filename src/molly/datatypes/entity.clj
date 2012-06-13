@@ -78,16 +78,16 @@
   [this]
   (let [int-meta  (meta this)
         T         (int-meta :type)
+        all       (clojure.string/join " " (vals this))
         luc-meta  [[:__type__  (name T)]
                    [:__class__ (name (int-meta :class))]
-                   [:__all__   (let [all (clojure.string/join " " (vals this))]
-                                 (if (= T :value)
+                   [:__all__   (if (= T :value)
                                    (q-gram all)
-                                   all))]]
+                                   all)]]
         raw-doc   (concat luc-meta
                           this
                           (condp = (int-meta :type)
-                            :value   []
+                            :value   [[:value all]]
                             :entity  [[:__id__ (int-meta :id)]]
                             :group   []))];[[:entities (int-meta :entities)]]))]
     (document raw-doc)))

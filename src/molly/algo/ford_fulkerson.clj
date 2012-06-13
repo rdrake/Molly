@@ -1,5 +1,6 @@
 (ns molly.algo.ford-fulkerson
-  (:use molly.algo.common))
+  (:use molly.algo.common
+        clojure.set))
 
 (defn need-relax? [v1 v2 dist]
   (if (dist v2)
@@ -14,7 +15,7 @@
       [dist prev]))
 
 (defn update-neighbours
-  [G v1 seen seen-all dist prev]
+  [G v1 seen seen-all dist prev ^Integer max-hops]
   (loop [v-list   (neighbours G v1)
          seen     seen
          seen-all seen-all
@@ -27,22 +28,21 @@
             v-list (rest v-list)]
         (if (seen-all v2)
           (recur v-list seen seen-all dist prev add-to-q)
-          (let [seen-all seen-all
-                [dist prev] (relax v1 v2 dist prev)
-                add-to-q (if (seen v2) add-to-q (conj add-to-q v2))]
+          (let [[dist prev] (relax v1 v2 dist prev)
+                add-to-q (if (or (seen v2) (> (dist v2) max-hops)) add-to-q (conj add-to-q v2))]
             (recur v-list (conj seen v2) seen-all dist prev add-to-q)))))))
 
 (defn ford-fulkerson
-  [G src]
+  [G src tgts max-hops]
   (loop [queue [src]
          seen  #{src}
          seen-all #{}
          dist  {src 0}
          prev  {src nil}]
-    (if (empty? queue)
+    (if (or (empty? queue) (and (not (nil? tgts)) (subset? tgts seen)))
       [dist prev seen-all]
       (let [v1 (first queue)
             queue (rest queue)
             [seen seen-all dist prev add-to-q]
-              (update-neighbours G v1 seen seen-all dist prev)]
+              (update-neighbours G v1 seen seen-all dist prev max-hops)]
         (recur (concat queue add-to-q) seen seen-all dist prev)))))

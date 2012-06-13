@@ -36,8 +36,8 @@
     (.close)))
 
 (defn idx-search
-  [idx-searcher query]
-  (let [results (. (. idx-searcher search query 100) scoreDocs)]
+  [idx-searcher query topk]
+  (let [results (. (. idx-searcher search query topk) scoreDocs)]
     (map (fn [result] (.doc idx-searcher (.doc result))) results)))
 
 (defn add-doc
