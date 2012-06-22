@@ -30,7 +30,7 @@
                {:result
                 (dox (query :type :value)
                      :text
-                     (clojure.string/split (q-gram q) #"\s{1}") :or 10)}))
+                     (clojure.string/split (q-gram q) #"\s{1}") :or 3)}))
 
     (defpage "/entities" {:keys [q]}
              (response/json

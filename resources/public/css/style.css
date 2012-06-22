@@ -51,8 +51,3 @@ body {
 #entity-list > .entity {
 	width: 90%;
 }
-
-#entity-list {
-	height: 400px;
-	overflow-y: scroll;
-}
