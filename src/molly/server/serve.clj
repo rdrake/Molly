@@ -9,8 +9,8 @@
             [noir.response :as response]))
 
 (defn start!
-  []
-  (let [searcher (idx-searcher (idx-path "mycampus.idx"))]
+  [props]
+  (let [searcher (idx-searcher (idx-path (props :index)))]
     (defn dox
       [q1 field S op topk]
       (let [bq      (boolean-query
@@ -30,31 +30,32 @@
                {:result
                 (dox (query :type :value)
                      :text
-                     (clojure.string/split (q-gram q) #"\s{1}") :or 3)}))
+                     (clojure.string/split (q-gram q) #"\s{1}")
+                     :or
+                     (props :topk_value))}))
 
     (defpage "/entities" {:keys [q]}
              (response/json
                {:result
                 (dox (query :type :entity)
                      :text
-                     (clojure.string/split (q-gram q) #"\s{1}") :or 3)}))
+                     (clojure.string/split q #"\s{1}")
+                     :and
+                     (props :topk_entities))}))
 
     (defpage "/entity" {:keys [q]}
              (response/json
                {:result
                 (dox (query :type :entity)
                      :id
-                     (clojure.string/split q #"\s{1}") :and 3)}))
+                     (clojure.string/split q #"\s{1}")
+                     :and
+                     (props :topk_entity))}))
 
-    (defpage "/group" {:keys [q]}
-             (response/json
-               {:result
-                (dox (query :type :group) :entities [q] :and 10)}))
-    
     (defpage "/span" {:keys [e0 eL]}
              (let [start (System/currentTimeMillis)
                    [dist prev seen-all]
-                   (ford-fulkerson searcher e0 (set eL) 5)
+                   (ford-fulkerson searcher e0 (set eL) (props :topk_ff))
                    new-eL               (apply disj
                                                (set eL)
                                                (set seen-all))

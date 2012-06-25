@@ -1,6 +1,7 @@
 (ns molly.core
   (:gen-class)
   (:use molly.algo.ford-fulkerson
+        molly.conf.config
         molly.server.serve
         molly.index.build
         molly.search.lucene
@@ -11,29 +12,15 @@
 (defn parse-args
   [args]
   (cli args
-       ["-a" "--action" "Action to perform [serve|index|algo]"]
-       ["-d" "--database" "Database location."]
-       ["-i" "--index" "Index location."]))
-
-(defn print-path
-  [dist prev dest]
-  (println dest)
-  (if (nil? (prev dest))
-    nil
-    (print-path dist prev (prev dest))))
+       ["-a" "--action" "Action to perform [serve|index]"]
+       ["-c" "--config" "Path to configuration (properties) file"]))
 
 (defn -main
   [& args]
   (let [[opts arguments banner] (parse-args (flatten args))
-        action                  (opts :action)]
+        action                  (opts :action)
+        properties              (load-props (opts :config))]
     (condp = action
-      "serve" ((println "Starting Molly...")
-                 (start!))
-      "index" (let [database  (opts :database)
-                    index     (opts :index)]
-                (build database index))
-      "algo"  (let [G (idx-searcher (idx-path "mycampus.idx"))]
-                (println "Running Ford-Fulkerson...")
-                (let [[dist prev] (ford-fulkerson G "courses|csci_4100u")]
-                      ;dest (prev "instructors|74")]
-                  (print-path dist prev "instructors|74"))))))
+      "serve" (start! properties)
+      "index" (build (properties :database)
+                     (properties :index)))))

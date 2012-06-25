@@ -42,12 +42,27 @@ body {
 	display: none;
 }
 
-.entity {
-	min-height: 50px;
-	min-width: 200px;
-	padding: 10px;
-}
-
 #entity-list > .entity {
 	width: 90%;
+}
+
+.result-table {
+	width: 100%;
+}
+
+.result-table:hover {
+	background-color: #eee;
+}
+
+.result-table-key {
+	width: 25%;
+}
+
+.result-table-value {
+	width: 75%;
+}
+
+#q1-list, #q2-list {
+	height: 200px;
+	overflow: scroll;
 }

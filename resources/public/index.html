@@ -17,34 +17,33 @@
 			<div class="content">
 				<div class="page-header">
 					<h1>Molly
-						<small> Automated knowledge discovery</small>
+						<small>Automated knowledge discovery</small>
 					</h1>
 				</div>
 				<div class="row">
-					<div class="span5"><h3>Source</h3></div>
-					<div class="span5"><h3>Destination</h3></div>
-				</div>
-				<div class="row">
-					<div id="source-entity" class="span5 entity">Please choose an entity.</div>
-					<div id="destination-entity" class="span5 entity">Please choose an entity.</div>
-				</div>
-				<div class="row">
 					<div class="span5">
-						<a class="btn" data-toggle="modal" href="#wat">Choose</a>
+						<h2>Start</h2>
+						<input type="text" class="input-xlarge" data-bind="value: q1, valueUpdate: 'afterkeydown'">
+						<p>Did you mean <span id="q1-dym"></span>?</p>
+						<div id="q1-list"></div>
+						<p>Chosen:  <span data-bind="text: from"></span></p>
 					</div>
 					<div class="span5">
-						<a class="btn" data-toggle="modal" href="#wat">Choose</a>
+						<h2>End</h2>
+						<input type="text" class="input-xlarge" data-bind="value: q2, valueUpdate: 'afterkeydown'">
+						<p>Did you mean <span id="q2-dym"></span>?</p>
+						<div id="q2-list"></div>
+						<p>Chosen:  <span data-bind="text: to"></span></p>
 					</div>
-				</div>
 
-				<form id="spanning" class="form-horizontal">
-					<fieldset>
-						<div class="form-actions">
-							<button id="submit-btn" type="submit" class="btn btn-primary">Search</button>
-							<button id="clear-btn" class="btn">Clear</button>
-						</div>
-					</fieldset>
-				</form>
+					<p style="text-align: center;">
+						<form action="/span">
+							<input type="hidden" name="e0" data-bind="value: from">
+							<input type="hidden" name="eL[]" data-bind="value: to">
+							<input type="submit" value="Find Matches" class="btn btn-primary">
+						</form>
+					</p>
+				</div>
 				<h3 class="loader">
 					<img src="/img/ajax-loader.gif">
 					Loading results...
@@ -58,34 +57,9 @@
 			</footer>
 		</div>
 
-		<div class="modal hide fade" id="wat">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h3>Choose an Entity</h3>
-			</div>
-			<div class="modal-body">
-				<form id="entity-search">
-					<input id="entity-keyword" class="input-xlarge" placeholder="Keyword to search for">
-					<input class="btn btn-primary" type="submit" value="Search">
-				</form>
-				<p>Choose an entity from the following list.  If your query resulted in a value, clicking on it will bring up matching entities.</p>
-				<ul id="entity-list"></ul>
-			</div>
-			<div class="modal-footer">
-				<a href="#" class="btn" data-dismiss="modal">Cancel</a>
-				<a href="#" class="btn btn-primary" data-dismiss="modal">Save</a>
-			</div>
-		</div>
-
-		<script id="instructors-template" type="text/x-handlebars-template">
-			<div class="entity">
-			<h3>{{this.results.name}}</h3>
-			</div>
-		</script>
-
 		<script src="/js/jquery-1.7.1.js"></script>
 		<script src="/bootstrap/js/bootstrap.js"></script>
-		<script src="/js/ember-0.9.8.1.min.js"></script>
-		<script src="/js/behaviour.js"></script>
+		<script src="/js/knockout-2.1.0.js"></script>
+		<script src="/js/app.js"></script>
 	</body>
 </html>
