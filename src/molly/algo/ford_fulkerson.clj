@@ -33,13 +33,13 @@
             (recur v-list (conj seen v2) seen-all dist prev add-to-q)))))))
 
 (defn ford-fulkerson
-  [G src tgts max-hops]
+  [G src tgt max-hops]
   (loop [queue [src]
          seen  #{src}
          seen-all #{}
          dist  {src 0}
          prev  {src nil}]
-    (if (or (empty? queue) (and (not (nil? tgts)) (subset? tgts seen)))
+    (if (or (empty? queue) (and (not (nil? tgt)) (subset? #{tgt} seen)))
       [dist prev seen-all]
       (let [v1 (first queue)
             queue (rest queue)
