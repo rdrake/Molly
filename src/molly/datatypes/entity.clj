@@ -78,7 +78,11 @@
   [this]
   (let [int-meta  (meta this)
         T         (int-meta :type)
-        all       (clojure.string/join " " (vals this))
+        all       (clojure.string/join " "
+                                       (if (= T :entity)
+                                         (conj (vals this)
+                                               (name (int-meta :class)))
+                                         (vals this)))
         luc-meta  [[:__type__  (name T)]
                    [:__class__ (name (int-meta :class))]
                    [:__all__   (if (= T :value)
