@@ -1,3 +1,5 @@
+$(".hidden").hide();
+
 var SearchModel = {
 	q1: ko.observable(""),
 	q2: ko.observable(""),
@@ -8,6 +10,12 @@ var SearchModel = {
 }
 
 function didYouMean(query, prop, sel) {
+	if (query != "") {
+		sel.parent().show();
+	} else {
+		sel.parent().hide();
+	}
+
 	$.getJSON("/value", {q: query}, function(data) {
 		if (data.result.length > 0) {
 			var result = data.result[0].results.value;
@@ -15,6 +23,7 @@ function didYouMean(query, prop, sel) {
 
 			a.click(function() {
 				prop(result);
+				sel.parent().hide();
 			});
 
 			sel.empty().append(a[0]);
@@ -40,9 +49,13 @@ function createTable(id, obj, prop) {
 			obj[keys[key]] + "</td></tr>");
 	}
 
-	tbl.click(function() {
-		prop(id);
-	});
+	if (prop != undefined) {
+		tbl.click(function() {
+			prop(id);
+			tbl.parent().children().removeClass("selected");
+			tbl.addClass("selected");
+		});
+	}
 
 	return tbl;
 }
@@ -55,11 +68,35 @@ function drawListBox(values, sel, prop) {
 	});
 }
 
-$("#do-search").click(function() {
+$("#do-search").submit(function(e) {
 	if ((SearchModel.from() != undefined) &&
 		(SearchModel.to() != undefined)) {
-		console.log("WHOO");
+		$.getJSON("/span", {
+			e0: SearchModel.from(), eL: SearchModel.to()
+		}, function(data) {
+			var resDiv = $("#results");
+			var res = data.to;
+
+			console.log(data);
+
+			resDiv.empty();
+
+			while (res != undefined) {
+				if (data.entities[res] != undefined) {
+					var entity = data.entities[res][0];
+					resDiv.append(createTable(entity.meta.id, entity.results));
+					res = data.prev[res];
+				} else {
+					alert("Uh oh...");
+					return false;
+				}
+			}
+		});
 	}
+
+	e.preventDefault();
+	
+	return false;
 });
 
 SearchModel.q1.subscribe(function(q1) {

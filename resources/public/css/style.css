@@ -54,6 +54,10 @@ body {
 	background-color: #eee;
 }
 
+.selected {
+	background-color: #bbb;
+}
+
 .result-table-key {
 	width: 25%;
 }

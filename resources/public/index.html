@@ -24,22 +24,18 @@
 					<div class="span5">
 						<h2>Start</h2>
 						<input type="text" class="input-xlarge" data-bind="value: q1, valueUpdate: 'afterkeydown'">
-						<p>Did you mean <span id="q1-dym"></span>?</p>
+						<p class="hidden">Did you mean <span id="q1-dym"></span>?</p>
 						<div id="q1-list"></div>
-						<p>Chosen:  <span data-bind="text: from"></span></p>
 					</div>
 					<div class="span5">
 						<h2>End</h2>
 						<input type="text" class="input-xlarge" data-bind="value: q2, valueUpdate: 'afterkeydown'">
-						<p>Did you mean <span id="q2-dym"></span>?</p>
+						<p class="hidden">Did you mean <span id="q2-dym"></span>?</p>
 						<div id="q2-list"></div>
-						<p>Chosen:  <span data-bind="text: to"></span></p>
 					</div>
 
 					<p style="text-align: center;">
-						<form action="/span">
-							<input type="hidden" name="e0" data-bind="value: from">
-							<input type="hidden" name="eL" data-bind="value: to">
+						<form id="do-search">
 							<input type="submit" value="Find Matches" class="btn btn-primary">
 						</form>
 					</p>
