@@ -1,6 +1,6 @@
 (ns molly.server.serve
   (:use noir.core
-        molly.algo.ford-fulkerson
+        molly.algo.bellman-ford
         molly.datatypes.entity
         molly.search.lucene
         molly.search.query-builder
@@ -55,7 +55,7 @@
 
     (defpage "/span" {:keys [e0 eL]}
              (let [start                (System/currentTimeMillis)
-                   [dist prev seen-all] (ford-fulkerson
+                   [dist prev seen-all] (bellman-ford
                                           searcher e0 eL
                                           (props :topk_ff))
                    t                    (- (System/currentTimeMillis) start)

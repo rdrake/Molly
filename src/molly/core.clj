@@ -1,7 +1,6 @@
 (ns molly.core
   (:gen-class)
-  (:use molly.algo.ford-fulkerson
-        molly.conf.config
+  (:use molly.conf.config
         molly.server.serve
         molly.index.build
         molly.search.lucene

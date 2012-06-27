@@ -1,4 +1,4 @@
-(ns molly.algo.ford-fulkerson
+(ns molly.algo.bellman-ford
   (:use molly.algo.common
         clojure.set))
 
@@ -32,7 +32,7 @@
                 add-to-q (if (or (seen v2) (> (dist v2) max-hops)) add-to-q (conj add-to-q v2))]
             (recur v-list (conj seen v2) seen-all dist prev add-to-q)))))))
 
-(defn ford-fulkerson
+(defn bellman-ford
   [G src tgt max-hops]
   (loop [queue [src]
          seen  #{src}
