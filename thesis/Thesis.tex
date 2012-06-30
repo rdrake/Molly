@@ -24,7 +24,7 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 
-\usepackage{minted}
+%\usepackage{minted}
 \usepackage{tikz}
 
 \usepackage{nag}
@@ -170,22 +170,18 @@
 				\end{algorithmic}
 			\end{algorithm}
 
-	\chapter{Moar Source Code}
-		\section{Ford-Fulkerson}
-			\begin{minted}{clj}
-(defn ford-fulkerson
-  [G src]
-  (loop [queue [src]
-         seen  #{src}
-         seen-all #{}
-         dist  {src 0}
-         prev  {src nil}]
-    (if (empty? queue)
-      [dist prev seen-all]
-      (let [v1 (first queue)
-            queue (rest queue)
-            [seen seen-all dist prev add-to-q]
-              (update-neighbours G v1 seen seen-all dist prev)]
-        (recur (concat queue add-to-q) seen seen-all dist prev)))))
-			\end{minted}
+	
+	\chapter{Blah blah blah}
+		\section{Choosing a Breadth-First Search Algorithm}
+			We took several criteria into consideration when choosing a Breadth-First Search algorithm to perform the graph search.  In the context of this problem, there is no obvious heuristic to help predict the distance between two nodes.  We decided to use a constant cost function.  That is, $d_{(v_1, v_2)} = n$.  The selected algorithm must also be highly parallelizable.
+
+			
+
+			BFS - Wrong result if non-uniform distance
+			Bellman-Ford - Always correct result
+			Dijkstra - Faster than Bellman-Ford, uses priority queue
+			Push-Relabel \& Johnson - Uses complicated (and difficult to parallelize) data structures
+			A-Star Search - No obvious heuristic
+	
+	
 \end{document}

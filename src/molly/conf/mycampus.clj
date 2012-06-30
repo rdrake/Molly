@@ -37,7 +37,7 @@
       :sql    (table :courses)
       :ID     :code
       :attrs  [:code :title :description]
-      :values [:title]})
+      :values [:code :title]})
    (EntitySchema.
      {:T      :entity
       :C      :instructors
@@ -51,7 +51,7 @@
       :sql    (table :v_schedules)
       :ID     :id
       :attrs  [:position :actual :campus :capacity :credits :levels :registration_start :registration_end :semester :sec_code :sec_number :year :course :date_start :date_end :day :schedtype :hour_start :hour_end :min_start :min_end :classtype :location]
-      :values [:position :campus :location]})
+      :values [:campus :location]})
    (EntitySchema.
      {:T      :group
       :C      "Instructor schedule"
