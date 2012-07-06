@@ -22,7 +22,16 @@
 
 # Chapter 4:  System Implementation and Performance
 
-## Introduction
+## Overview of System Components
+
+### Crawler
+### Indexer
+### Core (Processing)
+### API
+### Frontend
+
+## Data Flow
+- Link together data representation with flow
 
 # Chapter 5:  Utilizing Multicore Systems
 
