@@ -6,7 +6,8 @@
 # Chapter 1:  Introduction
 - (why am I even bothering with this project in the first place?)
 
-## Outline (what to expect)
+## Outline
+- Quick overview of the wondrous journey they are about to take with me through my thesis
 
 # Chapter 2:  Literature Review
 - (Need some help with this one)
@@ -16,7 +17,8 @@
 
 ## Introduction
 - Data corpus and representation
-		- Probably use Mycampus data as example throughout, representation as 
+    - Probably use Mycampus data as example throughout
+    - Detailed representation data structure overview
 
 # Chapter 4:  System Implementation and Performance
 
