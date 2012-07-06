@@ -4,7 +4,7 @@
 # ToC
 # List of {Tables,Figures,Algorithms}
 # Chapter 1:  Introduction
-- (why am I even bothering with this project in the first place?)
+- (answer:  why am I even bothering with this project in the first place?)
 
 ## Outline
 - Quick overview of the wondrous journey they are about to take with me through my thesis
@@ -33,6 +33,10 @@
 ## Data Flow
 - Link together data representation with flow
 
+## Implementation Issues
+- Data inconsistency (broke crawler/indexer)
+- 
+
 # Chapter 5:  Utilizing Multicore Systems
 
 ## Introduction
@@ -42,6 +46,11 @@
 
 ## Conclusion
 - Was it worth the effort to make concurrent?
+
+
+
+* * *
+Ignore the stuff down here
 
 Goal:  Perform keyword queries on structured data (search engine with "meaning").
 
