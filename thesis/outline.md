@@ -10,8 +10,8 @@ Outline
 		- Outline (what to expect)
 
 # Chapter 2:  Literature Review
-		- (Need some help with this one)
-  	- (Likely not titled "Literature Review")
+- (Need some help with this one)
+- (Likely not titled "Literature Review")
 
 # Chapter 3:  System Design and Rationale
 ## Introduction
@@ -24,9 +24,9 @@ Outline
 # Chapter 5:  Utilizing Multicore Systems
 ## Introduction
 ## Implementation
-		- Analysis of multi threaded vs. single threaded
+- Analysis of multi threaded vs. single threaded
 ## Conclusion
-		- Was it worth the effort to make concurrent?
+- Was it worth the effort to make concurrent?
 
 Goal:  Perform keyword queries on structured data (search engine with "meaning").
 
