@@ -33,14 +33,19 @@ function MollyCtrl($scope, $http) {
 
 				_.each(data.result, function(val, idx) {
 					var context = val.results;
+					var html;
 
+					context.id = val.meta.id;
+					
 					if (val.meta.class == "instructors") {
-						results.append(instructors(context));
+						context.name = context.name.toUpperCase();
+						html = instructors(context);
 					} else if (val.meta.class == "courses") {
 						context.code = context.code.toUpperCase();
-						context.id = val.meta.id;
-						results.append(courses(context));
+						html = courses(context);
 					}
+
+					results.append(html);
 				});
 			});
 		}
@@ -49,5 +54,20 @@ function MollyCtrl($scope, $http) {
 	$scope.updateQuery = function(value) {
 		$scope.query = value;
 		$scope.findValues();
+	}
+}
+
+// Keyboard bindings
+KeyboardJS.bind.key('slash', function() {}, function() {
+	$("#search-box").focus();
+});
+
+function link(eid) {
+	var wl = window.location;
+
+	if (wl.search == "") {
+		window.location = wl.pathname + "?from=" + eid;
+	} else {
+		window.location = "/results.html" + wl.search + "&to=" + eid;
 	}
 }

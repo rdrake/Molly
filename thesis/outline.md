@@ -1,3 +1,33 @@
+Outline
+
+# Title Page
+# Abstract
+# Acknowledgements
+# ToC
+# List of {Tables,Figures,Algorithms}
+# Chapter 1:  Introduction
+- (why am I even bothering with this project in the first place?)
+		- Outline (what to expect)
+
+# Chapter 2:  Literature Review
+		- (Need some help with this one)
+  	- (Likely not titled "Literature Review")
+
+# Chapter 3:  System Design and Rationale
+## Introduction
+- Data corpus and representation
+		- Probably use Mycampus data as example throughout, representation as 
+
+# Chapter 4:  System Implementation and Performance
+## Introduction
+
+# Chapter 5:  Utilizing Multicore Systems
+## Introduction
+## Implementation
+		- Analysis of multi threaded vs. single threaded
+## Conclusion
+		- Was it worth the effort to make concurrent?
+
 Goal:  Perform keyword queries on structured data (search engine with "meaning").
 
 Stages:

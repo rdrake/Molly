@@ -6,20 +6,21 @@
 		<script src="/vendor/bootstrap/js/typeahead.js"></script>
 		<script src="/vendor/angular/angular-1.0.1.min.js"></script>
 
-		<script src="https://github.com/downloads/wycats/handlebars.js/handlebars-1.0.0.beta.6.js"></script>
+		<script src="/vendor/handlebars/handlebars-1.0.0.beta.6.js"></script>
+		<script src="/vendor/keyboardjs/keyboard.0.2.2.min.js"></script>
 
 		<link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="/css/style.css">
 
 		<script id="instructors-template" type="text/x-handlebars-template">
 			<div class="entity">
-				<h2>{{ name }}</h2>
+				<h2><a href="#" onclick="link('{{ id }}')">{{ name }}</a></h2>
 			</div>
 		</script>
 
 		<script id="courses-template" type="text/x-handlebars-template">
 			<div class="entity">
-				<h2><a href="/entity?q={{ id }}">{{ title }}</a></h2>
+				<h2><a href="#" onclick="link('{{ id }}')">{{ title }}</a></h2>
 				<h4>{{ code }}</h4>
 				<p>{{ description }}</p>
 			</div>
@@ -28,14 +29,20 @@
 		<script src="js/app.js"></script>
 	</head>
 	<body>
-		<div class="container">
-			<h1>Molly</h1>
+		<div class="navbar navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="brand" href="/">Molly</a>
+				</div>
+			</div>
+		</div>
 
+		<div class="container">
 			<div class="row" ng-controller="MollyCtrl">
-				<div class="span3">
+				<div class="span3 search well">
 					<p>Enter your query here:</p>
 					<form ng-submit="findValues()">
-						<input ng-model="query" ng-change="findValues()" autofocus>
+						<input id="search-box" ng-model="query" ng-change="findValues()" autofocus>
 					</form>
 
 					<p>Suggestions:</p>
@@ -46,7 +53,7 @@
 					</ul>
 				</div>
 
-				<div class="span9">
+				<div class="span9 results">
 					<div id="results"></div>
 				</div>
 			</div>
