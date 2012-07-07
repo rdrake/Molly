@@ -5,8 +5,7 @@
         molly.index.build
         molly.search.lucene
         molly.search.query-builder
-        [clojure.tools.cli :only (cli)]
-        [clojure.pprint :only (pprint)]))
+        [clojure.tools.cli :only (cli)]))
 
 (defn parse-args
   [args]

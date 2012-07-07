@@ -17,6 +17,6 @@
         big-str (clojure.string/join " " (map #(% :entities) results))]
     (distinct (clojure.string/split big-str #"\s{1}"))))
 
-(defn neighbours
+(defn find-adj
   [G v]
   (find-group-for-id G v))

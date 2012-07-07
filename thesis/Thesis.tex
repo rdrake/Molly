@@ -89,79 +89,98 @@
 %	\end{acknowledgements}
 
 	\tableofcontents
-	\listoffigures
+
 	\listoftables
+	\listoffigures
+	\listofalgorithms
 
 	\clearpage
 	\pagenumbering{arabic}
 
 	\chapter{Introduction}
 
-		\section{Data Representation}
-			The data from the database is represented in various data structures.  There are separate representations for each type of data:  values, entities, and entity groups.
+		\section{Outline}
 
-			\subsection{Value}
-				\begin{defn}
-					A \textbf{Value} represents a single piece of information.  To avoid repetition, each value is unique.  That is, $\exists! v \in V$, where $v$ is a value in the set $V$ of all values.
-				\end{defn}
+	\chapter{Literature Review}
 
-			\subsection{Entity}
-				\begin{defn}
-					An \textbf{Entity} is a collection of attributes, $a_n$, each mapped to a single value, $v_n$.  An entity also includes additional information such as a unique identifier.
+	\chapter{System Design, Rationale, \& Performance}
+		\section{Introduction}
+			\subsection{Data Representation}
+				The data from the database is represented in various data structures.  There are separate representations for each type of data:  values, entities, and entity groups.
 
-					\begin{figure}[!ht]
-						\centering
-						\[
-							\begin{array}{ll}
-								\mathrm{id} & T_n|v_{id} \\
-								a_1 & v_1 \\
-								a_2 & v_2 \\
-								\vdots & \vdots \\
-								a_n & v_n
-							\end{array}
-						\]
-						\caption{The structure of an entity}
-						\label{fig:entity-rep}
-					\end{figure}
+				\subsubsection{Value}
+					\begin{defn}
+						A \textbf{Value} represents a single piece of information.  To avoid repetition, each value is unique.  That is, $\exists! v \in V$, where $v$ is a value in the set $V$ of all values.
+					\end{defn}
 
-					Entities are analogous to rows in a database table.  Thus, the unique identifier is generated based on the table name, $T_n$, as well as unique key in the table, $v_{id}$.  The unique key identifies the row, and the table name identifies the table.  Together they uniquely identify the entity within the entire database.
+				\subsubsection{Entity}
+					\begin{defn}
+						An \textbf{Entity} is a collection of attributes, $a_n$, each mapped to a single value, $v_n$.  An entity also includes additional information such as a unique identifier.
 
-					$\exists! e_{id} \in E$, where $E$ is the set of all entities.
-				\end{defn}
+						\begin{figure}[!ht]
+							\centering
+							\[
+								\begin{array}{ll}
+									\mathrm{id} & T_n|v_{id} \\
+									a_1 & v_1 \\
+									a_2 & v_2 \\
+									\vdots & \vdots \\
+									a_n & v_n
+								\end{array}
+							\]
+							\caption{The structure of an entity}
+							\label{fig:entity-rep}
+						\end{figure}
 
-			\subsection{Entity Group}
-				\begin{defn}
-					An \textbf{Entity Group} joins together two or more entities.  These entity groups can also have attributes, $a_n$, and values, $v_n$, associated with them much like entities.
+						Entities are analogous to rows in a database table.  Thus, the unique identifier is generated based on the table name, $T_n$, as well as unique key in the table, $v_{id}$.  The unique key identifies the row, and the table name identifies the table.  Together they uniquely identify the entity within the entire database.
 
-					\begin{figure}[!ht]
-						\centering
-						\[
-							\begin{array}{ll}
-								e_L & \left[ e_1, e_2, \ldots, e_n \right] \\
-								a_1 & v_1 \\
-								a_2 & v_2 \\
-								\vdots & \vdots \\
-								a_n & v_n
-							\end{array}
-						\]
-						\caption{The structure of an entity group}
-						\label{fig:entity-group-rep}
-					\end{figure}
+						$\exists! e_{id} \in E$, where $E$ is the set of all entities.
+					\end{defn}
 
-					\begin{tikzpicture}
-						[scale=.8,auto=left,every node/.style={circle}]
-  \node (e1) at (1,1) {$e_1$};
-  \node (e2) at (4,2)  {$e_2$};
-  \node (e3) at (7,3)  {$e_3$};
-  \node (e4) at (10,3) {$e_4$};
-  \node (e5) at (13,2)  {$e_5$};
-  \node (e6) at (16,1)  {$e_6$};
+				\subsubsection{Entity Group}
+					\begin{defn}
+						An \textbf{Entity Group} joins together two or more entities.  These entity groups can also have attributes, $a_n$, and values, $v_n$, associated with them much like entities.
 
-  \foreach \from/\to in {e1/e2,e2/e3,e3/e4,e4/e5,e5/e6}
-    \draw (\from) -- (\to);
+						\begin{figure}[!ht]
+							\centering
+							\[
+								\begin{array}{ll}
+									e_L & \left[ e_1, e_2, \ldots, e_n \right] \\
+									a_1 & v_1 \\
+									a_2 & v_2 \\
+									\vdots & \vdots \\
+									a_n & v_n
+								\end{array}
+							\]
+							\caption{The structure of an entity group}
+							\label{fig:entity-group-rep}
+						\end{figure}
 
-\end{tikzpicture}
-				\end{defn}
+						\begin{tikzpicture}
+							[scale=.8,auto=left,every node/.style={circle}]
+							\node (e1) at (1,1) {$e_1$};
+							\node (e2) at (4,2)  {$e_2$};
+							\node (e3) at (7,3)  {$e_3$};
+							\node (e4) at (10,3) {$e_4$};
+							\node (e5) at (13,2)  {$e_5$};
+							\node (e6) at (16,1)  {$e_6$};
+
+							\foreach \from/\to in {e1/e2,e2/e3,e3/e4,e4/e5,e5/e6}
+								\draw (\from) -- (\to);
+
+						\end{tikzpicture}
+					\end{defn}
+
+			\section{Overview of System Components}
+				\subsection{Crawler}
+				\subsection{Indexer}
+				\subsection{Core (Processing)}
+				\subsection{API}
+				\subsection{Frontend}
+
+			\section{Data Flow}
+			
+			\section{Implementation Issues}
 
 		\section{Ford-Fulkerson}
 			\begin{algorithm}

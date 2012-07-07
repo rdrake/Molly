@@ -1,6 +1,7 @@
 (ns molly.server.serve
   (:use noir.core
-        molly.algo.bellman-ford
+        molly.algo.bfs
+        molly.algo.bfs-atom
         molly.datatypes.entity
         molly.search.lucene
         molly.search.query-builder
@@ -53,11 +54,12 @@
                {:result
                 (entities :id q (props :topk_entity))}))
 
-    (defpage "/span" {:keys [e0 eL]}
+    (defpage "/span" {:keys [e0 eL method]}
              (let [start                (System/currentTimeMillis)
-                   [dist prev seen-all] (bellman-ford
-                                          searcher e0 eL
-                                          (props :topk_ff))
+                   [visited dist prev]
+                   (if (= method "atom")
+                          (bfs-atom searcher e0 eL (props :topk_ff))
+                          (bfs searcher e0 eL (props :topk_ff)))
                    t                    (- (System/currentTimeMillis) start)
                    eids                 (for [[k v] prev] k)
                    get-entities         (fn [eid]
