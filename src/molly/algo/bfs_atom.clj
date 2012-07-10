@@ -6,8 +6,20 @@
   (atom {:Q       (-> (clojure.lang.PersistentQueue/EMPTY) (conj s))
          :marked  #{s}
          :dist    {s 0}
-         :prev    {s nil}
+         :prev    {}
          :done    false}))
+
+(defn update-state
+  [state u v]
+  (let [Q       (state :Q)
+        marked  (state :marked)
+        dist    (state :dist)
+        prev    (state :prev)]
+    (assoc state
+           :Q       (conj Q v)
+           :marked  (conj marked v)
+           :dist    (assoc dist v (inc (dist u)))
+           :prev    (assoc prev v u))))
 
 (defn deref-future
   [dfd]
@@ -15,35 +27,26 @@
     (deref dfd)
     dfd))
 
-(defn update-state
-  ([S-ref G u]
-   (let [marked?  (@S-ref :marked)
-         deferred (doall
+(defn update-adj
+  [state-ref G u]
+  ;[G marked dist prev u]
+  (let [marked?   (@state-ref :marked)
+        deferred  (doall
                     (for [v (find-adj G u)]
                       (if (marked? v)
                         nil
-                        (future (swap! S-ref update-state G u v)))))]
-     (doall (map deref-future deferred))))
-  ([S G u v]
-   (let [Q      (S :Q)
-         marked (S :marked)
-         dist   (S :dist)
-         prev   (S :prev)]
-   (assoc S
-          :Q      (conj Q v)
-          :marked (conj marked v)
-          :dist   (assoc dist v (inc (dist u)))
-          :prev   (assoc prev v u)))))
+                        (future (swap! state-ref update-state u v)))))]
+    (doall (map deref-future deferred))))
 
 (defn bfs-atom
-  [G s accept]
-  (let [S-ref (initial-state s)]
-    (while (and (not (empty? (@S-ref :Q)))
-                (not (@S-ref :done)))
-      (let [u   (first (@S-ref :Q))
-            Q   (pop (@S-ref :Q))]
-        (swap! S-ref assoc :Q Q)
-        (if (accept u)
-          (swap! S-ref assoc :done true)
-          (update-state S-ref G u))))
-    (shutdown-agents)))
+  [G s tgt]
+  (let [state-ref (initial-state s)]
+    (while (and (not (empty? (@state-ref :Q)))
+                (not (@state-ref :done)))
+      (let [u   (first (@state-ref :Q))
+            Q'  (pop (@state-ref :Q))]
+        (swap! state-ref assoc :Q Q')
+        (if (= u tgt)
+          (swap! state-ref assoc :done true)
+          (update-adj state-ref G u))))
+    @state-ref))

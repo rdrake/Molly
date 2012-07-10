@@ -6,7 +6,6 @@
         molly.index.build
         molly.search.lucene
         molly.search.query-builder
-        molly.algo.bellman-ford
         [clojure.tools.cli :only (cli)]
         [molly.algo.bfs-atom :only (bfs-atom)]
         [molly.algo.bfs-ref :only (bfs-ref)]
@@ -31,12 +30,12 @@
                     (bfs-atom
                       (idx-searcher (idx-path (properties :index)))
                       "instructors|74"
-                      (fn [x] (= x "courses|csci_3030u"))))
+                      "courses|csci_3030u"))
       "bfs-ref"   (time
                     (bfs-ref
                       (idx-searcher (idx-path (properties :index)))
                       "instructors|74"
-                      (fn [x] (= x "courses|csci_3030u"))))
+                      "courses|csci_3030u"))
       "bfs"       (time
                     (bfs
                       (idx-searcher (idx-path (properties :index)))
