@@ -1,6 +1,7 @@
 (ns molly.core
   (:gen-class)
   (:use clojure.pprint
+        criterium.core
         molly.conf.config
         molly.server.serve
         molly.index.build
@@ -20,8 +21,16 @@
 (defn accept
   [args]
   (let [[marked hops] args]
-    (or (some (fn [x] (= x "courses|csci_3030u")) marked)
-        (>= hops 5))))
+    (or (some (fn [x] (= x "educ_3482u")) marked)
+        (>= hops 25))))
+
+(def properties (load-props "mycampus.properties"))
+(def G (idx-searcher (idx-path (properties :index))))
+(def s "instructors|74")
+
+(defn b
+  [f]
+  (bench (f G s accept)))
 
 (defn -main
   [& args]
