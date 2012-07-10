@@ -7,7 +7,8 @@
          :marked  #{s}
          :dist    {s 0}
          :prev    {}
-         :done    false}))
+         :done    false
+         :hops    0}))
 
 (defn update-state
   [state u v]
@@ -29,7 +30,7 @@
 
 (defn update-adj
   [state-ref G u]
-  ;[G marked dist prev u]
+  (swap! state-ref (fn [state] (assoc state :hops (inc (state :hops)))))
   (let [marked?   (@state-ref :marked)
         deferred  (doall
                     (for [v (find-adj G u)]
@@ -39,14 +40,14 @@
     (doall (map deref-future deferred))))
 
 (defn bfs-atom
-  [G s tgt]
+  [G s accept]
   (let [state-ref (initial-state s)]
     (while (and (not (empty? (@state-ref :Q)))
                 (not (@state-ref :done)))
       (let [u   (first (@state-ref :Q))
             Q'  (pop (@state-ref :Q))]
         (swap! state-ref assoc :Q Q')
-        (if (= u tgt)
+        (if (accept [(@state-ref :marked) (@state-ref :hops)])
           (swap! state-ref assoc :done true)
           (update-adj state-ref G u))))
-    @state-ref))
+    [(@state-ref :marked) (@state-ref :dist) (@state-ref :prev)]))

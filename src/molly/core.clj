@@ -17,6 +17,12 @@
        ["-a" "--action" "Action to perform [serve|index]"]
        ["-c" "--config" "Path to configuration (properties) file"]))
 
+(defn accept
+  [args]
+  (let [[marked hops] args]
+    (or (some (fn [x] (= x "courses|csci_3030u")) marked)
+        (>= hops 5))))
+
 (defn -main
   [& args]
   (let [[opts arguments banner] (parse-args (flatten args))
@@ -30,14 +36,14 @@
                     (bfs-atom
                       (idx-searcher (idx-path (properties :index)))
                       "instructors|74"
-                      "courses|csci_3030u"))
+                      accept))
       "bfs-ref"   (time
                     (bfs-ref
                       (idx-searcher (idx-path (properties :index)))
                       "instructors|74"
-                      "courses|csci_3030u"))
+                      accept))
       "bfs"       (time
                     (bfs
                       (idx-searcher (idx-path (properties :index)))
                       "instructors|74"
-                      "courses|csci_3030u")))))
+                      accept)))))

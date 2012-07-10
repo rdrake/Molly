@@ -19,16 +19,17 @@
             (recur adj' marked dist' prev' (conj frontier v))))))))
 
 (defn bfs
-  [G s tgt]
+  [G s accept]
   (loop [Q      (-> (clojure.lang.PersistentQueue/EMPTY) (conj s))
          marked #{}
          dist   {s 0}
-         prev   {s nil}]
+         prev   {s nil}
+         hops   0]
     (if (or (empty? Q)
-            (some (fn [x] (= x tgt)) marked))
+            (accept [marked hops]))
       [marked dist prev]
       (let [u   (first Q)
             Q'  (rest Q)
             [marked' dist' prev' frontier]
             (update-adj G marked dist prev u)]
-        (recur (concat Q' frontier) marked' dist' prev')))))
+        (recur (concat Q' frontier) marked' dist' prev' (inc hops))))))
