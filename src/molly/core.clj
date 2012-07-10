@@ -1,11 +1,16 @@
 (ns molly.core
   (:gen-class)
-  (:use molly.conf.config
+  (:use clojure.pprint
+        molly.conf.config
         molly.server.serve
         molly.index.build
         molly.search.lucene
         molly.search.query-builder
-        [clojure.tools.cli :only (cli)]))
+        molly.algo.bellman-ford
+        [clojure.tools.cli :only (cli)]
+        [molly.algo.bfs-atom :only (bfs-atom)]
+        [molly.algo.bfs-ref :only (bfs-ref)]
+        [molly.algo.bfs :only (bfs)]))
 
 (defn parse-args
   [args]
@@ -19,6 +24,21 @@
         action                  (opts :action)
         properties              (load-props (opts :config))]
     (condp = action
-      "serve" (start! properties)
-      "index" (build (properties :database)
-                     (properties :index)))))
+      "serve"     (start! properties)
+      "index"     (build (properties :database)
+                         (properties :index))
+      "bfs-atom"  (time
+                    (bfs-atom
+                      (idx-searcher (idx-path (properties :index)))
+                      "instructors|74"
+                      (fn [x] (= x "courses|csci_3030u"))))
+      "bfs-ref"   (time
+                    (bfs-ref
+                      (idx-searcher (idx-path (properties :index)))
+                      "instructors|74"
+                      (fn [x] (= x "courses|csci_3030u"))))
+      "bfs"       (time
+                    (bfs
+                      (idx-searcher (idx-path (properties :index)))
+                      "instructors|74"
+                      "courses|csci_3030u")))))

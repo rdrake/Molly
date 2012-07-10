@@ -71,3 +71,41 @@ function link(eid) {
 		window.location = "/results.html" + wl.search + "&to=" + eid;
 	}
 }
+
+function findPath(from, to) {
+	$.get("/span", {e0: from, eL: to}, function(data) {
+		var results = $("#results");
+		results.empty();
+
+		var e = to;
+		var eids = [];
+
+		while ((e != null) && (e != from)) {
+			eids.push(e);
+			e = data.prev[e];
+		}
+
+		eids.push(from);
+		eids = eids.reverse();
+
+		_.each(eids, function(val, idx) {
+			var entity = data.entities[val][0];
+			var context = entity.results;
+			var html;
+
+			context.id = entity.meta.id;
+				
+			if (entity.meta.class == "instructors") {
+				context.name = context.name.toUpperCase();
+				html = instructors(context);
+			} else if (entity.meta.class == "courses") {
+				context.code = context.code.toUpperCase();
+				html = courses(context);
+			} else {
+				html = "<div class='entity'>" + context.id + "</div>";
+			}
+
+			results.append(html);
+		});
+	});
+}

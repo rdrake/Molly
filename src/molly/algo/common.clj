@@ -19,4 +19,4 @@
 
 (defn find-adj
   [G v]
-  (find-group-for-id G v))
+  (remove #{v} (find-group-for-id G v)))

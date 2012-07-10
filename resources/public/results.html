@@ -1,19 +1,62 @@
-Results go here.
+<!doctype html>
+<html ng-app>
+	<head>
+		<script src="/vendor/jquery/jquery-1.7.2.min.js"></script>
+		<script src="/vendor/underscore/underscore-min.js"></script>
+		<script src="/vendor/bootstrap/js/typeahead.js"></script>
+		<script src="/vendor/angular/angular-1.0.1.min.js"></script>
 
-<script>
-	var urlParams = {};
+		<script src="/vendor/handlebars/handlebars-1.0.0.beta.6.js"></script>
+		<script src="/vendor/keyboardjs/keyboard.0.2.2.min.js"></script>
 
-	(function () {
-		var match,
-		pl     = /\+/g,  // Regex for replacing addition symbol with a space
-		search = /([^&=]+)=?([^&]*)/g,
-		decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
-		query  = window.location.search.substring(1);
+		<link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/css/style.css">
 
-		while (match = search.exec(query))
-			urlParams[decode(match[1])] = decode(match[2]);
-	})();
+		<script id="instructors-template" type="text/x-handlebars-template">
+			<div class="entity">
+				<h2><a href="#">{{ name }}</a></h2>
+			</div>
+		</script>
 
-console.log(urlParams["from"]);
-console.log (urlParams["to"]);
-</script>
+		<script id="courses-template" type="text/x-handlebars-template">
+			<div class="entity">
+				<h2><a href="#">{{ title }}</a></h2>
+				<h4>{{ code }}</h4>
+				<p>{{ description }}</p>
+			</div>
+		</script>
+
+		<script>
+			var urlParams = {};
+
+			(function () {
+				var match,
+				pl     = /\+/g,  // Regex for replacing addition symbol with a space
+				search = /([^&=]+)=?([^&]*)/g,
+				decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+				query  = window.location.search.substring(1);
+
+				while (match = search.exec(query))
+					urlParams[decode(match[1])] = decode(match[2]);
+			})();
+		</script>
+
+		<script src="js/app.js"></script>
+	</head>
+	<body onload="javascript:findPath(urlParams['from'], urlParams['to'])">
+		<div class="navbar navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="brand" href="/">Molly</a>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row" ng-controller="MollyCtrl">
+				<div class="span12">
+					<div id="results"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

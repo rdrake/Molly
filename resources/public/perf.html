@@ -1,0 +1,46 @@
+<script src="vendor/jquery/jquery-1.7.2.min.js"></script>
+
+<form id="params">
+	<input id="e0">
+	<input id="eL">
+	<input type="submit" value="Measure">
+</form>
+
+<table>
+	<thead>
+		<tr>
+			<th>Method</th><th>Result</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Default</td><td id="default"></td>
+		</tr>
+		<tr>
+			<td>Atom</td><td id="atom"></td>
+		</tr>
+	</tbody>
+</table>
+
+<script>
+	$("#params").submit(function(e) {
+		e.preventDefault();
+
+		$.get("/span", {
+			e0: $("#e0").val(),
+			eL: $("#eL").val()
+		}, function(data) {
+			$("#default").text(data.debug.time);
+		});
+
+		$.get("/span", {
+			e0: $("#e0").val(),
+			eL: $("#eL").val(),
+			method: "atom"
+		}, function(data) {
+			$("#atom").text(data.debug.time);
+		});
+
+		return false;
+	});
+</script>

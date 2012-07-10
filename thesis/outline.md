@@ -35,7 +35,11 @@
 
 ## Implementation Issues
 - Data inconsistency (broke crawler/indexer)
-- 
+
+## Performance
+- How does the system handle a typical workload (ab)?
+- What factors influence performance?
+- Full analysis of performance must go here
 
 # Chapter 5:  Utilizing Multicore Systems
 
