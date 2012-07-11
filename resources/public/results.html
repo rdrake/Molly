@@ -26,6 +26,29 @@
 			</div>
 		</script>
 
+		<script id="schedules-template" type="text/x-handlebars-template">
+			<div class="entity">
+				<table>
+					<tr>
+						<td>{{ semester }}</td>
+						<td>{{ datestart }} - {{ dateend }}</td>
+					</tr>
+					<tr>
+						<td>{{ seccode }}</td>
+						<td>{{ hourstart }}:{{ minstart }} - {{ hourend }}:{{ minend }}</td>
+					</tr>
+					<tr>
+						<td>{{ secnumber }}</td>
+						<td>{{ day }}</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>{{ location }}</td>
+					</tr>
+				</table>
+			</div>
+		</script>
+
 		<script>
 			var urlParams = {};
 

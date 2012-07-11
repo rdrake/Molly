@@ -1,6 +1,7 @@
 // Compile the templates only once.
 var instructors = Handlebars.compile($("#instructors-template").html());
 var courses = Handlebars.compile($("#courses-template").html());
+var schedules = Handlebars.compile($("#schedules-template").html());
 
 function MollyCtrl($scope, $http) {
 	$scope.entities = [];
@@ -89,7 +90,14 @@ function findPath(from, to) {
 		eids = eids.reverse();
 
 		_.each(eids, function(val, idx) {
-			var entity = data.entities[val][0];
+			var entity = data.entities[val];
+
+			if (entity == undefined) {
+				alert("No path!");
+			}
+
+			entity = entity[0];
+
 			var context = entity.results;
 			var html;
 
@@ -101,8 +109,8 @@ function findPath(from, to) {
 			} else if (entity.meta.class == "courses") {
 				context.code = context.code.toUpperCase();
 				html = courses(context);
-			} else {
-				html = "<div class='entity'>" + context.id + "</div>";
+			} else if (entity.meta.class == "schedules") {
+				html = schedules(context);
 			}
 
 			results.append(html);

@@ -16,43 +16,29 @@
   [args]
   (cli args
        ["-a" "--action" "Action to perform [serve|index]"]
-       ["-c" "--config" "Path to configuration (properties) file"]))
-
-(defn accept
-  [args]
-  (let [[marked hops] args]
-    (or (some (fn [x] (= x "educ_3482u")) marked)
-        (>= hops 25))))
-
-(def properties (load-props "mycampus.properties"))
-(def G (idx-searcher (idx-path (properties :index))))
-(def s "instructors|74")
-
-(defn b
-  [f]
-  (bench (f G s accept)))
+       ["-c" "--config" "Path to configuration (properties) file"]
+       ["-s" "--source" "Source node"]
+       ["-t" "--target" "Target node"]))
 
 (defn -main
   [& args]
   (let [[opts arguments banner] (parse-args (flatten args))
         action                  (opts :action)
-        properties              (load-props (opts :config))]
+        properties              (load-props (opts :config))
+        searcher                (idx-searcher
+                                  (idx-path
+                                    (properties :index)))
+        source                  (opts :source)
+        target                  (opts :target)
+        accept                  (fn [args]
+                                  (let [[marked hops] args]
+                                    (or (some (fn [x]
+                                                (= x target)) marked)
+                                        (>= hops 25))))]
     (condp = action
       "serve"     (start! properties)
       "index"     (build (properties :database)
                          (properties :index))
-      "bfs-atom"  (time
-                    (bfs-atom
-                      (idx-searcher (idx-path (properties :index)))
-                      "instructors|74"
-                      accept))
-      "bfs-ref"   (time
-                    (bfs-ref
-                      (idx-searcher (idx-path (properties :index)))
-                      "instructors|74"
-                      accept))
-      "bfs"       (time
-                    (bfs
-                      (idx-searcher (idx-path (properties :index)))
-                      "instructors|74"
-                      accept)))))
+      "bfs-atom"  (bench (bfs-atom searcher source accept))
+      "bfs-ref"   (bench (bfs-ref searcher source accept))
+      "bfs"       (bench (bfs searcher source accept)))))
