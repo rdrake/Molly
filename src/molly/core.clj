@@ -24,9 +24,11 @@
   (let [[opts arguments banner] (parse-args (flatten args))
         action                  (opts :action)
         properties              (load-props (opts :config))
-        searcher                (idx-searcher
-                                  (idx-path
-                                    (properties :index)))
+        searcher                (if (not (= action "index"))
+                                  (idx-searcher
+                                    (idx-path
+                                      (properties :index)))
+                                  nil)
         source                  (opts :source)
         target                  (opts :target)
         accept                  (fn [args]
