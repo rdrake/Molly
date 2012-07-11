@@ -1,6 +1,7 @@
 (ns molly.core
   (:gen-class)
-  (:use criterium.core
+  (:use clojure.pprint
+        criterium.core
         molly.conf.config
         molly.server.serve
         molly.index.build
@@ -35,11 +36,16 @@
                                   (let [[marked hops] args]
                                     (or (some (fn [x]
                                                 (= x target)) marked)
-                                        (>= hops 5))))]
+                                        (>= hops 5))))
+        bench'                  (fn [func]
+                                  (pprint
+                                    (with-progress-reporting
+                                      (benchmark
+                                        (func searcher source accept)))))]
     (condp = action
       "serve"     (start! properties)
       "index"     (build (properties :database)
                          (properties :index))
-      "bfs-atom"  (bench (bfs-atom searcher source accept))
-      "bfs-ref"   (bench (bfs-ref searcher source accept))
-      "bfs"       (with-progress-reporting (benchmark (bfs searcher source accept))))))
+      "bfs-atom"  (bench' bfs-atom)
+      "bfs-ref"   (bench' bfs-ref)
+      "bfs"       (bench' bfs))))
