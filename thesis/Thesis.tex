@@ -88,6 +88,33 @@
 %		\lipsum[2]
 %	\end{acknowledgements}
 
+	\chapter*{Preface}
+		\section*{Background and Motivation}
+			The introduction of keyword search has revolutionized how we find information.  Over the years, numerous techniques have been developed which make searching through large amounts of information for one or more keywords extremely fast.  With the advent of faster computer hardware, we are able to not only search through small attributes of a document (eg. Title, synopsis, etc.) but rather the entirety of the document itself.
+		
+			An example of an early system which utilized keyword search would be a library catalogue.  Such a system would allow a user to search, by keyword, for the title of a book, manuscript, etc.  The results would show item titles matching the keyword(s), as well as other information such as whether or not the item is in circulation, as well as where it is located within the library.  This information would come from a relational database.
+		
+			With the rise of the World Wide Web, much information was placed online.  This information would be easy to access if one knew how to locate it.  Unfortunately, over time, so much information existed on the World Wide Web that it became difficult to keep track of it all.  There was a need to index all of this information and make it accessible.  This need was filled by a Web search engine.
+		
+			Initial Web search engines comprised of simple scripts that gathered listings of files on FTP servers; they were essentially link farms.  A few short years later, the first full-text (keyword) search engine, WebCrawler, was released.
+		
+			While full-text search engines provided an excellent means for locating information, as the Web grew larger, the volume of noise also grew larger.  In addition, every Web page could be structured in a different way; the Web was largely a collection of unstructured documents.  That is, there were few obvious links between them.
+		
+			Search engines such as Google attempted to solve this problem by introducing new algorithms, such as PageRank, to rank Web pages on both the relevance of their content as well as their reputation.  The idea was if a page is linked to often, it is considered to be more authoritative on a subject than a page with fewer links.  This allowed the relevance of a page to be computed based on not only its contents, but its artificial importance.
+		
+			Molly attempts to avoid some of the issues plaguing search engines.  It deals primarily with structured, filtered data.  This allows us to provide results with less noise.  In addition, the fact that it deals with structured data means links between documents are explicitly stated.  Rather than inferring a link between documents based on hyperlinks, we know when two documents are linked together.
+		
+			This thesis provides an overview of the Molly system.
+		
+		\section*{Outline}
+			Chapter 1 provides a look at systems which tried to solve a similar problem.  It analyzes where other systems have failed and where they have succeeded.
+			
+			Chapter 2 discusses the system design and rationale behind the design.
+			
+			Chapter 3 details the implementation of Molly.  It also discusses several factors which influence performance.
+			
+			Chapter 4 moves beyond single-threaded performance and discusses making the system use multiple threads simultaneously.  It also discusses what performance gains, if any, were made.
+
 	\tableofcontents
 
 	\listoftables
@@ -96,10 +123,9 @@
 
 	\clearpage
 	\pagenumbering{arabic}
-
-	\chapter{Introduction}
-
-		\section{Outline}
+	
+	\setcounter{chapter}{-1}
+	\chapter{Data Representation and Notation}
 
 	\chapter{Literature Review}
 

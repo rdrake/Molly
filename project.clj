@@ -10,6 +10,7 @@
                [org.clojure/tools.cli                 "0.2.1"]
                [clojureql                             "1.0.3"]
                [noir                                  "1.3.0-alpha10"]]
+            :profiles {:dev {:dependencies [[criterium "0.2.1"]]}}
             :dev-dependencies [[speclj "2.1.1"]
                                [criterium "0.2.1"]]
             :test-path    "spec/"
