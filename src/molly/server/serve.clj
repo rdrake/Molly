@@ -56,15 +56,18 @@
                 (entities :id q (props :topk_entity))}))
 
     (defpage "/span" {:keys [e0 eL method]}
-             (let [start        (System/currentTimeMillis)
+             (let [start        (System/nanoTime)
                    accept       (fn [args]
                                   (let [[marked hops] args]
                                     (or (some (fn [x]
                                                 (= x eL)) marked)
                                         (>= hops 25))))
                    [visited dist prev]
-                      (bfs searcher e0 accept)
-                   t            (- (System/currentTimeMillis) start)
+                      (condp = method
+                        "atom"  (bfs-atom searcher e0 accept)
+                        "stm"   (bfs-ref searcher e0 accept)
+                        (bfs searcher e0 accept))
+                   t            (- (System/nanoTime) start)
                    eids         (for [[k v] prev] k)
                    get-entities (fn [eid]
                                   {(keyword eid)
