@@ -3,7 +3,7 @@ from matplotlib.pyplot import *
 
 import requests
 
-RUNS = 1000
+RUNS = 100
 
 # Ken Pu
 FROM = "instructors|74"
@@ -31,7 +31,7 @@ for target in to:
 
 		for i in range(RUNS):
 			data = requests.get(url).json
-			results[(target, method)].append(data["debug"]["time"] / (1000 * 1000))
+			results[(target, method)].append(data["debug"]["time"] / float(1000 * 1000))
 
 		plot(x, results[(target, method)], label=method)
 
