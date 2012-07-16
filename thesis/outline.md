@@ -1,144 +1,85 @@
-# Title Page
-# Abstract
-# Acknowledgements
-# ToC
-# List of {Tables,Figures,Algorithms}
-# Chapter 1:  Introduction
-- (answer:  why am I even bothering with this project in the first place?)
+# Title Page #
+# Abstract #
+# Preface #
 
-## Outline
+- Discuss progression from uncategorized to searchable
+- Disadvantages of web search engine approach to discovering information
+- Motivation for implementing Molly
+    - Web search engines do not do linked data (nicely)
+- Possibly (brief) introduction to FTSDB (eg. Lucene).
+
+## Outline ##
+
+- Brief overview of what is covered in each of the chapters
+    - Very brief and concise
 - Quick overview of the wondrous journey they are about to take with me through my thesis
 
-# Chapter 2:  Literature Review
-- (Need some help with this one)
-- (Likely not titled "Literature Review")
+# Table of Contents #
+# List of Tables #
+# List of Figures #
+# List of Algorithms #
 
-# Chapter 3:  System Design and Rationale
+# Chapter 0:  Data Representation and Notation #
 
-## Introduction
-- Data corpus and representation
-    - Probably use Mycampus data as example throughout
-    - Detailed representation data structure overview
+- Define the example corpus to be used throughout the thesis (mycampus?)
+- Detail in-memory representation of value, entity, and group
 
-# Chapter 4:  System Implementation and Performance
+# Chapter 1:  Literature Review #
 
-## Overview of System Components
+- Need help with this one
+    - Some keywords to search for or something
 
-### Crawler
-### Indexer
-### Core (Processing)
-### API
-### Frontend
+# Chapter 2:  System Design & Rationale #
 
-## Data Flow
-- Link together data representation with flow
+- Various components comprising the software
+    - Debate different algorithms that could be used in certain places
+    - Crawler, Indexer, Core (Processing), API, Frontend
+- Tie together the example corpus, representation, and how data flows through the system
+    - DB Row -> Memory -> Document (for instance)
 
-## Implementation Issues
-- Data inconsistency (broke crawler/indexer)
+# Chapter 3:  System Implementation & Performance #
 
-## Performance
-- How does the system handle a typical workload (ab)?
-- What factors influence performance?
-- Full analysis of performance must go here
+- Justification for choice of language, DB, FTSDB, etc.
+- Implementation of chosen algorithm(s)
 
-# Chapter 5:  Utilizing Multicore Systems
+## Implementation issues ##
 
-## Introduction
+- eg. Data inconsistency, broke the indexer often
+- What to do when things don''t connect, etc
 
-## Implementation
-- Analysis of multi threaded vs. single threaded
+## Performance ##
 
-## Conclusion
-- Was it worth the effort to make concurrent?
+- How does the core code perform under different situations
+    - Closely connected, loosely connected, disconnected
+- Limiting factors
+    - Max hops
+- Possibly satisfaction with results vs. time
+    - topk
+- Possibly test server performance (how it handles concurrent connections)
 
+# Chapter 4:  Concurrency & Impact on Performance #
 
+- Talk about various methods of concurrency in Clojure (STM, Atoms, Agents)
 
-* * *
-Ignore the stuff down here
+## Implementation ##
 
-Goal:  Perform keyword queries on structured data (search engine with "meaning").
+- How concurrent code differs from single threaded code
 
-Stages:
- - Original data source
- - "Linked" data source
- - Fast (unstructured) full-text search
- - Algorithms & implementation
- - Consumable interface
- - User-friendly UI
+## Performance ##
 
-Components:
- - Crawler
- - Indexer
- - Core
- - API
- - Front-end
+- How big (if any) of a speedup can be obtained with n cores?
+    - May need to run on multiple machines with varying numbers of cores
+    - Must compare the percent increase between numbers of cores
+    - Cannot use time, various machines different speeds
+- Speedups gained by STM, Atoms
 
-"The System" deals with the data from its linked form to an API.  The crawler to obtain the original data and the user-friendly front-end are both developed independently.
+# Conclusion #
 
-Problems Encountered:
- - Inconsistencies in data
- - Developing a suitable representation of the data
- - Being able to take these independent pieces of data found by a simple keyword search and "link" them together
- - Evaluating importance of these links
- - Preparing an API which allows consumers to utilize all functions
+- Sum up...
+    - What was achieved
+    - What was learned
+    - What might be done in the future
 
-Design & Implementation
- - Why Clojure, sqlite, Lucene, etc?
+# Appendix A:  Code Listing #
 
-Introduction:
-
-
-The Problem:
-
-
-What's Been Done:
-
-
-How I Plan on Doing It:
-
-
-How I Did It:
-
-
-What Happened:
-
-
----
-Require:
- - Title/title page
- - Abstract
-  - < 150 words
- - TOC
-  - Auto-generated
- - Acknowledgements
-  - Thank people for putting up with this
- - Introduction
-  - What the problem is
-	 - Keyword queries over corpus doesn't take into account "meaning"
-	 - Currently faked with algorithms such as PageRank
-	  - Run offline, this proposed solution runs online
-	- Some definitions relevant to area
-	- What to expect in remaining chapters
-	 - Pure amazement
- - Literature Review
-  - Thorough review of the research area
-	 - What's been done, what hasn't
-	  - Full-text search over databases has been
-		- Lots of stuff on graph search
-		- Unsure of what's been done with regard to linking together info found with keyword queries
-	 - Have there been any similar approaches to what I've done
- - Philosophy of approach & plan of attack
-  - Describe all the things
-	 - Data representation
-	 - Data transformations
-	 - Data flow from start to finish
-	- How I intend on implementing all of this
-	 - Describe tools chosen for the job
-	 - Propose algorithms?
- - Description of the work
-  - How the system was built from start to finish
- - Critical analysis of the results
- - Future work
- - Conclusions
- - References
- - Appendix
+- Should be obvious

@@ -48,4 +48,5 @@
                          (properties :index))
       "bfs-atom"  (bench' bfs-atom)
       "bfs-ref"   (bench' bfs-ref)
-      "bfs"       (bench' bfs))))
+      "bfs"       (bench' bfs)
+      (println "I'm afraid I can't do that, Ken."))))
