@@ -1,7 +1,7 @@
 % Change "draft" to "final" when you're done.
 \documentclass[12pt,letterpaper,oneside,draft]{report}
 
-\usepackage[top=1in, left=1.5in, right=1in, bottom=1in]{geometry}
+\usepackage[top=1in,left=1.5in,right=1in,bottom=1in]{geometry}
 
 \usepackage{fontspec,lipsum}
 \usepackage{mathpazo}
@@ -13,7 +13,8 @@
 
 %\DisemulatePackage{setspace}
 \usepackage{setspace}
-\onehalfspacing
+%\onehalfspacing
+\doublespacing
 
 \usepackage{titling}
 
@@ -26,6 +27,8 @@
 
 %\usepackage{minted}
 \usepackage{tikz}
+
+\usepackage{booktabs}
 
 \usepackage{nag}
 
@@ -107,13 +110,7 @@
 			This thesis provides an overview of the Molly system.
 		
 		\section*{Outline}
-			Chapter 1 provides a look at systems which tried to solve a similar problem.  It analyzes where other systems have failed and where they have succeeded.
-			
-			Chapter 2 discusses the system design and rationale behind the design.
-			
-			Chapter 3 details the implementation of Molly.  It also discusses several factors which influence performance.
-			
-			Chapter 4 moves beyond single-threaded performance and discusses making the system use multiple threads simultaneously.  It also discusses what performance gains, if any, were made.
+			Changed.
 
 	\tableofcontents
 
@@ -123,110 +120,187 @@
 
 	\clearpage
 	\pagenumbering{arabic}
-	
-	\setcounter{chapter}{-1}
-	\chapter{Data Representation and Notation}
 
 	\chapter{Literature Review}
-
-	\chapter{System Design, Rationale, \& Performance}
-		\section{Introduction}
-			\subsection{Data Representation}
-				The data from the database is represented in various data structures.  There are separate representations for each type of data:  values, entities, and entity groups.
-
-				\subsubsection{Value}
-					\begin{defn}
-						A \textbf{Value} represents a single piece of information.  To avoid repetition, each value is unique.  That is, $\exists! v \in V$, where $v$ is a value in the set $V$ of all values.
-					\end{defn}
-
-				\subsubsection{Entity}
-					\begin{defn}
-						An \textbf{Entity} is a collection of attributes, $a_n$, each mapped to a single value, $v_n$.  An entity also includes additional information such as a unique identifier.
-
-						\begin{figure}[!ht]
-							\centering
-							\[
-								\begin{array}{ll}
-									\mathrm{id} & T_n|v_{id} \\
-									a_1 & v_1 \\
-									a_2 & v_2 \\
-									\vdots & \vdots \\
-									a_n & v_n
-								\end{array}
-							\]
-							\caption{The structure of an entity}
-							\label{fig:entity-rep}
-						\end{figure}
-
-						Entities are analogous to rows in a database table.  Thus, the unique identifier is generated based on the table name, $T_n$, as well as unique key in the table, $v_{id}$.  The unique key identifies the row, and the table name identifies the table.  Together they uniquely identify the entity within the entire database.
-
-						$\exists! e_{id} \in E$, where $E$ is the set of all entities.
-					\end{defn}
-
-				\subsubsection{Entity Group}
-					\begin{defn}
-						An \textbf{Entity Group} joins together two or more entities.  These entity groups can also have attributes, $a_n$, and values, $v_n$, associated with them much like entities.
-
-						\begin{figure}[!ht]
-							\centering
-							\[
-								\begin{array}{ll}
-									e_L & \left[ e_1, e_2, \ldots, e_n \right] \\
-									a_1 & v_1 \\
-									a_2 & v_2 \\
-									\vdots & \vdots \\
-									a_n & v_n
-								\end{array}
-							\]
-							\caption{The structure of an entity group}
-							\label{fig:entity-group-rep}
-						\end{figure}
-
-						\begin{tikzpicture}
-							[scale=.8,auto=left,every node/.style={circle}]
-							\node (e1) at (1,1) {$e_1$};
-							\node (e2) at (4,2)  {$e_2$};
-							\node (e3) at (7,3)  {$e_3$};
-							\node (e4) at (10,3) {$e_4$};
-							\node (e5) at (13,2)  {$e_5$};
-							\node (e6) at (16,1)  {$e_6$};
-
-							\foreach \from/\to in {e1/e2,e2/e3,e3/e4,e4/e5,e5/e6}
-								\draw (\from) -- (\to);
-
-						\end{tikzpicture}
-					\end{defn}
-
-			\section{Overview of System Components}
-				\subsection{Crawler}
-				\subsection{Indexer}
-				\subsection{Core (Processing)}
-				\subsection{API}
-				\subsection{Frontend}
-
-			\section{Data Flow}
-			
-			\section{Implementation Issues}
-
-		\section{Ford-Fulkerson}
-			\begin{algorithm}
-				\begin{algorithmic}
-					\ENSURE $1=1$
-				\end{algorithmic}
-			\end{algorithm}
-
 	
-	\chapter{Blah blah blah}
-		\section{Choosing a Breadth-First Search Algorithm}
-			We took several criteria into consideration when choosing a Breadth-First Search algorithm to perform the graph search.  In the context of this problem, there is no obvious heuristic to help predict the distance between two nodes.  We decided to use a constant cost function.  That is, $d_{(v_1, v_2)} = n$.  The selected algorithm must also be highly parallelizable.
-
+	\chapter{Theoretical}
+		Problem definition
+		
+		\section{Data Representation \& Notation}
+			Formal definition data model
+		
+		\section{Relational Database Abstraction}
+			Value -> entity -> graph abstract of a relational database
+		Connected subgraph from keyword queries
+		
+		\section{Data Corpus}
+			For illustrative purposes, the mycampus dataset will be used.  This data comes from UOIT's course registration system.
 			
-
-			BFS - Wrong result if non-uniform distance
-			Bellman-Ford - Always correct result
-			Dijkstra - Faster than Bellman-Ford, uses priority queue
-			Push-Relabel \& Johnson - Uses complicated (and difficult to parallelize) data structures
-			A-Star Search - No obvious heuristic
+			There are several different entities which comprise the mycampus dataset:
+			
+			\begin{itemize}
+				\item Courses
+				\item Instructors
+				\item Schedules
+				\item Sections
+				\item Teaches
+			\end{itemize}
+			
+			The \textbf{Courses} entity represents a course.  A course has an individual code, along with a title and a description (See Table  \ref{tbl:courses-entity-schema}).  The code uniquely identifies the course.
+			
+			\begin{table}[!htp]
+				\centering
+				\begin{tabular}{lll}
+					\toprule
+					Column & Type & Description \\
+					\midrule
+					code & VARCHAR & Unique course code \\
+					title & VARCHAR & Title of the course \\
+					description & TEXT & A brief description \\
+					\bottomrule
+				\end{tabular}
+				\caption{Courses entity schema}
+				\label{tbl:courses-entity-schema}
+			\end{table}
+			
+			The \textbf{Instructors} entity represents an individual instructor.  Each instructor has a unique identifier, as well as a name (See Table \ref{tbl:instructors-entity-schema}).  An instructor can be a Professor, Lecturer, Sessional Instructor, or Teaching Assistant.
+			
+			\begin{table}[!htp]
+				\centering
+				\begin{tabular}{lll}
+					\toprule
+					Column & Type & Description \\
+					\midrule
+					id & INT & Unique identifier \\
+					name & VARCHAR & The instructor's name \\
+					\bottomrule
+				\end{tabular}
+				\caption{Instructors entity schema}
+				\label{tbl:instructors-entity-schema}
+			\end{table}
+			
+			The \textbf{Sections} entity represents a section of a course.  Courses may have many sections.  For example, one section could be a lecture, while another is a lab.  Some courses may have over a dozen sections, depending on the associated term.
+			
+			Each section contains a unique identifier, capacity information (students enrolled, spots open, etc.), when registration is open for the section, how many credits it is worth, what level (eg. undergraduate or graduate), and what year the section is offered in (See Table \ref{tbl:sections-entity-schema}).
+			
+			\begin{table}[!htp]
+				\centering
+				\begin{tabular}{lll}
+					\toprule
+					Column & Type & Description \\
+					\midrule
+					id & INT & Unique identifier \\
+					actual & INT & Number of people enrolled in the course \\
+					campus & VARCHAR & String uniquely identifying the campus \\
+					capacity & INT & Maximum number of people that may be enrolled in the section \\
+					credits & FLOAT & Number of credits awarded upon successful completion \\
+					levels & VARCHAR & The level of the course (eg. undergraduate, graduate, etc.) \\
+					registration\_start & DATE & Date registration for the section opens \\
+					registration\_end & DATE & Date registration for the section ends \\
+					semester & VARCHAR & String that uniquely identifies the semester \\
+					sec\_code & INT & Unique section code (called a CRN) \\
+					sec\_number & INT & Sequential number identifying the number of the section \\
+					year & INT & The year the section is offered in \\
+					\bottomrule
+				\end{tabular}
+				\caption{Sections entity schema}
+				\label{tbl:sections-entity-schema}
+			\end{table}
+			
+			The \textbf{Schedules} entity represents a scheduled meeting of a section.  A section may have many schedules.  For example, a lecture section may meet twice a week.
+			
+			Each schedule has a unique identifier, a date range in which the schedule is active, the time of the schedule, the type, location, and the day which the class takes place (See Table \ref{tbl:schedules-entity-schema}).
+			
+			\begin{table}[!htp]
+				\centering
+				\begin{tabular}{lll}
+					\toprule
+					Column & Type & Description \\
+					\midrule
+					id & INT & Unique identifier \\
+					date\_start & DATE & First day of class \\
+					date\_end & DATE & Last day of class \\
+					day & VARCHAR & Single character representing the day of the week \\
+					schedtype & VARCHAR & Lecture, tutorial, lab, etc. \\
+					hour\_start & INT & Hour the class starts at \\
+					hour\_end & INT & Hour the class ends at \\
+					min\_start & INT & Minute the class starts at \\
+					min\_end & INT & Minute the class ends at \\
+					classtype & VARCHAR & The type of class \\
+					location & VARCHAR & Unique location name where class is held \\
+					\bottomrule
+				\end{tabular}
+				\caption{Schedules entity schema}
+				\label{tbl:schedules-entity-schema}
+			\end{table}
+			
+			A \textbf{Teaches} entity is used to link together an instructor and a schedule.  Each link has a unique identifier along with the instructor's position (eg. Teaching Assistant, Lecturer, etc.) (See Table \ref{tbl:teaches-entity-schema}).
+			
+			\begin{table}[!htp]
+				\centering
+				\begin{tabular}{lll}
+					\toprule
+					Column & Type & Description \\
+					\midrule
+					id & INT & Unique identifier \\
+					position & VARCHAR & Position of the Instructor with regard to a Schedule \\
+					\bottomrule
+				\end{tabular}
+				\caption{Teaches entity schema}
+				\label{tbl:teaches-entity-schema}
+			\end{table}
+		
+		\section{Graph Search Algorithms}
+			Careful consideration was given to which graph search algorithm was to be used.  Among the choices were:
+			
+			\begin{itemize}
+				\item Breadth-First
+				\item Bellman-Ford
+				\item Dijkstra
+				\item A*
+			\end{itemize}
+			
+			The first choice, Breadth-First Search, is among the simplest of the algorithms.  It has the advantage of being simple to implement.  It can only handle fixed costs for travelling between nodes, which can be a disadvantage.
+			
+			Bellman-Ford is similar to BFS.  It has the ability to deal with variable cost.  This comes at the cost of increased difficulty in implementation.  When the cost between nodes is fixed, Bellman-Ford essentially becomes BFS.
+			
+			A greedy version of BFS is Dijkstra's Algorithm.  It utilizes a priority queue rather than a regular queue, allowing it to be faster.  As it is a greedy algorithm, Dijkstra's Algorithm may not return the optimal result.
+			
+			An extension to Dijkstra's is A* search.  Graph search spaces can be rather large.  A* attempts to prune the search space based on a heuristic.  A* is a natural choice to perform graph search in certain areas such as computer vision where an obvious heuristic exists.  It has a disadvantage of consuming large amounts of memory (though IDA* attempts to limit memory consumption).
+			
+			There are many more graph search algorithms.  The above were primarily considered as many of the other algorithms are simple extensions with different data structures.
+			
+			For this application, there is no obvious heuristic.  This eliminates A*.  There is also no obvious cost function.  This eliminiates Dijkstra's Algorithm.  Bellman-Ford is very similar to BFS with the added ability to deal with variable cost.  As the cost function is not obvious and thus constant, Bellman-Ford essentially reverts back to BFS.
+			
+			For these reasons, BFS was chosen as the graph search algorithm.  While the other candidates and others provide numerous advantages over BFS in many situations, this is not one of them.
 	
+	\chapter{Implementation}
+		\section{Functional vs. Procedurial Programming of Algorithms}
+			Key differences between FP and procedurial (for algorithms)
+			
+			\subsection{Functional Data Structures}
+				Clojure immutable data structures, versioning (persistent data structures), STM vs. locking
+			
+		\section{Tunable Parameters}
+			Tunable parameters
+	
+	\chapter{System Implementation}
+		\section{Technology Selection}
+			\subsection{Programming Language}
+			
+			\subsection{Relational Database}
+			
+			\subsection{Full-Text Search Database}
+			
+			\subsection{Web Stack}
+		
+		\section{Implementation Issues}
+	
+	\chapter{Performance \& Evaluation}
+		Screenshots?
+		Graphs
+		Experiments
+	
+	\chapter{Conclusion}
 	
 \end{document}
