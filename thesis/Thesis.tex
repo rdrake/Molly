@@ -286,7 +286,24 @@
 	
 	\chapter{System Implementation}
 		\section{Technology Selection}
+			
+			
 			\subsection{Programming Language}
+				Numerous programming languages were considered for the implementation.  Among them were:  Ruby, Python, and Clojure.  Each of the languages presented both pros and cons.  Ruby and Python are rather similar object oriented languages.  Clojure is a functional language.
+				
+				Ruby features a clean syntax and is very object oriented.  Its object model was inspired by that of Smalltalk.  It has a very active web development community and numerous web frameworks (eg. Rails, Sinatra, Padrino, etc.).  In contrast to Python, it features a lean core, instead choosing to depend on third party libraries.
+				
+				Python also features clean syntax and is object oriented.  It embraces a ``batteries included'' philosophy to its standard library, featuring libraries for everything from serial communications to importing/exporting CSV files.  It too has a strong web development community and numerous web frameworks (eg. Django, Flask, web2py, etc.).
+				
+				Python is used extensively by scientists.  As such, it has numerous plotting, computation, and simulation libraries.  Examples include Matplotlib, SciPy, NumPy, and NetworkX.
+				
+				Both of the above languages embrace functional programming elements.  Python has filter, reduce, and map.  Ruby's collections are also capable of performing filter (select), reduce (inject), and map.  They both lack an important aspect of functional programming:  immutable objects.
+				
+				Clojure is a purely functional language built on top of the JVM.  Like Python and Ruby, it is dynamically typed.  Unlike Python and Ruby, it is a Lisp dialect and as such features macros and code-as-data.
+				
+				As it runs on the JVM, Clojure allows us to utilize existing Java languages.  Using Java libraries through Python or Ruby requires using their respective native code interfaces to Java's JNI.  This process is typically automated through a tool such as SWIG.
+				
+				Clojure was chosen as the implementation language for a number of reasons.  First of all, as it is built on top of the JVM, it can utilize JDBC for database access.  It can also make use of several other useful libraries.  Secondly, its dynamic Lisp nature is a natural way of processing data.  Clojure allows us to model our data structures directly after the data.  In a language such as Python, one would need to make use of classes.
 			
 			\subsection{Relational Database}
 			

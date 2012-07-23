@@ -1,5 +1,9 @@
 import re
 
+# Hack to let this code run on a headless server
+import matplotlib as mpl
+mpl.use("Agg")
+
 from collections import defaultdict
 from matplotlib.pyplot import *
 from pbs import java

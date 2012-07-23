@@ -69,7 +69,7 @@
                                     searcher
                                     "courses|alsu_1101u"
                                     accept
-                                    30)
+                                    15)
                                   (benchmark func searcher source accept))]
     (condp = action
       "serve"     (start! properties)
