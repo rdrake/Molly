@@ -14,10 +14,15 @@
 (defn parse-args
   [args]
   (cli args
-       ["-a" "--action" "Action to perform [serve|index]"]
        ["-c" "--config" "Path to configuration (properties) file"]
+       ["--serve"       "Start the server" :default false :flag true]
+       ["--port"        "Port to run the server on" :default 8080 :parse-fn #(Integer. %)]
+       ["--algorithm"   "Algorithm to run"]
        ["-s" "--source" "Source node"]
-       ["-t" "--target" "Target node"]))
+       ["-t" "--target" "Target node"]
+       ["--index"       "Build an index of the database":default false :flag true]
+       ["--benchmark"   "Run benchmarks" :default false :flag true]
+       ["-h" "--help"   "Show help" :default false :flag true]))
 
 (def counter (atom 0))
 
@@ -45,32 +50,36 @@
     (let [elapsed (- (System/nanoTime) start)]
       (println (str "Elapsed time: " (ns-to-ms elapsed) " msecs")))))
 
+(defn bench
+  [f searcher source target]
+  (warmup f searcher "courses|alsu_1101u"
+          "schedules|schedules|3067sections|1246teaches|893" 10)
+  (benchmark f searcher source target))
+
 (defn -main
   [& args]
-  (let [[opts arguments banner] (parse-args (flatten args))
-        action                  (opts :action)
-        properties              (load-props (opts :config))
-        searcher                (if (not (= action "index"))
-                                  (idx-searcher
-                                    (idx-path
-                                      (properties :index)))
-                                  nil)
-        source                  (opts :source)
-        target                  (opts :target)
-        bench                   (fn [func]
-                                  (warmup
-                                    func
-                                    searcher
-                                    "courses|alsu_1101u"
-                                    "schedules|schedules|3067sections|1246teaches|893"
-                                    10)
-                                  (benchmark func searcher source target))]
-    (condp = action
-      "serve"           (start! properties)
-      "index"           (build (properties :database)
-                               (properties :index))
-      "bfs-bench"       (bench bfs)
-      "bfs-atom-bench"  (bench bfs-atom)
-      "bfs-ref-bench"   (bench bfs-ref)
-      (println "I'm afraid I can't do that, Ken."))
-    (shutdown-agents)))
+  (let [[opts arguments banner] (parse-args (flatten args))]
+    (when (opts :help)
+      (println banner)
+      (System/exit 0))
+
+    (let [properties  (load-props (opts :config))
+          algo        (fn [f searcher source target]
+                        (if (opts :benchmark)
+                          (bench f searcher source target)
+                          (f searcher source target)))]
+      (cond
+        (opts :index)     (let [database  (properties :database)
+                                index     (properties :index)]
+                            (build database index))
+        (opts :serve)     (start! properties)
+        (opts :algorithm) (let [searcher  (idx-searcher
+                                            (idx-path
+                                              (properties :index)))
+                                source    (opts :source)
+                                target    (opts :target)]
+                            (condp = (opts :algorithm)
+                              "bfs"       (algo bfs searcher source target)
+                              "bfs-atom"  (algo bfs-atom searcher source target)
+                              "bfs-ref"   (algo bfs-ref searcher source target))
+                            (shutdown-agents))))))
