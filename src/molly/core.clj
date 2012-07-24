@@ -26,22 +26,22 @@
   (/ nanosec (* 1000.0 1000.0)))
 
 (defn warmup
-  [func searcher source target max-hops seconds]
+  [func searcher source target seconds]
   "Takes in a function, searcher, source, accept function, and the number
   of sections to run the function for"
   (let [start     (System/nanoTime)
         time-in-s (* seconds 1000 1000 1000)]
     (while (< (- (System/nanoTime) start) time-in-s)
-      (func searcher source target max-hops)
+      (func searcher source target)
       (swap! counter inc)))
 
   @counter)
 
 (defn benchmark
-  [f searcher source target max-hops]
+  [f searcher source target]
   "Benchmarks a function with a given searcher, source, and accept function"
   (let [start (System/nanoTime)]
-    (f searcher source target max-hops)
+    (f searcher source target)
     (let [elapsed (- (System/nanoTime) start)]
       (println (str "Elapsed time: " (ns-to-ms elapsed) " msecs")))))
 
@@ -63,21 +63,14 @@
                                     searcher
                                     "courses|alsu_1101u"
                                     "schedules|schedules|3067sections|1246teaches|893"
-                                    5
-                                    5)
-                                  (benchmark func searcher source target 5))]
+                                    10)
+                                  (benchmark func searcher source target))]
     (condp = action
-      "serve"     (start! properties)
-      "index"     (build (properties :database)
-                         (properties :index))
-      "bfs"       (bfs searcher source target 5)
-      "bfs-bench" (bench bfs)
-      "bfs-atom-bench" (bench bfs-atom)
-      "bfs-ref-bench"  (bench bfs-ref)
-      ;"bfs-bench"      (bench bfs)
-      ;"bfs-atom"      (bench' bfs-atom)
-      ;"bfs-ref"       (bench' bfs-ref)
-      ;"bfs"           (bench' bfs)
+      "serve"           (start! properties)
+      "index"           (build (properties :database)
+                               (properties :index))
+      "bfs-bench"       (bench bfs)
+      "bfs-atom-bench"  (bench bfs-atom)
+      "bfs-ref-bench"   (bench bfs-ref)
       (println "I'm afraid I can't do that, Ken."))
-    ))
-    ;(shutdown-agents)))
+    (shutdown-agents)))

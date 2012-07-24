@@ -43,8 +43,7 @@
     (while (and (not (empty? (@state-ref :Q)))
                 (not (@state-ref :done)))
       (let [u     (first (@state-ref :Q))
-            Q'    (pop (@state-ref :Q))
-            hops  (atom 0)]
+            Q'    (pop (@state-ref :Q))]
         (swap! state-ref assoc :Q Q')
         (if (some (fn [node] (= node t)) (@state-ref :marked))
           (swap! state-ref assoc :done true)
