@@ -1,8 +1,0 @@
-Jan. 24, 2012
- - Add tests to verify correct functionality of data->doc and doc->data
- - Add simple search code to test index
-
-Dec. 29, 2011
- - Values (spell check) - :values added to schema
- - Search API/web UI
- - Noir/ClojureScript

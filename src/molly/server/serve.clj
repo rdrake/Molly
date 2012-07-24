@@ -57,16 +57,11 @@
 
     (defpage "/span" {:keys [e0 eL method]}
              (let [start        (System/nanoTime)
-                   accept       (fn [args]
-                                  (let [[marked hops] args]
-                                    (or (some (fn [x]
-                                                (= x eL)) marked)
-                                        (>= hops 25))))
                    [visited dist prev]
                       (condp = method
-                        "atom"  (bfs-atom searcher e0 accept)
-                        "stm"   (bfs-ref searcher e0 accept)
-                        (bfs searcher e0 accept))
+                        "atom"  (bfs-atom searcher e0 eL)
+                        "ref"   (bfs-ref searcher e0 eL)
+                        (bfs searcher e0 eL))
                    t            (- (System/nanoTime) start)
                    eids         (for [[k v] prev] k)
                    get-entities (fn [eid]
