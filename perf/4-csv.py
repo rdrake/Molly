@@ -1,12 +1,8 @@
+import csv
 import pickle
 import sys
 
-# Hack to let this code run on a headless server
-import matplotlib as mpl
-mpl.use("Agg")
-
 from collections import defaultdict
-from matplotlib.pyplot import *
 
 if len(sys.argv) <= 1:
 	sys.exit("Usage: %s <results>" % sys.argv[0])
@@ -27,14 +23,11 @@ targets = [
 ]
 
 for (target, hops) in targets:
-	clf()
-	title("%d Hop(s) [%s]" % (hops, target))
-	xlabel("Time (ms)")
-	ylabel("# Runs")
-
 	for method in methods:
-		vals = [float(x) for x in results[(target, method)]]
-		hist(vals, label=method)
-	
-	legend(loc="upper right")
-	savefig("%d_hops.png" % hops)
+		ofile = open("%s_%d_hops.csv" % (method, hops), "wb")
+		writer = csv.writer(ofile, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
+
+		for value in [float(x) for x in results[(target, method)]]:
+			writer.writerow([value])
+
+		ofile.close()

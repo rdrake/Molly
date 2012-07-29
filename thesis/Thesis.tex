@@ -32,6 +32,9 @@
 
 \usepackage{nag}
 
+\input tikz
+\usetikzlibrary{fit}
+
 \setmainfont[
 	Numbers=OldStyle,
 	Kerning=Uppercase,
@@ -124,16 +127,87 @@
 	\chapter{Literature Review}
 	
 	\chapter{Theoretical}
-		Problem definition
+		The problem of efficiently searching through a graph is the subject of countless articles and journal papers.  Numerous algorithms have been proposed to perform graph search in an efficient manner.  Many of these algorithms build upon their predecessors, making assumptions and changing aspects to better suit a particular problem area.
+		
+		The applications of efficient graph search algorithms are endless.  Algorithms such as Dijkstra's are used heavily in path finding, for example in a portable GPS unit.  A* Search is used in the area of computer vision to approximate the best path to take.  Companies such as Amazon make use of graph search algorithms in order to find related products for consumers to purchase.
+		
+		This thesis concentrates on building a system which can be utilized in order to discover related information.  The system that was built is capable of finding not only related information from neighbouring nodes, but also the best path between two arbitrary nodes.
+		
+		Section \ref{sec:data-rep-and-notation} provides an overview of how the data is represented in the system.  It also defines notation to represent this data.  Section \ref{sec:database-abstraction} outlines how the relational database is related to the data in the system.  Section \ref{sec:data-corpus} provides an example data corpus which is utilized throughout this thesis.  It details the ``mycampus'' dataset.  Finally, Section \ref{sec:graph-search-algos} provides justification for the algorithm chosen to perform the graph search.  It discusses multiple different graph search algorithms, as well as why the one used in this thesis was chosen.
 		
 		\section{Data Representation \& Notation}
-			Formal definition data model
-		
+		\label{sec:data-rep-and-notation}
+			The data from the database is represented in various data structures.  There are separate representations for each type of data:  values, entities, and entity groups.
+
+				\subsubsection{Value}
+					\begin{defn}
+						A \textbf{Value} represents a single piece of information.  To avoid repetition, each value is unique.  That is, $\exists! v \in V$, where $v$ is a value in the set $V$ of all values.
+					\end{defn}
+
+				\subsubsection{Entity}
+					\begin{defn}
+						An \textbf{Entity} is a collection of attributes, $a_n$, each mapped to a single value, $v_n$.  An entity also includes additional information such as a unique identifier.
+
+						\begin{figure}[!ht]
+							\centering
+							\[
+								\begin{array}{ll}
+									\mathrm{id} & T_n|v_{id} \\
+									a_1 & v_1 \\
+									a_2 & v_2 \\
+									\vdots & \vdots \\
+									a_n & v_n
+								\end{array}
+							\]
+							\caption{The structure of an entity}
+							\label{fig:entity-rep}
+						\end{figure}
+
+						Entities are analogous to rows in a database table.  Thus, the unique identifier is generated based on the table name, $T_n$, as well as unique key in the table, $v_{id}$.  The unique key identifies the row, and the table name identifies the table.  Together they uniquely identify the entity within the entire database.
+
+						$\exists! e_{id} \in E$, where $E$ is the set of all entities.
+					\end{defn}
+
+				\subsubsection{Entity Group}
+					\begin{defn}
+						An \textbf{Entity Group} joins together two or more entities.  These entity groups can also have attributes, $a_n$, and values, $v_n$, associated with them much like entities.
+
+						\begin{figure}[!ht]
+							\centering
+							\[
+								\begin{array}{ll}
+									e_L & \left[ e_1, e_2, \ldots, e_n \right] \\
+									a_1 & v_1 \\
+									a_2 & v_2 \\
+									\vdots & \vdots \\
+									a_n & v_n
+								\end{array}
+							\]
+							\caption{The structure of an entity group}
+							\label{fig:entity-group-rep}
+						\end{figure}
+
+						\begin{tikzpicture}[auto=left,every node/.style={circle}]
+							\node (e1) at (1,1) {$e_1$};
+							\node (e2) at (4,1)  {$e_2$};
+							\node (e3) at (7,1)  {$e_3$};
+							\node (e4) at (10,1) {$e_4$};
+							\node (e5) at (13,1)  {$e_5$};
+
+							\foreach \from/\to in {e1/e2,e2/e3,e3/e4,e4/e5}
+								\draw (\from) -- (\to);
+							
+							\node (rect) [draw,dotted,fit=(e1) (e2) (e3)] {};
+							\node[draw,dotted,fit=(e3) (e4) (e5)] {};
+
+						\end{tikzpicture}
+					\end{defn}
+					
 		\section{Relational Database Abstraction}
-			Value -> entity -> graph abstract of a relational database
-		Connected subgraph from keyword queries
+		\label{sec:database-abstraction}
 		
 		\section{Data Corpus}
+		\label{sec:data-corpus}
 			For illustrative purposes, the mycampus dataset will be used.  This data comes from UOIT's course registration system.
 			
 			There are several different entities which comprise the mycampus dataset:
@@ -251,6 +325,7 @@
 			\end{table}
 		
 		\section{Graph Search Algorithms}
+		\label{sec:graph-search-algos}
 			Careful consideration was given to which graph search algorithm was to be used.  Among the choices were:
 			
 			\begin{itemize}

@@ -26,15 +26,23 @@ targets = [
 	["schedules|schedules|1731sections|610teaches|338", 1]
 ]
 
-for (target, hops) in targets:
-	clf()
-	title("%d Hop(s) [%s]" % (hops, target))
-	xlabel("Time (ms)")
-	ylabel("# Runs")
+targets.sort(key=lambda (name, hops): (hops, name))
 
-	for method in methods:
-		vals = [float(x) for x in results[(target, method)]]
-		hist(vals, label=method)
-	
-	legend(loc="upper right")
-	savefig("%d_hops.png" % hops)
+clf()
+
+title("Growth")
+xlabel("# Hops")
+ylabel("Average Time (ms)")
+
+def average(target, method):
+	vals = [float(x) for x in results[(target, method)]]
+	return reduce(lambda x, y: x + y, vals) / len(vals)
+
+x = [i + 1 for i in range(len(targets))]
+
+for method in methods:
+	y = [average(target, method) for (target, hops) in targets]
+	plot(x, y, label=method)
+
+legend(loc="upper right")
+savefig("growth.png")
