@@ -1,5 +1,5 @@
 % Change "draft" to "final" when you're done.
-\documentclass[12pt,letterpaper,oneside,draft]{report}
+\documentclass[12pt,letterpaper,oneside]{report}
 
 \usepackage[top=1in,left=1.5in,right=1in,bottom=1in]{geometry}
 
@@ -10,6 +10,12 @@
 
 \usepackage{xltxtra}
 \usepackage{xunicode}
+
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{rotating}
+
+\graphicspath{{images/}}
 
 %\DisemulatePackage{setspace}
 \usepackage{setspace}
@@ -389,6 +395,78 @@
 		\section{Implementation Issues}
 	
 	\chapter{Performance \& Evaluation}
+		\ref{fig:perf-1-hop} WUUUUUUUT
+		
+		\begin{figure}[!ht]
+			\includegraphics[scale=1.7]{1_hops}
+			\caption{1 Hop}
+			\label{fig:perf-1-hop}
+		\end{figure}
+		
+		\begin{figure}[!ht]
+			\includegraphics[scale=1.7]{2_hops}
+			\caption{2 Hops}
+			\label{fig:perf-2-hops}
+		\end{figure}
+		
+		\begin{figure}[!ht]
+			\includegraphics[scale=1.7]{3_hops}
+			\caption{3 Hops}
+			\label{fig:perf-3-hops}
+		\end{figure}
+		
+		\begin{figure}[!ht]
+			\includegraphics[scale=1.7]{4_hops}
+			\caption{4 Hops}
+			\label{fig:perf-4-hops}
+		\end{figure}
+		
+		\begin{figure}[!ht]
+			\includegraphics[scale=1.7]{5_hops}
+			\caption{5 Hops}
+			\label{fig:perf-5-hops}
+		\end{figure}
+		
+		\begin{figure}[!ht]
+			\includegraphics[scale=1.7]{6_hops}
+			\caption{6 Hops}
+			\label{fig:perf-6-hops}
+		\end{figure}
+		
+		\begin{figure}[!ht]
+			\includegraphics[scale=1.7]{7_hops}
+			\caption{7 Hops}
+			\label{fig:perf-7-hops}
+		\end{figure}
+		
+		\begin{figure}[!ht]
+			\includegraphics[scale=1.7]{8_hops}
+			\caption{8 Hops}
+			\label{fig:perf-8-hops}
+		\end{figure}
+		
+		\begin{figure}[!ht]
+			\includegraphics[scale=1.7]{growth}
+			\caption{Comparison between single threaded and concurrent graph search}
+			\label{fig:perf-growth}
+		\end{figure}
+		
+%		\begin{sidewaysfigure}[!ht]
+%			\subcaptionbox{1 Hop\label{fig:perf-1-hop}}[0.5\linewidth]{\includegraphics[scale=1.1]{../1_hops}}
+%			\subcaptionbox{2 Hops\label{fig:perf-2-hops}}[0.5\linewidth]{\includegraphics[scale=1.1]{../2_hops}}
+%			\subcaptionbox{3 Hops\label{fig:perf-3-hops}}[0.5\linewidth]{\includegraphics[scale=1.1]{../3_hops}}
+%			\subcaptionbox{4 Hops\label{fig:perf-4-hops}}[0.5\linewidth]{\includegraphics[scale=1.1]{../4_hops}}
+%			\caption{Results of 1-4 Hops}
+%		\end{sidewaysfigure}
+%		
+%		\begin{sidewaysfigure}[!ht]
+%			\subcaptionbox{5 Hops\label{fig:perf-5-hops}}[0.5\linewidth]{\includegraphics{../5_hops}}
+%			\subcaptionbox{6 Hops\label{fig:perf-6-hops}}[0.5\linewidth]{\includegraphics{../6_hops}}
+%			\subcaptionbox{7 Hops\label{fig:perf-7-hops}}[0.5\linewidth]{\includegraphics{../7_hops}}
+%			\subcaptionbox{8 Hops\label{fig:perf-8-hops}}[0.5\linewidth]{\includegraphics{../8_hops}}
+%			\caption{Results of 5-8 Hops}
+%		\end{sidewaysfigure}
+		
 		Screenshots?
 		Graphs
 		Experiments

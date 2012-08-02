@@ -39,3 +39,5 @@
 *.vrb
 *.xdy
 .DS_Store
+*.pgf
+*.pyc
