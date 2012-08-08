@@ -12,7 +12,13 @@ from numpy import mod
 if len(sys.argv) <= 1:
 	sys.exit("Usage: %s <results>" % sys.argv[0])
 
-import mplrc.ieee.transaction
+import mplrc.ieee.transaction_fullpage
+
+params = {
+	"font.serif": ["Garamond Premier Pro"]
+}
+
+mpl.pyplot.rcParams.update(params)
 
 dashes = ["--", "-", ":"] # Dashed, solid, dotted
 hatches = ["\\\\\\", "---", "///"]

@@ -12,7 +12,7 @@ for (target, hops) in targets:
 
 	for (i, method) in enumerate(methods):
 		vals = [float(x) for x in results[(target, method)]]
-		hist(vals, label=method, histtype="step", color="black", hatch=hatches[mod(i, len(hatches))])
+		hist(vals, label=method, linewidth=0.0, bins=100)
 	
 	legend(loc="upper right")
 	savefig("%d_hops.pdf" % hops)
