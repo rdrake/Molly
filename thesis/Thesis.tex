@@ -1,3 +1,4 @@
+% !TEX root = Thesis.tex
 % Change "draft" to "final" when you're done.
 \documentclass[12pt,letterpaper,oneside]{report}
 
@@ -37,6 +38,9 @@
 \usepackage{booktabs}
 
 \usepackage{nag}
+
+\usepackage[backend=biber]{biblatex}
+\addbibresource{Thesis.bib}
 
 \input tikz
 \usetikzlibrary{fit}
@@ -405,9 +409,9 @@
 				\subsubsection{Timing Execution}
 					There are two methods provided by the JVM for getting a precise time from the OS; \texttt{System.currentTimeMillis()} and \texttt{System.nanoTime()}.  The former returns the ``wall'' time.  It is possible for time to leap forward or backward using this method.  If daylight savings time occurs between calls to \texttt{System.currentTimeMillis()}, it can result in a negative time.
 					
-					The latter uses a variety of methods in order to obtain the precise time.  The method it uses depends on both the OS and the hardware itself.  Under Windows, \texttt{System.nanoTime()} makes use of the \texttt{QueryPerformanceCounter(QPC)} call.  This call may make use of the ``programmable-interval-timer (PIT), or the ACPI power management timer (PMT), or the CPU-level timestamp-counter (TSC).'' (https://blogs.oracle.com/dholmes/entry/inside\_the\_hotspot\_vm\_clocks)  Accessing the PIT and PMT is a slow operation.  Accessing the TSC is a very fast operation, but may result in varying numbers (http://lwn.net/Articles/209101/).
+					The latter uses a variety of methods in order to obtain the precise time.  The method it uses depends on both the OS and the hardware itself.  Under Windows, \texttt{System.nanoTime()} makes use of the \texttt{QueryPerformanceCounter(QPC)} call.  This call may make use of the ``programmable-interval-timer (PIT), or the ACPI power management timer (PMT), or the CPU-level timestamp-counter (TSC).'' \cite{hotspot-timer-06}  Accessing the PIT and PMT is a slow operation.  Accessing the TSC is a very fast operation, but may result in varying numbers \cite{linux-tsc-06}.
 					
-					Linux attempts to use the TSC when possible.  If it finds the values to be unreliable (eg. different cores vary too much), it makes use of the High Precision Event Timer (HPET) (http://lwn.net/Articles/209101/).
+					Linux attempts to use the TSC when possible.  If it finds the values to be unreliable (eg. different cores vary too much), it makes use of the High Precision Event Timer (HPET) \cite{linux-tsc-06}.
 					
 				The JVM's timing functions are one area where the JVM's behaviour differs based on the OS.  Different operating systems provide varying degrees of time resolution.  The speed at which the OS-level calls to these timing functions return can even differ.
 				
@@ -499,4 +503,5 @@
 	
 	\chapter{Conclusion}
 	
+	\printbibliography
 \end{document}
