@@ -12,7 +12,7 @@
 \usepackage{xltxtra}
 \usepackage{xunicode}
 
-\usepackage{subcaption}
+%\usepackage{subcaption}
 \usepackage{graphicx}
 \usepackage{rotating}
 
@@ -399,23 +399,73 @@
 		\section{Implementation Issues}
 	
 	\chapter{Performance \& Evaluation}
+		\section{Environment}
+			All benchmarks were run on the same machine using the same software versions.  The machine has the following specs.
+			
+			\begin{table}[!ht]
+				\centering
+				\begin{tabular}{ll}
+					\toprule
+					Item & Description \\
+					\midrule
+					Model & Dell PowerEdge 2950 \\
+					Processor & 2 x Quad-Core Intel\textregistered\ Xeon\texttrademark\ 5300 3.0GHz \\
+					Memory & 8 GB DDR2 ECC RAM 667 MHz \\
+					\bottomrule
+				\end{tabular}
+			\end{table}
+			
+			Along with the following software versions.
+			
+			\begin{table}[!ht]
+				\centering
+				\begin{tabular}{ll}
+					\toprule
+					Item & Description \\
+					\midrule
+					Operating System & GNU/Linux Ubuntu 10.04.4 LTS \\
+					Kernel & 2.6.32-28-generic \\
+					Java\texttrademark\ SE Runtime Environment & 1.6.0\_26-b03 \\
+					Java HotSpot\texttrademark\ 64-Bit Server VM & 20.1\-b02 \\
+					\bottomrule
+				\end{tabular}
+			\end{table}
+		
 		\section{Methodology}
 			Evaluating the performance of code is a difficult problem at best.  It is difficult to determine the impact on performance of various uncontrollable factors.  Virtual Machines add another layer of abstraction which introduces even more factors.
 			
 			As this project runs a top of the Java Virtual Machine (JVM), there are many factors to consider with regard to performance.  In addition to uncontrollable events such as garbage collection, the JVM's behaviour can differ based on the operating system (OS) it is running on.
 			
 			\subsection{Pitfalls of the Java Virtual Machine}
-				
 				\subsubsection{Timing Execution}
-					There are two methods provided by the JVM for getting a precise time from the OS; \texttt{System.currentTimeMillis()} and \texttt{System.nanoTime()}.  The former returns the ``wall'' time.  It is possible for time to leap forward or backward using this method.  If daylight savings time occurs between calls to \texttt{System.currentTimeMillis()}, it can result in a negative time.
+					There are two methods provided by the JVM for getting a precise time from the OS; \\\texttt{System.currentTimeMillis()} and \texttt{System.nanoTime()}.  The former returns the ``wall'' time.  It is possible for time to leap forward or backward using this method.  If daylight savings time occurs between calls to \texttt{System.currentTimeMillis()}, it can result in a negative time.
 					
 					The latter uses a variety of methods in order to obtain the precise time.  The method it uses depends on both the OS and the hardware itself.  Under Windows, \texttt{System.nanoTime()} makes use of the \texttt{QueryPerformanceCounter(QPC)} call.  This call may make use of the ``programmable-interval-timer (PIT), or the ACPI power management timer (PMT), or the CPU-level timestamp-counter (TSC).'' \cite{hotspot-timer-06}  Accessing the PIT and PMT is a slow operation.  Accessing the TSC is a very fast operation, but may result in varying numbers \cite{linux-tsc-06}.
 					
 					Linux attempts to use the TSC when possible.  If it finds the values to be unreliable (eg. different cores vary too much), it makes use of the High Precision Event Timer (HPET) \cite{linux-tsc-06}.
 					
-				The JVM's timing functions are one area where the JVM's behaviour differs based on the OS.  Different operating systems provide varying degrees of time resolution.  The speed at which the OS-level calls to these timing functions return can even differ.
+					\begin{table}[!ht]
+						\centering
+						\begin{tabular}{lc}
+							\toprule
+							Platform & Resolution (ms) \\
+							\midrule
+							Windows 95/98 & 55 \\
+							Windows NT, 2000, XP (single processor) & 10 \\
+							Windows XP (multi processor) & 15.625 \\
+							Linux 2.4 Kernel & 10 \\
+							Linux 2.6 Kernel & 1 \\
+							\bottomrule
+						\end{tabular}
+						\caption{Reported resolutions of \texttt{currentTimeMillis()} by platform \cite{rob-java-bench-08}.}
+					\end{table}
+					
+					The JVM's timing functions are one area where the JVM's behaviour differs based on the OS.  Different operating systems provide varying degrees of time resolution.  The speed at which the OS-level calls to these timing functions return can even differ.
 				
-			\subsubsection{Garbage Collection}
+				\subsubsection{Garbage Collection}
+			
+				\subsubsection{Just-in-Time Compilation}
+					A typical JVM only loads classes when they're first used \cite{rob-java-bench-08}.  This task typically involves disk I/O, along with extra processing.  As a result, the initial run of a task may only 
 				
 		
 		\begin{figure}[!ht]
@@ -480,28 +530,9 @@
 			\caption{Comparison between single threaded and concurrent graph search}
 			\label{fig:perf-growth}
 		\end{figure}
-		
-%		\begin{sidewaysfigure}[!ht]
-%			\subcaptionbox{1 Hop\label{fig:perf-1-hop}}[0.5\linewidth]{\includegraphics[scale=1.1]{../1_hops}}
-%			\subcaptionbox{2 Hops\label{fig:perf-2-hops}}[0.5\linewidth]{\includegraphics[scale=1.1]{../2_hops}}
-%			\subcaptionbox{3 Hops\label{fig:perf-3-hops}}[0.5\linewidth]{\includegraphics[scale=1.1]{../3_hops}}
-%			\subcaptionbox{4 Hops\label{fig:perf-4-hops}}[0.5\linewidth]{\includegraphics[scale=1.1]{../4_hops}}
-%			\caption{Results of 1-4 Hops}
-%		\end{sidewaysfigure}
-%		
-%		\begin{sidewaysfigure}[!ht]
-%			\subcaptionbox{5 Hops\label{fig:perf-5-hops}}[0.5\linewidth]{\includegraphics{../5_hops}}
-%			\subcaptionbox{6 Hops\label{fig:perf-6-hops}}[0.5\linewidth]{\includegraphics{../6_hops}}
-%			\subcaptionbox{7 Hops\label{fig:perf-7-hops}}[0.5\linewidth]{\includegraphics{../7_hops}}
-%			\subcaptionbox{8 Hops\label{fig:perf-8-hops}}[0.5\linewidth]{\includegraphics{../8_hops}}
-%			\caption{Results of 5-8 Hops}
-%		\end{sidewaysfigure}
-		
-		Screenshots?
-		Graphs
-		Experiments
 	
 	\chapter{Conclusion}
+		\cite{rob-java-bench-08}
 	
 	\printbibliography
 \end{document}

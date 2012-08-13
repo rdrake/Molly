@@ -54,6 +54,8 @@ for target in to:
 			# Gra) the time taken
 			val = patt.search(output).group(1)
 
+			print val
+
 			results[(target, method)].append(val)
 
 			count += 1

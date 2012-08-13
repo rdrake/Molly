@@ -46,14 +46,15 @@
   [f searcher source target]
   "Benchmarks a function with a given searcher, source, and accept function"
   (let [start (System/nanoTime)]
-    (f searcher source target)
+    (for [i (range 5)]
+      (f searcher source target))
     (let [elapsed (- (System/nanoTime) start)]
-      (println (str "Elapsed time: " (ns-to-ms elapsed) " msecs")))))
+      (println (str "Elapsed time: " (ns-to-ms (/ elapsed 5)) " msecs")))))
 
 (defn bench
   [f searcher source target]
   (warmup f searcher "courses|alsu_1101u"
-          "schedules|schedules|3067sections|1246teaches|893" 10)
+          "schedules|schedules|3067sections|1246teaches|893" 15)
   (benchmark f searcher source target))
 
 (defn -main
