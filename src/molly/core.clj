@@ -46,10 +46,9 @@
   [f searcher source target]
   "Benchmarks a function with a given searcher, source, and accept function"
   (let [start (System/nanoTime)]
-    (for [i (range 5)]
-      (f searcher source target))
+    (f searcher source target)
     (let [elapsed (- (System/nanoTime) start)]
-      (println (str "Elapsed time: " (ns-to-ms (/ elapsed 5)) " msecs")))))
+      (println (str "Elapsed time: " (ns-to-ms elapsed 5) " msecs")))))
 
 (defn bench
   [f searcher source target]
