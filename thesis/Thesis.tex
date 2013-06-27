@@ -16,6 +16,8 @@
 \usepackage{graphicx}
 \usepackage{rotating}
 
+\usepackage{todo}
+
 \graphicspath{{images/}}
 
 %\DisemulatePackage{setspace}
@@ -32,8 +34,10 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 
-%\usepackage{minted}
+\usepackage{minted}
 \usepackage{tikz}
+
+\usemintedstyle{bw}
 
 \usepackage{booktabs}
 
@@ -94,7 +98,7 @@
 \newtheorem{defn}{Definition}
 
 \begin{document}
-	\thesistitle{Molly}{Richard Drake}{Masters of Science}{Science}{Computer Science}{Dr. Ken Q. Pu}{September}{2012}
+	\thesistitle{Molly}{Richard J.I. Drake}{Master of Science (MSc)}{Science}{Computer Science}{Dr. Ken Q. Pu}{August}{2013}
 
 	\begin{abstract}
 		\lipsum[2]
@@ -173,7 +177,7 @@
 							\label{fig:entity-rep}
 						\end{figure}
 
-						Entities are analogous to rows in a database table.  Thus, the unique identifier is generated based on the table name, $T_n$, as well as unique key in the table, $v_{id}$.  The unique key identifies the row, and the table name identifies the table.  Together they uniquely identify the entity within the entire database.
+						Entities are analogous to rows in a database table.  Thus, the unique identifier is generated based on the table name, $T_n$, as well as unique key in the table, $v_{id}$.  The unique key identifies the row, and the table name identifies the table.  Together they uniquely identify the entity within the entire database.  Attributes are analogous to columns in a database table.
 
 						$\exists! e_{id} \in E$, where $E$ is the set of all entities.
 					\end{defn}
@@ -219,6 +223,8 @@
 		\section{Data Corpus}
 		\label{sec:data-corpus}
 			For illustrative purposes, the mycampus dataset will be used.  This data comes from UOIT's course registration system.
+			% TODO:  Fix footnotes.
+			% \footnote{http://uoit.ca/mycampus/}.
 			
 			There are several different entities which comprise the mycampus dataset:
 			
@@ -355,19 +361,23 @@
 			
 			There are many more graph search algorithms.  The above were primarily considered as many of the other algorithms are simple extensions with different data structures.
 			
-			For this application, there is no obvious heuristic.  This eliminates A*.  There is also no obvious cost function.  This eliminiates Dijkstra's Algorithm.  Bellman-Ford is very similar to BFS with the added ability to deal with variable cost.  As the cost function is not obvious and thus constant, Bellman-Ford essentially reverts back to BFS.
+			For this application, there is no obvious heuristic.  This eliminates A*.  There is also no obvious cost function.  This eliminates Dijkstra's Algorithm.  Bellman-Ford is very similar to BFS with the added ability to deal with variable cost.  As the cost function is not obvious and thus constant, Bellman-Ford essentially reverts back to BFS.
 			
 			For these reasons, BFS was chosen as the graph search algorithm.  While the other candidates and others provide numerous advantages over BFS in many situations, this is not one of them.
 	
 	\chapter{Implementation}
-		\section{Functional vs. Procedurial Programming of Algorithms}
-			Key differences between FP and procedurial (for algorithms)
+		\section{Functional vs. Procedural Programming of Algorithms}
+			Functional and procedural programming languages are entirely different paradigms.	In functional programming, data is immutable.  Functions must be pure and predictable (free of ``side effects'').  Loops and control flow are accomplished with recursion and pattern matching.
+			
+			Procedural languages allow for more flexibility at a cost of unpredictability.  
+			
+			Key differences between FP and procedural (for algorithms)
 			
 			\subsection{Functional Data Structures}
 				Clojure immutable data structures, versioning (persistent data structures), STM vs. locking
 			
-		\section{Tunable Parameters}
-			Tunable parameters
+		\section{Tuneable Parameters}
+			Tuneable parameters
 	
 	\chapter{System Implementation}
 		\section{Technology Selection}
@@ -391,10 +401,79 @@
 				Clojure was chosen as the implementation language for a number of reasons.  First of all, as it is built on top of the JVM, it can utilize JDBC for database access.  It can also make use of several other useful libraries.  Secondly, its dynamic Lisp nature is a natural way of processing data.  Clojure allows us to model our data structures directly after the data.  In a language such as Python, one would need to make use of classes.
 			
 			\subsection{Relational Database}
+				Several relational database management engines (RDBMS) were evaluated for this project.  Key requirements were SQL support, and JDBC driver availability.
+				
+				SQL, or Structured Query Language, is a powerful way to make complex queries.  It is loosely based on Relational Algebra (RA)\cite[p.~243]{dbsys-06}.  In addition to being a data-manipulation language (similar to Relational Algebra), it is also a data-definition language.
+				
+				JDBC, or Java Database Connectivity, was required in order for our application to access the database.  JDBC is an API which allows us to access a database using a standard interface.  It is the responsibility of the JDBC Driver to translate the API calls into the correct syntax for the database engine.
+				
+				Any RDBMS that supports SQL-92 or higher and has a JDBC driver for it should be usable in this system.  For testing purposes, we chose to use SQLite.  SQLite provided a SQL interface, had a stable JDBC driver, and is ubiquitous.  SQLite is an embedded database, allowing for local development without running a separate daemon process.
 			
 			\subsection{Full-Text Search Database}
+				Two full-featured full-text search databases (FTSDB) were evaluated.  The first, Xapian, is written as a C++ library.  It features a rich query language, high performance, and a scalable design\cite{xapian}.  Bindings for Java are made available via a simple JNI library.
+				%\footnote{http://xapian.org/docs/bindings/java/README}
+				
+				The second, Lucene, is a pure-Java library.  It too features a rich query language and reasonable performance.  Lucene also forms the basis of the Apache Solr search platform.  As it is written in Java, Lucene runs natively on the JVM.
+				
+				Both choices provided plenty of features, Java interfaces, and excellent performance.  Ultimately Lucene was chosen.  As it ran on the JVM, interfacing with the Lucene library from our Clojure code was simple.  The fact that it was written in pure-Java and required no native libraries meant the entire project could be bundled as a Java Archive (JAR).
 			
 			\subsection{Web Stack}
+				Clojure is a young language.  As such, few web frameworks exist specifically for it (it can, however, interface with any Java web framework).  
+				
+				Clojure web frameworks are built on top of Ring, itself an HTTP abstraction layer with adapters for Java servlets as well as the Jetty web server.  Ring is similar to WSGI in Python, or Rack in Ruby.
+				
+				The web framework chosen for this project was Noir.  Noir provided a simple Clojure API for building the JSON API to allow for client-side querying of the project's API.
+			
+		\section{System Design}
+			The system is split into numerous components.
+			
+			A configuration file is used to describe the entities and entity groups.  It defines the relationship between entities, as well as their attributes and values.  This configuration file is used by the crawler and indexer in order to retrieve data from the relational database and index it in a full-text search database.
+			
+			Once the index is built, another component provides an internal API for querying the full-text search database.  It is a thin Clojure wrapper over the Lucene API which provides the basis for search and retrieval of results.  This wrapper is utilized by the system to discover relationships among entities.
+			
+			Finally, the system can be interfaced with via a JSON API.  The JSON API provides a simple HTTP wrapper around the search and discovery features of the system.  The use of JSON allows client-side JavaScript to send and receive queries with XMLHttpRequest.
+			
+			\todo{Add overview diagram of system design.}
+			
+			\subsection{Configuration}
+				Configuration files are simply Clojure code that follow a well-defined protocol.  The protocol defines three main components of the system:
+				
+				\begin{itemize}
+					\item[\texttt{connection}] The relational database connection.  It must be an instance of the \texttt{Database} protocol.
+					\item[\texttt{index}] The path to the full-text search database index file.
+					\item[\texttt{schema}] A definition of the database schema.  The definition includes both the definition of entities, as well as the definition of entity groups.  The schema is a list of instances of the \texttt{Schema} protocol.
+				\end{itemize}
+				
+				\subsubsection{\texttt{Database} Protocol}
+					The \texttt{Database} protocol is defined as follows.
+					
+					\begin{minted}{clj}
+(defprotocol Database
+	(execute-query [this query f]))
+					\end{minted}
+					
+					Each database instance must provide a function which accepts a query and function as arguments.  It must execute the query provided and call function \texttt{f} on each row returned.
+				
+				\subsubsection{\texttt{Schema} Protocol}
+					The \texttt{Schema} protocol is defined as follows.
+					
+					\begin{minted}{clj}
+(defprotocol Schema
+  (crawl [this db-conn idx-w])
+  (klass [this])
+  (schema-map [this]))
+  				\end{minted}
+					
+					A schema consists of the following information:
+					
+					\begin{itemize}
+						\item A symbol (typically the name of the table).
+						\item A hash map containing the structure of the schema.
+					\end{itemize}
+					
+					Schemas are also responsible for populating the full-text search index with data from the relational database.
+					
+					A concrete implementation for this protocol is provided by the \texttt{EntitySchema} type.
 		
 		\section{Implementation Issues}
 	
@@ -535,4 +614,6 @@
 		\cite{rob-java-bench-08}
 	
 	\printbibliography
+	
+	\todos
 \end{document}
