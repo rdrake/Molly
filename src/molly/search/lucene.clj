@@ -2,7 +2,8 @@
   (:import
     (java.io File)
     (org.apache.lucene.analysis WhitespaceAnalyzer)
-    (org.apache.lucene.index IndexReader IndexWriter IndexWriter$MaxFieldLength)
+    (org.apache.lucene.index IndexReader IndexWriter
+                             IndexWriter$MaxFieldLength)
     (org.apache.lucene.queryParser QueryParser)
     (org.apache.lucene.search IndexSearcher)
     (org.apache.lucene.store SimpleFSDirectory)

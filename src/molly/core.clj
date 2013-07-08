@@ -15,14 +15,24 @@
   [args]
   (cli args
        ["-c" "--config" "Path to configuration (properties) file"]
-       ["--serve"       "Start the server" :default false :flag true]
-       ["--port"        "Port to run the server on" :default 8080 :parse-fn #(Integer. %)]
+       ["--serve"       "Start the server"
+        :default false
+        :flag true]
+       ["--port"        "Port to run the server on"
+        :default 8080
+        :parse-fn #(Integer. %)]
        ["--algorithm"   "Algorithm to run"]
        ["-s" "--source" "Source node"]
        ["-t" "--target" "Target node"]
-       ["--index"       "Build an index of the database":default false :flag true]
-       ["--benchmark"   "Run benchmarks" :default false :flag true]
-       ["-h" "--help"   "Show help" :default false :flag true]))
+       ["--index"       "Build an index of the database"
+        :default false
+        :flag true]
+       ["--benchmark"   "Run benchmarks"
+        :default false
+        :flag true]
+       ["-h" "--help"   "Show help"
+        :default false
+        :flag true]))
 
 (def counter (atom 0))
 
@@ -32,8 +42,6 @@
 
 (defn warmup
   [func searcher source target seconds]
-  "Takes in a function, searcher, source, accept function, and the number
-  of sections to run the function for"
   (let [start     (System/nanoTime)
         time-in-s (* seconds 1000 1000 1000)]
     (while (< (- (System/nanoTime) start) time-in-s)
@@ -44,11 +52,11 @@
 
 (defn benchmark
   [f searcher source target]
-  "Benchmarks a function with a given searcher, source, and accept function"
   (let [start (System/nanoTime)]
     (f searcher source target)
     (let [elapsed (- (System/nanoTime) start)]
-      (println (str "Elapsed time: " (ns-to-ms elapsed 5) " msecs")))))
+      (println
+        (str "Elapsed time: " (ns-to-ms elapsed 5) " msecs")))))
 
 (defn bench
   [f searcher source target]
@@ -79,7 +87,16 @@
                                 source    (opts :source)
                                 target    (opts :target)]
                             (condp = (opts :algorithm)
-                              "bfs"       (algo bfs searcher source target)
-                              "bfs-atom"  (algo bfs-atom searcher source target)
-                              "bfs-ref"   (algo bfs-ref searcher source target))
+                              "bfs"       (algo bfs
+                                                searcher
+                                                source
+                                                target)
+                              "bfs-atom"  (algo bfs-atom
+                                                searcher
+                                                source
+                                                target)
+                              "bfs-ref"   (algo bfs-ref
+                                                searcher
+                                                source
+                                                target))
                             (shutdown-agents))))))

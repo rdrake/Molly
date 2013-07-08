@@ -2,7 +2,9 @@
   (:use molly.util.nlp)
   (:import
     [clojure.lang IPersistentMap IPersistentList]
-    [org.apache.lucene.document Document Field Field$Index Field$Store]))
+    [org.apache.lucene.document
+     Document Field
+     Field$Index Field$Store]))
 
 (defn special?
   [field-name]
@@ -15,14 +17,21 @@
     row [[:T :ID :desc] [:T :ID :desc]]"
   ([row C id]
      (if (nil? (row id))
-       (throw (Exception. (str "ID column " id " does not exist in row " row ".")))
-       (str (name C) "|" (clojure.string/replace (row id) #"\s+" "_"))))
+       (throw
+         (Exception.
+           (str "ID column " id " does not exist in row " row ".")))
+       (str (name C)
+            "|"
+            (clojure.string/replace (row id) #"\s+" "_"))))
   ([row Tids]
    (clojure.string/join " " (for [[C id] Tids]
                               (uid row C id)))))
 (defn field
   [field-name field-value]
-  (Field. field-name field-value Field$Store/YES Field$Index/ANALYZED))
+  (Field. field-name
+          field-value
+          Field$Store/YES
+          Field$Index/ANALYZED))
 
 (defn document
   [fields]
@@ -50,26 +59,32 @@
                  :value   (assoc meta-data
                                  :class
                                  (clojure.string/join "|"
-                                                      (map name
-                                                           [C
-                                                            (first attr-cols)])))
+                                    (map name
+                                         [C (first attr-cols)])))
                  :entity  (assoc meta-data :id
                                  (if (coll? id-col)
                                    (uid this id-col)
                                    (uid this C id-col)))
-                 :group   (assoc meta-data :entities (uid this id-col))
-                 (throw (IllegalArgumentException. "I only know how to deal with types :value, :entity, and :group"))))))
+                 :group   (assoc meta-data
+                                 :entities
+                                 (uid this id-col))
+                 (throw
+                   (IllegalArgumentException.
+                     "I only know how to deal with types :value,
+                     :entity, and :group"))))))
 
 (defn doc->data
   ^{:doc "Transforms a Document into the internal representation."}
   [this]
   (let [fields        (.getFields this)
         extract       (fn [x] [(keyword (clojure.string/replace
-                                          (.name x) "_" "")) (.stringValue x)])
+                                          (.name x) "_" ""))
+                               (.stringValue x)])
         check-special (fn [x] (special? (.name x)))
-        filter-fn     (fn [f] (apply hash-map (flatten
-                                                (map extract
-                                                     (filter f fields)))))]
+        filter-fn     (fn [f] (apply hash-map
+                                     (flatten
+                                       (map extract
+                                            (filter f fields)))))]
     (with-meta (filter-fn (fn [x] (not (check-special x))))
                (filter-fn check-special))))
 
@@ -81,7 +96,8 @@
         all       (clojure.string/join " "
                                        (if (= T :entity)
                                          (conj (vals this)
-                                               (name (int-meta :class)))
+                                               (name
+                                                 (int-meta :class)))
                                          (vals this)))
         luc-meta  [[:__type__  (name T)]
                    [:__class__ (name (int-meta :class))]
@@ -93,5 +109,5 @@
                           (condp = (int-meta :type)
                             :value   [[:value all]]
                             :entity  [[:__id__ (int-meta :id)]]
-                            :group   []))];[[:entities (int-meta :entities)]]))]
+                            :group   []))]
     (document raw-doc)))

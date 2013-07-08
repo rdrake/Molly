@@ -34,7 +34,8 @@
                     (for [v (find-adj G u)]
                       (if (marked? v)
                         nil
-                        (future (swap! state-ref update-state u v)))))]
+                        (future
+                          (swap! state-ref update-state u v)))))]
     (doall (map deref-future deferred))))
 
 (defn bfs-atom

@@ -14,7 +14,8 @@
   (let [query   (boolean-query [[(query :type :group) :and]
                                 [(query :entities id) :and]])
         results (map doc->data (idx-search G query 10))
-        big-str (clojure.string/join " " (map #(% :entities) results))]
+        big-str (clojure.string/join " "
+                                     (map #(% :entities) results))]
     (distinct (clojure.string/split big-str #"\s{1}"))))
 
 (defn find-adj

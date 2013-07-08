@@ -13,15 +13,21 @@
     (join
       (->
         (table :sections)
-        (project [[:id :as :sec_id] [:id :as :section_id] :actual :campus :capacity :credits :levels :registration_start :registration_end :semester :sec_code :sec_number :year :course]))
+        (project [[:id :as :sec_id] [:id :as :section_id] :actual
+                  :campus :capacity :credits :levels
+                  :registration_start :registration_end :semester
+                  :sec_code :sec_number :year :course]))
       (->
         (join
           (->
             (table :schedules)
-            (project [[:id :as :sch_id] :date_start :date_end :day :schedtype :hour_start :hour_end :min_start :min_end :classtype :location]))
+            (project [[:id :as :sch_id] :date_start :date_end :day
+                      :schedtype :hour_start :hour_end :min_start
+                      :min_end :classtype :location]))
           (->
             (table :teaches)
-            (project [:position :teaches.schedule_id :teaches.instructor_id [:id :as :teaches_id]]))
+            (project [:position :teaches.schedule_id
+                      :teaches.instructor_id [:id :as :teaches_id]]))
           (where (= :schedules.id :teaches.schedule_id))))
       (where (= :sections.id :section_id)))))
 
@@ -50,7 +56,11 @@
       :C      :schedules
       :sql    (table :v_schedules)
       :ID     :id
-      :attrs  [:position :actual :campus :capacity :credits :levels :registration_start :registration_end :semester :sec_code :sec_number :year :course :date_start :date_end :day :schedtype :hour_start :hour_end :min_start :min_end :classtype :location]
+      :attrs  [:position :actual :campus :capacity :credits :levels
+               :registration_start :registration_end :semester
+               :sec_code :sec_number :year :course :date_start
+               :date_end :day :schedtype :hour_start :hour_end
+               :min_start :min_end :classtype :location]
       :values [:campus :location]})
    (EntitySchema.
      {:T      :group

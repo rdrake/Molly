@@ -9,8 +9,8 @@
 \defaultfontfeatures{Ligatures=TeX}
 \usepackage[small,sf,bf]{titlesec}
 
-\usepackage{xltxtra}
-\usepackage{xunicode}
+%\usepackage{xltxtra}
+%\usepackage{xunicode}
 
 %\usepackage{subcaption}
 \usepackage{graphicx}
@@ -20,9 +20,7 @@
 
 \graphicspath{{images/}}
 
-%\DisemulatePackage{setspace}
 \usepackage{setspace}
-%\onehalfspacing
 \doublespacing
 
 \usepackage{titling}
@@ -34,31 +32,39 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 
-\usepackage{minted}
-\usepackage{tikz}
+%\usepackage{tikz}
 
-\usemintedstyle{bw}
+\usepackage{minted}
+
+%\usemintedstyle{bw}
 
 \usepackage{booktabs}
 
 \usepackage{nag}
 
+\usepackage{upquote}
+
 \usepackage[backend=biber]{biblatex}
 \addbibresource{Thesis.bib}
 
-\input tikz
-\usetikzlibrary{fit}
+%\input tikz
+%\usetikzlibrary{fit}
+
+%\usemintedstyle{default}
 
 \setmainfont[
 	Numbers=OldStyle,
 	Kerning=Uppercase,
 	SizeFeatures={
-		{Size={8-10}, Font=* Caption},
+		{Size={6-10}, Font=* Caption},
 		{Size={10.01-}, Font=*}
 	}]{Garamond Premier Pro}
 \setsansfont{Futura Std}
 \setmathfont{STIXGeneral}
+%\setmonofont{Anonymous Pro}
 \setmonofont{Consolas}
+
+\newmintedfile[cljcode]{clj}{linenos,frame=topline,frame=lines,framesep=2mm,mathescape}
 
 \pagenumbering{roman}
 
@@ -138,6 +144,99 @@
 	\clearpage
 	\pagenumbering{arabic}
 
+	\chapter{RDBMS to Document Store}
+		\begin{figure}[ht!]
+			\cljcode{../src/molly/core.clj}
+			
+			\caption{core.clj}
+		\end{figure}
+		
+		\begin{figure}[ht!]
+			\cljcode{../src/molly/conf/mycampus.clj}
+			
+			\caption{conf/mycampus.clj}
+		\end{figure}
+		
+		\begin{figure}[ht!]
+			\cljcode{../src/molly/datatypes/database.clj}
+			
+			\caption{datatypes/database.clj}
+		\end{figure}
+		
+		\begin{figure}[ht!]
+			\cljcode{../src/molly/datatypes/entity.clj}
+						
+			\caption{datatypes/entity.clj}
+		\end{figure}
+		
+		\begin{figure}[ht!]
+			\cljcode{../src/molly/datatypes/index.clj}
+			
+			\caption{datatypes/index.clj}
+		\end{figure}
+		
+		\begin{figure}[ht!]
+			\cljcode{../src/molly/datatypes/schema.clj}
+			
+			\caption{datatypes/schema.clj}
+		\end{figure}
+		
+		\begin{figure}[ht!]
+			\cljcode{../src/molly/index/build.clj}
+			
+			\caption{index/build.clj}
+		\end{figure}
+		
+		\begin{figure}[ht!]
+			\cljcode{../src/molly/util/nlp.clj}
+			
+			\caption{util/nlp.clj}
+		\end{figure}
+	
+	\chapter{Search}
+		\begin{figure}[ht!]
+			\cljcode{../src/molly/search/lucene.clj}
+			
+			\caption{search/lucene.clj}
+		\end{figure}
+		
+		\begin{figure}[ht!]
+			\cljcode{../src/molly/search/query_builder.clj}
+			
+			\caption{search/query\_builder.clj}
+		\end{figure}
+		
+		\begin{figure}[ht!]
+			\cljcode{../src/molly/server/serve.clj}
+			
+			\caption{server/serve.clj}
+		\end{figure}
+	
+	\chapter{Concurrency}
+		\begin{figure}[ht!]
+			\cljcode{../src/molly/algo/common.clj}
+			
+			\caption{algo/common.clj}
+		\end{figure}
+		
+		\begin{figure}[ht!]
+			\cljcode{../src/molly/algo/bfs.clj}
+			
+			\caption{algo/bfs.clj}
+		\end{figure}
+		
+		\begin{figure}[ht!]
+			\cljcode{../src/molly/algo/bfs_atom.clj}
+			
+			\caption{algo/bfs\_atom.clj}
+		\end{figure}
+		
+		\begin{figure}[ht!]
+			\cljcode{../src/molly/algo/bfs_ref.clj}
+			
+			\caption{algo/bfs\_ref.clj}
+		\end{figure}
+
 	\chapter{Literature Review}
 	
 	\chapter{Theoretical}
@@ -201,20 +300,20 @@
 							\label{fig:entity-group-rep}
 						\end{figure}
 
-						\begin{tikzpicture}[auto=left,every node/.style={circle}]
-							\node (e1) at (1,1) {$e_1$};
-							\node (e2) at (4,1)  {$e_2$};
-							\node (e3) at (7,1)  {$e_3$};
-							\node (e4) at (10,1) {$e_4$};
-							\node (e5) at (13,1)  {$e_5$};
-
-							\foreach \from/\to in {e1/e2,e2/e3,e3/e4,e4/e5}
-								\draw (\from) -- (\to);
-							
-							\node (rect) [draw,dotted,fit=(e1) (e2) (e3)] {};
-							\node[draw,dotted,fit=(e3) (e4) (e5)] {};
-
-						\end{tikzpicture}
+%						\begin{tikzpicture}[auto=left,every node/.style={circle}]
+%							\node (e1) at (1,1) {$e_1$};
+%							\node (e2) at (4,1)  {$e_2$};
+%							\node (e3) at (7,1)  {$e_3$};
+%							\node (e4) at (10,1) {$e_4$};
+%							\node (e5) at (13,1)  {$e_5$};
+%
+%							\foreach \from/\to in {e1/e2,e2/e3,e3/e4,e4/e5}
+%								\draw (\from) -- (\to);
+%							
+%							\node (rect) [draw,dotted,fit=(e1) (e2) (e3)] {};
+%							\node[draw,dotted,fit=(e3) (e4) (e5)] {};
+%
+%						\end{tikzpicture}
 					\end{defn}
 					
 		\section{Relational Database Abstraction}
@@ -544,8 +643,15 @@
 				\subsubsection{Garbage Collection}
 			
 				\subsubsection{Just-in-Time Compilation}
-					A typical JVM only loads classes when they're first used \cite{rob-java-bench-08}.  This task typically involves disk I/O, along with extra processing.  As a result, the initial run of a task may only 
-				
+					A typical JVM only loads classes when they're first used \cite{rob-java-bench-08}.  This task typically involves disk I/O, along with extra processing.  As a result, the initial run of a task may only...
+			
+			\subsection{Mitigating JVM Pitfalls}
+				\subsubsection{JIT Compilation}
+					\begin{figure}[ht!]
+						\cljcode[firstnumber=33,firstline=33,lastline=41]{../src/molly/core.clj}
+			
+						\caption{core.clj}
+					\end{figure}
 		
 		\begin{figure}[!ht]
 			\centering
