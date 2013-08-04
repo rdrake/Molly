@@ -1,6 +1,6 @@
 % !TEX root = Thesis.tex
 % Change "draft" to "final" when you're done.
-\documentclass[12pt,letterpaper,oneside]{report}
+\documentclass[12pt,letterpaper,oneside,notitlepage]{report}
 
 \usepackage[top=1in,left=1.5in,right=1in,bottom=1in]{geometry}
 
@@ -55,18 +55,20 @@
 \setmainfont[
 	Numbers=OldStyle,
 	Kerning=Uppercase,
-	SizeFeatures={
-		{Size={6-10}, Font=* Caption},
-		{Size={10.01-}, Font=*}
-	}]{Garamond Premier Pro}
+	% Not allowed to use any fonts > 10pt.
+	%SizeFeatures={
+	%	{Size={6-10}, Font=* Caption},
+	%	{Size={10.01-}, Font=*}
+	%}
+	]{Garamond Premier Pro}
 \setsansfont{Futura Std}
 \setmathfont{STIXGeneral}
 %\setmonofont{Anonymous Pro}
 \setmonofont{Consolas}
 
-\newmintedfile[cljcode]{clj}{linenos,frame=topline,frame=lines,framesep=2mm,mathescape}
+\newmintedfile[cljcode]{clj}{linenos,frame=topline,frame=lines,framesep=2mm}
 
-\pagenumbering{roman}
+\renewcommand{\theFancyVerbLine}{\ttfamily{\scriptsize {\arabic{FancyVerbLine}}}}
 
 \newcommand{\thesistitle}[8]{
 	\title{#1}
@@ -104,10 +106,20 @@
 \newtheorem{defn}{Definition}
 
 \begin{document}
-	\thesistitle{Molly}{Richard J.I. Drake}{Master of Science (MSc)}{Science}{Computer Science}{Dr. Ken Q. Pu}{August}{2013}
+	\pagenumbering{roman}
+	
+	\thesistitle{The Chronicles of Molly}{Richard J.I. Drake}{Master of Science (MSc)}{Science}{Computer Science}{Dr. Ken Q. Pu}{August}{2013}
+	
+	%\thispagestyle{empty}
+	%\clearpage
+	
+	%\pagenumbering{roman}
+	\setcounter{page}{3}
 
 	\begin{abstract}
 		\lipsum[2]
+		
+		\textbf{Keywords} relational database; full-text search
 	\end{abstract}
 
 %	\begin{acknowledgements}
@@ -143,74 +155,123 @@
 
 	\clearpage
 	\pagenumbering{arabic}
+	
+	\chapter{Definitions}
+		\section{Data Representation \& Notation}
+		\label{sec:data-representation-notation}
+			The data from the database is represented in various data structures.  There are separate representations for each type of data:  values, entities, and entity groups.
+
+				\subsubsection{Value}
+					\begin{defn}
+						A \textbf{Value} represents a single piece of information.  To avoid repetition, each value is unique.  That is, $\exists! v \in V$, where $v$ is a value in the set $V$ of all values.
+					\end{defn}
+
+				\subsubsection{Entity}
+					\begin{defn}
+						An \textbf{Entity} is a collection of attributes, $a_n$, each mapped to a single value, $v_n$.  An entity also includes additional information such as a unique identifier.
+
+						\begin{figure}[!ht]
+							\centering
+							\[
+								\begin{array}{ll}
+									\mathrm{id} & T_n|v_{id} \\
+									a_1 & v_1 \\
+									a_2 & v_2 \\
+									\vdots & \vdots \\
+									a_n & v_n
+								\end{array}
+							\]
+							\caption{The structure of an entity}
+							\label{fig:entity-rep}
+						\end{figure}
+
+						Entities are analogous to rows in a database table.  Thus, the unique identifier is generated based on the table name, $T_n$, as well as unique key in the table, $v_{id}$.  The unique key identifies the row, and the table name identifies the table.  Together they uniquely identify the entity within the entire database.  Attributes are analogous to columns in a database table.
+
+						$\exists! e_{id} \in E$, where $E$ is the set of all entities.
+					\end{defn}
+
+				\subsubsection{Entity Group}
+					\begin{defn}
+						An \textbf{Entity Group} joins together two or more entities.  These entity groups can also have attributes, $a_n$, and values, $v_n$, associated with them much like entities.
+
+						\begin{figure}[!ht]
+							\centering
+							\[
+								\begin{array}{ll}
+									e_L & \left[ e_1, e_2, \ldots, e_n \right] \\
+									a_1 & v_1 \\
+									a_2 & v_2 \\
+									\vdots & \vdots \\
+									a_n & v_n
+								\end{array}
+							\]
+							\caption{The structure of an entity group}
+							\label{fig:entity-group-rep}
+						\end{figure}
+
+%						\begin{tikzpicture}[auto=left,every node/.style={circle}]
+%							\node (e1) at (1,1) {$e_1$};
+%							\node (e2) at (4,1)  {$e_2$};
+%							\node (e3) at (7,1)  {$e_3$};
+%							\node (e4) at (10,1) {$e_4$};
+%							\node (e5) at (13,1)  {$e_5$};
+%
+%							\foreach \from/\to in {e1/e2,e2/e3,e3/e4,e4/e5}
+%								\draw (\from) -- (\to);
+%							
+%							\node (rect) [draw,dotted,fit=(e1) (e2) (e3)] {};
+%							\node[draw,dotted,fit=(e3) (e4) (e5)] {};
+%
+%						\end{tikzpicture}
+					\end{defn}
 
 	\chapter{RDBMS to Document Store}
 		\begin{figure}[ht!]
-			\cljcode{../src/molly/core.clj}
-			
-			\caption{core.clj}
+			\cljcode[firstnumber=9,firstline=9,lastline=11]{../src/molly/datatypes/entity.clj}
+			\caption{Determining whether or not a field is classified as ``special.''}
+			\label{src:molly-datatypes-entity-special}
 		\end{figure}
 		
 		\begin{figure}[ht!]
-			\cljcode{../src/molly/conf/mycampus.clj}
-			
-			\caption{conf/mycampus.clj}
+			\cljcode[firstnumber=13,firstline=13,lastline=28]{../src/molly/datatypes/entity.clj}
+			\caption{Unique identifier generation.}
+			\label{src:molly-datatypes-entity-uid}
 		\end{figure}
 		
 		\begin{figure}[ht!]
-			\cljcode{../src/molly/datatypes/database.clj}
-			
-			\caption{datatypes/database.clj}
+			\cljcode[firstnumber=29,firstline=29,lastline=34]{../src/molly/datatypes/entity.clj}
+			\caption{Creation of a field.}
+			\label{src:molly-datatypes-entity-field}
 		\end{figure}
 		
 		\begin{figure}[ht!]
-			\cljcode{../src/molly/datatypes/entity.clj}
-						
-			\caption{datatypes/entity.clj}
+			\cljcode[firstnumber=36,firstline=36,lastline=42]{../src/molly/datatypes/entity.clj}
+			\caption{Creation of a document.}
+			\label{src:molly-datatypes-entity-document}
 		\end{figure}
 		
 		\begin{figure}[ht!]
-			\cljcode{../src/molly/datatypes/index.clj}
-			
-			\caption{datatypes/index.clj}
+			\cljcode[firstnumber=44,firstline=44,lastline=74]{../src/molly/datatypes/entity.clj}
+			\caption{Transformation of a row into the internal representation.}
+			\label{src:molly-datatypes-entity-row-data}
 		\end{figure}
 		
 		\begin{figure}[ht!]
-			\cljcode{../src/molly/datatypes/schema.clj}
-			
-			\caption{datatypes/schema.clj}
+			\cljcode[firstnumber=76,firstline=76,lastline=89]{../src/molly/datatypes/entity.clj}
+			\caption{Transformation of a document into the internal representation.}
+			\label{src:molly-datatypes-entity-doc-data}
 		\end{figure}
 		
 		\begin{figure}[ht!]
-			\cljcode{../src/molly/index/build.clj}
-			
-			\caption{index/build.clj}
+			\cljcode[firstnumber=91,firstline=91,lastline=113]{../src/molly/datatypes/entity.clj}
+			\caption{Transformation of the internal representation into a document.}
+			\label{src:molly-datatypes-entity-data-doc}
 		\end{figure}
 		
-		\begin{figure}[ht!]
-			\cljcode{../src/molly/util/nlp.clj}
-			
-			\caption{util/nlp.clj}
-		\end{figure}
-	
-	\chapter{Search}
-		\begin{figure}[ht!]
-			\cljcode{../src/molly/search/lucene.clj}
-			
-			\caption{search/lucene.clj}
-		\end{figure}
-		
-		\begin{figure}[ht!]
-			\cljcode{../src/molly/search/query_builder.clj}
-			
-			\caption{search/query\_builder.clj}
-		\end{figure}
-		
-		\begin{figure}[ht!]
-			\cljcode{../src/molly/server/serve.clj}
-			
-			\caption{server/serve.clj}
-		\end{figure}
+		%\begin{figure}[ht!]
+		%	\cljcode[firstnumber=,firstline=,lastline=]{../src/molly/}
+		%	\caption{}
+		%\end{figure}
 	
 	\chapter{Concurrency}
 		\begin{figure}[ht!]
@@ -718,6 +779,13 @@
 	
 	\chapter{Conclusion}
 		\cite{rob-java-bench-08}
+	
+	% appendix
+	\appendix
+	
+	\singlespacing
+	
+	\input{source-code.tex}
 	
 	\printbibliography
 	
