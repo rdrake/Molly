@@ -2,7 +2,7 @@
   (:gen-class)
   (:use clojure.pprint
         molly.conf.config
-        molly.server.serve
+        ;molly.server.serve
         molly.index.build
         molly.search.lucene
         molly.search.query-builder

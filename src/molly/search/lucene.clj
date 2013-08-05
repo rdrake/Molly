@@ -1,36 +1,34 @@
 (ns molly.search.lucene
   (:import
     (java.io File)
-    (org.apache.lucene.analysis WhitespaceAnalyzer)
+    (org.apache.lucene.analysis.core WhitespaceAnalyzer)
     (org.apache.lucene.index IndexReader IndexWriter
-                             IndexWriter$MaxFieldLength)
-    (org.apache.lucene.queryParser QueryParser)
+                             IndexWriterConfig)
     (org.apache.lucene.search IndexSearcher)
-    (org.apache.lucene.store SimpleFSDirectory)
+    (org.apache.lucene.store Directory SimpleFSDirectory)
     (org.apache.lucene.util Version)))
 
 (def version
-     Version/LUCENE_35)
+     Version/LUCENE_44)
 (def default-analyzer
   (WhitespaceAnalyzer. version))
-(def unlimited-fields IndexWriter$MaxFieldLength/UNLIMITED)
 
-(defn idx-path
+(defn ^Directory idx-path
   [path]
   (-> path File. SimpleFSDirectory.))
 
 (defn idx-searcher
-  [idx-path]
+  [^IndexSearcher idx-path]
   (-> (IndexReader/open idx-path) IndexSearcher.))
 
-(defn idx-writer
-  ([idx-path analyzer]
-    (IndexWriter. idx-path analyzer unlimited-fields))
-  ([idx-path]
+(defn ^IndexWriter idx-writer
+  ([^Directory idx-path analyzer]
+    (IndexWriter. idx-path (IndexWriterConfig. version analyzer)))
+  ([^Directory idx-path]
     (idx-writer idx-path default-analyzer)))
 
 (defn close-idx-writer
-  [idx-writer]
+  [^IndexWriter idx-writer]
   (doto idx-writer
     ; Lucene docs say not to use .optimize anymore.
     (.commit)

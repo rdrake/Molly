@@ -1,5 +1,5 @@
 (ns molly.server.serve
-  (:use noir.core
+  (:use ;noir.core
         molly.datatypes.entity
         molly.search.lucene
         molly.search.query-builder

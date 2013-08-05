@@ -1,18 +1,18 @@
 (defproject molly "1.0.0-SNAPSHOT"
             :description  "Knowledge discovery engine."
+            :url          "https://github.com/rdrake/Molly"
+            :license      {:name  "Apache License, Version 2.0"
+                           :url   "http://www.apache.org/licenses/LICENSE-2.0"}
             :source-path  "src"
             :dependencies
-              [[org.clojure/clojure                   "1.4.0"]
-               [org.apache.lucene/lucene-core         "3.5.0"]
-               [org.apache.lucene/lucene-analyzers    "3.5.0"]
+              [[org.clojure/clojure                   "1.5.1"]
+               [org.apache.lucene/lucene-core         "4.4.0"]
+               [org.apache.lucene/lucene-analyzers-common    "4.4.0"]
                [sqlitejdbc                            "0.5.6"]
-               [org.clojure/java.jdbc                 "0.0.6"]
-               [org.clojure/tools.cli                 "0.2.1"]
+               [org.clojure/java.jdbc                 "0.3.0-alpha4"]
+               [org.clojure/tools.cli                 "0.2.2"]
                [clojureql                             "1.0.3"]
-               [noir                                  "1.3.0-alpha10"]]
-            :profiles {:dev {:dependencies [[criterium "0.2.1"]]}}
-            :dev-dependencies [[speclj "2.1.1"]
-                               [criterium "0.2.1"]]
-            :test-path    "spec/"
+               [compojure                             "1.1.5"]
+               [lib-noir                              "0.6.6"]]
             :main         molly.core
             :jvm-opts     ["-Xss1024m"])
