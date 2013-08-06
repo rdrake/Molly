@@ -44,3 +44,5 @@
 *.bcf
 *.run.xml
 story.md
+*.swp
+.lein-repl-history

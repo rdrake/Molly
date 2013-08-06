@@ -15,7 +15,7 @@
         idx-w   (idx-writer ft-path)
         schemas (schema conf)]
     (doseq [ent-def schemas]
-      (println "Indexing " (name (klass ent-def)) "...")
+      (println "Indexing" (name (klass ent-def)) "...")
       (crawl ent-def db-conn idx-w))
 
     (close-idx-writer idx-w)))

@@ -1,11 +1,9 @@
 (ns molly.conf.mycampus
   (:use molly.conf.config
         molly.datatypes.database
-        molly.datatypes.index
         molly.datatypes.schema
         [clojureql.core :only (table project join where rename)])
   (:import (molly.datatypes.database Sqlite)
-           (molly.datatypes.index Lucene)
            (molly.datatypes.schema EntitySchema)))
 
 (def schedules-table

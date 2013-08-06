@@ -3,12 +3,17 @@
 
 (defn load-props
   [file-name]
-  (with-open [^java.io.Reader reader
-              (clojure.java.io/reader file-name)] 
-    (let [props (java.util.Properties.)]
-      (.load props reader)
-      (into {}
-            (for [[k v] props] [(keyword k) (read-string v)])))))
+  (let [res (clojure.java.io/resource file-name)]
+    (if (nil? res)
+      (throw
+        (IllegalArgumentException. "Unable to load properties."))
+      (with-open [^java.io.Reader reader
+                  (clojure.java.io/reader res)]
+        (let [props (java.util.Properties.)]
+          (.load props reader)
+          (into {}
+                (for [[k v] props] [(keyword k)
+                                    (read-string v)])))))))
 
 (defprotocol IConfig
   (connection [this])

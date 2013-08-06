@@ -2,7 +2,6 @@
   (:gen-class)
   (:use clojure.pprint
         molly.conf.config
-        ;molly.server.serve
         molly.index.build
         molly.search.lucene
         molly.search.query-builder
@@ -15,9 +14,6 @@
   [args]
   (cli args
        ["-c" "--config" "Path to configuration (properties) file"]
-       ["--serve"       "Start the server"
-        :default false
-        :flag true]
        ["--port"        "Port to run the server on"
         :default 8080
         :parse-fn #(Integer. %)]
@@ -56,7 +52,7 @@
     (f searcher source target)
     (let [elapsed (- (System/nanoTime) start)]
       (println
-        (str "Elapsed time: " (ns-to-ms elapsed 5) " msecs")))))
+        (str "Elapsed time: " (ns-to-ms elapsed) " msecs")))))
 
 (defn bench
   [f searcher source target]
@@ -80,7 +76,6 @@
         (opts :index)     (let [database  (properties :database)
                                 index     (properties :index)]
                             (build database index))
-        (opts :serve)     (start! properties)
         (opts :algorithm) (let [searcher  (idx-searcher
                                             (idx-path
                                               (properties :index)))
