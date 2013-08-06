@@ -1,21 +1,3 @@
-.search {
-	/*padding: 9px 0;*/
-	position:fixed;
-	/*left:20px;
-	top:60px;*/
-	top: 60px;
-	width:220px;
-}
-
-.results {
-    margin-left: 300px;
-}
-
-#results {
-	top: 60px;
-	position:relative;
-}
-
 .entity {
 	margin: 0 0 1em 0;
 	padding: 0.5em 0.5em 1em 1em;

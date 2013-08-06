@@ -4,116 +4,111 @@ var courses = Handlebars.compile($("#courses-template").html());
 var schedules = Handlebars.compile($("#schedules-template").html());
 
 function MollyCtrl($scope, $http) {
-	$scope.entities = [];
+  $scope.entities = [];
 
-	$scope.findValues = function() {
-		if ($scope.query == "") {
-			$scope.values = [];
-		} else {
-			// Populate suggestions
-			$http({
-				method: "GET",
-				url: "/value",
-				params: {q: $scope.query}
-			}).success(function(data) {
-				$scope.values = _.map(data.result, function(value) {
-					return value.results.value;
-				});
-			});
+  $scope.findValues = function() {
+    if ($scope.query == "") {
+      $scope.values = [];
+    } else {
+      // Populate suggestions
+      $http({
+        method: "GET",
+        url: "/value",
+        params: {q: $scope.query}
+      }).success(function(data) {
+        $scope.values = _.map(data.result, function(value) {
+          return value.results.value;
+        });
+      });
 
-			// Populate entity results
-			$http({
-				method: "GET",
-				url: "/entities",
-				params: {q: $scope.query}
-			}).success(function(data) {
-				$scope.entities = data.result;
+      // Populate entity results
+      $http({
+        method: "GET",
+        url: "/entities",
+        params: {q: $scope.query}
+      }).success(function(data) {
+        $scope.entities = data.result;
 
-				var results = $("#results");
-				results.empty();
+        var results = $("#results");
+        results.empty();
 
-				_.each(data.result, function(val, idx) {
-					var context = val.results;
-					var html;
+        _.each(data.result, function(val, idx) {
+          var context = val.results;
+          var html;
 
-					context.id = val.meta.id;
-					
-					if (val.meta.class == "instructors") {
-						context.name = context.name.toUpperCase();
-						html = instructors(context);
-					} else if (val.meta.class == "courses") {
-						context.code = context.code.toUpperCase();
-						html = courses(context);
-					}
+          context.id = val.meta.id;
+          
+          if (val.meta.class == "instructors") {
+            context.name = context.name.toUpperCase();
+            html = instructors(context);
+          } else if (val.meta.class == "courses") {
+            context.code = context.code.toUpperCase();
+            html = courses(context);
+          }
 
-					results.append(html);
-				});
-			});
-		}
-	}
+          results.append(html);
+        });
+      });
+    }
+  }
 
-	$scope.updateQuery = function(value) {
-		$scope.query = value;
-		$scope.findValues();
-	}
+  $scope.updateQuery = function(value) {
+    $scope.query = value;
+    $scope.findValues();
+  }
 }
 
-// Keyboard bindings
-KeyboardJS.bind.key('slash', function() {}, function() {
-	$("#search-box").focus();
-});
-
 function link(eid) {
-	var wl = window.location;
+  var wl = window.location;
 
-	if (wl.search == "") {
-		window.location = wl.pathname + "?from=" + eid;
-	} else {
-		window.location = "/results.html" + wl.search + "&to=" + eid;
-	}
+  if (wl.search == "") {
+    window.location = wl.pathname + "?from=" + eid;
+  } else {
+    window.location = "/results.html" + wl.search + "&to=" + eid;
+  }
 }
 
 function findPath(from, to) {
-	$.get("/span", {e0: from, eL: to}, function(data) {
-		var results = $("#results");
-		results.empty();
+  $.get("/span", {e0: from, eL: to}, function(data) {
+    var results = $("#results");
+    results.empty();
 
-		var e = to;
-		var eids = [];
+    var e = to;
+    var eids = [];
 
-		while ((e != null) && (e != from)) {
-			eids.push(e);
-			e = data.prev[e];
-		}
+    while ((e != null) && (e != from)) {
+      eids.push(e);
+      e = data.prev[e];
+    }
 
-		eids.push(from);
-		eids = eids.reverse();
+    eids.push(from);
+    eids = eids.reverse();
 
-		_.each(eids, function(val, idx) {
-			var entity = data.entities[val];
+    _.each(eids, function(val, idx) {
+      var entity = data.entities[val];
 
-			if (entity == undefined) {
-				alert("No path!");
-			}
+      if (entity == undefined) {
+        alert("No path!");
+      }
 
-			entity = entity[0];
+      entity = entity[0];
 
-			var context = entity.results;
-			var html;
+      var context = entity.results;
+      var html;
 
-			context.id = entity.meta.id;
-				
-			if (entity.meta.class == "instructors") {
-				context.name = context.name.toUpperCase();
-				html = instructors(context);
-			} else if (entity.meta.class == "courses") {
-				context.code = context.code.toUpperCase();
-				html = courses(context);
-			} else if (entity.meta.class == "schedules") {
-				html = schedules(context);
-			}
+      context.id = entity.meta.id;
+        
+      if (entity.meta.class == "instructors") {
+        context.name = context.name.toUpperCase();
+        html = instructors(context);
+      } else if (entity.meta.class == "courses") {
+        context.code = context.code.toUpperCase();
+        html = courses(context);
+      } else if (entity.meta.class == "schedules") {
+        html = schedules(context);
+      }
 
-			results.append(html);
-		});
-	});
+      results.append(html);
+    });
+  });
 }
