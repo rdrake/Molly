@@ -62,7 +62,7 @@ class Section(TableBase):
     section_num = Column(String(3), nullable=False)
     term_id = Column(ForeignKey("Term.id"))
     course_code = Column(ForeignKey("Course.code"))
-    level = Column(String(16), nullable=False)
+    levels = Column(String(16), nullable=False)
 
 class Schedule(TableBase):
     __tablename__ = "Schedule"
@@ -98,35 +98,26 @@ if __name__ == "__main__":
     TableBase.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
 
-    session = Session()
+    s = Session()
 
-    terms = {}
-    courses = {}
-    locations = set()
-    instructors = set()
-    subjects = {}
-    campuses = set()
-    sections = {}
+    for C in raw_courses:
+        course = get_or_create(s, Course, code=C["code"], title=C["title"])
+        term = get_or_create(s, Term, id=C["term_id"], name=C["term_name"])
+        subject = get_or_create(s, Subject, id=C["subject_id"], name=C["subject_name"])
+        instructor = get_or_create(s, Instructor, name=C["instructor"])
+        location = get_or_create(s, Location, name=C["room"])
+        campus = get_or_create(s, Campus, name=C["campus"])
 
-    for course in raw_courses:
-        # General
-        code = course["code"]
-        title = course["title"]
-        term_id = course["term_id"]
-        term_name = course["term_name"]
-        subject_id = course["subject_id"]
-        subject_name = course["subject_name"]
-        instructor = course["instructor"]
-        location = course["room"]
-        levels_ = course["levels"]
-        campus = course["campus"]
-
-        # Section-specific
-        reg_start = course["reg_start"]
-        reg_end = course["reg_end"]
-        credits = course["credits"]
-        crn = course["crn"]
-        section_num = course["section_num"]
+        section = get_or_create(s, Section,
+            crn=C["crn"],
+            reg_start=C["reg_start"],
+            reg_end=C["reg_end"],
+            credits=C["credits"],
+            section_num=C["section_num"],
+            levels=C["levels"],
+            course_code=course.code,
+            term_id=term.id
+        )
 
         # Schedule-specific
         date_start = course["date_start"]
