@@ -46,3 +46,5 @@
 story.md
 *.swp
 .lein-repl-history
+*.pickle
+target
