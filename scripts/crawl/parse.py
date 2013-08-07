@@ -43,7 +43,7 @@ class CourseParser:
     def _relative_index(self, i, offset):
         return FRONTMATTER_LENGTH - 1 + i * SCHEDULE_LENGTH + offset
 
-    def parse(self, term_id, subject_id, raw_courses):
+    def parse(self, term_name, term_id, subject_name, subject_id, raw_courses):
         courses = []
 
         for (raw_title, raw_course) in raw_courses.items():
@@ -62,7 +62,7 @@ class CourseParser:
 
                 continue
 
-            level = raw_course[1].replace("Levels: ", "")
+            levels = raw_course[1].replace("Levels: ", "").split(", ")
             campus = raw_course[2].replace("Campus", "")
 
             credits = float(re.findall("\d+.\d+", raw_course[6])[0])
@@ -79,22 +79,24 @@ class CourseParser:
                     raw_course[self._relative_index(i, 1)])
 
                 course = {
-                    "term": term_id,
-                    "subject": subject_id,
+                    "term_id": term_id,
+                    "subject_id": subject_id,
+                    "term_name": term_name,
+                    "subject_name": subject_name,
                     "title": title,
                     "crn": crn,
                     "code": code,
                     "section_num": section_num,
-                    "levels": level,
+                    "levels": levels,
                     "campus": campus,
                     "credits": credits,
                     "week": raw_course[self._relative_index(i, 0)],
-                    "day": raw_course[self._relative_index(i, 2)],
+                    "days": raw_course[self._relative_index(i, 2)],
                     "room": raw_course[self._relative_index(i, 3)],
                     "type": raw_course[self._relative_index(i, 5)],
-                    "instructors": raw_course[
+                    "instructor": raw_course[
                         self._relative_index(i, 6)]
-                        .replace(" (P)", "").split(", "),
+                        .replace(" (P)", "").split(", ")[0],
                     "reg_start": date_start,
                     "reg_end": date_end,
                     "date_start": date_start,
@@ -274,7 +276,8 @@ class MycampusParser:
 
                 raw_courses = self._get_courses(course_text)
                 parsed_courses = course_parser.parse(
-                    term_id, subject_id, raw_courses)
+                    term_name, term_id, subject_name,
+                    subject_id, raw_courses)
                 courses.extend(parsed_courses)
 
         print("Found:\t%s" % self.courses_counter)
