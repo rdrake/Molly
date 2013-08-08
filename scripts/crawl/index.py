@@ -128,7 +128,8 @@ if __name__ == "__main__":
             for C in courses:
                 course = get_or_create(s, Course, "code",
                     code=C["code"],
-                    title=C["title"]
+                    title=C["title"],
+                    subject_id=subject_id
                 )
 
                 campus = get_or_create(s, Campus, "name",
@@ -144,7 +145,8 @@ if __name__ == "__main__":
                     term_id=term_id,
                     reg_start=C["reg_start"],
                     reg_end=C["reg_end"],
-                    credits=C["credits"]
+                    credits=C["credits"],
+                    course_code=C["code"]
                 )
 
                 s.add(section)
@@ -177,5 +179,5 @@ if __name__ == "__main__":
                 if i % 100 == 0:
                     print(i)
 
-                s.commit()
+            s.commit()
     s.close()
