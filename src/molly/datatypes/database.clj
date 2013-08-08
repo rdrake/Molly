@@ -1,4 +1,6 @@
-(ns molly.datatypes.database)
+(ns molly.datatypes.database
+  (:use korma.core
+        korma.db))
 
 (defprotocol Database
   (execute-query [this query f]))
@@ -6,7 +8,8 @@
 (deftype Sqlite [conn]
   Database
   (execute-query
-    [this query f] nil))
-    ;(sql/with-connection conn (cql/with-results [rs query]
-    ;                                            (doseq [res rs]
-    ;                                              (f res))))))
+    [this query f]
+    (with-db conn
+             (doseq [result (-> query (select))]
+               (println result)
+               (f result)))))

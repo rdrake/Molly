@@ -14,11 +14,10 @@
   (crawl
     [this db-conn idx-w]
     (let [sql (S :sql)]
-      (println sql)
-      ;(execute-query db-conn sql
-      ;               (fn [row]
-      ;                 (add-doc idx-w
-      ;                          (data->doc (row->data row S)))))
+      (execute-query db-conn sql
+                     (fn [row]
+                       (add-doc idx-w
+                                (data->doc (row->data row S)))))))
       ;
       ;(if (= (S :T) :entity)
       ;  (doseq [value (S :values)]
@@ -33,7 +32,6 @@
       ;                                     (assoc S
       ;                                            :T :value
       ;                                            )))))))))))
-      ))
   (klass
     [this]
     ((schema-map this) :C))

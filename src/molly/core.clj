@@ -14,9 +14,6 @@
   [args]
   (cli args
        ["-c" "--config" "Path to configuration (properties) file"]
-       ["--port"        "Port to run the server on"
-        :default 8080
-        :parse-fn #(Integer. %)]
        ["--algorithm"   "Algorithm to run"]
        ["-s" "--source" "Source node"]
        ["-t" "--target" "Target node"]
@@ -63,7 +60,7 @@
 (defn -main
   [& args]
   (let [[opts arguments banner] (parse-args (flatten args))]
-    (when (opts :help)
+    (when (and (opts :help) (not (opts :config)))
       (println banner)
       (System/exit 0))
 
