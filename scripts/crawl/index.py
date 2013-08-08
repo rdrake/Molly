@@ -81,18 +81,14 @@ class Schedule(TableBase):
 
 cache = {}
 
-def get_or_create(session, model, **kwargs):
-    cache_key = (model, str(kwargs))
+def get_or_create(session, model, key, **kwargs):
+    cache_key = (model, kwargs[key])
 
     if (cache_key) not in cache:
         instance = model(**kwargs)
         cache[cache_key] = instance
 
-        try:
-            session.add(instance)
-            session.commit()
-        except:
-            pass
+        session.add(instance)
 
     return cache[cache_key]
 
@@ -120,42 +116,66 @@ if __name__ == "__main__":
     s = Session()
     i = 0
 
-    for C in raw_courses:
-        course = get_or_create(s, Course, code=C["code"], title=C["title"])
-        term = get_or_create(s, Term, id=C["term_id"], name=C["term_name"])
-        subject = get_or_create(s, Subject, id=C["subject_id"], name=C["subject_name"])
-        instructor = get_or_create(s, Instructor, name=C["instructor"])
-        location = get_or_create(s, Location, name=C["room"])
-        campus = get_or_create(s, Campus, name=C["campus"])
+    for ((term_id, term_name), subject) in raw_courses.items():
+        s.add(Term(id=term_id, name=term_name))
 
-        section = get_or_create(s, Section,
-            crn=C["crn"],
-            reg_start=C["reg_start"],
-            reg_end=C["reg_end"],
-            credits=C["credits"],
-            section_num=C["section_num"],
-            levels=", ".join(C["levels"]),
-            course_code=course.code,
-            term_id=term.id
-        )
+        for ((subject_id, subject_name), courses) in subject.items():
+            get_or_create(s, Subject, "id",
+                id=subject_id,
+                name=subject_name
+            )
 
-        schedule = get_or_create(s, Schedule,
-            date_start=C["date_start"],
-            date_end=C["date_end"],
-            time_start=C["time_start"],
-            time_end=C["time_end"],
-            sch_type=C["type"],
-            week=C["week"],
-            days=C["days"],
-            location_id=location.id,
-            section_id=C["crn"],
-            instructor_id=instructor.id
-        )
+            for C in courses:
+                course = get_or_create(s, Course, "code",
+                    code=C["code"],
+                    title=C["title"]
+                )
 
-        i += 1
+                campus = get_or_create(s, Campus, "name",
+                    name=C["campus"]
+                )
 
-        if i % 100 == 0:
-            print(i)
+                #section = Section(
 
-            #s.commit()
+                section = get_or_create(s, Section, "crn",
+                    crn=C["crn"],
+                    section_num=C["section_num"],
+                    levels=", ".join(C["levels"]),
+                    term_id=term_id,
+                    reg_start=C["reg_start"],
+                    reg_end=C["reg_end"],
+                    credits=C["credits"]
+                )
+
+                s.add(section)
+
+                for S in C["schedules"]:
+                    instructor = get_or_create(s, Instructor, "name",
+                        name=S["instructor"]
+                    )
+
+                    location = get_or_create(s, Location, "name",
+                        name=S["room"],
+                        campus_id=campus.id
+                    )
+
+                    s.add(Schedule(
+                        days=S["days"],
+                        sch_type=S["type"],
+                        date_start=S["date_start"],
+                        date_end=S["date_end"],
+                        time_start=S["time_start"],
+                        time_end=S["time_end"],
+                        week=S["week"],
+                        instructor_id=instructor.id,
+                        section_id=section.crn,
+                        location_id=location.id
+                    ))
+
+                i += 1
+
+                if i % 100 == 0:
+                    print(i)
+
+                s.commit()
     s.close()
