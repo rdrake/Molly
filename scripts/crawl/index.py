@@ -55,7 +55,7 @@ class Course(TableBase):
 class Section(TableBase):
     __tablename__ = "Section"
     
-    crn = Column(Integer, primary_key=True)
+    crn = Column(String(5), primary_key=True)
     reg_start = Column(Date)
     reg_end = Column(Date)
     credits = Column(Float, nullable=False)
@@ -79,13 +79,32 @@ class Schedule(TableBase):
     section_id = Column(ForeignKey("Section.crn"))
     instructor_id = Column(ForeignKey("Instructor.id"))
 
+cache = {}
+
 def get_or_create(session, model, **kwargs):
-    instance = session.query(model).filter_by(**kwargs).first()
-    if instance:
-        return instance
-    else:
+    cache_key = (model, str(kwargs))
+
+    if (cache_key) not in cache:
         instance = model(**kwargs)
-        return instance
+        cache[cache_key] = instance
+
+        try:
+            session.add(instance)
+            session.commit()
+        except:
+            pass
+
+    return cache[cache_key]
+
+    #instance = session.query(model).filter_by(**kwargs).first()
+    #
+    #if instance:
+    #    return instance
+    #else:
+    #    instance = model(**kwargs)
+    #    session.add(instance)
+    #
+    #    return instance
 
 if __name__ == "__main__":
     try:
@@ -99,6 +118,7 @@ if __name__ == "__main__":
     Session = sessionmaker(bind=engine)
 
     s = Session()
+    i = 0
 
     for C in raw_courses:
         course = get_or_create(s, Course, code=C["code"], title=C["title"])
@@ -114,79 +134,28 @@ if __name__ == "__main__":
             reg_end=C["reg_end"],
             credits=C["credits"],
             section_num=C["section_num"],
-            levels=C["levels"],
+            levels=", ".join(C["levels"]),
             course_code=course.code,
             term_id=term.id
         )
 
-        # Schedule-specific
-        date_start = course["date_start"]
-        date_end = course["date_end"]
-        time_start = course["time_start"]
-        time_end = course["time_end"]
-        type_ = course["type"]
-        week = course["week"]
-        days = course["days"]
+        schedule = get_or_create(s, Schedule,
+            date_start=C["date_start"],
+            date_end=C["date_end"],
+            time_start=C["time_start"],
+            time_end=C["time_end"],
+            sch_type=C["type"],
+            week=C["week"],
+            days=C["days"],
+            location_id=location.id,
+            section_id=C["crn"],
+            instructor_id=instructor.id
+        )
 
-        if code not in courses:
-            courses[code] = title
+        i += 1
 
-        if term_id not in terms:
-            terms[term_id] = term_name
+        if i % 100 == 0:
+            print(i)
 
-        if subject_id not in subjects:
-            subjects[subject_id] = subject_name
-
-        instructors.add(instructor)
-        locations.add(location)
-        campuses.add(campus)
-
-    print len(courses), len(terms), len(subjects), len(locations), len(instructors), len(campuses)
-
-    #with engine.connect() as connection:
-    #    pass
-
-    session.add_all([Location(name=loc) for loc in locations])
-    session.add_all([Instructor(name=inst) for inst in instructors])
-    session.add_all([Campus(name=campus) for campus in campuses])
-
-    for (id, name) in subjects.items():
-        session.add(Subject(id=id, name=name))
-
-    for (code, title) in courses.items():
-        session.add(Course(code=code, title=title))
-
-    for (id, name) in terms.items():
-        session.add(Term(id=id, name=name))
-
-    print session.query(exists().where(Instructor.name == "Ken Pu")).scalar()
-    
-    session.commit()
-    session.close()
-
-"""
-All:
-----------
-code
-date_end
-time_end
-campus
-time_start
-title
-term_id
-subject_id
-date_start
-reg_start
-section_num
-type
-week
-term_name
-instructors
-subject_name
-credits
-levels
-reg_end
-days
-room
-crn
-"""
+            #s.commit()
+    s.close()

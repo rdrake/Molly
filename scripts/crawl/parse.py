@@ -3,6 +3,8 @@ from lxml.html import document_fromstring
 
 from datetime import datetime
 
+from collections import defaultdict
+
 import re
 
 import pickle
@@ -69,6 +71,19 @@ class CourseParser:
 
             (reg_start, reg_end) = self._extract_dates(raw_course[0])
 
+            course = {
+                "title": title,
+                "crn": crn,
+                "code": code,
+                "section_num": section_num,
+                "levels": levels,
+                "campus": campus,
+                "credits": credits,
+                "reg_start": reg_start,
+                "reg_end": reg_end,
+                "schedules": []
+            }
+
             for i in range(
                     ((len(raw_course) - FRONTMATTER_LENGTH) /
                         SCHEDULE_LENGTH) - 1):
@@ -78,18 +93,8 @@ class CourseParser:
                 (time_start, time_end) = self._extract_times(
                     raw_course[self._relative_index(i, 1)])
 
-                course = {
-                    "term_id": term_id,
-                    "subject_id": subject_id,
-                    "term_name": term_name,
-                    "subject_name": subject_name,
-                    "title": title,
-                    "crn": crn,
-                    "code": code,
-                    "section_num": section_num,
-                    "levels": levels,
-                    "campus": campus,
-                    "credits": credits,
+
+                course["schedules"].append({
                     "week": raw_course[self._relative_index(i, 0)],
                     "days": raw_course[self._relative_index(i, 2)],
                     "room": raw_course[self._relative_index(i, 3)],
@@ -97,15 +102,13 @@ class CourseParser:
                     "instructor": raw_course[
                         self._relative_index(i, 6)]
                         .replace(" (P)", "").split(", ")[0],
-                    "reg_start": date_start,
-                    "reg_end": date_end,
                     "date_start": date_start,
                     "date_end": date_start,
                     "time_start": time_start,
                     "time_end": time_end,
-                }
+                })
 
-                courses.append(course)
+            courses.append(course)
         
         return courses
 
@@ -249,7 +252,8 @@ class MycampusParser:
 
     def parse(self):
         course_parser = CourseParser()
-        courses = []
+        courses = {}
+
         terms = self._get_listing(
             "TERM",
             self.params["TERM"],
@@ -257,6 +261,8 @@ class MycampusParser:
         )
 
         for (term_id, term_name) in terms:
+            courses[(term_id, term_name)] = {}
+
             subject_params = self.params["SUBJECT"]
             subjects = self._get_listing("SUBJECT", subject_params(term_id))
 
@@ -278,7 +284,8 @@ class MycampusParser:
                 parsed_courses = course_parser.parse(
                     term_name, term_id, subject_name,
                     subject_id, raw_courses)
-                courses.extend(parsed_courses)
+
+                courses[(term_id, term_name)][(subject_id, subject_name)] = parsed_courses
 
         print("Found:\t%s" % self.courses_counter)
         print("Parsed:\t%s" % self.courses_parsed)
