@@ -11,5 +11,4 @@
     [this query f]
     (with-db conn
              (doseq [result (-> query (select))]
-               (println result)
                (f result)))))

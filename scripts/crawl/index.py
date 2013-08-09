@@ -10,7 +10,6 @@ import sqlalchemy as sa
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.sql import exists
 
 TableBase = declarative_base()
 
@@ -89,18 +88,9 @@ def get_or_create(session, model, key, **kwargs):
         cache[cache_key] = instance
 
         session.add(instance)
+        session.commit()
 
     return cache[cache_key]
-
-    #instance = session.query(model).filter_by(**kwargs).first()
-    #
-    #if instance:
-    #    return instance
-    #else:
-    #    instance = model(**kwargs)
-    #    session.add(instance)
-    #
-    #    return instance
 
 if __name__ == "__main__":
     try:
@@ -135,8 +125,6 @@ if __name__ == "__main__":
                 campus = get_or_create(s, Campus, "name",
                     name=C["campus"]
                 )
-
-                #section = Section(
 
                 section = get_or_create(s, Section, "crn",
                     crn=C["crn"],

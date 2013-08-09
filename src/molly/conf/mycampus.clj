@@ -154,24 +154,6 @@
               [:term     :term_id  "Term"]]})
    ])
 
-;   (EntitySchema.
-;     {:T      :group
-;      :C      "Course schedule"
-;      :sql    (->
-;                (join
-;                  (table :v_schedules)
-;                  (->
-;                    (table :courses)
-;                    (project [:code]))
-;                  (where (= :course :code))))
-;      :ID     [[:courses    :courses.code   "Course code"]
-;               [:schedules  :id     "Schedule ID"]]
-;      :attrs  []
-;      :values []})
-;   ])
-;
-
-
 (deftype Mycampus [db-path idx-path]
   IConfig
   (connection
