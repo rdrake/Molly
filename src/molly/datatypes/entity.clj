@@ -26,6 +26,7 @@
   ([row Tids]
    (clojure.string/join " " (for [[C id] Tids]
                               (uid row C id)))))
+
 (defn field
   [field-name field-value]
   (Field. field-name

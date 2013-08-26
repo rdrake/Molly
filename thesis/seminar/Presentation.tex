@@ -1,0 +1,66 @@
+% !TEX root = Presentation.tex
+% Change "draft" to "final" when you're done.
+\documentclass[compress]{beamer}
+
+\usepackage{fontspec,lipsum}
+\usepackage{mathpazo}
+\defaultfontfeatures{Ligatures=TeX}
+
+\usepackage{graphicx}
+\usepackage{rotating}
+
+\usepackage{todo}
+
+\graphicspath{{images/}}
+
+\usepackage{unicode-math}
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\usepackage{minted}
+
+\usepackage{booktabs}
+
+\usepackage{nag}
+
+\usepackage{upquote}
+
+\usepackage[backend=biber]{biblatex}
+\addbibresource{Thesis.bib}
+
+\setmainfont[
+	Numbers=OldStyle,
+	Kerning=Uppercase,
+	]{Garamond Premier Pro}
+\setsansfont{Futura Std}
+\setmathfont{STIXGeneral}
+\setmonofont{Consolas}
+
+\newmintedfile[cljcode]{clj}{linenos,frame=topline,frame=lines,framesep=2mm}
+
+\renewcommand{\theFancyVerbLine}{\ttfamily{\scriptsize {\arabic{FancyVerbLine}}}}
+
+\usetheme{Frankfurt}
+\usecolortheme{lily}
+
+\title[M.Sc. Thesis -- \insertframenumber/\inserttotalframenumber]{The Chronicles of Molly}
+\subtitle{M.Sc. Thesis}
+\author[\copyright 2013 Richard Drake]{\textbf{Richard Drake} \\ \vspace{0.3em} \scriptsize{\texttt{richard.drake@uoit.ca}} \\ \vspace{1em} \tiny Supervisor:  Dr. Ken Q. Pu}
+\institute[UOIT]{Database \& Information Research Group \\ University of Ontario Institute of Technology \\ Oshawa, Ontario, Canada}
+\date{\tiny Soon, Please\ldots}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+
+\begin{document}
+	\frame{\maketitle}
+	
+	\section*{}
+	
+	\frame{\titlepage}
+		
+	\todos
+\end{document}

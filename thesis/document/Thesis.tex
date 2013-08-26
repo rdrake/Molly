@@ -117,7 +117,7 @@
 	\setcounter{page}{3}
 
 	\begin{abstract}
-		\lipsum[2]
+		Traditional relational database systems offer powerful data modelling and querying capabilities.  Unfortunately a relational database does not permit users to perform natural (keyword) queries.  We present a system for automatic mapping of a relational schema into a document schema in order to facilitate fast and powerful full-text (keyword) search.  By providing a facility for users to conduct keyword searches, we improve accessibility and decrease search time complexity.  In addition, we explore further improvements to time complexity by utilizing concurrent implementations of our search algorithms.
 		
 		\textbf{Keywords} relational database; full-text search
 	\end{abstract}
@@ -239,66 +239,98 @@
 		\end{figure}
 		
 		\begin{figure}[ht!]
-			\cljcode[firstnumber=29,firstline=29,lastline=34]{../src/molly/datatypes/entity.clj}
+			\cljcode[firstnumber=30,firstline=30,lastline=35]{../src/molly/datatypes/entity.clj}
 			\caption{Creation of a field.}
 			\label{src:molly-datatypes-entity-field}
 		\end{figure}
 		
 		\begin{figure}[ht!]
-			\cljcode[firstnumber=36,firstline=36,lastline=42]{../src/molly/datatypes/entity.clj}
+			\cljcode[firstnumber=37,firstline=37,lastline=43]{../src/molly/datatypes/entity.clj}
 			\caption{Creation of a document.}
 			\label{src:molly-datatypes-entity-document}
 		\end{figure}
 		
 		\begin{figure}[ht!]
-			\cljcode[firstnumber=44,firstline=44,lastline=74]{../src/molly/datatypes/entity.clj}
+			\cljcode[firstnumber=45,firstline=45,lastline=75]{../src/molly/datatypes/entity.clj}
 			\caption{Transformation of a row into the internal representation.}
 			\label{src:molly-datatypes-entity-row-data}
 		\end{figure}
 		
 		\begin{figure}[ht!]
-			\cljcode[firstnumber=76,firstline=76,lastline=89]{../src/molly/datatypes/entity.clj}
+			\cljcode[firstnumber=77,firstline=77,lastline=90]{../src/molly/datatypes/entity.clj}
 			\caption{Transformation of a document into the internal representation.}
 			\label{src:molly-datatypes-entity-doc-data}
 		\end{figure}
 		
 		\begin{figure}[ht!]
-			\cljcode[firstnumber=91,firstline=91,lastline=113]{../src/molly/datatypes/entity.clj}
+			\cljcode[firstnumber=92,firstline=92,lastline=114]{../src/molly/datatypes/entity.clj}
 			\caption{Transformation of the internal representation into a document.}
 			\label{src:molly-datatypes-entity-data-doc}
 		\end{figure}
-		
-		%\begin{figure}[ht!]
-		%	\cljcode[firstnumber=,firstline=,lastline=]{../src/molly/}
-		%	\caption{}
-		%\end{figure}
 	
 	\chapter{Concurrency}
 		\begin{figure}[ht!]
-			\cljcode{../src/molly/algo/common.clj}
+			\cljcode[firstnumber=6,firstline=6,lastline=10]{../src/molly/algo/common.clj}
 			
-			\caption{algo/common.clj}
+			\caption{Retrieves the entity with the given ID.}
+			\label{src:molly-algo-common-find-entity-by-id}
 		\end{figure}
 		
 		\begin{figure}[ht!]
-			\cljcode{../src/molly/algo/bfs.clj}
+			\cljcode[firstnumber=12,firstline=12,lastline=19]{../src/molly/algo/common.clj}
 			
-			\caption{algo/bfs.clj}
+			\caption{Finds all groups containing an entity with the given ID.}
+			\label{src:molly-algo-common-find-group-for-id}
 		\end{figure}
 		
 		\begin{figure}[ht!]
-			\cljcode{../src/molly/algo/bfs_atom.clj}
+			\cljcode[firstnumber=21,firstline=21,lastline=23]{../src/molly/algo/common.clj}
 			
-			\caption{algo/bfs\_atom.clj}
+			\caption{Finds adjacent nodes in the graph (entities linked in groups).}
+			\label{src:molly-algo-common-find-adj}
 		\end{figure}
 		
 		\begin{figure}[ht!]
-			\cljcode{../src/molly/algo/bfs_ref.clj}
+			\cljcode[firstnumber=4,firstline=4,lastline=19]{../src/molly/algo/bfs.clj}
 			
-			\caption{algo/bfs\_ref.clj}
+			\caption{Discovers new nodes along the frontier and updates the state accordingly.}
+			\label{src:molly-algo-bfs-update-adj}
 		\end{figure}
-
-	\chapter{Literature Review}
+		
+		\begin{figure}[ht!]
+			\cljcode[firstnumber=21,firstline=21,lastline=34]{../src/molly/algo/bfs.clj}
+			
+			\caption{BFS using recursion.}
+			\label{src:molly-algo-bfs-bfs}
+		\end{figure}
+		
+		\begin{figure}[ht!]
+			\cljcode[firstnumber=4,firstline=4,lastline=13]{../src/molly/algo/bfs_atom.clj}
+			
+			\caption{Discovers new nodes along the frontier and updates the state accordingly.}
+			\label{src:molly-algo-bfs-atom-update-adj}
+		\end{figure}
+		
+		\begin{figure}[ht!]
+			\cljcode[firstnumber=15,firstline=15,lastline=26]{../src/molly/algo/bfs_atom.clj}
+			
+			\caption{Implements a concurrent version of BFS using atoms.}
+			\label{src:molly-algo-bfs-atom-bfs-atom}
+		\end{figure}
+		
+		\begin{figure}[ht!]
+			\cljcode[firstnumber=4,firstline=4,lastline=16]{../src/molly/algo/bfs_ref.clj}
+			
+			\caption{Discovers new nodes along the frontier and updates the state accordingly.}
+			\label{src:molly-algo-bfs-ref-update-adj}
+		\end{figure}
+		
+		\begin{figure}[ht!]
+			\cljcode[firstnumber=18,firstline=18,lastline=29]{../src/molly/algo/bfs_ref.clj}
+			
+			\caption{Implements a concurrent version of BFS using references.}
+			\label{src:molly-algo-bfs-ref-bfs-atom}
+		\end{figure}
 	
 	\chapter{Theoretical}
 		The problem of efficiently searching through a graph is the subject of countless articles and journal papers.  Numerous algorithms have been proposed to perform graph search in an efficient manner.  Many of these algorithms build upon their predecessors, making assumptions and changing aspects to better suit a particular problem area.
@@ -676,6 +708,8 @@
 			As this project runs a top of the Java Virtual Machine (JVM), there are many factors to consider with regard to performance.  In addition to uncontrollable events such as garbage collection, the JVM's behaviour can differ based on the operating system (OS) it is running on.
 			
 			\subsection{Pitfalls of the Java Virtual Machine}
+				Reliable benchmarking on the JVM is a difficult problem.  The standard HotSpot VM utilizes a non-deterministic garbage collector (GC).  In addition, the JIT is also non-deterministic.  These two problems combine into a larger issue.
+				
 				\subsubsection{Timing Execution}
 					There are two methods provided by the JVM for getting a precise time from the OS; \\\texttt{System.currentTimeMillis()} and \texttt{System.nanoTime()}.  The former returns the ``wall'' time.  It is possible for time to leap forward or backward using this method.  If daylight savings time occurs between calls to \texttt{System.currentTimeMillis()}, it can result in a negative time.
 					
