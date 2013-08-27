@@ -30,7 +30,6 @@
 (defn close-idx-writer
   [^IndexWriter idx-writer]
   (doto idx-writer
-    ; Lucene docs say not to use .optimize anymore.
     (.commit)
     (.close)))
 

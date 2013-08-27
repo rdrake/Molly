@@ -49,7 +49,8 @@
 (defn get-entities [q]
   (response/json
     {:result
-     (entities :text q (props :topk_entities))}))
+     (entities
+       :text (clojure.string/lower-case q) (props :topk_entities))}))
 
 (defn get-entity [q]
   (response/json
