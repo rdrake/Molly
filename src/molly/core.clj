@@ -68,7 +68,8 @@
           algo        (fn [f searcher source target]
                         (if (opts :benchmark)
                           (bench f searcher source target)
-                          (f searcher source target)))]
+                          (println
+                            (f searcher source target))))]
       (cond
         (opts :index)     (let [database  (properties :database)
                                 index     (properties :index)]

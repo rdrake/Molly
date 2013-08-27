@@ -1,6 +1,14 @@
 (ns molly.algo.bfs-atom
   (use molly.algo.common))
 
+(defn initial-state
+  [s]
+  (atom {:Q       (-> (clojure.lang.PersistentQueue/EMPTY) (conj s))
+         :marked  #{s}
+         :dist    {s 0}
+         :prev    {}
+         :done    false}))
+
 (defn update-adj
   [state-ref G u]
   (let [marked?   (@state-ref :marked)
