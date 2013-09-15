@@ -54,14 +54,14 @@
 
 (defn bench
   [f searcher source target]
-  (warmup f searcher "courses|alsu_1101u"
-          "schedules|schedules|3067sections|1246teaches|893" 15)
+  (warmup f searcher "instructor|109"
+          "instructor|108" 15)
   (benchmark f searcher source target))
 
 (defn -main
   [& args]
   (let [[opts arguments banner] (parse-args (flatten args))]
-    (when (and (opts :help) (not (opts :config)))
+    (when (or (opts :help) (not (opts :config)))
       (println banner)
       (System/exit 0))
 
@@ -80,21 +80,20 @@
                                 source    (opts :source)
                                 target    (opts :target)]
                             (condp = (opts :algorithm)
-                              "bfs"       (algo bfs
-                                                searcher
-                                                source
-                                                target)
-                              "bfs-atom"  (algo bfs-atom
-                                                searcher
-                                                source
-                                                target)
-                              "bfs-ref"   (algo bfs-ref
-                                                searcher
-                                                source
-                                                target)
-                              "ford-fulkerson"  (println (ford-fulkerson
-                                                  searcher
-                                                  source
-                                                  target
-                                                  10)))
+                              "bfs"             (algo bfs
+                                                      searcher
+                                                      source
+                                                      target)
+                              "bfs-atom"        (algo bfs-atom
+                                                      searcher
+                                                      source
+                                                      target)
+                              "bfs-ref"         (algo bfs-ref
+                                                      searcher
+                                                      source
+                                                      target)
+                              "ford-fulkerson"  (algo ford-fulkerson
+                                                      searcher
+                                                      source
+                                                      target))
                             (shutdown-agents))))))

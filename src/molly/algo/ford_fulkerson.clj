@@ -2,47 +2,45 @@
   (:use molly.algo.common
         clojure.set))
 
-(defn need-relax? [v1 v2 dist]
-  (if (dist v2)
-    (> (dist v2) (+ (dist v1) 1))
+(defn need-relax? [u v dist]
+  (if (dist v)
+    (> (dist v) (+ (dist u) 1))
     true))
 
 (defn relax
-  [v1 v2 dist prev]
-    (if (need-relax? v1 v2 dist)
-      [(assoc dist v2 (+ (dist v1) 1))
-       (assoc prev v2 v1)]
+  [u v dist prev]
+    (if (need-relax? u v dist)
+      [(assoc dist v (+ (dist u) 1))
+       (assoc prev v u)]
       [dist prev]))
 
-(defn update-neighbours
-  [G v1 seen seen-all dist prev ^Integer max-hops]
-  (loop [v-list   (find-adj G v1)
-         seen     seen
-         seen-all seen-all
+(defn update-adj
+  [G marked dist prev u]
+  (loop [adj      (find-adj G u)
+         marked   marked
          dist     dist
          prev     prev
-         add-to-q []]
-    (if (empty? v-list)
-      [seen (conj seen-all v1) dist prev add-to-q]
-      (let [v2 (first v-list)
-            v-list (rest v-list)]
-        (if (seen-all v2)
-          (recur v-list seen seen-all dist prev add-to-q)
-          (let [[dist prev] (relax v1 v2 dist prev)
-                add-to-q (if (or (seen v2) (> (dist v2) max-hops)) add-to-q (conj add-to-q v2))]
-            (recur v-list (conj seen v2) seen-all dist prev add-to-q)))))))
+         frontier []]
+    (if (empty? adj)
+      [(conj marked u) dist prev frontier]
+      (let [v     (first adj)
+            adj'  (rest adj)]
+        (if (marked v)
+          (recur adj' marked dist prev frontier)
+          (let [[dist' prev'] (relax u v dist prev)
+            (recur adj' marked dist' prev' (conj frontier v))
 
 (defn ford-fulkerson
-  [G src tgt max-hops]
-  (loop [queue [src]
-         seen  #{src}
-         seen-all #{}
-         dist  {src 0}
-         prev  {src nil}]
-    (if (or (empty? queue) (and (not (nil? tgt)) (subset? #{tgt} seen)))
-      [dist prev seen-all]
-      (let [v1 (first queue)
-            queue (rest queue)
-            [seen seen-all dist prev add-to-q]
-              (update-neighbours G v1 seen seen-all dist prev max-hops)]
-        (recur (concat queue add-to-q) seen seen-all dist prev)))))
+  [G s t]
+  (loop [Q      (-> (clojure.lang.PersistentQueue/EMPTY) (conj s))
+         marked #{}
+         dist   {s 0}
+         prev   {s nil}]
+    (if (or (empty? Q)
+            (some (fn [node] (= node t)) marked))
+      [marked dist prev]
+      (let [u (first Q)
+            Q' (rest Q)
+            [marked' dist' prev' frontier]
+              (update-adj G u seen seen-all dist prev max-hops)]
+        (recur (concat Q' frontier) marked' dist' prev')))))
