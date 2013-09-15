@@ -6,7 +6,7 @@
   ([S n]
    (q-gram S n "$"))
   ([S n s]
-   (let [padding (clojure.string/join "" (repeat (dec n) "$"))
+   (let [padding (clojure.string/join "" (repeat (dec n) s))
          padded-S (str padding
                        (clojure.string/replace S " " padding)
                        padding)]
