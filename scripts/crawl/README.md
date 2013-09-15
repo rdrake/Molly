@@ -6,9 +6,13 @@ The recommended way of running these scripts is with virtualenv and pip.  First 
 
     $ virtualenv venv
 
-Then install the required packages with pip.
+Source the environment:
 
-    $ pip install SQLAlchemy lxml requests
+    $ source venv/bin/activate
+
+Install the required packages:
+
+    $ pip install -r requirements.txt
 
 You should have the following packages installed:
 
@@ -17,10 +21,6 @@ You should have the following packages installed:
     lxml==3.2.3
     requests==1.2.3
     wsgiref==0.1.2
-
-If you need to activate the environment again:
-
-    . venv/bin/activate{.fish}
 
 ## Scripts
 

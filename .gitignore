@@ -48,3 +48,5 @@ story.md
 .lein-repl-history
 *.pickle
 target
+venv
+*.bak

@@ -8,7 +8,8 @@
         [clojure.tools.cli :only (cli)]
         [molly.algo.bfs-atom :only (bfs-atom)]
         [molly.algo.bfs-ref :only (bfs-ref)]
-        [molly.algo.bfs :only (bfs)]))
+        [molly.algo.bfs :only (bfs)]
+        [molly.algo.ford-fulkerson :only (ford-fulkerson)]))
 
 (defn parse-args
   [args]
@@ -68,8 +69,7 @@
           algo        (fn [f searcher source target]
                         (if (opts :benchmark)
                           (bench f searcher source target)
-                          (println
-                            (f searcher source target))))]
+                          (f searcher source target)))]
       (cond
         (opts :index)     (let [database  (properties :database)
                                 index     (properties :index)]
@@ -91,5 +91,10 @@
                               "bfs-ref"   (algo bfs-ref
                                                 searcher
                                                 source
-                                                target))
+                                                target)
+                              "ford-fulkerson"  (println (ford-fulkerson
+                                                  searcher
+                                                  source
+                                                  target
+                                                  10)))
                             (shutdown-agents))))))
