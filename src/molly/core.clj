@@ -24,6 +24,9 @@
        ["--benchmark"   "Run benchmarks"
         :default false
         :flag true]
+       ["-d" "--debug"  "Displays additional information."
+        :default false
+        :flag true]
        ["-h" "--help"   "Show help"
         :default false
         :flag true]))
@@ -66,10 +69,14 @@
       (System/exit 0))
 
     (let [properties  (load-props (opts :config))
+          max-hops    (properties :max-hops)
           algo        (fn [f searcher source target]
-                        (if (opts :benchmark)
-                          (bench f searcher source target)
-                          (f searcher source target)))]
+                        (let [[marked dist prev]
+                              (if (opts :benchmark)
+                                (bench f searcher source target max-hops)
+                                (f searcher source target max-hops))]
+                          (if (opts :debug)
+                            (println marked))))]
       (cond
         (opts :index)     (let [database  (properties :database)
                                 index     (properties :index)]

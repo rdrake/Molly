@@ -1,16 +1,8 @@
 (ns molly.algo.bfs-ref
   (use molly.algo.common))
 
-(defn initial-state
-  [s]
-  (ref {:Q       (-> (clojure.lang.PersistentQueue/EMPTY) (conj s))
-        :marked  #{s}
-        :dist    {s 0}
-        :prev    {}
-        :done    false}))
-
 (defn update-adj
-  [state-ref G u]
+  [state-ref G u max-hops]
   (let [marked?   (@state-ref :marked)
         deferred  (doall
                     (for [v (find-adj G u)]
@@ -20,12 +12,13 @@
                                           state-ref
                                           update-state
                                           u
-                                          v))))))]
+                                          v
+                                          max-hops))))))]
     (doall (map deref-future deferred))))
 
 (defn bfs-ref
-  [G s t]
-  (let [state-ref (initial-state s)]
+  [G s t max-hops]
+  (let [state-ref (ref (initial-state s))]
     (while (and (not (empty? (@state-ref :Q)))
                 (not (@state-ref :done)))
       (let [u   (first (@state-ref :Q))
@@ -33,5 +26,5 @@
         (dosync (alter state-ref assoc :Q Q'))
         (if (some (fn [node] (= node t)) (@state-ref :marked))
           (dosync (alter state-ref assoc :done true))
-          (update-adj state-ref G u))))
+          (update-adj state-ref G u max-hops))))
      [(@state-ref :marked) (@state-ref :dist) (@state-ref :prev)]))

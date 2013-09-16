@@ -22,17 +22,29 @@
   [G v]
   (remove #{v} (find-group-for-id G v)))
 
+(defn initial-state
+  [s]
+  {:Q       (-> (clojure.lang.PersistentQueue/EMPTY) (conj s))
+   :marked  #{s}
+   :dist    {s 0}
+   :prev    {}
+   :done    false})
+
 (defn update-state
-  [state u v]
+  [state u v max-hops]
   (let [Q       (state :Q)
         marked  (state :marked)
         dist    (state :dist)
-        prev    (state :prev)]
+        prev    (state :prev)
+        done    (> (dist u) max-hops)]
     (assoc state
-           :Q       (conj Q v)
+           :Q       (if done
+                      Q
+                      (conj Q v))
            :marked  (conj marked v)
            :dist    (assoc dist v (inc (dist u)))
-           :prev    (assoc prev v u))))
+           :prev    (assoc prev v u)
+           :done    done)))
 
 (defn deref-future
   [dfd]
