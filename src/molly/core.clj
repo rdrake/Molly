@@ -1,15 +1,14 @@
 (ns molly.core
   (:gen-class)
-  (:use criterium.core
-        molly.conf.config
+  (:use molly.conf.config
         molly.index.build
         molly.search.lucene
-        molly.search.query-builder
         [clojure.tools.cli :only (cli)]
         [molly.algo.bfs-atom :only (bfs-atom)]
         [molly.algo.bfs-ref :only (bfs-ref)]
         [molly.algo.bfs :only (bfs)]
-        [molly.algo.ford-fulkerson :only (ford-fulkerson)]))
+        [molly.algo.ford-fulkerson :only (ford-fulkerson)]
+        [molly.bench.benchmark :only (benchmark-search)]))
 
 (defn parse-args
   [args]
@@ -43,41 +42,29 @@
           max-hops    (if (opts :max-hops)
                         (Integer. (opts :max-hops))
                         (properties :max-hops))]
-      (letfn [(algo [f searcher source target]
-                (if (opts :benchmark)
-                  (bench (f searcher source target max-hops))
-                  (let [[marked dist prev]
-                        (f searcher source target max-hops)]
-                    (if (opts :debug)
-                      (println dist)
-                      nil))))]
-        (if (opts :index)
-          (let [database  (properties :database)
-                index     (properties :index)]
-            (build database index))
-          nil)
-        (if (opts :algorithm)
-          (let [searcher  (idx-searcher
-                            (idx-path
-                              (properties :index)))
-                source    (opts :source)
-                target    (opts :target)]
-            (condp = (opts :algorithm)
-              "bfs"             (algo bfs
-                                      searcher
-                                      source
-                                      target)
-              "bfs-atom"        (algo bfs-atom
-                                      searcher
-                                      source
-                                      target)
-              "bfs-ref"         (algo bfs-ref
-                                      searcher
-                                      source
-                                      target)
-              "ford-fulkerson"  (algo ford-fulkerson
-                                      searcher
-                                      source
-                                      target))
-            (shutdown-agents))
-          nil)))))
+      (if (opts :index)
+        (let [database  (properties :database)
+              index     (properties :index)]
+          (build database index))
+        nil)
+      (if (opts :algorithm)
+        (let [searcher  (idx-searcher
+                          (idx-path
+                            (properties :index)))
+              source    (opts :source)
+              target    (opts :target)]
+          (let [f (delay
+                    (condp = (opts :algorithm)
+                      "bfs"             bfs
+                      "bfs-atom"        bfs-atom
+                      "bfs-ref"         bfs-ref
+                      "ford-fulkerson"  ford-fulkerson)
+                    searcher source target max-hops)]
+            (if (opts :benchmark)
+              (benchmark-search f)
+              (let [[marked dist prev] (deref f)]
+                (if (opts :debug)
+                  (println (str marked dist prev))
+                  nil)))
+            (shutdown-agents)))
+        nil))))
