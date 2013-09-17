@@ -21,7 +21,7 @@
          dist     dist
          prev     prev
          frontier []]
-    (if (empty? adj)
+    (if (or (empty? adj) (>= (dist u) max-hops))
       [(conj marked u) dist prev frontier]
       (let [v     (first adj)
             adj'  (rest adj)]

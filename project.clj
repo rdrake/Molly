@@ -13,7 +13,8 @@
      [org.clojure/tools.cli                     "0.2.4"]
      [korma                                     "0.3.0-RC5"]
      [compojure                                 "1.1.5"]
-     [lib-noir                                  "0.6.6"]]
+     [lib-noir                                  "0.6.6"]
+     [criterium                                 "0.4.2"]]
   :main         molly.core
   :jvm-opts     ["-Xss1024m"]
   :plugins      [[lein-ring                     "0.8.6"]]

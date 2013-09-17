@@ -4,16 +4,18 @@
 (defn update-adj
   [state-ref G u max-hops]
   (let [marked?   (@state-ref :marked)
-        deferred  (doall
-                    (for [v (find-adj G u)]
-                      (if (marked? v)
-                        nil
-                        (future (dosync (alter
-                                          state-ref
-                                          update-state
-                                          u
-                                          v
-                                          max-hops))))))]
+        deferred  (if  (>= ((@state-ref :dist) u) max-hops)
+                    []
+                    (doall
+                      (for [v (find-adj G u)]
+                        (if (marked? v)
+                          nil
+                          (future (dosync (alter
+                                            state-ref
+                                            update-state
+                                            u
+                                            v
+                                            max-hops)))))))]
     (doall (map deref-future deferred))))
 
 (defn bfs-ref

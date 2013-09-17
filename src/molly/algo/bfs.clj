@@ -8,7 +8,7 @@
          dist     dist
          prev     prev
          frontier []]
-    (if (empty? adj)
+    (if (or (empty? adj) (>= (dist u) max-hops))
       [(conj marked u) dist prev frontier]
       (let [v     (first adj)
             adj'  (rest adj)]
@@ -16,9 +16,7 @@
           (recur adj' marked dist prev frontier)
           (let [dist'     (assoc dist v (inc (dist u)))
                 prev'     (assoc prev v u)
-                frontier' (if (> (dist u) max-hops)
-                            frontier
-                            (conj frontier v))]
+                frontier' (conj frontier v)]
             (recur adj' marked dist' prev' frontier')))))))
 
 (defn bfs
