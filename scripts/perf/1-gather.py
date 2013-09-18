@@ -10,13 +10,13 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Some constants/settings
-RUNS = 5
+RUNS = 10
 
 FROM = "instructor|109"
 TO = "instructor|108"
 
 methods = ["bfs", "bfs-atom", "bfs-ref", "ford-fulkerson"]
-hops = map(lambda x: x + 1, range(4))
+hops = map(lambda x: x + 1, range(8))
 
 results = defaultdict(list)
 x = range(RUNS)
