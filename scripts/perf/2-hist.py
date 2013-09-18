@@ -5,6 +5,9 @@ import sys
 import matplotlib as mpl
 from common import *
 
+if len(sys.argv) <= 1:
+    sys.exit("Usage: %s <results>" % sys.argv[0])
+
 for (hops_, target) in results:
     values = results[(hops_, target)]
 

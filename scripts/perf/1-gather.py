@@ -5,6 +5,8 @@ from collections import defaultdict, OrderedDict
 from datetime import datetime
 from sh import lein
 
+from common import get_datetime, dt_to_str, ns_to_ms
+
 # Configure logging so we can be informed of progress, issues, etc.
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -16,7 +18,7 @@ FROM = "instructor|109"
 TO = "instructor|108"
 
 methods = ["bfs", "bfs-atom", "bfs-ref", "ford-fulkerson"]
-hops = map(lambda x: x + 1, range(8))
+hops = map(lambda x: x + 1, range(1))
 
 lein = lein.bake("run",
     "--benchmark",
@@ -29,13 +31,14 @@ run_count = 0
 
 TOTAL_RUNS = len(hops) * len(methods) * RUNS
 
-bench_start = datetime.now()
+bench_start = get_datetime()
+bench_start_str = dt_to_str(bench_start)
 
-logger.info("Began benchmarks at %s" % bench_start)
+logger.info("Began benchmarks at %s" % bench_start_str)
 
 fields = OrderedDict([("hops", None), ("method", None), ("duration", None), ("warmup_duration", None)])
 
-with open("%s-result" % bench_start, "w") as f:
+with open("%s-result.csv" % bench_start_str, "w") as f:
     writer = csv.DictWriter(f, fieldnames=fields)
 
     writer.writeheader()
@@ -48,7 +51,7 @@ with open("%s-result" % bench_start, "w") as f:
                 logger.info("Benchmarking... (%s, %d of %d, src:  %s, tgt:  %s, hops:  %d, remaining:  %d)" % (method, i + 1, RUNS, FROM, TO, max_hops, (TOTAL_RUNS - run_count)))
 
                 output = str(lein("--algorithm", method, "--max-hops", max_hops))
-                (duration, warmup_duration) = map(lambda x: int(x), output.split())
+                (duration, warmup_duration) = map(lambda x: ns_to_ms(int(x)), output.split())
 
                 writer.writerow({
                     "hops": max_hops,
@@ -59,6 +62,6 @@ with open("%s-result" % bench_start, "w") as f:
 
                 f.flush()
 
-bench_end = datetime.now()
+bench_end = get_datetime()
 
-logger.info("Completed benchmarks at %s (%s elapsed)" % (bench_end, (bench_end - bench_start)))
+logger.info("Completed benchmarks at %s (%s elapsed)" % (dt_to_str(bench_end), (bench_end - bench_start)))
