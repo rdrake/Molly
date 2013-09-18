@@ -26,10 +26,5 @@ results = pickle.load(open(sys.argv[1]))
 methods = set([method for (hops, method) in results])
 hops = set([hops for (hops, method) in results])
 
-for (hops, method) in results:
-    values = []
-
-    for (duration, execution_count, total_duration) in results[(hops, method)]:
-        values.append(duration)
-
-    results[(hops, method)] = values
+def ns_to_ms(ns):
+    return ns / (1000.0 * 1000.0)
