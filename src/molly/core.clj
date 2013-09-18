@@ -53,18 +53,15 @@
                             (properties :index)))
               source    (opts :source)
               target    (opts :target)]
-          (let [f (delay
+          (let [f (partial
                     (condp = (opts :algorithm)
                       "bfs"             bfs
                       "bfs-atom"        bfs-atom
                       "bfs-ref"         bfs-ref
-                      "ford-fulkerson"  ford-fulkerson)
+                      "ford-fulkerson"  ford-fulkerson
+                      (throw (Exception.
+                               "Not a valid algorithm choice.")))
                     searcher source target max-hops)]
-            (if (opts :benchmark)
-              (benchmark-search f)
-              (let [[marked dist prev] (deref f)]
-                (if (opts :debug)
-                  (println (str marked dist prev))
-                  nil)))
+            (benchmark-search f)
             (shutdown-agents)))
         nil))))
