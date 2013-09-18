@@ -53,15 +53,32 @@
                             (properties :index)))
               source    (opts :source)
               target    (opts :target)]
-          (let [f (partial
-                    (condp = (opts :algorithm)
-                      "bfs"             bfs
-                      "bfs-atom"        bfs-atom
-                      "bfs-ref"         bfs-ref
-                      "ford-fulkerson"  ford-fulkerson
-                      (throw (Exception.
-                               "Not a valid algorithm choice.")))
-                    searcher source target max-hops)]
-            (benchmark-search f)
-            (shutdown-agents)))
+          (condp = (opts :algorithm)
+            "bfs"             (benchmark-search
+                                bfs
+                                searcher
+                                source
+                                target
+                                max-hops)
+            "bfs-atom"        (benchmark-search
+                                bfs-atom
+                                searcher
+                                source
+                                target
+                                max-hops)
+            "bfs-ref"         (benchmark-search
+                                bfs-ref
+                                searcher
+                                source
+                                target
+                                max-hops)
+            "ford-fulkerson"  (benchmark-search
+                                ford-fulkerson
+                                searcher
+                                source
+                                target
+                                max-hops)
+            (throw (Exception.
+                     "Not a valid algorithm choice.")))
+          (shutdown-agents))
         nil))))

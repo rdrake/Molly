@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Some constants/settings
-RUNS = 10000
+RUNS = 10
 
 FROM = "instructor|109"
 TO = "instructor|108"
@@ -33,7 +33,7 @@ bench_start = datetime.now()
 
 logger.info("Began benchmarks at %s" % bench_start)
 
-fields = OrderedDict([("hops", None), ("method", None), ("duration", None)])
+fields = OrderedDict([("hops", None), ("method", None), ("duration", None), ("warmup_duration", None)])
 
 with open("%s-result" % bench_start, "w") as f:
     writer = csv.DictWriter(f, fieldnames=fields)
@@ -47,12 +47,14 @@ with open("%s-result" % bench_start, "w") as f:
 
                 logger.info("Benchmarking... (%s, %d of %d, src:  %s, tgt:  %s, hops:  %d, remaining:  %d)" % (method, i + 1, RUNS, FROM, TO, max_hops, (TOTAL_RUNS - run_count)))
 
-                output = int(str(lein("--algorithm", method, "--max-hops", max_hops)))
+                output = str(lein("--algorithm", method, "--max-hops", max_hops))
+                (duration, warmup_duration) = map(lambda x: int(x), output.split())
 
                 writer.writerow({
                     "hops": max_hops,
                     "method": method,
-                    "duration": output
+                    "duration": duration,
+                    "warmup_duration": warmup_duration
                 })
 
                 f.flush()
