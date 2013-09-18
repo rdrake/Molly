@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Some constants/settings
-RUNS = 10
+RUNS = 100
 
 FROM = "instructor|109"
 TO = "instructor|108"
