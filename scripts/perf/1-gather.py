@@ -12,13 +12,13 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Some constants/settings
-RUNS = 10
+RUNS = 100
 
 FROM = "instructor|109"
 TO = "instructor|108"
 
 methods = ["bfs", "bfs-atom", "bfs-ref", "ford-fulkerson"]
-hops = map(lambda x: x + 1, range(1))
+hops = map(lambda x: x + 1, range(8))
 
 lein = lein.bake("run",
     "--benchmark",
@@ -36,7 +36,7 @@ bench_start_str = dt_to_str(bench_start)
 
 logger.info("Began benchmarks at %s" % bench_start_str)
 
-fields = OrderedDict([("hops", None), ("method", None), ("duration", None), ("warmup_duration", None)])
+fields = OrderedDict([("idx", None), ("hops", None), ("method", None), ("duration", None), ("warmup_duration", None)])
 
 with open("%s-result.csv" % bench_start_str, "w") as f:
     writer = csv.DictWriter(f, fieldnames=fields)
@@ -54,6 +54,7 @@ with open("%s-result.csv" % bench_start_str, "w") as f:
                 (duration, warmup_duration) = map(lambda x: ns_to_ms(int(x)), output.split())
 
                 writer.writerow({
+                    "idx": run_count,
                     "hops": max_hops,
                     "method": method,
                     "duration": duration,

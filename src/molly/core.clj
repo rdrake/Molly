@@ -52,33 +52,23 @@
                           (idx-path
                             (properties :index)))
               source    (opts :source)
-              target    (opts :target)]
-          (condp = (opts :algorithm)
-            "bfs"             (benchmark-search
-                                bfs
-                                searcher
-                                source
-                                target
-                                max-hops)
-            "bfs-atom"        (benchmark-search
-                                bfs-atom
-                                searcher
-                                source
-                                target
-                                max-hops)
-            "bfs-ref"         (benchmark-search
-                                bfs-ref
-                                searcher
-                                source
-                                target
-                                max-hops)
-            "ford-fulkerson"  (benchmark-search
-                                ford-fulkerson
-                                searcher
-                                source
-                                target
-                                max-hops)
-            (throw (Exception.
-                     "Not a valid algorithm choice.")))
+              target    (opts :target)
+              f         (condp = (opts :algorithm)
+                          "bfs"             bfs
+                          "bfs-atom"        bfs-atom
+                          "bfs-ref"         bfs-ref
+                          "ford-fulkerson"  ford-fulkerson
+                          (throw
+                            (Exception.
+                              "Not a valid algorithm choice.")))]
+          (if (opts :debug)
+            (let [[marked dist prev] (f searcher
+                                        source
+                                        target
+                                        max-hops)]
+              (println marked)
+              (println dist)
+              (println prev))
+            (benchmark-search f searcher source target max-hops))
           (shutdown-agents))
         nil))))
