@@ -43,12 +43,15 @@ with open("%s-result.pickle" % bench_start_str, "w") as f:
                 logger.info("Benchmarking... (%s, %d of %d, src:  %s, tgt:  %s, hops:  %d, remaining:  %d)" % (method, i + 1, RUNS, FROM, TO, max_hops, (TOTAL_RUNS - run_count)))
 
                 run_cmd = "%s --algorithm %s --max-hops %d" % (cmd, method, max_hops)
-
                 output = check_output(run_cmd, shell=True)
+
+                print "==="
+                print "%d %s %d" % (max_hops, method, i)
+                print(output)   # Can monitor stdout in case of failure.
 
                 results[(max_hops, method)].append(output)
     
-                pickle.dump(results, f)
+    pickle.dump(results, f)
 
 bench_end = get_datetime()
 

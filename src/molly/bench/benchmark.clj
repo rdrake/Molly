@@ -3,6 +3,5 @@
 
 (defn benchmark-search
   [f G s t max-hops]
-  (with-progress-reporting
     (bench
-      (f G s t max-hops))))
+      (f G s t max-hops)))
