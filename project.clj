@@ -11,6 +11,7 @@
      [org.xerial/sqlite-jdbc                    "3.7.2"]
      [org.clojure/java.jdbc                     "0.3.0-alpha4"]
      [org.clojure/tools.cli                     "0.2.4"]
+     [org.clojure/data.json                     "0.2.3"]
      [korma                                     "0.3.0-RC5"]
      [compojure                                 "1.1.5"]
      [lib-noir                                  "0.6.6"]
