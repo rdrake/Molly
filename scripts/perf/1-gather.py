@@ -6,7 +6,9 @@ import re
 
 from collections import OrderedDict
 from datetime import datetime
-from sh import lein
+#from sh import lein
+
+from subprocess import call, check_output
 
 from common import get_datetime, dt_to_str, ns_to_ms
 
@@ -18,20 +20,15 @@ patt = re.compile("Execution time mean : (\d+\.\d+) (m|µ)s")
 
 # Some constants/settings
 RUNS = 1
-HOPS = 1 # Normally 8
+HOPS = 8
 
 FROM = "instructor|109"
 TO = "instructor|108"
 
-methods = ["bfs"]#, "bfs-atom", "bfs-ref", "ford-fulkerson"]
+methods = ["bfs", "bfs-atom", "bfs-ref", "ford-fulkerson"]
 hops = map(lambda x: x + 1, range(HOPS))
 
-lein = lein.bake("run",
-    "--benchmark",
-    c=".properties",
-    s="\"%s\"" % FROM,
-    t="\"%s\"" % TO
-)
+cmd = "lein run --benchmark -c .properties -s \"%s\" -t \"%s\"" % (FROM, TO) 
 
 run_count = 0
 
@@ -56,13 +53,9 @@ with open("%s-result.csv" % bench_start_str, "w") as f:
 
                 logger.info("Benchmarking... (%s, %d of %d, src:  %s, tgt:  %s, hops:  %d, remaining:  %d)" % (method, i + 1, RUNS, FROM, TO, max_hops, (TOTAL_RUNS - run_count)))
 
-                output = lein("--algorithm", method, "--max-hops", max_hops)
-                
-                print output
+                run_cmd = "%s --algorithm %s --max-hops %d" % (cmd, method, max_hops)
 
-                output = str(output)
-
-                print output
+                output = check_output(run_cmd, shell=True)
 
                 r = patt.search(output)
 
