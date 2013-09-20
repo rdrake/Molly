@@ -1,7 +1,6 @@
 import logging
-import pickle
+import json
 
-from collections import defaultdict
 from datetime import datetime
 from subprocess import check_output
 
@@ -32,26 +31,26 @@ bench_start_str = dt_to_str(bench_start)
 
 logger.info("Began benchmarks at %s" % bench_start)
 
-with open("%s-result.pickle" % bench_start_str, "w") as f:
-    results = defaultdict(list)
+results = []
 
-    for max_hops in hops:
-        for method in methods:
-            for i in range(RUNS):
-                run_count += 1
+for max_hops in hops:
+    for method in methods:
+        for i in range(RUNS):
+            run_count += 1
 
-                logger.info("Benchmarking... (%s, %d of %d, src:  %s, tgt:  %s, hops:  %d, remaining:  %d)" % (method, i + 1, RUNS, FROM, TO, max_hops, (TOTAL_RUNS - run_count)))
+            logger.info("Benchmarking... (%s, %d of %d, src:  %s, tgt:  %s, hops:  %d, remaining:  %d)" % (method, i + 1, RUNS, FROM, TO, max_hops, (TOTAL_RUNS - run_count)))
 
-                run_cmd = "%s --algorithm %s --max-hops %d" % (cmd, method, max_hops)
-                output = check_output(run_cmd, shell=True)
+            run_cmd = "%s --algorithm %s --max-hops %d" % (cmd, method, max_hops)
+            output = check_output(run_cmd, shell=True)
 
-                print "==="
-                print "%d %s %d" % (max_hops, method, i)
-                print(output)   # Can monitor stdout in case of failure.
+            print "==="
+            print "%d %s %d" % (max_hops, method, i)
+            print(output)   # Can monitor stdout in case of failure.
 
-                results[(max_hops, method)].append(output)
-    
-    pickle.dump(results, f)
+            results.append(json.loads(output))
+
+            with open("%s-result.json" % bench_start_str, "w") as f:
+                json.dump(results, f)
 
 bench_end = get_datetime()
 
