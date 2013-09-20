@@ -1,22 +1,15 @@
-# coding=utf-8
-
-import csv
 import logging
-import re
+import pickle
 
-from collections import OrderedDict
+from collections import defaultdict
 from datetime import datetime
-#from sh import lein
+from subprocess import check_output
 
-from subprocess import call, check_output
-
-from common import get_datetime, dt_to_str, ns_to_ms
+from common import get_datetime, dt_to_str
 
 # Configure logging so we can be informed of progress, issues, etc.
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-patt = re.compile("Execution time mean : (\d+\.\d+) (m|µ)s")
 
 # Some constants/settings
 RUNS = 1
@@ -37,14 +30,10 @@ TOTAL_RUNS = len(hops) * len(methods) * RUNS
 bench_start = get_datetime()
 bench_start_str = dt_to_str(bench_start)
 
-logger.info("Began benchmarks at %s" % bench_start_str)
+logger.info("Began benchmarks at %s" % bench_start)
 
-fields = OrderedDict([("idx", None), ("hops", None), ("method", None), ("duration", None)])
-
-with open("%s-result.csv" % bench_start_str, "w") as f:
-    writer = csv.DictWriter(f, fieldnames=fields)
-
-    writer.writeheader()
+with open("%s-result.pickle" % bench_start_str, "w") as f:
+    results = defaultdict(list)
 
     for max_hops in hops:
         for method in methods:
@@ -57,22 +46,10 @@ with open("%s-result.csv" % bench_start_str, "w") as f:
 
                 output = check_output(run_cmd, shell=True)
 
-                r = patt.search(output)
-
-                mean = float(r.group(1))
-
-                if r.group(2) == "µ":
-                    mean /= 1000
-
-                writer.writerow({
-                    "idx": run_count,
-                    "hops": max_hops,
-                    "method": method,
-                    "duration": mean
-                })
-
-                f.flush()
+                results[(max_hops, method)].append(output)
+    
+                pickle.dump(results, f)
 
 bench_end = get_datetime()
 
-logger.info("Completed benchmarks at %s (%s elapsed)" % (dt_to_str(bench_end), (bench_end - bench_start)))
+logger.info("Completed benchmarks at %s (%s elapsed)" % (bench_end, (bench_end - bench_start)))
