@@ -1,0 +1,190 @@
+% !TEX root = Thesis.tex
+\section{Relational model with star schema}
+	\subsection{Relational Model of Data}
+		\begin{grammar}
+		
+			<DB> ::= <name>
+			
+			%DB ::= List(REL), name : string, List(FK)
+			%REL ::= name : string, attars : List(ATTR), key : List(ATTR)
+			%ATTR ::= name : string, domain : datatype
+			%FK ::= from : (REL, List(ATTR)), to : (REL, List(ATTR))
+		\end{grammar}
+		
+		\begin{defn}{Database}
+		\label{def:database}
+		
+			Let $d$ be a database instance.  A database is comprised of three main components:
+			
+			\begin{itemize}
+				\item $\textsc{name}\lbrack d\rbrack$ : string
+				\item $\textsc{rel}\lbrack d\rbrack$ : list(REL)
+				\item $\textsc{fk}\lbrack d\rbrack$ : list(FK)
+			\end{itemize}
+		\end{defn}
+		
+		\begin{defn}{Relation}
+		\label{def:relation}
+		
+			Let $r \in \textsc{rel}\lbrack d\rbrack$, where $d$ is defined in Definition \ref{def:database}.  A relation is comprised of three main components:
+			
+			\begin{itemize}
+				\item $\textsc{name}\lbrack r\rbrack$ : string
+				\item $\textsc{attr}\lbrack r\rbrack$ : list(ATTR)
+				\item $\textsc{key}\lbrack r\rbrack$ : list(ATTR)
+			\end{itemize}
+			
+			The first is a \texttt{string} representation of the relation.  The second is a list of attributes that make up entries, or tuples, in the relation.  The third is a list of the relation's attributes that uniquely identify the tuple within the relation.  That is, $\textsc{key}\lbrack r\rbrack \subseteq \textsc{attr}\lbrack r\rbrack$.
+		\end{defn}
+		
+		\begin{defn}{Attribute}
+		
+			Let $a \in \textsc{attr}\lbrack r\rbrack$, where $r$ is defined in Definition \ref{def:relation}.  An attribute is comprised of two main components:
+			
+			\begin{itemize}
+				\item $\textsc{name}\lbrack a\rbrack$
+				\item $\textsc{type}\lbrack a\rbrack$
+			\end{itemize}
+		
+			Note:  Lower case letters (e.g.\ $a, b, c, \ldots$) are attributes.
+		\end{defn}
+		
+		\begin{defn}{Foreign Key}
+		
+			Let $\theta \in \textsc{FK}\lbrack d\rbrack$ be a FK instance,where $d$ is defined in Definition \ref{def:database}.  A foreign key is comprised of two main components:
+			
+			\begin{itemize}
+				\item $\textsc{from}\lbrack fk\rbrack = (\textsc{rel}_{s}\lbrack\theta\rbrack, \textsc{attr}_{s}\lbrack\theta\rbrack)$
+				\item $\textsc{to}\lbrack fk\rbrack = (\textsc{rel}_{t}\lbrack\theta\rbrack, \textsc{attr}_{t}\lbrack\theta\rbrack)$
+			\end{itemize}
+			
+			Note:  $\theta, \phi$ are the FK constraints
+		\end{defn}
+	
+	\subsection{Star Join Schema to Form Entity Groups}
+		A network (forest) of tuples, jointed via some existing $\theta \in \textsc{fk}\lbrack d\rbrack$.
+		
+		The schema of entity group $G$ is defined as vertices of $G$:
+		
+		$$V(G) \subseteq \textsc{rel}(DB)$$
+		
+		Relation $r$ in the space of vertices of $G$, $V(G)$, may be a table or a computed view.
+		
+		$$r \in V(G)$$
+		
+		It is also defined as the edges of $G$, or $E(G)$, in the form of
+		
+		$$r(a_1, a_2, \ldots, a_k) \rightarrow s(b_1, b_2, \ldots, b_k)$$
+		
+		where $a_i \in \textsc{attr}\lbrack r\rbrack$, $b_i \in \textsc{attr}\lbrack s\rbrack$, with the additional constraint of $r, s \in V(G)$.
+		
+		\begin{ex}
+			\begin{eqnarray*}
+				Instructor(name) &\rightarrow& Schedule(instructor) \\
+				Schedule(code) &\rightarrow& Course(id)
+			\end{eqnarray*}
+		\end{ex}
+	
+	\subsection{Instances of an Entity Group}
+		\xymatrix{
+			& r_1 \ar[dl]^{\theta_{1, 2}} \ar[dr]^{\theta_{1, 3}} & \\
+			r_2 & & r_3 \ar[d]^{\theta_{2, 3}} \\
+			& & r_4
+		}
+		
+		Instances are obtained by the following process.
+		
+		For $r_i(a_{i, 1}, a{i, 2}, \ldots, a_{i, k}) \rightarrow r_j(b_{j, 1}, b_{j, 2}, \ldots, b{j, k})$
+		
+		$$c_{ii, j} = \bigwedge^k_{n=1} (a_{i, n} = b_{j, n})$$
+		
+		\begin{eqnarray*}
+			\textsc{view}\lbrack G\rbrack &=& \bowtie_{\theta_{ij}} (r_i, r_j) \\
+			&=& r_1 \bowtie_{\theta_{1, 2}} r_2 \bowtie_{\theta_{2, 3}} r_3 \ldots \bowtie_{\theta_{n, n+1}} r_n
+		\end{eqnarray*}
+		
+		where $r_1, r_2, r_3, \ldots, r_n$ are relations discovered by a depth-first search traversal of $G$.
+		
+		Each tuple in $\textsc{view}\lbrack G\rbrack$ is an instance of entity group $G$.
+		
+		Motivation:
+		
+		\todo{Diagram of schema-level graph (FKs, relations)}
+		
+		Database schema
+		
+		Vertices:  $\textsc{rel}\lbrack d\rbrack$
+		
+		Edges:  $\textsc{fk}\lbrack d\rbrack$
+		
+		The entity graphs are overlapping subgraphs at the schema level.
+		
+		Question:
+		
+		How to determine connectivity at the instance level?
+	
+	\begin{itemize}
+		\item ER style relational schema
+		\item Star join schema to form entity groups
+		\item Expressing relational objects using universal design pattern (describing data using scalar, lists and dictionaries).
+		\item Relational object graph
+	\end{itemize}
+
+\section{Pros and Cons of the Relational Model}
+	In order to better understand the motivation behind this work, it is important to examine the strong as well as weak points of the relational model.
+	
+	\subsection{Pros}
+		\begin{itemize}
+			\item Well supported by relational algebra and relational databases (RDBMS)
+			\item Clean and consistent database instances (A\underline{C}ID?)
+			\item Can use queries to resolve instance-level connectivity
+				\begin{itemize}
+					\item How is "Ken" connected to "CSCI 3030U"?
+				\end{itemize}
+				\todo{More examples of queries}
+		\end{itemize}
+	
+	\subsection{Cons}
+		\begin{itemize}
+			\item Must know the relational schema
+				\begin{enumerate}
+					\item Know table/attribute names
+					\item Know join paths (schema)
+				\end{enumerate}
+			\item Inflexible string matching options  (basically just have \texttt{LIKE}), substring matching
+			\item Must know SQL
+			\item All queries must be re-written upon schema changes (rename, change in join path, etc.)
+			\item Not adaptive to new join path (e.g.\ newly created entity group, deleted E.G.\, etc.)
+		\end{itemize}
+
+	\begin{itemize}
+		\item Good for analytics (aggregation, selection) if user has domain knowledge of the schema.
+		\item Bad for exploratory queries.
+		\item Bad if user doesn't know SQL
+		\item Bad for flexibility
+	\end{itemize}
+
+		\section{Document model (4 days, week 2)}
+	\begin{itemize}
+		\item Definition: documents, terms, and the bag of terms model for documents and queries
+		\item Definition of keyword search queries: vectorization of documents (tf-idf) and queries.	Models of distance between documents and queries (cosine-distance, jaccard distance, BM25).
+		\item Extended document model with attributes and fields
+		\item Expressing documents in the universal design pattern (aka list+dict)
+		\item Document graph
+	\end{itemize}
+
+		\section{Pro and con of document model (1 day)}
+	\begin{itemize}
+		\item Good: exploratory queries using keywords (google)
+		\item Good: easy (or no) syntax
+		\item Good: fuzzy matching (using n-gram)
+		\item Bad: No analytics
+	\end{itemize}
+		
+		\section{Best of both worlds (4 days, week 3)}
+	\begin{itemize}
+		\item Hybrid database defined by both the relational model and the document model
+		\item Translation between relational objects (entities and entity) groups to documents.
+		\item Translation of documents back to relational objects.
+		\item Proof of lossless translation between relational space and document space
+	\end{itemize}
