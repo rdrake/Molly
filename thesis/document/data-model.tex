@@ -1,49 +1,103 @@
 % !TEX root = Thesis.tex
+In this chapter we provide a formal definition of the relational data model, discuss its merits, its shortcomings, and contrast it to the document data model.  Contrary to the relational model, the document model permits fast and flexible keyword search without requiring explicit domain knowledge of the data.  In addition, we demonstrate the feasibility of encoding a relational model into a document model in a lossless manner.
+
+The term ``data model'' refers to a notation for describing data and/or information.  It consists of the data structure, operations that may be performed on the data, as well as constraints placed on the data \cite{dbsys-06}.
+
 \section{Relational model with star schema}
+%	In order to understand the shortcomings of the relational model, we must first 
+	In this section we formally define the relational model.
+	
 	\subsection{Relational Model of Data}
-		\begin{grammar}
+		In its most basic form, the relational data model is built upon sets and tuples.  Each of these sets consist of a set of finite possible values.  Tuples are constructed from these sets to form relations.
 		
-			<DB> ::= <name>
+		Formally, a Relation is defined as follows \cite{codd-90}:
+		
+		\begin{defn}{Relation}
+			Given a list of sets $\lbrack S_1, S_2, \ldots, S_n\rbrack$, let $R$ be a relation on these $n$ sets if it is a set of $n$-tuples, with the first component from $S_1$, the second component from $S_2$, and so on.
 			
-			%DB ::= List(REL), name : string, List(FK)
-			%REL ::= name : string, attars : List(ATTR), key : List(ATTR)
-			%ATTR ::= name : string, domain : datatype
-			%FK ::= from : (REL, List(ATTR)), to : (REL, List(ATTR))
-		\end{grammar}
+			More concisely,
+			
+			$$R \subset S_1 \times S_2 \times \ldots \times S_n$$
+			
+			$R$ is said to be of degree $n$, denoted as $\mathrm{deg}_R$.  Each of the sets on which one or more relation is based is called the domain, denoted as $\mathrm{dom}_S$.
+		\end{defn}
 		
-		\begin{defn}{Database}
+		\begin{ex}
+			Consider the following sets
+			\begin{eqnarray*}
+				S_1 &=& \left\{\textrm{``Winter 2014''}, \textrm{``Fall 2013''}\right\} \\
+				S_2 &=& \left\{\textrm{``CSCI 3030U''}, \textrm{``CSCI 4020U''}\right\} \\
+				S_3 &=& \left\{\textrm{``Ken Pu''}\right\}
+			\end{eqnarray*}
+			which have the properties
+			\begin{eqnarray*}
+				\mathrm{dom}_{S_1} &=& \mathrm{terms} \\
+				\mathrm{dom}_{S_2} &=& \mathrm{courses} \\
+				\mathrm{dom}_{S_3} &=& \mathrm{instructors}
+			\end{eqnarray*}
+			By taking the Cartesian product, we arrive at the following set of tuples
+			$$
+				S_1 \times S_2 \times S_3 =
+				\left\{
+					\begin{array}{l}
+						\left(\textrm{``Winter 2014''}, \textrm{``CSCI 3030U''}, \textrm{``Ken Pu''}\right) \\
+						\left(\textrm{``Fall 2013''}, \textrm{``CSCI 3030U''}, \textrm{``Ken Pu''}\right) \\
+						\left(\textrm{``Winter 2014''}, \textrm{``CSCI 4020U''}, \textrm{``Ken Pu''}\right) \\
+						\left(\textrm{``Fall 2013''}, \textrm{``CSCI 4020U''}, \textrm{``Ken Pu''}\right)
+					\end{array}
+				\right\}
+			$$
+			Furthermore, given the relation
+			$$
+				R =
+				\left\{
+					\begin{array}{l}
+						\left(\textrm{``Winter 2014''}, \textrm{``CSCI 4020U''}, \textrm{``Ken Pu''}\right) \\
+						\left(\textrm{``Fall 2013''}, \textrm{``CSCI 3030U''}, \textrm{``Ken Pu''}\right)
+					\end{array}
+				\right\}
+			$$
+			We see that $R \subset S_1 \times S_2 \times S_3$, with $\mathrm{deg}_R = 3$.
+		\end{ex}
+		
+		
+		
+		%The relational model, as suggested by its name, is based on the concept of relations.  These relations are 2-dimensional tables, where the rows are n-tuples and the columns are attributes.  Any number of these attributes may also be keys.  In addition to attributes and keys, a relation has a name.
+		
+		%Given a relation $r$, we denote the name of $r$ as $\textsc{Name}\lbrack r\rbrack$.  
+		
+		\begin{defn}
 		\label{def:database}
-		
 			Let $d$ be a database instance.  A database is comprised of three main components:
 			
 			\begin{itemize}
-				\item $\textsc{name}\lbrack d\rbrack$ : string
-				\item $\textsc{rel}\lbrack d\rbrack$ : list(REL)
-				\item $\textsc{fk}\lbrack d\rbrack$ : list(FK)
+				\item $\textsc{Name}\lbrack d\rbrack \rightarrow$ string
+				\item $\textsc{Rel}\lbrack d\rbrack \rightarrow$ list(REL)
+				\item $\textsc{FK}\lbrack d\rbrack \rightarrow$ list(FK)
 			\end{itemize}
 		\end{defn}
 		
 		\begin{defn}{Relation}
 		\label{def:relation}
 		
-			Let $r \in \textsc{rel}\lbrack d\rbrack$, where $d$ is defined in Definition \ref{def:database}.  A relation is comprised of three main components:
+			Let $r \in \textsc{Rel}\lbrack d\rbrack$, where $d$ is defined in Definition \ref{def:database}.  A relation is comprised of three main components:
 			
 			\begin{itemize}
-				\item $\textsc{name}\lbrack r\rbrack$ : string
-				\item $\textsc{attr}\lbrack r\rbrack$ : list(ATTR)
-				\item $\textsc{key}\lbrack r\rbrack$ : list(ATTR)
+				\item $\textsc{Name}\lbrack r\rbrack$ : string
+				\item $\textsc{Attr}\lbrack r\rbrack$ : list(ATTR)
+				\item $\textsc{Key}\lbrack r\rbrack$ : list(ATTR)
 			\end{itemize}
 			
-			The first is a \texttt{string} representation of the relation.  The second is a list of attributes that make up entries, or tuples, in the relation.  The third is a list of the relation's attributes that uniquely identify the tuple within the relation.  That is, $\textsc{key}\lbrack r\rbrack \subseteq \textsc{attr}\lbrack r\rbrack$.
+			The first is a \texttt{string} representation of the relation.  The second is a list of attributes that make up entries, or tuples, in the relation.  The third is a list of the relation's attributes that uniquely identify the tuple within the relation.  That is, $\textsc{Key}\lbrack r\rbrack \subseteq \textsc{Attr}\lbrack r\rbrack$.
 		\end{defn}
 		
 		\begin{defn}{Attribute}
 		
-			Let $a \in \textsc{attr}\lbrack r\rbrack$, where $r$ is defined in Definition \ref{def:relation}.  An attribute is comprised of two main components:
+			Let $a \in \textsc{Attr}\lbrack r\rbrack$, where $r$ is defined in Definition \ref{def:relation}.  An attribute is comprised of two main components:
 			
 			\begin{itemize}
-				\item $\textsc{name}\lbrack a\rbrack$
-				\item $\textsc{type}\lbrack a\rbrack$
+				\item $\textsc{Name}\lbrack a\rbrack$
+				\item $\textsc{Type}\lbrack a\rbrack$
 			\end{itemize}
 		
 			Note:  Lower case letters (e.g.\ $a, b, c, \ldots$) are attributes.
@@ -54,19 +108,19 @@
 			Let $\theta \in \textsc{FK}\lbrack d\rbrack$ be a FK instance,where $d$ is defined in Definition \ref{def:database}.  A foreign key is comprised of two main components:
 			
 			\begin{itemize}
-				\item $\textsc{from}\lbrack fk\rbrack = (\textsc{rel}_{s}\lbrack\theta\rbrack, \textsc{attr}_{s}\lbrack\theta\rbrack)$
-				\item $\textsc{to}\lbrack fk\rbrack = (\textsc{rel}_{t}\lbrack\theta\rbrack, \textsc{attr}_{t}\lbrack\theta\rbrack)$
+				\item $\textsc{From}\lbrack fk\rbrack = (\textsc{Rel}_{s}\lbrack\theta\rbrack, \textsc{Attr}_{s}\lbrack\theta\rbrack)$
+				\item $\textsc{To}\lbrack fk\rbrack = (\textsc{Rel}_{t}\lbrack\theta\rbrack, \textsc{Attr}_{t}\lbrack\theta\rbrack)$
 			\end{itemize}
 			
 			Note:  $\theta, \phi$ are the FK constraints
 		\end{defn}
 	
 	\subsection{Star Join Schema to Form Entity Groups}
-		A network (forest) of tuples, jointed via some existing $\theta \in \textsc{fk}\lbrack d\rbrack$.
+		A network (forest) of tuples, jointed via some existing $\theta \in \textsc{FK}\lbrack d\rbrack$.
 		
 		The schema of entity group $G$ is defined as vertices of $G$:
 		
-		$$V(G) \subseteq \textsc{rel}(DB)$$
+		$$V(G) \subseteq \textsc{Rel}(DB)$$
 		
 		Relation $r$ in the space of vertices of $G$, $V(G)$, may be a table or a computed view.
 		
@@ -99,13 +153,13 @@
 		$$c_{ii, j} = \bigwedge^k_{n=1} (a_{i, n} = b_{j, n})$$
 		
 		\begin{eqnarray*}
-			\textsc{view}\lbrack G\rbrack &=& \bowtie_{\theta_{ij}} (r_i, r_j) \\
+			\textsc{View}\lbrack G\rbrack &=& \bowtie_{\theta_{ij}} (r_i, r_j) \\
 			&=& r_1 \bowtie_{\theta_{1, 2}} r_2 \bowtie_{\theta_{2, 3}} r_3 \ldots \bowtie_{\theta_{n, n+1}} r_n
 		\end{eqnarray*}
 		
 		where $r_1, r_2, r_3, \ldots, r_n$ are relations discovered by a depth-first search traversal of $G$.
 		
-		Each tuple in $\textsc{view}\lbrack G\rbrack$ is an instance of entity group $G$.
+		Each tuple in $\textsc{View}\lbrack G\rbrack$ is an instance of entity group $G$.
 		
 		Motivation:
 		
@@ -113,9 +167,9 @@
 		
 		Database schema
 		
-		Vertices:  $\textsc{rel}\lbrack d\rbrack$
+		Vertices:  $\textsc{Rel}\lbrack d\rbrack$
 		
-		Edges:  $\textsc{fk}\lbrack d\rbrack$
+		Edges:  $\textsc{FK}\lbrack d\rbrack$
 		
 		The entity graphs are overlapping subgraphs at the schema level.
 		

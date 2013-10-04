@@ -1,0 +1,43 @@
+% !TEX root = Thesis.tex
+\usepackage{fontspec}								% Use nicer system fonts
+\usepackage{graphicx}								% Pretty pictures
+\usepackage{todo}										% List of things to do
+\usepackage{amsmath}								% Allow use of amsthm
+\usepackage{amsthm}									% Pretty theorem environments
+\usepackage{algorithm}							% Pretty algorithm environment
+\usepackage{algorithmic}						% Pretty algorithms
+\usepackage[nounderscore]{syntax}		% BNF grammars
+\usepackage{tikz}										% Diagrams
+\usepackage{minted}									% Pretty code
+\usepackage{booktabs}								% Pretty tables
+\usepackage{nag}										% Complain
+\usepackage[all]{xypic}							% Easy (compared to tikz) diagrams
+\usepackage{unicode-math}						% Unicode symbols in math
+
+% Use and configure bibliography
+\usepackage[backend=biber,style=trad-alpha]{biblatex}
+\addbibresource{Thesis.bib}
+
+% Configure tikz for pretty diagrams
+\input tikz
+\usetikzlibrary{fit}
+
+% Define a new environment for Clojure code
+\newmintedfile[cljcode]{clj}{linenos,frame=topline,frame=lines,framesep=2mm}
+
+% Define new theorem environments
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+\newtheorem{ex}{Example}
+
+% Change the image path prefix
+\graphicspath{{images/}}
+
+% Make the text worth looking at
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont[
+	Kerning=Uppercase
+]{Garamond Premier Pro}
+\setsansfont{Futura Std}
+\setmathfont{XITS Math}
+\setmonofont{Consolas}
