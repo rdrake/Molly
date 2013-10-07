@@ -218,16 +218,233 @@ The term ``data model'' refers to a notation for describing data and/or informat
 		\item Bad for flexibility
 	\end{itemize}
 
-		\section{Document model (4 days, week 2)}
+\section{Document model (4 days, week 2)}
+	In this section we formally define the document model.
+	
+	Documents are a unit of information.  The definition of unit can vary.  It may represent an email, a book chapter, a memo, etc.  Contained within each document is a set of terms.
+	
+	In contrast to the relational model, the document model represents unstructured data.  Examples of information suitable to the document model includes emails, memos, book chapters, etc.
+	
+	\begin{ex}
+		Let $\{d_1, d_2, d_3\}$ be the set of documents, each representing a course title.
+		
+		\begin{eqnarray*}
+			d_1 &=& \textrm{Software Design and Analysis} \\
+			d_2 &=& \textrm{Software Quality Assurance} \\
+			d_3 &=& \textrm{Analysis and Design of Algorithms}
+		\end{eqnarray*}
+		
+		The simplest method would be to perform a linear scan through every document, returning each document that contains a search query.
+		
+		If we were to issue a query $q = \textrm{``Design''}$, we would receive a result of $\{d_1, d_3\}$.  Unfortunately this search must be performed every time a user issues a search query.  Thus the search time would grow linearly with the number of documents, as well as the length of each document.
+		
+		Another method would be to construct an incidence matrix of each term in each document, then consult this matrix when a search query is issued.  Using this method would incur an initial penalty, but this would only occur once.
+		
+		$$
+			\begin{array}{lccc}
+				& d_1 & d_2 & d_3 \\
+				\textrm{Algorithms} & 0 & 0 & 1 \\
+				\textrm{Analysis} & 1 & 0 & 1 \\
+				\textrm{Assurance} & 0 & 1 & 0 \\
+				\textrm{Design} & 1 & 0 & 1 \\
+				\textrm{Quality} & 0 & 1 & 0 \\
+				\textrm{Software} & 1 & 1 & 0
+			\end{array}
+		$$
+		
+		A search then becomes a simple lookup in the matrix.  A search for ``Algorithms'' would yield the binary string \texttt{001}.  It also allows for simple boolean operations.  A query of ``Analysis'' \textsc{AND} ``Software'' would become
+		
+		$$101 \textsc{AND} 110$$
+		
+		which would yield 100, or the set $\{d_1\}$.
+		
+		While an incidence matrix solves the problem of having to scan every document for every search, it introduces additional problems.  There may be a large number of documents, each with its own unique terms.  This causes the matrix to become very sparse.
+		
+		In order to deal with the problem of a sparse matrix, we use an inverted list index.  It consists of a sorted dictionary of terms, each pointing to one or more documents that contain that term.
+		
+		\begin{table}[!ht]
+			\centering
+			
+			\begin{subtable}[b]{.3\textwidth}
+				\begin{tabular}{ll}
+					\toprule
+					$t$ & $d$ \\
+					\midrule
+					Software & $d_1$ \\
+					Design & $d_1$ \\
+					Analysis & $d_1$ \\
+					Software & $d_2$ \\
+					Quality & $d_2$ \\
+					Assurance & $d_2$ \\
+					Analysis & $d_3$ \\
+					Design & $d_3$ \\
+					Algorithms & $d_3$ \\
+					\bottomrule
+				\end{tabular}
+				
+				\label{tbl:inverted-list-index-initial}
+				\subcaption{Initial inverted list index}
+			\end{subtable}
+			
+			\begin{subtable}[b]{0.3\textwidth}
+				\begin{tabular}{ll}
+					\toprule
+					$t$ & $d$ \\
+					\midrule
+					Algorithms & $d_3$ \\
+					Analysis & $d_1$ \\
+					Analysis & $d_3$ \\
+					Assurance & $d_2$ \\
+					Design & $d_1$ \\
+					Design & $d_3$ \\
+					Quality & $d_2$ \\
+					Software & $d_1$ \\
+					Software & $d_2$ \\
+					\bottomrule
+				\end{tabular}
+			
+				\label{tbl:inverted-list-index-sorted}
+				\subcaption{Sorted inverted list index}
+			\end{subtable}
+			
+			\begin{subtable}[b]{0.3\textwidth}
+				\begin{tabular}{ll}
+					\toprule
+					$t$ & $d$ \\
+					\midrule
+					Algorithms & $\lbrack d_3\rbrack$ \\
+					Analysis & $\lbrack d_1, d_3\rbrack$ \\
+					Assurance & $\lbrack d_2\rbrack$ \\
+					Design & $\lbrack d_1, d_3\rbrack$ \\
+					Quality & $\lbrack d_2\rbrack$ \\
+					Software & $\lbrack d_1, d_2\rbrack$ \\
+					\bottomrule
+				\end{tabular}
+				
+				\label{tbl:inverted-list-index-complete}
+				\subcaption{Completed inverted list index}
+			\end{subtable}
+		\end{table}
+		
+		
+		\begin{table}[!ht]
+			\centering
+			
+			\begin{tabular}{ll}
+				\toprule
+				$t$ & $d$ \\
+				\midrule
+				Software & $d_1$ \\
+				Design & $d_1$ \\
+				Analysis & $d_1$ \\
+				Software & $d_2$ \\
+				Quality & $d_2$ \\
+				Assurance & $d_2$ \\
+				Analysis & $d_3$ \\
+				Design & $d_3$ \\
+				Algorithms & $d_3$ \\
+				\bottomrule
+			\end{tabular}
+			
+			\label{tbl:inverted-list-index-initial}
+			\caption{Initial inverted list index}
+		\end{table}
+		
+		\begin{table}[!ht]
+			\centering
+			
+			\begin{tabular}{ll}
+				\toprule
+				$t$ & $d$ \\
+				\midrule
+				Algorithms & $d_3$ \\
+				Analysis & $d_1$ \\
+				Analysis & $d_3$ \\
+				Assurance & $d_2$ \\
+				Design & $d_1$ \\
+				Design & $d_3$ \\
+				Quality & $d_2$ \\
+				Software & $d_1$ \\
+				Software & $d_2$ \\
+				\bottomrule
+			\end{tabular}
+			
+			\label{tbl:inverted-list-index-sorted}
+			\caption{Sorted inverted list index}
+		\end{table}
+		
+		\begin{table}[!ht]
+			\centering
+			
+			\begin{tabular}{ll}
+				\toprule
+				$t$ & $d$ \\
+				\midrule
+				Algorithms & $\lbrack d_3\rbrack$ \\
+				Analysis & $\lbrack d_1, d_3\rbrack$ \\
+				Assurance & $\lbrack d_2\rbrack$ \\
+				Design & $\lbrack d_1, d_3\rbrack$ \\
+				Quality & $\lbrack d_2\rbrack$ \\
+				Software & $\lbrack d_1, d_2\rbrack$ \\
+				\bottomrule
+			\end{tabular}
+			
+			\label{tbl:inverted-list-index-complete}
+			\caption{Completed inverted list index}
+		\end{table}
+		
+		This permits more space efficient storage.
+		
+		Note:  The terms in the inverted list index are sorted.  This permits binary search, resulting in lookup performance of $\mathcal{O}\left(\log{n}\right)$.
+	\end{ex}
+	
+	\subsection{Keyword Query Vectorization}
+		We now have a method for determining which documents contain a particular term.  While this allows a user to manually sort through all of the results, it does not provide an indication of the importance, or score, of each result.
+		
+		\subsubsection{Term Frequency}
+			In order to measure importance of a term within a document, we look at the number of occurrences of said term within the document versus how many individual terms are in the document.  This is the term frequency.
+			
+			$$\mathrm{tf}_{t, d} = 0.5 + \frac{0.5 \times \mathrm{f}_{t, d}}{\max{\{\mathrm{f}_{w, d} : w \in d}\}}$$
+			
+		\subsection{Inverse Document Frequency}
+			The inverse document frequency is a measurement of the rarity of a term in the space of all documents.  A term that occurs multiple times within a single document is considered less rare if said term also occurs within many documents.
+			
+			$$\mathrm{idf}_t = \log{\frac{N}{\mathrm{df}_t}}$$
+		
+		These two functions are combined to measure the importance of a term within a document.
+		
+		$$\textrm{tf-idf}_{t, d} = \mathrm{tf}_{t, d} \times \mathrm{idf}_t$$
+		
+		\subsubsection{Scoring a Document}
+			With the ability to score a document for a particular term, we can now think of a document $d$ score for a query $q$, where $q = \lbrack t_1, t_2, \ldots, t_n\rbrack$, as a vector.
+			
+			$$
+				\mathrm{score}_{q, d} = 
+				\left[
+				\begin{array}{c}
+					\textrm{tf-idf}_{t_1, d} \\
+					\textrm{tf-idf}_{t_2, d} \\
+					\vdots \\
+					\textrm{tf-idf}_{t_n, d}
+				\end{array}
+				\right]
+			$$
+			
+			Therefore the overall score is as follows.
+			
+			$$\mathrm{score}_{q, d} = \sum_{t \in q} \textrm{tf-idf}_{t, d}$$
+			
+			
+	
 	\begin{itemize}
 		\item Definition: documents, terms, and the bag of terms model for documents and queries
-		\item Definition of keyword search queries: vectorization of documents (tf-idf) and queries.	Models of distance between documents and queries (cosine-distance, jaccard distance, BM25).
+		\item Definition of keyword search queries: vectorization of documents (tf-idf) and queries.  Models of distance between documents and queries (cosine-distance, jaccard distance, BM25).
 		\item Extended document model with attributes and fields
 		\item Expressing documents in the universal design pattern (aka list+dict)
 		\item Document graph
 	\end{itemize}
 
-		\section{Pro and con of document model (1 day)}
+\section{Pro and con of document model (1 day)}
 	\begin{itemize}
 		\item Good: exploratory queries using keywords (google)
 		\item Good: easy (or no) syntax
