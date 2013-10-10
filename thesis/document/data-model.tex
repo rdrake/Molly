@@ -262,136 +262,63 @@ The term ``data model'' refers to a notation for describing data and/or informat
 		
 		In order to deal with the problem of a sparse matrix, we use an inverted list index.  It consists of a sorted dictionary of terms, each pointing to one or more documents that contain that term.
 		
-		\begin{table}[!ht]
+		\begin{figure}[!ht]
 			\centering
 			
-			\begin{subtable}[b]{.3\textwidth}
+			\subcaptionbox{Initial inverted list index}[0.33\textwidth]{
+				\centering
 				\begin{tabular}{ll}
 					\toprule
-					$t$ & $d$ \\
+					Term & Doc ID \\
 					\midrule
-					Software & $d_1$ \\
-					Design & $d_1$ \\
-					Analysis & $d_1$ \\
-					Software & $d_2$ \\
-					Quality & $d_2$ \\
-					Assurance & $d_2$ \\
-					Analysis & $d_3$ \\
-					Design & $d_3$ \\
-					Algorithms & $d_3$ \\
+					software & 1 \\
+					design & 1 \\
+					analysis & 1 \\
+					software & 2 \\
+					quality & 2 \\
+					assurance & 2 \\
+					analysis & 3 \\
+					design & 3 \\
+					algorithm & 3 \\
 					\bottomrule
 				\end{tabular}
-				
-				\label{tbl:inverted-list-index-initial}
-				\subcaption{Initial inverted list index}
-			\end{subtable}
-			
-			\begin{subtable}[b]{0.3\textwidth}
+			}
+			\subcaptionbox{Sorted inverted list index}[0.33\textwidth]{
+				\centering
 				\begin{tabular}{ll}
 					\toprule
-					$t$ & $d$ \\
+					Term & Doc ID \\
 					\midrule
-					Algorithms & $d_3$ \\
-					Analysis & $d_1$ \\
-					Analysis & $d_3$ \\
-					Assurance & $d_2$ \\
-					Design & $d_1$ \\
-					Design & $d_3$ \\
-					Quality & $d_2$ \\
-					Software & $d_1$ \\
-					Software & $d_2$ \\
+					algorithm & 3 \\
+					analysis & 1 \\
+					analysis & 3 \\
+					assurance & 2 \\
+					design & 1 \\
+					design & 3 \\
+					quality & 2 \\
+					software & 1 \\
+					software & 2 \\
 					\bottomrule
 				\end{tabular}
-			
-				\label{tbl:inverted-list-index-sorted}
-				\subcaption{Sorted inverted list index}
-			\end{subtable}
-			
-			\begin{subtable}[b]{0.3\textwidth}
-				\begin{tabular}{ll}
+			}
+			\subcaptionbox{Completed inverted list index}[0.33\textwidth]{
+				\centering
+				\begin{tabular}{lrl}
 					\toprule
-					$t$ & $d$ \\
+					Term & $\df$ & Doc ID \\
 					\midrule
-					Algorithms & $\lbrack d_3\rbrack$ \\
-					Analysis & $\lbrack d_1, d_3\rbrack$ \\
-					Assurance & $\lbrack d_2\rbrack$ \\
-					Design & $\lbrack d_1, d_3\rbrack$ \\
-					Quality & $\lbrack d_2\rbrack$ \\
-					Software & $\lbrack d_1, d_2\rbrack$ \\
+					algorithm & 1 & $\lbrack 3\rbrack$ \\
+					analysis & 2 & $\lbrack 1, 3\rbrack$ \\
+					assurance & 1 & $\lbrack 2\rbrack$ \\
+					design & 2 & $\lbrack 1, 3\rbrack$ \\
+					quality & 1 & $\lbrack 2\rbrack$ \\
+					software & 2 & $\lbrack 1, 2\rbrack$ \\
 					\bottomrule
 				\end{tabular}
-				
-				\label{tbl:inverted-list-index-complete}
-				\subcaption{Completed inverted list index}
-			\end{subtable}
-		\end{table}
-		
-		
-		\begin{table}[!ht]
-			\centering
+			}
 			
-			\begin{tabular}{ll}
-				\toprule
-				$t$ & $d$ \\
-				\midrule
-				Software & $d_1$ \\
-				Design & $d_1$ \\
-				Analysis & $d_1$ \\
-				Software & $d_2$ \\
-				Quality & $d_2$ \\
-				Assurance & $d_2$ \\
-				Analysis & $d_3$ \\
-				Design & $d_3$ \\
-				Algorithms & $d_3$ \\
-				\bottomrule
-			\end{tabular}
-			
-			\label{tbl:inverted-list-index-initial}
-			\caption{Initial inverted list index}
-		\end{table}
-		
-		\begin{table}[!ht]
-			\centering
-			
-			\begin{tabular}{ll}
-				\toprule
-				$t$ & $d$ \\
-				\midrule
-				Algorithms & $d_3$ \\
-				Analysis & $d_1$ \\
-				Analysis & $d_3$ \\
-				Assurance & $d_2$ \\
-				Design & $d_1$ \\
-				Design & $d_3$ \\
-				Quality & $d_2$ \\
-				Software & $d_1$ \\
-				Software & $d_2$ \\
-				\bottomrule
-			\end{tabular}
-			
-			\label{tbl:inverted-list-index-sorted}
-			\caption{Sorted inverted list index}
-		\end{table}
-		
-		\begin{table}[!ht]
-			\centering
-			
-			\begin{tabular}{ll}
-				\toprule
-				$t$ & $d$ \\
-				\midrule
-				Algorithms & $\lbrack d_3\rbrack$ \\
-				Analysis & $\lbrack d_1, d_3\rbrack$ \\
-				Assurance & $\lbrack d_2\rbrack$ \\
-				Design & $\lbrack d_1, d_3\rbrack$ \\
-				Quality & $\lbrack d_2\rbrack$ \\
-				Software & $\lbrack d_1, d_2\rbrack$ \\
-				\bottomrule
-			\end{tabular}
-			
-			\label{tbl:inverted-list-index-complete}
-			\caption{Completed inverted list index}
-		\end{table}
+			\caption{Construction of the inverted list index}
+		\end{figure}
 		
 		This permits more space efficient storage.
 		
@@ -404,16 +331,16 @@ The term ``data model'' refers to a notation for describing data and/or informat
 		\subsubsection{Term Frequency}
 			In order to measure importance of a term within a document, we look at the number of occurrences of said term within the document versus how many individual terms are in the document.  This is the term frequency.
 			
-			$$\mathrm{tf}_{t, d} = 0.5 + \frac{0.5 \times \mathrm{f}_{t, d}}{\max{\{\mathrm{f}_{w, d} : w \in d}\}}$$
+			$$\tf_{t, d} = 0.5 + \frac{0.5 \times \mathrm{f}_{t, d}}{\max{\{\mathrm{f}_{w, d} \mid w \in d}\}}$$
 			
 		\subsection{Inverse Document Frequency}
 			The inverse document frequency is a measurement of the rarity of a term in the space of all documents.  A term that occurs multiple times within a single document is considered less rare if said term also occurs within many documents.
 			
-			$$\mathrm{idf}_t = \log{\frac{N}{\mathrm{df}_t}}$$
+			$$\idf_t = \log{\frac{N}{\df_t}}$$
 		
 		These two functions are combined to measure the importance of a term within a document.
 		
-		$$\textrm{tf-idf}_{t, d} = \mathrm{tf}_{t, d} \times \mathrm{idf}_t$$
+		$$\tfidf_{t, d} = \tf_{t, d} \times \idf_t$$
 		
 		\subsubsection{Scoring a Document}
 			With the ability to score a document for a particular term, we can now think of a document $d$ score for a query $q$, where $q = \lbrack t_1, t_2, \ldots, t_n\rbrack$, as a vector.
@@ -422,24 +349,51 @@ The term ``data model'' refers to a notation for describing data and/or informat
 				\mathrm{score}_{q, d} = 
 				\left[
 				\begin{array}{c}
-					\textrm{tf-idf}_{t_1, d} \\
-					\textrm{tf-idf}_{t_2, d} \\
+					\tfidf_{t_1, d} \\
+					\tfidf_{t_2, d} \\
 					\vdots \\
-					\textrm{tf-idf}_{t_n, d}
+					\tfidf_{t_n, d}
 				\end{array}
 				\right]
 			$$
 			
 			Therefore the overall score is as follows.
 			
-			$$\mathrm{score}_{q, d} = \sum_{t \in q} \textrm{tf-idf}_{t, d}$$
+			$$\score_{q, d} = \sum_{t \in q} \tfidf_{t, d}$$
+		
+	\subsection{Cosine Similarity}
+		$$\similarity_{d_1, d_2} = \cos{\theta} = \frac{d_1 \cdot d_2}{\lVert d_1\rVert\lVert d_2\rVert}$$
+	
+	\subsection{Jaccard Similarity}
+		$$\similarity_{d_1, d_2} = \frac{\mid d_1 \cap d_2\mid}{\mid d_1 \cup d_2\mid}$$
+	
+	\subsection{Extending the Document Model}
+		In reality not all documents contain completely unstructured information.  For example, an email contains additional information beyond the message such as subject, recipient, etc.  This additional information is stored in fields.
+		
+		\begin{ex}
+			Every course has two main attributes, a code and a title.  These attributes could be stored in a single document.  However, we may wish to apply different analysis techniques to each attribute type.
 			
+			\begin{table}
+				\centering
+				\begin{tabular}{ll}
+					\toprule
+					Field & Contents \\
+					\midrule
+					code & CSCI 3030U \\
+					title & Database Systems and Concepts \\
+					\bottomrule
+				\end{tabular}
+			\end{table}
 			
+			In the case of a code, we likely want it copied verbatim.  An example tokenization of ``CSCI 3030U'' would be $\left\{\texttt{csci}, \texttt{3030u}\right\}$.  A standard analyzer would have eliminated the second token.
+			
+			Whereas a standard analyzer would work well for course titles.  For example, an ideal tokenization of ``Database Systems and Concepts'' would be $\left\{\texttt{database}, \texttt{system}, \texttt{concept}\right\}$.
+			
+			Plural forms of words were reduced to their singular form, and the stop word ``and'' was eliminated.
+		\end{ex}
 	
 	\begin{itemize}
-		\item Definition: documents, terms, and the bag of terms model for documents and queries
 		\item Definition of keyword search queries: vectorization of documents (tf-idf) and queries.  Models of distance between documents and queries (cosine-distance, jaccard distance, BM25).
-		\item Extended document model with attributes and fields
 		\item Expressing documents in the universal design pattern (aka list+dict)
 		\item Document graph
 	\end{itemize}
