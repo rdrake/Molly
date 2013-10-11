@@ -1,229 +1,243 @@
 % !TEX root = Thesis.tex
-In this chapter we provide a formal definition of the relational data model, discuss its merits, its shortcomings, and contrast it to the document data model.  Contrary to the relational model, the document model permits fast and flexible keyword search without requiring explicit domain knowledge of the data.  In addition, we demonstrate the feasibility of encoding a relational model into a document model in a lossless manner.
-
 The term ``data model'' refers to a notation for describing data and/or information.  It consists of the data structure, operations that may be performed on the data, as well as constraints placed on the data \cite{dbsys-06}.
 
-\section{Relational model with star schema}
-%	In order to understand the shortcomings of the relational model, we must first 
-	In this section we formally define the relational model.
+In this chapter we provide a formal definition of the relational data model, discuss its merits, its shortcomings, and contrast it to the document data model.  Contrary to the relational model, the document model permits fast and flexible keyword search without requiring explicit domain knowledge of the data.  In addition, we demonstrate the feasibility of encoding a relational model into a document model in a lossless manner.
+
+\section{Relational Model}
+	In its most basic form, the relational data model is built upon sets and tuples.  Each of these sets consist of a set of finite possible values.  Tuples are constructed from these sets to form relations.
 	
-	\subsection{Relational Model of Data}
-		In its most basic form, the relational data model is built upon sets and tuples.  Each of these sets consist of a set of finite possible values.  Tuples are constructed from these sets to form relations.
+	\begin{defn}[Named Tuple]
+	\label{def:named-tuple}
+		A named tuple $t$ is an instance of a relation $r$, consisting of values corresponding to the attributes of $r$.  For example,
 		
-		Formally, a Relation is defined as follows \cite{codd-90}:
+		$$t = \left\{\mathrm{name}: \textrm{``Jack Bauer''}, \mathrm{age}: 39\right\}$$
 		
-		\begin{defn}{Relation}
-			Given a list of sets $\lbrack S_1, S_2, \ldots, S_n\rbrack$, let $R$ be a relation on these $n$ sets if it is a set of $n$-tuples, with the first component from $S_1$, the second component from $S_2$, and so on.
+		We denote the attributes of $t$ as $\fcn{ATTR}{t} = \left\{\mathrm{name}, \mathrm{age}\right\}$  The values are $t\lbrack \mathrm{name}\rbrack = \textrm{``Jack Bauer''}$, and $t\lbrack \mathrm{age}\rbrack = 39$.
+	\end{defn}
+	
+	\begin{defn}[Relation]
+	\label{def:relation}
+		A relation $r$ is a set of named tuples, $r = \left\{t_1, t_2, \dotsc, t_n\right\}$, such that all the named tuples share the same attributes.
+		
+		$$\forall t, t' \in r, \fcn{ATTR}{t} = \fcn{ATTR}{t'}$$
+		
+		For example,
+		
+		$$r = \left\{
+			\begin{array}{l}
+				\left\{\mathrm{name}: \textrm{``Jack Bauer''}, \mathrm{age}: 39\right\}, \\
+				\left\{\mathrm{name}: \textrm{``Bruce Wayne''}, \mathrm{age}: 39\right\}, \\
+				\left\{\mathrm{name}: \textrm{``Clark Kent''}, \mathrm{age}: 45\right\}
+			\end{array}
+		\right\}$$
+		
+		Relations are typically represented as tables.
+		
+		\begin{table}[!ht]
+			\centering
+			\begin{tabular}{ll}
+				\toprule
+				name & age \\
+				\midrule
+				``Jack Bauer'' & 39 \\
+				``Bruce Wayne'' & 39 \\
+				``Clark Kent'' & 45 \\
+				\bottomrule
+			\end{tabular}
 			
-			More concisely,
+			\caption{Person table}
+			\label{tbl:person}
+		\end{table}
+	\end{defn}
+	
+	\begin{defn}[Keys]
+	\label{def:keys}
+		Keys are constraints imposed on relations.  A key constraint $K$ on a relation $r$ is a subset of $\fcn{ATTR}{r}$ which may uniquely identify a tuple.  Formally, we say $r$ satisfies the key constraint $K$, denoted as $r \models K$, subject to
+		
+		$$\forall t, t' \in r, t \not= t' \implies t[K] \not= t'[K]$$
+		
+		For example, in Table~\ref{tbl:person}, the relation satisfies the key constraint $\left\{\mathrm{name}\right\}$, but not $\left\{\mathrm{age}\right\}$.
+	\end{defn}
+	
+	\begin{defn}[Foreign Keys]
+	\label{def:foreign-keys}
+		A foreign key constraint applies to two relations, $r_1, r_2$.  It asserts that values of certain attributes of $r_1$ must appear as values of some corresponding attributes of $r_2$.  A foreign key constraint is written as
+		
+		$$\theta = r_1(a_1, a_2, \dotsc, a_k) \rightarrow r_2(b_1, b_2, \dotsc, b_k)$$
+		
+		where $a_i \subseteq \fcn{ATTR}{r_1}$ and $b_i \subseteq \fcn{ATTR}{r_2}$.  We say $(r_1, r_2)$ satisfies $\theta$, denoted as $(r_1, r_2) \models \theta$, if
+		
+		$$\forall t \in r_1, \exists t' \in r_2 \mid t\lbrack a_1, a_2, \dotsc, a_k\rbrack = t'\lbrack b_1, b_2, \dotsc, b_k]$$
+		
+		\begin{ex}
+			Suppose we have a relation Superhero(name, superpower).  We can impose a FK constraint of
 			
-			$$R \subset S_1 \times S_2 \times \ldots \times S_n$$
+			$$\textrm{Superhero(name)} \rightarrow \textrm{Person(name)}$$
+		\end{ex}
+	\end{defn}
+	
+	\begin{defn}[Relational Database]
+	\label{def:relational-database}
+		A relational database, $d$, is a named collection of relations (as defined by Definition~\ref{def:relation}, keys (as defined by Definition~\ref{def:keys}), and foreign key constraints (as defined by Definition~\ref{def:foreign-keys}.
+		
+		We use $\fcn{Name}{d}$ to denote the name of $d$, $\fcn{Rel}{d}$ the list of relations in $d$, $\fcn{Key}{d}$ the list of key constraints of $d$, and $\fcn{FK}{d}$ the list of foreign key constraints of $d$.
+	\end{defn}
+	
+	\subsection{Schema Group}
+		\begin{defn}[Schema Graph]
+			If we view relations as vertices, and foreign key constraints as edges, a database $d$ can be viewed as a \emph{schema graph} $G$, formally defined as
 			
-			$R$ is said to be of degree $n$, denoted as $\mathrm{deg}_R$.  Each of the sets on which one or more relation is based is called the domain, denoted as $\mathrm{dom}_S$.
+			\begin{eqnarray*}
+				\mathrm{vertices}:  V(G) &=& \fcn{REL}{d} \\
+				\mathrm{edges}:  E(G) &=& \fcn{FK}{d}
+			\end{eqnarray*}
 		\end{defn}
 		
 		\begin{ex}
-			Consider the following sets
+			Given the following schema
+			
+			\begin{figure}[!ht]
+				\centering
+				
+				Superhero(name, power) \\
+				Person(name, age, birthplace) \\
+				Planet(name, size, age, destroyed, galaxy) \\
+				Link(name, peer, relation type) \\
+			\end{figure}
+			
+			and the following foreign key constraints
+			
 			\begin{eqnarray*}
-				S_1 &=& \left\{\textrm{``Winter 2014''}, \textrm{``Fall 2013''}\right\} \\
-				S_2 &=& \left\{\textrm{``CSCI 3030U''}, \textrm{``CSCI 4020U''}\right\} \\
-				S_3 &=& \left\{\textrm{``Ken Pu''}\right\}
+				\textrm{Superhero(name)} &\rightarrow& \textrm{Person(name)} \\
+				\textrm{Person(birthplace)} &\rightarrow& \textrm{Planet(name)} \\
+				\textrm{Link(name)} &\rightarrow& \textrm{Person(name)} \\
+				\textrm{Link(peer)} &\rightarrow& \textrm{Person(name)}
 			\end{eqnarray*}
-			which have the properties
-			\begin{eqnarray*}
-				\mathrm{dom}_{S_1} &=& \mathrm{terms} \\
-				\mathrm{dom}_{S_2} &=& \mathrm{courses} \\
-				\mathrm{dom}_{S_3} &=& \mathrm{instructors}
-			\end{eqnarray*}
-			By taking the Cartesian product, we arrive at the following set of tuples
-			$$
-				S_1 \times S_2 \times S_3 =
-				\left\{
-					\begin{array}{l}
-						\left(\textrm{``Winter 2014''}, \textrm{``CSCI 3030U''}, \textrm{``Ken Pu''}\right) \\
-						\left(\textrm{``Fall 2013''}, \textrm{``CSCI 3030U''}, \textrm{``Ken Pu''}\right) \\
-						\left(\textrm{``Winter 2014''}, \textrm{``CSCI 4020U''}, \textrm{``Ken Pu''}\right) \\
-						\left(\textrm{``Fall 2013''}, \textrm{``CSCI 4020U''}, \textrm{``Ken Pu''}\right)
-					\end{array}
-				\right\}
-			$$
-			Furthermore, given the relation
-			$$
-				R =
-				\left\{
-					\begin{array}{l}
-						\left(\textrm{``Winter 2014''}, \textrm{``CSCI 4020U''}, \textrm{``Ken Pu''}\right) \\
-						\left(\textrm{``Fall 2013''}, \textrm{``CSCI 3030U''}, \textrm{``Ken Pu''}\right)
-					\end{array}
-				\right\}
-			$$
-			We see that $R \subset S_1 \times S_2 \times S_3$, with $\mathrm{deg}_R = 3$.
+			
+			we produce the following schema graph.
+			
+			\todo{ER diagram or something of schema.}
+			
+			The relational data model is particularly powerful for analytic queries.  Given the schema below above, one can formulate the following analytic queries in a query language known as SQL.
+			
+			List all superheroes whose home planet has not been destroyed.
+			
+			SELECT Person.name FROM Person JOIN Planet on Person.birthplace = Planet.name WHERE NOT Planet.destroyed;
 		\end{ex}
 		
-		
-		
-		%The relational model, as suggested by its name, is based on the concept of relations.  These relations are 2-dimensional tables, where the rows are n-tuples and the columns are attributes.  Any number of these attributes may also be keys.  In addition to attributes and keys, a relation has a name.
-		
-		%Given a relation $r$, we denote the name of $r$ as $\textsc{Name}\lbrack r\rbrack$.  
-		
-		\begin{defn}
-		\label{def:database}
-			Let $d$ be a database instance.  A database is comprised of three main components:
-			
-			\begin{itemize}
-				\item $\textsc{Name}\lbrack d\rbrack \rightarrow$ string
-				\item $\textsc{Rel}\lbrack d\rbrack \rightarrow$ list(REL)
-				\item $\textsc{FK}\lbrack d\rbrack \rightarrow$ list(FK)
-			\end{itemize}
-		\end{defn}
-		
-		\begin{defn}{Relation}
-		\label{def:relation}
-		
-			Let $r \in \textsc{Rel}\lbrack d\rbrack$, where $d$ is defined in Definition \ref{def:database}.  A relation is comprised of three main components:
-			
-			\begin{itemize}
-				\item $\textsc{Name}\lbrack r\rbrack$ : string
-				\item $\textsc{Attr}\lbrack r\rbrack$ : list(ATTR)
-				\item $\textsc{Key}\lbrack r\rbrack$ : list(ATTR)
-			\end{itemize}
-			
-			The first is a \texttt{string} representation of the relation.  The second is a list of attributes that make up entries, or tuples, in the relation.  The third is a list of the relation's attributes that uniquely identify the tuple within the relation.  That is, $\textsc{Key}\lbrack r\rbrack \subseteq \textsc{Attr}\lbrack r\rbrack$.
-		\end{defn}
-		
-		\begin{defn}{Attribute}
-		
-			Let $a \in \textsc{Attr}\lbrack r\rbrack$, where $r$ is defined in Definition \ref{def:relation}.  An attribute is comprised of two main components:
-			
-			\begin{itemize}
-				\item $\textsc{Name}\lbrack a\rbrack$
-				\item $\textsc{Type}\lbrack a\rbrack$
-			\end{itemize}
-		
-			Note:  Lower case letters (e.g.\ $a, b, c, \ldots$) are attributes.
-		\end{defn}
-		
-		\begin{defn}{Foreign Key}
-		
-			Let $\theta \in \textsc{FK}\lbrack d\rbrack$ be a FK instance,where $d$ is defined in Definition \ref{def:database}.  A foreign key is comprised of two main components:
-			
-			\begin{itemize}
-				\item $\textsc{From}\lbrack fk\rbrack = (\textsc{Rel}_{s}\lbrack\theta\rbrack, \textsc{Attr}_{s}\lbrack\theta\rbrack)$
-				\item $\textsc{To}\lbrack fk\rbrack = (\textsc{Rel}_{t}\lbrack\theta\rbrack, \textsc{Attr}_{t}\lbrack\theta\rbrack)$
-			\end{itemize}
-			
-			Note:  $\theta, \phi$ are the FK constraints
-		\end{defn}
-	
-	\subsection{Star Join Schema to Form Entity Groups}
-		A network (forest) of tuples, jointed via some existing $\theta \in \textsc{FK}\lbrack d\rbrack$.
-		
-		The schema of entity group $G$ is defined as vertices of $G$:
-		
-		$$V(G) \subseteq \textsc{Rel}(DB)$$
-		
-		Relation $r$ in the space of vertices of $G$, $V(G)$, may be a table or a computed view.
-		
-		$$r \in V(G)$$
-		
-		It is also defined as the edges of $G$, or $E(G)$, in the form of
-		
-		$$r(a_1, a_2, \ldots, a_k) \rightarrow s(b_1, b_2, \ldots, b_k)$$
-		
-		where $a_i \in \textsc{attr}\lbrack r\rbrack$, $b_i \in \textsc{attr}\lbrack s\rbrack$, with the additional constraint of $r, s \in V(G)$.
-		
-		\begin{ex}
-			\begin{eqnarray*}
-				Instructor(name) &\rightarrow& Schedule(instructor) \\
-				Schedule(code) &\rightarrow& Course(id)
-			\end{eqnarray*}
-		\end{ex}
-	
-	\subsection{Instances of an Entity Group}
-		\xymatrix{
-			& r_1 \ar[dl]^{\theta_{1, 2}} \ar[dr]^{\theta_{1, 3}} & \\
-			r_2 & & r_3 \ar[d]^{\theta_{2, 3}} \\
-			& & r_4
-		}
-		
-		Instances are obtained by the following process.
-		
-		For $r_i(a_{i, 1}, a{i, 2}, \ldots, a_{i, k}) \rightarrow r_j(b_{j, 1}, b_{j, 2}, \ldots, b{j, k})$
-		
-		$$c_{ii, j} = \bigwedge^k_{n=1} (a_{i, n} = b_{j, n})$$
-		
-		\begin{eqnarray*}
-			\textsc{View}\lbrack G\rbrack &=& \bowtie_{\theta_{ij}} (r_i, r_j) \\
-			&=& r_1 \bowtie_{\theta_{1, 2}} r_2 \bowtie_{\theta_{2, 3}} r_3 \ldots \bowtie_{\theta_{n, n+1}} r_n
-		\end{eqnarray*}
-		
-		where $r_1, r_2, r_3, \ldots, r_n$ are relations discovered by a depth-first search traversal of $G$.
-		
-		Each tuple in $\textsc{View}\lbrack G\rbrack$ is an instance of entity group $G$.
-		
-		Motivation:
-		
-		\todo{Diagram of schema-level graph (FKs, relations)}
-		
-		Database schema
-		
-		Vertices:  $\textsc{Rel}\lbrack d\rbrack$
-		
-		Edges:  $\textsc{FK}\lbrack d\rbrack$
-		
-		The entity graphs are overlapping subgraphs at the schema level.
-		
-		Question:
-		
-		How to determine connectivity at the instance level?
-	
-	\begin{itemize}
-		\item ER style relational schema
-		\item Star join schema to form entity groups
-		\item Expressing relational objects using universal design pattern (describing data using scalar, lists and dictionaries).
-		\item Relational object graph
-	\end{itemize}
+	\subsection{Entity Group}
+		\begin{defn}[Entity Group]
+			An entity group is a forest, T,  of tuples interconnected by join conditions defined by the foreign key constraints in the schema graph.  Given two vertices $t_1, t_2'\in V\left(T\right)$, it must be that:
 
-\section{Pros and Cons of the Relational Model}
-	In order to better understand the motivation behind this work, it is important to examine the strong as well as weak points of the relational model.
+			$\exists r_1, r_2\in \fcn{REL}{d}$ such that $t_1 \in r_1$, $t_2\in r_2$, and $\left(r_1, r_2\right)\in G$.  This is to say that $t_1$ and $t_2$ belong to two relations that are connected by the schema graph.
+
+			Let $r_1\left(a_1, \dotsc, a_k\right) \to r_2\left(b_1, \dotsc, b_k\right)$ be the FK that connects $r_1, r_2$.  We further assert that $t_1\lbrack a_1, \dotsc, a_k\rbrack = t_2\lbrack b_1, \dotsc, b_k\rbrack$.
+		\end{defn}
+		
+		The motivation of entity groups is to define complex structured objects that can include more information than individual tuples in the relations.
+		
+		Example:
+		
+		name: Clark Kent
+		age: ?
+		birthplace: Krypton
+		superpower: ?
+		friends: ?.
+		enemies: ?
+		
+		This object (the profile of Clark Kent) can only be represented as an entity group as no single tuple in any of the relations has such detailed information.  This is a result of normalization of the schema.
+
+	\subsection{Pros and Cons of the Relational Model}
+		In order to better understand the motivation behind this work, it is important to examine the strong as well as weak points of the relational model.
+		
+		For each item of pro and con, use the running example to illustrate them.
+		
+		For example:
+		
+		1. both queries are executable by Postgres
+		2. if we try to insert ``Clark Kent'' again, it will be rejected.  If we insert ``Frog Boy'' as a superhero, it will be rejected.  If we change the age of ``Clark Kent'' this will only need to occur in a single place.
+		3. Change the ``Ken'' and ``CSCI'' to some superhero example.
+		
+		Do the same for CONS.
+		
+		E.g. Tell me something about ``Batman''.  We need to know the relation and attributes involved in order to author the SQL query.  ``Supermen'' will return nothing.
+		
+		\subsection{Pros}
+			\begin{itemize}
+				\item Well supported by relational algebra and relational databases (RDBMS)
+				\item Clean and consistent database instances (A\underline{C}ID?)
+				\item Can use queries to resolve instance-level connectivity
+					\begin{itemize}
+						\item How is "Ken" connected to "CSCI 3030U"?
+					\end{itemize}
+					\todo{More examples of queries}
+			\end{itemize}
+		
+		\subsection{Cons}
+			\begin{itemize}
+				\item Must know the relational schema
+					\begin{enumerate}
+						\item Know table/attribute names
+						\item Know join paths (schema)
+					\end{enumerate}
+				\item Inflexible string matching options  (basically just have \texttt{LIKE}), substring matching
+				\item Must know SQL
+				\item All queries must be re-written upon schema changes (rename, change in join path, etc.)
+				\item Not adaptive to new join path (e.g.\ newly created entity group, deleted E.G.\, etc.)
+			\end{itemize}
 	
-	\subsection{Pros}
 		\begin{itemize}
-			\item Well supported by relational algebra and relational databases (RDBMS)
-			\item Clean and consistent database instances (A\underline{C}ID?)
-			\item Can use queries to resolve instance-level connectivity
-				\begin{itemize}
-					\item How is "Ken" connected to "CSCI 3030U"?
-				\end{itemize}
-				\todo{More examples of queries}
-		\end{itemize}
-	
-	\subsection{Cons}
-		\begin{itemize}
-			\item Must know the relational schema
-				\begin{enumerate}
-					\item Know table/attribute names
-					\item Know join paths (schema)
-				\end{enumerate}
-			\item Inflexible string matching options  (basically just have \texttt{LIKE}), substring matching
-			\item Must know SQL
-			\item All queries must be re-written upon schema changes (rename, change in join path, etc.)
-			\item Not adaptive to new join path (e.g.\ newly created entity group, deleted E.G.\, etc.)
+			\item Good for analytics (aggregation, selection) if user has domain knowledge of the schema.
+			\item Bad for exploratory queries.
+			\item Bad if user doesn't know SQL
+			\item Bad for flexibility
 		\end{itemize}
 
-	\begin{itemize}
-		\item Good for analytics (aggregation, selection) if user has domain knowledge of the schema.
-		\item Bad for exploratory queries.
-		\item Bad if user doesn't know SQL
-		\item Bad for flexibility
-	\end{itemize}
-
-\section{Document model (4 days, week 2)}
+\section{Document Model}
 	In this section we formally define the document model.
 	
 	Documents are a unit of information.  The definition of unit can vary.  It may represent an email, a book chapter, a memo, etc.  Contained within each document is a set of terms.
 	
-	In contrast to the relational model, the document model represents unstructured data.  Examples of information suitable to the document model includes emails, memos, book chapters, etc.
+	In contrast to the relational model, the document model represents semi-structured data.  Examples of information suitable to the document model includes emails, memos, book chapters, etc.
+	
+	\begin{defn}[Document]
+	\label{def:document}
+		A document is a unit of information.  The definition of unit can vary; it may represent an email, a book chapter, a memo, etc.  The $k$-th document is denoted by $d_k$, which uniquely identifies the document within the document space.
+		
+		Documents may be comprised of one or more fields, $\fcn{Fields}{d}$.  They can be thought of as a dictionary.
+		
+		$$
+			d_k = \left\{
+				\begin{array}{c}
+					f_1 \rightarrow v_1 \\
+					f_2 \rightarrow v_2 \\
+					\vdots \\
+					f_n \rightarrow v_n
+				\end{array}
+			\right\}
+		$$
+		
+		 %as well as one or more terms (Definition~\ref{def:term}), denoted $\fcn{Term}{d} = \lbrack t_1, t_2, \dotsc, t_n\rbrack$.
+	\end{defn}
+	
+	\begin{defn}[Field]
+	\label{def:field}
+		A field, $f$, is a dictionary item within a document $d$.
+		
+		$$f \in \fcn{Fields}{d}$$
+		
+		
+	\end{defn}
+	
+	\begin{defn}[Document Collection]
+	\label{def:document-collection}
+		Given a set of documents $D = \left\{d_1, d_2, \dotsc, d_n\right\}$, we say that $d_1, d_2, \dotsc, d_n$ are the documents within the collection $D$.  The size of $D$ is denoted by $N$.
+	\end{defn}
+	
+	\begin{defn}[Term]
+	\label{def:term}
+	
+	\end{defn}
 	
 	\begin{ex}
 		Let $\{d_1, d_2, d_3\}$ be the set of documents, each representing a course title.
@@ -254,7 +268,7 @@ The term ``data model'' refers to a notation for describing data and/or informat
 		
 		A search then becomes a simple lookup in the matrix.  A search for ``Algorithms'' would yield the binary string \texttt{001}.  It also allows for simple boolean operations.  A query of ``Analysis'' \textsc{AND} ``Software'' would become
 		
-		$$101 \textsc{AND} 110$$
+		$$101~\textsc{AND}~110$$
 		
 		which would yield 100, or the set $\{d_1\}$.
 		
@@ -333,6 +347,8 @@ The term ``data model'' refers to a notation for describing data and/or informat
 			
 			$$\tf_{t, d} = 0.5 + \frac{0.5 \times \mathrm{f}_{t, d}}{\max{\{\mathrm{f}_{w, d} \mid w \in d}\}}$$
 			
+			\todo{Add consistency for this equation.  Maybe find another variant not from Wikipedia.}
+			
 		\subsection{Inverse Document Frequency}
 			The inverse document frequency is a measurement of the rarity of a term in the space of all documents.  A term that occurs multiple times within a single document is considered less rare if said term also occurs within many documents.
 			
@@ -343,7 +359,7 @@ The term ``data model'' refers to a notation for describing data and/or informat
 		$$\tfidf_{t, d} = \tf_{t, d} \times \idf_t$$
 		
 		\subsubsection{Scoring a Document}
-			With the ability to score a document for a particular term, we can now think of a document $d$ score for a query $q$, where $q = \lbrack t_1, t_2, \ldots, t_n\rbrack$, as a vector.
+			With the ability to score a document for a particular term, we can now think of a document $d$ score for a query $q$, where $q = \lbrack t_1, t_2, \dotsc, t_n\rbrack$, as a vector.
 			
 			$$
 				\mathrm{score}_{q, d} = 
