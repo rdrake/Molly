@@ -440,6 +440,8 @@
   {\ifx\empty#1\empty\else\gdef\@faculty{#1}\fi}
 \newcommand{\department}[1]%
   {\ifx\empty#1\empty\else\gdef\@department{#1}\fi}
+ \newcommand{\gradmonth}[1]%
+  {\ifx\empty#1\empty\else\gdef\@gradmonth{#1}\fi}
 \newcommand{\gradyear}[1]%
   {\ifx\empty#1\empty\else\gdef\@gradyear{#1}\fi}
 \renewcommand{\author}[1]%
@@ -577,15 +579,24 @@
       \vfill
       {\@author}\\
       \vfill
+      A Thesis Submitted in Partial Fulfillment\\
+      of the Requirements for the Degree of\\
       \vfill
-      A thesis submitted in conformity with the requirements\\
-      for the degree of {\@degree}\\
-      Faculty of {\@faculty} ({\@department})\\
+      {\@degree}\\
+      \vfill
+      in\\
+      \vfill
+      The Faculty of {\@faculty}\\
+      \vfill
+      {\@department}\\
+      \vfill
       University of Ontario Institute of Technology\\
       \vfill
-      Supervisor(s): {\@supervisor}\\
+      Supervisor: {\@supervisor}\\
       \vfill
-      Copyright {\copyright} {\@gradyear} by {\@author}\\
+      {\@gradmonth} {\@gradyear}
+      \vfill
+      {\copyright} {\@author}, {\@gradyear}\\
       \vspace{.2in}
       \mbox{}
    \end{center}

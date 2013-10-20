@@ -16,14 +16,16 @@
 \usepackage{unicode-math}						% Unicode symbols in math
 \usepackage{caption}								% Possible del for subcaption
 \usepackage{subcaption}							% Subfigures
+\usepackage[refpage]{nomencl}	% Symbols
+\usepackage[linktocpage=true,colorlinks=true]{hyperref}		% Helpful links
 
 % Use and configure bibliography
 \usepackage[backend=biber,style=trad-alpha]{biblatex}
 \addbibresource{Thesis.bib}
 
 % Configure tikz for pretty diagrams
-\input tikz
-\usetikzlibrary{fit}
+%\input tikz
+%\usetikzlibrary{fit}
 
 % Define a new environment for Clojure code
 \newmintedfile[cljcode]{clj}{linenos,frame=topline,frame=lines,framesep=2mm}
@@ -32,6 +34,7 @@
 \theoremstyle{definition}
 \newtheorem{defn}{Definition}
 \newtheorem{ex}{Example}
+\newtheorem{remark}{Remark}
 
 % Change the image path prefix
 \graphicspath{{images/}}
@@ -52,5 +55,8 @@
 \DeclareMathOperator{\tf}{tf}
 \DeclareMathOperator{\idf}{idf}
 \DeclareMathOperator{\score}{score}
+\DeclareMathOperator{\freq}{freq}
 
 \newcommand{\fcn}[2]{\ensuremath\textsc{#1}\lbrack #2\rbrack}
+
+\makenomenclature

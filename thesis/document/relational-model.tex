@@ -1,0 +1,194 @@
+% !TEX root = Thesis.tex
+\section{Relational Model}
+	In its most basic form, the relational data model is built upon sets and tuples.  Each of these sets consist of a set of finite possible values.  Tuples are constructed from these sets to form relations.
+	
+	\begin{defn}[Named Tuple]
+	\label{def:named-tuple}
+		A named tuple $t$ is an instance of a relation $r$, consisting of values corresponding to the attributes of $r$.  For example,
+		
+		$$t = \left\{\mathrm{name}: \textrm{``Jack Bauer''}, \mathrm{age}: 39\right\}$$
+		
+		We denote the attributes of $t$ as $\fcn{ATTR}{t} = \left\{\mathrm{name}, \mathrm{age}\right\}$  The values are $t\lbrack \mathrm{name}\rbrack = \textrm{``Jack Bauer''}$, and $t\lbrack \mathrm{age}\rbrack = 39$.
+	\end{defn}
+	
+	\begin{defn}[Relation]
+	\label{def:relation}
+		A relation $r$ is a set of named tuples, $r = \left\{t_1, t_2, \dotsc, t_n\right\}$, such that all the named tuples share the same attributes.
+		
+		$$\forall t, t' \in r, \fcn{ATTR}{t} = \fcn{ATTR}{t'}$$
+		
+		For example,
+		
+		$$r = \left\{
+			\begin{array}{l}
+				\left\{\mathrm{name}: \textrm{``Jack Bauer''}, \mathrm{age}: 39\right\}, \\
+				\left\{\mathrm{name}: \textrm{``Bruce Wayne''}, \mathrm{age}: 39\right\}, \\
+				\left\{\mathrm{name}: \textrm{``Clark Kent''}, \mathrm{age}: 45\right\}
+			\end{array}
+		\right\}$$
+		
+		Relations are typically represented as tables.
+		
+		\begin{table}[!ht]
+			\centering
+			\begin{tabular}{ll}
+				\toprule
+				name & age \\
+				\midrule
+				``Jack Bauer'' & 39 \\
+				``Bruce Wayne'' & 39 \\
+				``Clark Kent'' & 45 \\
+				\bottomrule
+			\end{tabular}
+			
+			\caption{Person table}
+			\label{tbl:person}
+		\end{table}
+	\end{defn}
+	
+	\begin{defn}[Keys]
+	\label{def:keys}
+		Keys are constraints imposed on relations.  A key constraint $K$ on a relation $r$ is a subset of $\fcn{ATTR}{r}$ which may uniquely identify a tuple.  Formally, we say $r$ satisfies the key constraint $K$, denoted as $r \models K$, subject to
+		
+		$$\forall t, t' \in r, t \not= t' \implies t[K] \not= t'[K]$$
+		
+		For example, in Table~\ref{tbl:person}, the relation satisfies the key constraint $\left\{\mathrm{name}\right\}$, but not $\left\{\mathrm{age}\right\}$.
+	\end{defn}
+	
+	\begin{defn}[Foreign Keys]
+	\label{def:foreign-keys}
+		A foreign key constraint applies to two relations, $r_1, r_2$.  It asserts that values of certain attributes of $r_1$ must appear as values of some corresponding attributes of $r_2$.  A foreign key constraint is written as
+		
+		$$\theta = r_1(a_1, a_2, \dotsc, a_k) \rightarrow r_2(b_1, b_2, \dotsc, b_k)$$
+		
+		where $a_i \subseteq \fcn{ATTR}{r_1}$ and $b_i \subseteq \fcn{ATTR}{r_2}$.  We say $(r_1, r_2)$ satisfies $\theta$, denoted as $(r_1, r_2) \models \theta$, if
+		
+		$$\forall t \in r_1, \exists t' \in r_2 \mid t\lbrack a_1, a_2, \dotsc, a_k\rbrack = t'\lbrack b_1, b_2, \dotsc, b_k]$$
+		
+		\begin{ex}
+			Suppose we have a relation Superhero(name, superpower).  We can impose a FK constraint of
+			
+			$$\textrm{Superhero(name)} \rightarrow \textrm{Person(name)}$$
+		\end{ex}
+	\end{defn}
+	
+	\begin{defn}[Relational Database]
+	\label{def:relational-database}
+		A relational database, $d$, is a named collection of relations (as defined by Definition~\ref{def:relation}, keys (as defined by Definition~\ref{def:keys}), and foreign key constraints (as defined by Definition~\ref{def:foreign-keys}.
+		
+		We use $\fcn{Name}{d}$ to denote the name of $d$, $\fcn{Rel}{d}$ the list of relations in $d$, $\fcn{Key}{d}$ the list of key constraints of $d$, and $\fcn{FK}{d}$ the list of foreign key constraints of $d$.
+	\end{defn}
+	
+	\subsection{Schema Group}
+		\begin{defn}[Schema Graph]
+			If we view relations as vertices, and foreign key constraints as edges, a database $d$ can be viewed as a \emph{schema graph} $G$, formally defined as
+			
+			\begin{eqnarray*}
+				\mathrm{vertices}:  V(G) &=& \fcn{REL}{d} \\
+				\mathrm{edges}:  E(G) &=& \fcn{FK}{d}
+			\end{eqnarray*}
+		\end{defn}
+		
+		\begin{ex}
+			Given the following schema
+			
+			\begin{figure}[!ht]
+				\centering
+				
+				Superhero(name, power) \\
+				Person(name, age, birthplace) \\
+				Planet(name, size, age, destroyed, galaxy) \\
+				Link(name, peer, relation type) \\
+			\end{figure}
+			
+			and the following foreign key constraints
+			
+			\begin{eqnarray*}
+				\textrm{Superhero(name)} &\rightarrow& \textrm{Person(name)} \\
+				\textrm{Person(birthplace)} &\rightarrow& \textrm{Planet(name)} \\
+				\textrm{Link(name)} &\rightarrow& \textrm{Person(name)} \\
+				\textrm{Link(peer)} &\rightarrow& \textrm{Person(name)}
+			\end{eqnarray*}
+			
+			we produce the following schema graph.
+			
+			\todo{ER diagram or something of schema.}
+		\end{ex}
+		
+		The relational data model is particularly powerful for analytic queries.  Given the schema below above, one can formulate the following analytic queries in a query language known as SQL.
+			
+		\begin{ex}
+			List all superheroes whose home planet has not been destroyed.
+			
+			\begin{minted}{sql}
+				SELECT Person.name FROM Person JOIN Planet on Person.birthplace = Planet.name WHERE NOT Planet.destroyed;
+			\end{minted}
+		\end{ex}
+		
+	\subsection{Entity Group}
+		\begin{defn}[Entity Group]
+			An entity group is a forest, T,  of tuples interconnected by join conditions defined by the foreign key constraints in the schema graph.  Given two vertices $t_1, t_2'\in V\left(T\right)$, it must be that:
+
+			$\exists r_1, r_2\in \fcn{REL}{d}$ such that $t_1 \in r_1$, $t_2\in r_2$, and $\left(r_1, r_2\right)\in G$.  This is to say that $t_1$ and $t_2$ belong to two relations that are connected by the schema graph.
+
+			Let $r_1\left(a_1, \dotsc, a_k\right) \to r_2\left(b_1, \dotsc, b_k\right)$ be the FK that connects $r_1, r_2$.  We further assert that $t_1\lbrack a_1, \dotsc, a_k\rbrack = t_2\lbrack b_1, \dotsc, b_k\rbrack$.
+		\end{defn}
+		
+		The motivation of entity groups is to define complex structured objects that can include more information than individual tuples in the relations.
+		
+		Example:
+		
+		name: Clark Kent
+		age: ?
+		birthplace: Krypton
+		superpower: ?
+		friends: ?.
+		enemies: ?
+		
+		This object (the profile of Clark Kent) can only be represented as an entity group as no single tuple in any of the relations has such detailed information.  This is a result of normalization of the schema.
+
+	\subsection{Pros and Cons of the Relational Model}
+		In order to better understand the motivation behind this work, it is important to examine the strong as well as weak points of the relational model.
+		
+		For each item of pro and con, use the running example to illustrate them.
+		
+		For example:
+		
+		1. both queries are executable by Postgres
+		2. if we try to insert ``Clark Kent'' again, it will be rejected.  If we insert ``Frog Boy'' as a superhero, it will be rejected.  If we change the age of ``Clark Kent'' this will only need to occur in a single place.
+		3. Change the ``Ken'' and ``CSCI'' to some superhero example.
+		
+		Do the same for CONS.
+		
+		E.g. Tell me something about ``Batman''.  We need to know the relation and attributes involved in order to author the SQL query.  ``Supermen'' will return nothing.
+		
+		\subsection{Pros}
+			\begin{itemize}
+				\item Well supported by relational algebra and relational databases (RDBMS)
+				\item Clean and consistent database instances (A\underline{C}ID?)
+				\item Can use queries to resolve instance-level connectivity
+					\begin{itemize}
+						\item How is "Ken" connected to "CSCI 3030U"?
+					\end{itemize}
+					\todo{More examples of queries}
+			\end{itemize}
+		
+		\subsection{Cons}
+			\begin{itemize}
+				\item Must know the relational schema
+					\begin{enumerate}
+						\item Know table/attribute names
+						\item Know join paths (schema)
+					\end{enumerate}
+				\item Inflexible string matching options  (basically just have \texttt{LIKE}), substring matching
+				\item Must know SQL
+				\item All queries must be re-written upon schema changes (rename, change in join path, etc.)
+				\item Not adaptive to new join path (e.g.\ newly created entity group, deleted E.G.\, etc.)
+			\end{itemize}
+	
+		\begin{itemize}
+			\item Good for analytics (aggregation, selection) if user has domain knowledge of the schema.
+			\item Bad for exploratory queries.
+			\item Bad if user doesn't know SQL
+			\item Bad for flexibility
+		\end{itemize}

@@ -1,0 +1,200 @@
+% !TEX root = Thesis.tex
+\section{Document Model}
+	In this section we formally define the document model.
+	
+	Documents are a unit of information.  The definition of unit can vary.  It may represent an email, a book chapter, a memo, etc.  Contained within each document is a set of terms.
+	
+	In contrast to the relational model, the document model represents semi-structured as well as unstructured data.  Examples of information suitable to the document model includes emails, memos, book chapters, etc.
+	
+	These pieces, or units, of information are broken into documents.  Groups of related documents (for example, a library catalogue) are referred to as a document collection.
+
+	\begin{defn}[Terms and Document]
+	\label{def:document}
+		A term, $t$, is an indivisible string (e.g.~a proper noun, word, or a phrase).  A document, $d$, is a bag of words.  Let $\freq_{t, d}$ be the frequency of terms $t$ in document $d$.
+		
+		Let $T$\nomenclature{$T$}{all terms in document collection} denote all possible terms, and $\fcn{Bag}{T}$ be all possible bag of terms.
+	\end{defn}
+	
+	\begin{remark}
+		We use the bag-of-words model for documents.  This means that position information of terms in a document is irrelevant, but the frequency of terms are kept in the document.  Documents are non-distinct sets.
+	\end{remark}
+	
+	\begin{defn}[Document Collection]
+	\label{def:document-collection}
+		A document collection $D$ is a set of documents, written $D = \left\{d_1, d_2, \dotsc, d_k\right\}$.  The size of $D$ is denoted $N$\nomenclature{$N$}{Number of documents in collection}.  The number of unique terms, or size of $T$, in $D$, is denoted $M$\nomenclature{$M$}{Size of $T$}.
+	\end{defn}
+	
+	\begin{ex}
+	\label{ex:superhero-documents}
+		Consider the following short sentences.
+		
+		\begin{enumerate}
+			\item Superman is strong on Earth and lives on Earth.
+			\item Batman was born on Earth.
+			\item Superwoman is fast on Earth.
+			\item Superman was born on Krypton.
+		\end{enumerate}
+		
+		Each sentence represents a document, giving us the following documents.
+		
+		\begin{eqnarray*}
+			d_1 &=& \left\{\textrm{``and''}: 1, \textrm{``on''}: 2, \textrm{``is''}: 1, \textrm{``lives''}: 1, \textrm{``earth''}: 2, \textrm{``strong''}: 1, \textrm{``superman''}: 1\right\} \\
+			d_2 &=& \left\{\textrm{``batman''}: 1, \textrm{``on''}: 1, \textrm{``was''}: 1, \textrm{``earth''}: 1, \textrm{``born''}: 1\right\} \\
+			d_3 &=& \left\{\textrm{``on''}: 1, \textrm{``is''}: 1, \textrm{``superwoman''}: 1, \textrm{``fast''}: 1, \textrm{``earth''}: 1\right\} \\
+			d_4 &=& \left\{\textrm{``krypton''}: 1, \textrm{``born''}: 1, \textrm{``on''}: 1, \textrm{``was''}: 1, \textrm{``superman''}: 1\right\} \\
+		\end{eqnarray*}
+	\end{ex}
+	
+	\subsection{Vectorization of Documents}
+		One of the most fundamental approach for search documents is to treat documents as high dimensional vectors, and the document collection as a subset in a vector space.  The search query becomes a nearest neighbour query in a vector space equipped with a distance measure.
+		
+		The first step is to convert bag of terms into vectors.  The standard technique (cite:text book) uses a scoring function that measures the relative importance terms in documents.
+		
+		\begin{defn}[TF-IDF Score]
+			The term frequency is the number of times a term $t$ appears in a document $d$, as given by $\freq_{t, d}$.  The document frequency of a term $t$, denoted by $\df_t$, is the number of documents in $D$ that contains $t$.  It is defined as
+			
+			$$\df_t = \mid \left\{d \in D: t \in d\right\} \mid$$
+			
+			The combined TF-IDF score of $t$ in a document $d$ is given by
+			
+			$$\tfidf_{D, t, d} = \frac{\freq_{t, d}}{\mid d \mid} \cdot \log{\frac{N}{\df_t}}$$
+		\end{defn}
+		
+		\begin{remark}
+			The first component, $\frac{\freq_{t, d}}{\mid d \mid}$, measures the importance of a term within a document.  It is normalized to account for document length.  The second component, $\log{\frac{N}{\df_t}}$, is a measure of the rarity of the term within the document collection $D$.
+		\end{remark}
+		
+		\begin{ex}
+			Using the documents from Example~\ref{ex:superhero-documents}, the TF-IDF scores are as follows.
+			
+			$$\bordermatrix{
+				~ & d_1 & d_2 & d_3 & d_4 \cr
+				\textrm{``and''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
+				\textrm{``on''} & 0.0000 & 0.0000 & 0.0000 & 0.0000 \cr
+				\textrm{``superwoman''} & 0.0000 & 0.0000 & 0.4000 & 0.0000 \cr
+				\textrm{``batman''} & 0.0000 & 0.4000 & 0.0000 & 0.0000 \cr
+				\textrm{``is''} & 0.1429 & 0.0000 & 0.2000 & 0.0000 \cr
+				\textrm{``fast''} & 0.0000 & 0.0000 & 0.4000 & 0.0000 \cr
+				\textrm{``born''} & 0.0000 & 0.2000 & 0.0000 & 0.2000 \cr
+				\textrm{``krypton''} & 0.0000 & 0.0000 & 0.0000 & 0.4000 \cr
+				\textrm{``earth''} & 0.1186 & 0.0830 & 0.0830 & 0.0000 \cr
+				\textrm{``lives''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
+				\textrm{``strong''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
+				\textrm{``was''} & 0.0000 & 0.2000 & 0.0000 & 0.2000 \cr
+				\textrm{``superman''} & 0.1429 & 0.0000 & 0.0000 & 0.2000 \cr
+			}$$
+		\end{ex}
+
+		\begin{defn}
+			Given a document collection $D$ with $M$ unique terms $T = \left[ t_1, t_2, \dotsc, t_n \right]$, each document $d$ can be represented by an $M$-dimensional vector.
+			
+			$$
+				\vec{d} = 
+				\left[
+				\begin{array}{c}
+					\tfidf_{t_1, d} \\
+					\tfidf_{t_2, d} \\
+					\vdots \\
+					\tfidf_{t_n, d}
+				\end{array}
+				\right]
+			$$
+		\end{defn}
+		
+		\begin{ex}
+			The documents in Example~\ref{ex:superhero-documents} would produce the following vectors.
+			
+			$$
+			\vec{d_1} = 
+				\left[
+					\begin{array}{c}
+						0.2857 \\
+						0.0000 \\
+						0.0000 \\
+						0.0000 \\
+						0.1429 \\
+						0.0000 \\
+						0.0000 \\
+						0.0000 \\
+						0.1186 \\
+						0.2857 \\
+						0.2857 \\
+						0.0000 \\
+						0.1429 \\
+					\end{array}
+				\right],
+			\vec{d_2} = 
+				\left[
+					\begin{array}{c}
+						0.0000 \\
+						0.0000 \\
+						0.0000 \\
+						0.4000 \\
+						0.0000 \\
+						0.0000 \\
+						0.2000 \\
+						0.0000 \\
+						0.0830 \\
+						0.0000 \\
+						0.0000 \\
+						0.2000 \\
+						0.0000 \\
+					\end{array}
+				\right],
+			\vec{d_3} = 
+				\left[
+					\begin{array}{c}
+						0.0000 \\
+						0.0000 \\
+						0.4000 \\
+						0.0000 \\
+						0.2000 \\
+						0.4000 \\
+						0.0000 \\
+						0.0000 \\
+						0.0830 \\
+						0.0000 \\
+						0.0000 \\
+						0.0000 \\
+						0.0000 \\
+					\end{array}
+				\right],
+			\vec{d_4} = 
+				\left[
+					\begin{array}{c}
+						0.0000 \\
+						0.0000 \\
+						0.0000 \\
+						0.0000 \\
+						0.0000 \\
+						0.0000 \\
+						0.2000 \\
+						0.4000 \\
+						0.0000 \\
+						0.0000 \\
+						0.0000 \\
+						0.2000 \\
+						0.2000 \\
+					\end{array}
+				\right]
+			$$
+		\end{ex}
+
+	
+	\subsection{Extending the Document Model}
+
+\section{Pro and con of document model (1 day)}
+	\begin{itemize}
+		\item Good: exploratory queries using keywords (google)
+		\item Good: easy (or no) syntax
+		\item Good: fuzzy matching (using n-gram)
+		\item Bad: No analytics
+	\end{itemize}
+		
+		\section{Best of both worlds (4 days, week 3)}
+	\begin{itemize}
+		\item Hybrid database defined by both the relational model and the document model
+		\item Translation between relational objects (entities and entity) groups to documents.
+		\item Translation of documents back to relational objects.
+		\item Proof of lossless translation between relational space and document space
+	\end{itemize}
