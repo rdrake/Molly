@@ -1,34 +1,47 @@
 % !TEX root = Thesis.tex
-\usepackage{fontspec}								% Use nicer system fonts
-\usepackage{graphicx}								% Pretty pictures
+\usepackage{morewrites}									% Greedy packages...
+\usepackage{fontspec}									% Use nicer system fonts
+%\usepackage{mathdesign}
+\usepackage{graphicx}									% Pretty pictures
 \usepackage{todo}										% List of things to do
-\usepackage{amsmath}								% Allow use of amsthm
-\usepackage{amsthm}									% Pretty theorem environments
-\usepackage{amssymb}								% More math symbols
-\usepackage{algorithm}							% Pretty algorithm environment
-\usepackage{algorithmic}						% Pretty algorithms
-\usepackage[nounderscore]{syntax}		% BNF grammars
+\usepackage{amsmath}									% Allow use of amsthm
+\usepackage{amsthm}										% Pretty theorem environments
+\usepackage{amssymb}									% More math symbols
+\usepackage{algorithm}									% Pretty algorithm environment
+\usepackage{algorithmic}								% Pretty algorithms
+\usepackage[nounderscore]{syntax}						% BNF grammars
+\usepackage{minted}										% Pretty code
 \usepackage{tikz}										% Diagrams
-\usepackage{minted}									% Pretty code
-\usepackage{booktabs}								% Pretty tables
+\usepackage{booktabs}									% Pretty tables
 \usepackage{nag}										% Complain
-\usepackage[all]{xypic}							% Easy (compared to tikz) diagrams
-\usepackage{unicode-math}						% Unicode symbols in math
-\usepackage{caption}								% Possible del for subcaption
-\usepackage{subcaption}							% Subfigures
-\usepackage[refpage]{nomencl}	% Symbols
-\usepackage[linktocpage=true,colorlinks=true]{hyperref}		% Helpful links
+\usepackage[all]{xypic}									% Easy (compared to tikz) diagrams
+\usepackage{unicode-math}								% Unicode symbols in math
+\usepackage{caption}									% Possible del for subcaption
+\usepackage{subcaption}									% Subfigures
+\usepackage{forest}										% Simple trees
+
+\usepackage[linktocpage=true,colorlinks=true]{hyperref}	% Helpful links
+
+% Apparently must go after hyperref to get pretty links
+%\usepackage[refpage]{nomencl}							% Symbols
+\usepackage[acronym,style=tree]{glossaries}				% Glossary of terms
 
 % Use and configure bibliography
 \usepackage[backend=biber,style=trad-alpha]{biblatex}
 \addbibresource{Thesis.bib}
 
-% Configure tikz for pretty diagrams
-%\input tikz
-%\usetikzlibrary{fit}
-
 % Define a new environment for Clojure code
 \newmintedfile[cljcode]{clj}{linenos,frame=topline,frame=lines,framesep=2mm}
+% SQL too!
+\newminted{sql}{linenos,frame=topline,frame=lines,framesep=2mm}
+
+% Configure tikz for pretty diagrams
+\input tikz
+\usetikzlibrary{fit}
+
+% For some reason using minted with tikz causes minted to fail to colourize
+% the output.  Should find a solution later, not really important right now.
+\usemintedstyle{bw}
 
 % Define new theorem environments
 \theoremstyle{definition}
@@ -46,6 +59,7 @@
 ]{Garamond Premier Pro}
 \setsansfont{Futura Std}
 \setmathfont{XITS Math}
+%\setmathfont{Garamond Premier Pro}
 \setmonofont{Consolas}
 
 % Simplify some of our function declarations
@@ -59,4 +73,5 @@
 
 \newcommand{\fcn}[2]{\ensuremath\textsc{#1}\lbrack #2\rbrack}
 
-\makenomenclature
+\newglossary{symbols}{sym}{sbl}{List of Symbols}
+\makeglossaries

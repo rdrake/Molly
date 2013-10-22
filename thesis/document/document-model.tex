@@ -12,7 +12,7 @@
 	\label{def:document}
 		A term, $t$, is an indivisible string (e.g.~a proper noun, word, or a phrase).  A document, $d$, is a bag of words.  Let $\freq_{t, d}$ be the frequency of terms $t$ in document $d$.
 		
-		Let $T$\nomenclature{$T$}{all terms in document collection} denote all possible terms, and $\fcn{Bag}{T}$ be all possible bag of terms.
+		Let $T$ denote all possible terms, and $\fcn{Bag}{T}$ be all possible bag of terms.
 	\end{defn}
 	
 	\begin{remark}
@@ -21,7 +21,7 @@
 	
 	\begin{defn}[Document Collection]
 	\label{def:document-collection}
-		A document collection $D$ is a set of documents, written $D = \left\{d_1, d_2, \dotsc, d_k\right\}$.  The size of $D$ is denoted $N$\nomenclature{$N$}{Number of documents in collection}.  The number of unique terms, or size of $T$, in $D$, is denoted $M$\nomenclature{$M$}{Size of $T$}.
+		A document collection $D$ is a set of documents, written $D = \left\{d_1, d_2, \dotsc, d_k\right\}$.  The size of $D$ is denoted $\gls{ndocs}$.  The number of unique terms, or size of $\gls{terms}$, in $D$, is denoted $\gls{nterms}$.
 	\end{defn}
 	
 	\begin{ex}
@@ -48,7 +48,7 @@
 	\subsection{Vectorization of Documents}
 		One of the most fundamental approach for search documents is to treat documents as high dimensional vectors, and the document collection as a subset in a vector space.  The search query becomes a nearest neighbour query in a vector space equipped with a distance measure.
 		
-		The first step is to convert bag of terms into vectors.  The standard technique (cite:text book) uses a scoring function that measures the relative importance terms in documents.
+		The first step is to convert bag of terms into vectors.  The standard technique \cite{ir-08} uses a scoring function that measures the relative importance terms in documents.
 		
 		\begin{defn}[TF-IDF Score]
 			The term frequency is the number of times a term $t$ appears in a document $d$, as given by $\freq_{t, d}$.  The document frequency of a term $t$, denoted by $\df_t$, is the number of documents in $D$ that contains $t$.  It is defined as
@@ -85,7 +85,7 @@
 			}$$
 		\end{ex}
 
-		\begin{defn}
+		\begin{defn}[Document Vector]
 			Given a document collection $D$ with $M$ unique terms $T = \left[ t_1, t_2, \dotsc, t_n \right]$, each document $d$ can be represented by an $M$-dimensional vector.
 			
 			$$
@@ -179,11 +179,92 @@
 				\right]
 			$$
 		\end{ex}
-
-	
+		
+		\begin{defn}[Search Query]
+			A search query $q$ is simply a document, namely a bag of terms.  The top-$k$ answers to $q$ with respect to a collection $D$ is defined as the $k$ documents, $\left\{d_1, d_2, \dotsc, d_k\right\}$, in $D$, such that $\left\{\vec{d}_i\right\}$ are the closest vectors to $\vec{q}$ using Euclidean distance measure in $\mathbb{R}^N$.
+		\end{defn}
+		
+		\begin{ex}
+			Given the search query $q = \left\{ \mathrm{superwoman}, \mathrm{was}, \mathrm{born}, \mathrm{on}, \mathrm{krypton} \right\}$, compute the vector $\vec{q}$ within the document collection $D$ (as defined in Example~\ref{ex:superhero-documents}).
+			
+			$$
+			\vec{q} = 
+				\left[
+					\begin{array}{c}
+						0.0000 \\
+						0.0000 \\
+						0.0000 \\
+						0.0000 \\
+						0.0000 \\
+						0.0000 \\
+						0.0000 \\
+						0.1474 \\
+						0.2644 \\
+						0.0000 \\
+						0.2644 \\
+						0.1474 \\
+						0.0000 \\
+					\end{array}
+				\right]
+			$$
+		\end{ex}
+		
+		In order to determine the top-$k$ documents for search query $q$, we need a way of measuring the similarity between documents.
+		
+		\begin{defn}[Cosine Similarity]
+			Given two document vectors, $\vec{d}_1$ and $\vec{d}_2$, the cosine similarity is the dot product $\vec{d}_1 \cdot \vec{d}_2$, normalized by the product of the Euclidean distance of $\vec{d}_1$ and $\vec{d}_2$ in $\mathbb{R}^N$.  It is denoted as $\similarity_{\vec{d}_1, \vec{d}_2}$.
+			
+			\begin{eqnarray}
+				\similarity_{\vec{d}_1, \vec{d}_2} &=& \frac{\vec{d}_1 \cdot \vec{d}_2}{\mid\mid \vec{d}_1 \mid\mid \cdot \mid\mid \vec{d}_2 \mid\mid} \\
+				 &=& \frac{\sum\limits_{i=1}^{N} \vec{d}_{1, i} \times \vec{d}_{2, i}}{\sqrt{\sum\limits_{i=1}^{N} \left(\vec{d}_{1, i}\right)^2} \times \sqrt{\sum\limits_{i=1}^{N} \left(\vec{d}_{2, i}\right)^2}}
+			\end{eqnarray}
+		\end{defn}
+		
+		Recall we may represent search queries as documents and thus document vectors.  Therefore we may compute the score of a document $d$ for a search query $q$ as
+		
+		$$\similarity_{\vec{d}, \vec{q}}$$
+		
+		\begin{ex}
+			Given the document collection $D$ (from Example~\ref{ex:superhero-documents}) and search query $q$, compute the similarity between $q$ and every document $d \in D$.
+			
+			\begin{eqnarray}
+				\similarity_{\vec{d}_1, \vec{q}} &=& 0.000000 \\
+				\similarity_{\vec{d}_2, \vec{q}} &=& 0.191533 \\
+				\similarity_{\vec{d}_3, \vec{q}} &=& 0.265877 \\
+				\similarity_{\vec{d}_4, \vec{q}} &=& 0.618553
+			\end{eqnarray}
+		\end{ex}
+		
 	\subsection{Extending the Document Model}
+		In the extended document model, documents have attributes: $\fcn{ATTR}{d}$, and each attribute have values (e.g.~date, string, integer), or bag of terms.  Thus:
 
-\section{Pro and con of document model (1 day)}
+		$$d:\fcn{ATTR}{d} \to \fcn{BAG}{\mathrm{Terms}}$$
+		
+		\begin{ex}[Semi-Structured Document]
+			We see that $d_2$ is about Batman.  The document contents are semi-structured, containing both a name and the name of a planet.  By adding attributes to the document, we are left with Table~\ref{tbl:person-document}.
+			
+			\begin{table}[!ht]j
+				\centering
+				
+				\begin{tabular}{ll}
+					\toprule
+					Attribute & Value \\
+					\midrule
+					name & Batman \\
+					birthplace & Earth \\
+					body & Batman was born on Earth. \\
+					\bottomrule
+				\end{tabular}
+				
+				\caption{Person document for Batman}
+				\label{tbl:person-document}
+			\end{table}
+			
+			which is similar in structure to the \texttt{Person} table.
+		\end{ex}
+
+
+	\subsection{Pros and Cons of the Document Model}
 	\begin{itemize}
 		\item Good: exploratory queries using keywords (google)
 		\item Good: easy (or no) syntax
@@ -191,7 +272,7 @@
 		\item Bad: No analytics
 	\end{itemize}
 		
-		\section{Best of both worlds (4 days, week 3)}
+\section{Best of both worlds (4 days, week 3)}
 	\begin{itemize}
 		\item Hybrid database defined by both the relational model and the document model
 		\item Translation between relational objects (entities and entity) groups to documents.
