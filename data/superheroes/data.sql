@@ -4,7 +4,7 @@ INSERT INTO Planet VALUES ('Earth', 12742, 4540, FALSE, 'Milky Way');
 INSERT INTO Person VALUES ('Superman', 33, 'Krypton');
 INSERT INTO Person VALUES ('Batman', 30, 'Earth');
 INSERT INTO Person VALUES ('Flash', 53, 'Earth');
-INSERT INTO Person VALUES ('Wonder Woman', 28, 'Krypton');
+INSERT INTO Person VALUES ('Wonder Woman', 28, 'Earth');
 INSERT INTO Person VALUES ('General Zod', 42, 'Krypton');
 
 INSERT INTO Superhero VALUES ('Superman', 'flying');

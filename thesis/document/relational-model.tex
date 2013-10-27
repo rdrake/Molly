@@ -5,19 +5,21 @@
 	\begin{defn}[Named Tuple]
 	\label{def:named-tuple}
 		A named tuple $t$ is an instance of a relation $\gls{r}$, consisting of values corresponding to the attributes of $\gls{r}$.  For example,
-		
-		$$t = \left\{\mathrm{name}: \textrm{``Superman''}, \mathrm{age}: 33, \mathrm{birthplace}: \textrm{``Krypton''}\right\}$$
-		
-		We denote the attributes of $t$ as $\fcn{ATTR}{t} = \left\{\mathrm{name}, \mathrm{age}\right\}$  The values are $t\lbrack \mathrm{name}\rbrack = \textrm{``Superman''}$, $t\lbrack \mathrm{age}\rbrack = 33$, and $t\lbrack \mathrm{birthplace}\rbrack = \textrm{``Krypton''}$,
 	\end{defn}
+	
+	\begin{ex}
+		Given a tuple $t = \left\{\mathrm{name}: \textrm{``Superman''}, \mathrm{age}: 33, \mathrm{birthplace}: \textrm{``Krypton''}\right\}$, we denote the attributes of $t$ as $\fcn{ATTR}{t} = \left\{\mathrm{name}, \mathrm{age}, \mathrm{birthplace}\right\}$.  The values are $t\lbrack \mathrm{name}\rbrack = \textrm{``Superman''}$, $t\lbrack \mathrm{age}\rbrack = 33$, and $t\lbrack \mathrm{birthplace}\rbrack = \textrm{``Krypton''}$.
+	\end{ex}
 	
 	\begin{defn}[Relation]
 	\label{def:relation}
 		A relation $r$ is a set of named tuples, $r = \left\{t_1, t_2, \dotsc, t_n\right\}$, such that all the named tuples share the same attributes.
 		
 		$$\forall t, t' \in r, \fcn{ATTR}{t} = \fcn{ATTR}{t'}$$
-		
-		For example,
+	\end{defn}
+	
+	\begin{ex}
+		An example Person relation, $r$, would be as follows,
 		
 		$$r = \left\{
 			\begin{array}{l}
@@ -28,27 +30,27 @@
 				\left\{\mathrm{name}: \textrm{``General Zod''}, \mathrm{age}: 42, \mathrm{birthplace}: \textrm{``Krypton''}\right\}
 			\end{array}
 		\right\}$$
+	\end{ex}
 		
-		Relations are typically represented as tables.
+	Relations are typically represented as tables.
+	
+	\begin{table}[!ht]
+		\centering
+		\begin{tabular}{lll}
+			\toprule
+			name & age & birthplace \\
+			\midrule
+			Superman & 33 & Krypton \\
+			Batman & 30 & Earth \\
+			Flash & 53 & Earth \\
+			Wonder Woman & 28 & Earth \\
+			General Zod & 42 & Krypton \\
+			\bottomrule
+		\end{tabular}
 		
-		\begin{table}[!ht]
-			\centering
-			\begin{tabular}{lll}
-				\toprule
-				name & age & birthplace \\
-				\midrule
-				Superman & 33 & Krypton \\
-				Batman & 30 & Earth \\
-				Flash & 53 & Earth \\
-				Wonder Woman & 28 & Earth \\
-				General Zod & 42 & Krypton \\
-				\bottomrule
-			\end{tabular}
-			
-			\caption{Person table}
-			\label{tbl:person}
-		\end{table}
-	\end{defn}
+		\caption{Person table}
+		\label{tbl:person}
+	\end{table}
 	
 	\begin{defn}[Keys]
 	\label{def:keys}
@@ -207,20 +209,8 @@ WHERE  NOT Planet.destroyed;
 			We require an entity group (Figure~\ref{fig:superhero-entity-group}) to join together all pieces of information related to Superman.
 			
 			\begin{figure}[!ht]
-				\centering
-				
-				\begin{forest}
-					[$\bowtie$
-						[Link]
-						[$\bowtie$
-							[Superhero]
-							[$\bowtie_{\mathrm{birthplace=Planet.name}}$
-								[Planet]
-								[$\sigma_{\mathrm{name=Superman}}(\mathrm{Person})$]
-							]
-						]
-					]
-				\end{forest}
+				\todo{Revise this figure}
+				\texttt{SELECT * FROM Link JOIN Superhero ON Link.name = Superhero.name JOIN Person ON Person.name = Superhero.name JOIN Planet ON Person.birthplace = Planet.name WHERE Person.name = 'Superman';}
 				
 				\caption{Superhero entity group}
 				\label{fig:superhero-entity-group}

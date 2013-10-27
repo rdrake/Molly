@@ -19,7 +19,7 @@
 \usepackage{caption}									% Possible del for subcaption
 \usepackage{subcaption}									% Subfigures
 \usepackage{forest}										% Simple trees
-
+\usepackage{comment}									% How is this not built-in?
 \usepackage[linktocpage=true,colorlinks=true]{hyperref}	% Helpful links
 
 % Apparently must go after hyperref to get pretty links
@@ -56,11 +56,13 @@
 \defaultfontfeatures{Ligatures=TeX}
 \setmainfont[
 	Kerning=Uppercase
+%]{EB Garamond}
 ]{Garamond Premier Pro}
-\setsansfont{Futura Std}
 \setmathfont{XITS Math}
-%\setmathfont{Garamond Premier Pro}
-\setmonofont{Consolas}
+\setmathfont[range=\mathbfsfit/{greek,Greek,latin,Latin}]{Garamond Premier Pro}%{EB Garamond}
+%\setsansfont{Source Sans Pro}
+%\setmonofont[Scale=0.9]{Source Code Pro}
+\setmonofont[Scale=0.9]{Consolas}
 
 % Simplify some of our function declarations
 \DeclareMathOperator{\similarity}{similarity}
@@ -75,3 +77,5 @@
 
 \newglossary{symbols}{sym}{sbl}{List of Symbols}
 \makeglossaries
+
+\includeonly{data-model}

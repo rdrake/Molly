@@ -1,5 +1,6 @@
 % !TEX root = Thesis.tex
 \section{Document Model}
+\label{sec:document-model}
 	In this section we formally define the document model.
 	
 	Documents are a unit of information.  The definition of unit can vary.  It may represent an email, a book chapter, a memo, etc.  Contained within each document is a set of terms.
@@ -10,7 +11,7 @@
 
 	\begin{defn}[Terms and Document]
 	\label{def:document}
-		A term, $t$, is an indivisible string (e.g.~a proper noun, word, or a phrase).  A document, $d$, is a bag of words.  Let $\freq_{t, d}$ be the frequency of terms $t$ in document $d$.
+		A term, $t$, is an indivisible string (e.g.~a proper noun, word, or a phrase).  A document, $d$, is a bag of words.  Let $\freq\left(t, d\right)$ be the frequency of terms $t$ in document $d$.
 		
 		Let $T$ denote all possible terms, and $\fcn{Bag}{T}$ be all possible bag of terms.
 	\end{defn}
@@ -46,22 +47,23 @@
 	\end{ex}
 	
 	\subsection{Vectorization of Documents}
+	\label{sec:vectorization-of-documents}
 		One of the most fundamental approach for search documents is to treat documents as high dimensional vectors, and the document collection as a subset in a vector space.  The search query becomes a nearest neighbour query in a vector space equipped with a distance measure.
 		
 		The first step is to convert bag of terms into vectors.  The standard technique \cite{ir-08} uses a scoring function that measures the relative importance terms in documents.
 		
 		\begin{defn}[TF-IDF Score]
-			The term frequency is the number of times a term $t$ appears in a document $d$, as given by $\freq_{t, d}$.  The document frequency of a term $t$, denoted by $\df_t$, is the number of documents in $D$ that contains $t$.  It is defined as
+			The term frequency is the number of times a term $t$ appears in a document $d$, as given by $\freq\left(t, d\right)$.  The document frequency of a term $t$, denoted by $\df_t$, is the number of documents in $D$ that contains $t$.  It is defined as
 			
 			$$\df_t = \mid \left\{d \in D: t \in d\right\} \mid$$
 			
 			The combined TF-IDF score of $t$ in a document $d$ is given by
 			
-			$$\tfidf_{D, t, d} = \frac{\freq_{t, d}}{\mid d \mid} \cdot \log{\frac{N}{\df_t}}$$
+			$$\tfidf\left(D, t, d\right) = \frac{\freq\left(t, d\right)}{\mid d \mid} \cdot \log{\frac{N}{\df_t}}$$
 		\end{defn}
 		
 		\begin{remark}
-			The first component, $\frac{\freq_{t, d}}{\mid d \mid}$, measures the importance of a term within a document.  It is normalized to account for document length.  The second component, $\log{\frac{N}{\df_t}}$, is a measure of the rarity of the term within the document collection $D$.
+			The first component, $\frac{\freq\left(t, d\right)}{\mid d \mid}$, measures the importance of a term within a document.  It is normalized to account for document length.  The second component, $\log{\frac{N}{\df_t}}$, is a measure of the rarity of the term within the document collection $D$.
 		\end{remark}
 		
 		\begin{ex}
@@ -92,10 +94,10 @@
 				\vec{d} = 
 				\left[
 				\begin{array}{c}
-					\tfidf_{t_1, d} \\
-					\tfidf_{t_2, d} \\
+					\tfidf\left(t_1, d\right) \\
+					\tfidf\left(t_2, d\right) \\
 					\vdots \\
-					\tfidf_{t_n, d}
+					\tfidf\left(t_n, d\right)
 				\end{array}
 				\right]
 			$$
@@ -212,30 +214,31 @@
 		In order to determine the top-$k$ documents for search query $q$, we need a way of measuring the similarity between documents.
 		
 		\begin{defn}[Cosine Similarity]
-			Given two document vectors, $\vec{d}_1$ and $\vec{d}_2$, the cosine similarity is the dot product $\vec{d}_1 \cdot \vec{d}_2$, normalized by the product of the Euclidean distance of $\vec{d}_1$ and $\vec{d}_2$ in $\mathbb{R}^N$.  It is denoted as $\similarity_{\vec{d}_1, \vec{d}_2}$.
+			Given two document vectors, $\vec{d}_1$ and $\vec{d}_2$, the cosine similarity is the dot product $\vec{d}_1 \cdot \vec{d}_2$, normalized by the product of the Euclidean distance of $\vec{d}_1$ and $\vec{d}_2$ in $\mathbb{R}^N$.  It is denoted as $\similarity\left(\vec{d}_1, \vec{d}_2\right)$.
 			
 			\begin{eqnarray}
-				\similarity_{\vec{d}_1, \vec{d}_2} &=& \frac{\vec{d}_1 \cdot \vec{d}_2}{\mid\mid \vec{d}_1 \mid\mid \cdot \mid\mid \vec{d}_2 \mid\mid} \\
+				\similarity\left(\vec{d}_1, \vec{d}_2\right) &=& \frac{\vec{d}_1 \cdot \vec{d}_2}{\mid\mid \vec{d}_1 \mid\mid \cdot \mid\mid \vec{d}_2 \mid\mid} \\
 				 &=& \frac{\sum\limits_{i=1}^{N} \vec{d}_{1, i} \times \vec{d}_{2, i}}{\sqrt{\sum\limits_{i=1}^{N} \left(\vec{d}_{1, i}\right)^2} \times \sqrt{\sum\limits_{i=1}^{N} \left(\vec{d}_{2, i}\right)^2}}
 			\end{eqnarray}
 		\end{defn}
 		
 		Recall we may represent search queries as documents and thus document vectors.  Therefore we may compute the score of a document $d$ for a search query $q$ as
 		
-		$$\similarity_{\vec{d}, \vec{q}}$$
+		$$\similarity\left(\vec{d}, \vec{q}\right)$$
 		
 		\begin{ex}
 			Given the document collection $D$ (from Example~\ref{ex:superhero-documents}) and search query $q$, compute the similarity between $q$ and every document $d \in D$.
 			
 			\begin{eqnarray}
-				\similarity_{\vec{d}_1, \vec{q}} &=& 0.000000 \\
-				\similarity_{\vec{d}_2, \vec{q}} &=& 0.191533 \\
-				\similarity_{\vec{d}_3, \vec{q}} &=& 0.265877 \\
-				\similarity_{\vec{d}_4, \vec{q}} &=& 0.618553
+				\similarity\left(\vec{d}_1, \vec{q}\right) &=& 0.000000 \\
+				\similarity\left(\vec{d}_2, \vec{q}\right) &=& 0.191533 \\
+				\similarity\left(\vec{d}_3, \vec{q}\right) &=& 0.265877 \\
+				\similarity\left(\vec{d}_4, \vec{q}\right) &=& 0.618553
 			\end{eqnarray}
 		\end{ex}
 		
 	\subsection{Extending the Document Model}
+	\label{sec:extending-the-document-model}
 		In the extended document model, documents have attributes: $\fcn{ATTR}{d}$, and each attribute have values (e.g.~date, string, integer), or bag of terms.  Thus:
 
 		$$d:\fcn{ATTR}{d} \to \fcn{BAG}{\mathrm{Terms}}$$
@@ -243,7 +246,7 @@
 		\begin{ex}[Semi-Structured Document]
 			We see that $d_2$ is about Batman.  The document contents are semi-structured, containing both a name and the name of a planet.  By adding attributes to the document, we are left with Table~\ref{tbl:person-document}.
 			
-			\begin{table}[!ht]j
+			\begin{table}[!ht]
 				\centering
 				
 				\begin{tabular}{ll}
@@ -262,13 +265,157 @@
 			
 			which is similar in structure to the \texttt{Person} table.
 		\end{ex}
+		
+	\subsection{Approximate String matching}
+	\label{sec:n-gram}
+		\begin{defn}[N-Gram]
+			An $n$-Gram is a contiguous sequence of substrings of string $S$ of length $n$.  An algorithm for computing the $n$-gram of $S$ is given in Algorithm~\ref{alg:n-gram}.
+		\end{defn}
+		
+		% \char"24 - DOLLAR  BILL Y'ALL
 
-
+		\begin{algorithm}[!ht]
+			\caption{$\textsc{N-Gram}\left(S, n, s\right)$}
+			\label{alg:n-gram}
+			
+			\begin{singlespaced}
+				\begin{algorithmic}[1]
+					\REQUIRE $S$ is a string, $n \ge 1$, and $s$ is a character
+					\ENSURE the list of $n$-grams of $S$
+					\medskip
+					\STATE $p \leftarrow \textsc{Repeat}\left(s, n - 1\right)$\label{alg:n-gram:repeat}\label{alg:n-gram:p}
+					\STATE $S \leftarrow \textsc{Replace}\left(S, \mathrm{'\;'}, \mathrm{'\char"24'}\right)$\label{alg:n-gram:replace}
+					\STATE $S \leftarrow \textsc{Concat}\left(p, S, p\right)$\label{alg:n-gram:concat}\label{alg:n-gram:S}
+					\STATE $G \leftarrow \left[\right]$\label{alg:n-gram:G}
+					\STATE $l \leftarrow \textsc{Length}\left(S\right)$\label{alg:n-gram:length}
+					
+					\FOR{$i=0$ \TO $l - n + 1$}
+						\STATE $G \leftarrow \textsc{SubStr}(S, i, i + n)$
+					\ENDFOR
+					
+					\RETURN $G$
+					\medskip
+					\medskip
+				\end{algorithmic}
+			\end{singlespaced}
+			
+			\todo{The medskips above should not be required.}
+		\end{algorithm}
+		
+		Where,
+		 
+		\begin{itemize}
+			\item $\textsc{Repeat}\left(c, i)\right)$ returns a string with character $c$ repeated $i$ times (line \ref{alg:n-gram:repeat}),
+			\item $\textsc{Replace}\left(s, c_1, c_2\right)$ returns string $s$ with all instances of character $c_1$ replaced by $c_2$ (line \ref{alg:n-gram:replace}),
+			\item $\textsc{Concat}\left(s_1, s_2, \dotsc, s_n\right)$ returns the concatenation of $s_1, s_2, \dotsc, s_n$ (line \ref{alg:n-gram:concat}),
+			\item $\textsc{Length}\left(s\right)$ returns the number of characters in string $s$ (line \ref{alg:n-gram:length}),
+			\item and $\textsc{SubStr}\left(s, i_1, i_2\right)$ returns a substring of string $s$ from $i$ (inclusive) to $i + n$ (exclusive).
+		\end{itemize}
+		
+		\begin{ex}
+		\label{ex:ngram-banana}
+			Given a string $S = \mathrm{``banana''}$, compute the trigram of $S$ using Algorithm \ref{alg:n-gram}.  Lines \ref{alg:n-gram:p}-\ref{alg:n-gram:S} would yield $S = \mathrm{``\char"24\char"24banana\char"24\char"24''}$, resulting in $l = 10$ (line \ref{alg:n-gram:length}).
+			
+			$$
+				G = \left\{
+					\mathrm{``\char"24\char"24b''},
+					\mathrm{``\char"24ba''},
+					\mathrm{``ban''},
+					\mathrm{``ana''},
+					\mathrm{``nan''},
+					\mathrm{``ana''},
+					\mathrm{``na\char"24''},
+					\mathrm{``a\char"24\char"24''}
+				\right\}
+			$$
+			
+			With a frequency of terms of
+			
+			$$\left\{\mathrm{``ana''}: 2, \mathrm{``na\char"24''}: 1, \mathrm{``\char"24ba''}: 1, \mathrm{``nan''}: 1, \mathrm{``a\char"24\char"24''}: 1, \mathrm{``ban''}: 1, \mathrm{``\char"24\char"24b''}: 1\right\}$$
+		\end{ex}
+		
+		We use $n$-grams in order to permit approximate string matching.
+		
+		\begin{ex}
+		\label{ex:n-gram-comparison}
+			Given a string $S$ (Example~\ref{ex:ngram-banana}), let $S' = \mathrm{``vanana''}$.  Compute the trigram of $S'$ and compare it to $S$.
+			
+			$$
+				G' = \left\{
+					\mathrm{``\char"24\char"24v''},
+					\mathrm{``\char"24va''},
+					\mathrm{``van''},
+					\mathrm{``ana''},
+					\mathrm{``nan''},
+					\mathrm{``ana''},
+					\mathrm{``na\char"24''},
+					\mathrm{``a\char"24\char"24''}
+				\right\}
+			$$
+			
+			Comparing $G$ to $G'$ results in the following matrix
+			
+			\begin{figure}[!ht]
+				$$
+					\bordermatrix{
+					~ & t_1 & t_2 & t_3 & t_4 & t_5 & t_6 & t_7 & t_8 \cr
+					G & \mathrm{``\char"24\char"24b''} & \mathrm{``\char"24ba''} & \mathrm{``ban''} & \mathrm{``ana''} & \mathrm{``nan''} & \mathrm{``ana''} & \mathrm{``na\char"24''} & \mathrm{``a\char"24\char"24''} \cr
+					G' & \mathrm{``\char"24\char"24v''} & \mathrm{``\char"24va''} & \mathrm{``van''} & \mathrm{``ana''} & \mathrm{``nan''} & \mathrm{``ana''} & \mathrm{``na\char"24''} & \mathrm{``a\char"24\char"24''} \cr
+					}
+				$$
+				
+				\caption{Comparison between $n$-grams of $G$ and $G'$.}
+				\label{fig:n-gram-misspelling-comparison}
+			\end{figure}
+			
+			As Figure~\ref{fig:n-gram-misspelling-comparison} shows, using $n$-grams yield very similar documents despite the letter substitution.
+		\end{ex}
+			
 	\subsection{Pros and Cons of the Document Model}
+		There are numerous reasons to use the document model.  It allows users without domain knowledge and working knowledge of a complex query language such as \gls{sql} to find information.
+		
+		\begin{ex}[Simple Queries]
+			Find all documents related to ``Superman'' or ``Earth''.  This query, if the default operator is \texttt{OR}, would simply be \texttt{Superman Earth}.  The result of the query $q$ would be
+			
+			$$\texttt{superman earth} = \left\{d_1, d_2, d_3, d_4\right\}$$
+		\end{ex}
+		
+		Users can also modify queries to require certain terms be present or not present.
+		
+		\begin{ex}[\texttt{AND} Query]
+		\label{ex:and-query}
+			Find all documents containing both ``Superman'' and ``Earth''.  This query would return the following set of documents
+			
+			$$\texttt{superman AND earth} = \left\{d_1\right\}$$
+			
+			as only $d_1$ contains both terms.
+		\end{ex}
+		
+		\begin{ex}[\texttt{NOT} Query]
+			Find all documents containing ``Superman'' but not ``Earth''.  This query would return different results than Example~\ref{ex:and-query}.
+			
+			$$\texttt{superman NOT earth} = \left\{d_4\right\}$$
+		\end{ex}
+		
+		While none of the above queries required domain knowledge, it is possible to use the extended document model (Section~\ref{sec:extending-the-document-model}) to search specific fields.  Doing so allows users to have finer control over what documents are retrieved.
+		
+		\begin{ex}[Extended Query]
+			Find all documents with a superhero named ``Superman'' that contain the term ``Earth''.
+			
+			$$\texttt{name:Superman Earth} = \left\{d_1\right\}$$
+			
+			Assuming the first term of every document is also the value of the name attribute.
+		\end{ex}
+		
+		People utilize keyword query search every day through web search engines such as Google\footnote{\url{https://www.google.ca/}}.
+		
+		Not only does the document model provide a familiar interface to search for information with, it also ranks the results.  In the relational model a search for ``Superman'' would return all named tuples that contained that term.  In the document model, documents are ranked against the query $q$ and the top-$k$ documents are returned.
+		
+		The advantage is that users have the result of $q$ already ranked so only the most relevant documents may be explored.  As the number of documents matching $q$ for a large corpus can be high, showing only the top-$k$ relevant documents may save the user a substantial amount of time.
+		
+		The relational model does not permit approximate string matching.  By utilizing the document model with $n$-grams (Section~\ref{sec:n-gram}), users who substitute, delete, or insert characters from the desired term may still receive results for their intended term (see Example~\ref{ex:n-gram-comparison} for a demonstration of how $n$-grams overcome character substitutions).
+		
 	\begin{itemize}
-		\item Good: exploratory queries using keywords (google)
-		\item Good: easy (or no) syntax
-		\item Good: fuzzy matching (using n-gram)
 		\item Bad: No analytics
 	\end{itemize}
 		
