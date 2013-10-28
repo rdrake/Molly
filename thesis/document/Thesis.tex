@@ -13,7 +13,6 @@
 \title{Towards a Concurrent Implementation of Keyword Search Over Relational Databases}
 
 \begin{document}
-	\todo{Figure out why EB Garamond doesn't bold definitions}
 	% Some acronyms...
 	\input{acronyms.tex}
 	\input{symbols.tex}
@@ -45,49 +44,9 @@
 	
 	\include{data-model}
 	
-	\chapter{Along came Clojure}
-		\section{Basic principles of functional programming (2 days)}
-			\begin{itemize}
-				\item immutable data structures
-				\item persistent data structures using multi-versioning
-				\item functions (and higher order functions) as values
-			\end{itemize}
-		
-		\section{Features of Clojure (2 days)}
-			\begin{itemize}
-				\item Data structures supporting the universal design pattern
-				\item Concurrency + STM
-				\item Interoperability with JVM (including Lucene)
-			\end{itemize}
-
-	\chapter{Search w/ Clojure}
-		\section{Thirdparty libraries (1 day, week 4)}
-			\begin{itemize}
-				\item Lucene
-			\end{itemize}
-
-		\section{Indexing of relational objects (5 days, week 5)}
-			\begin{itemize}
-				\item Schema definition
-				\item Crawling using SQL
-				\item Indexing using relational objects
-				\item Fuzzy indexing of values (typed by classes)
-			\end{itemize}
-
-		\section{Keyword Search in document space (5 days, week 6)}
-			\begin{itemize}
-				\item Disambiguate keywords using fuzzy search (suggestion, overloaded terms)
-				\item Flexibility keyword search for documents
-				\item Translate search result back to relational space
-			\end{itemize}
-
-		\section{Graph Search in document space (5 days, week 7)}
-			\begin{itemize}
-				\item Why we need graph search
-				\item Search in document graph using graph search algorithms with functional implementations: (Ford Fulkerson, BFS)
-				\item Speed up using concurrency
-				\item Clojure specific optimization: ref + atom
-			\end{itemize}
+	\include{have-it-all}
+	
+	\include{along-came-clojure}
 
 	\chapter{Experimental evaluation (5 days, week 8)}
 		\section{Implementation}

@@ -56,13 +56,12 @@
 \defaultfontfeatures{Ligatures=TeX}
 \setmainfont[
 	Kerning=Uppercase
-%]{EB Garamond}
 ]{Garamond Premier Pro}
 \setmathfont{XITS Math}
-\setmathfont[range=\mathbfsfit/{greek,Greek,latin,Latin}]{Garamond Premier Pro}%{EB Garamond}
-%\setsansfont{Source Sans Pro}
-%\setmonofont[Scale=0.9]{Source Code Pro}
+\setmathfont[range=\mathbfsfit/{greek,Greek,latin,Latin}]{Garamond Premier Pro}
 \setmonofont[Scale=0.9]{Consolas}
+
+%\todo{Figure out why EB Garamond doesn't bold definitions}
 
 % Simplify some of our function declarations
 \DeclareMathOperator{\similarity}{similarity}
@@ -78,4 +77,4 @@
 \newglossary{symbols}{sym}{sbl}{List of Symbols}
 \makeglossaries
 
-\includeonly{data-model}
+\includeonly{data-model,have-it-all,along-came-clojure}

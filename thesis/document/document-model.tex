@@ -71,19 +71,19 @@
 			
 			$$\bordermatrix{
 				~ & d_1 & d_2 & d_3 & d_4 \cr
-				\textrm{``and''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
-				\textrm{``on''} & 0.0000 & 0.0000 & 0.0000 & 0.0000 \cr
-				\textrm{``superwoman''} & 0.0000 & 0.0000 & 0.4000 & 0.0000 \cr
-				\textrm{``batman''} & 0.0000 & 0.4000 & 0.0000 & 0.0000 \cr
-				\textrm{``is''} & 0.1429 & 0.0000 & 0.2000 & 0.0000 \cr
-				\textrm{``fast''} & 0.0000 & 0.0000 & 0.4000 & 0.0000 \cr
-				\textrm{``born''} & 0.0000 & 0.2000 & 0.0000 & 0.2000 \cr
-				\textrm{``krypton''} & 0.0000 & 0.0000 & 0.0000 & 0.4000 \cr
-				\textrm{``earth''} & 0.1186 & 0.0830 & 0.0830 & 0.0000 \cr
-				\textrm{``lives''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
-				\textrm{``strong''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
-				\textrm{``was''} & 0.0000 & 0.2000 & 0.0000 & 0.2000 \cr
-				\textrm{``superman''} & 0.1429 & 0.0000 & 0.0000 & 0.2000 \cr
+				t_1 : \textrm{``and''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
+				t_2 : \textrm{``on''} & 0.0000 & 0.0000 & 0.0000 & 0.0000 \cr
+				t_3 : \textrm{``superwoman''} & 0.0000 & 0.0000 & 0.4000 & 0.0000 \cr
+				t_4 : \textrm{``batman''} & 0.0000 & 0.4000 & 0.0000 & 0.0000 \cr
+				t_5 : \textrm{``is''} & 0.1429 & 0.0000 & 0.2000 & 0.0000 \cr
+				t_6 : \textrm{``fast''} & 0.0000 & 0.0000 & 0.4000 & 0.0000 \cr
+				t_7 : \textrm{``born''} & 0.0000 & 0.2000 & 0.0000 & 0.2000 \cr
+				t_8 : \textrm{``krypton''} & 0.0000 & 0.0000 & 0.0000 & 0.4000 \cr
+				t_9 : \textrm{``earth''} & 0.1186 & 0.0830 & 0.0830 & 0.0000 \cr
+				t_{10} : \textrm{``lives''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
+				t_{11} : \textrm{``strong''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
+				t_{12} : \textrm{``was''} & 0.0000 & 0.2000 & 0.0000 & 0.2000 \cr
+				t_{13} : \textrm{``superman''} & 0.1429 & 0.0000 & 0.0000 & 0.2000 \cr
 			}$$
 		\end{ex}
 
@@ -107,9 +107,27 @@
 			The documents in Example~\ref{ex:superhero-documents} would produce the following vectors.
 			
 			$$
+			\vec{d_n} = 
+				\left[
+					\begin{array}{l}
+						\tfidf\left(t_{1}, d_n\right) \\
+						\tfidf\left(t_{2}, d_n\right) \\
+						\tfidf\left(t_{3}, d_n\right) \\
+						\tfidf\left(t_{4}, d_n\right) \\
+						\tfidf\left(t_{5}, d_n\right) \\
+						\tfidf\left(t_{6}, d_n\right) \\
+						\tfidf\left(t_{7}, d_n\right) \\
+						\tfidf\left(t_{8}, d_n\right) \\
+						\tfidf\left(t_{9}, d_n\right) \\
+						\tfidf\left(t_{10}, d_n\right) \\
+						\tfidf\left(t_{11}, d_n\right) \\
+						\tfidf\left(t_{12}, d_n\right) \\
+						\tfidf\left(t_{13}, d_n\right) \\
+					\end{array}
+				\right],
 			\vec{d_1} = 
 				\left[
-					\begin{array}{c}
+					\begin{array}{l}
 						0.2857 \\
 						0.0000 \\
 						0.0000 \\
@@ -127,7 +145,7 @@
 				\right],
 			\vec{d_2} = 
 				\left[
-					\begin{array}{c}
+					\begin{array}{l}
 						0.0000 \\
 						0.0000 \\
 						0.0000 \\
@@ -145,7 +163,7 @@
 				\right],
 			\vec{d_3} = 
 				\left[
-					\begin{array}{c}
+					\begin{array}{l}
 						0.0000 \\
 						0.0000 \\
 						0.4000 \\
@@ -163,7 +181,7 @@
 				\right],
 			\vec{d_4} = 
 				\left[
-					\begin{array}{c}
+					\begin{array}{l}
 						0.0000 \\
 						0.0000 \\
 						0.0000 \\
@@ -298,9 +316,9 @@
 					\medskip
 				\end{algorithmic}
 			\end{singlespaced}
-			
-			\todo{The medskips above should not be required.}
 		\end{algorithm}
+		
+		\todo{The medskips above should not be required.}
 		
 		Where,
 		 
@@ -415,14 +433,4 @@
 		
 		The relational model does not permit approximate string matching.  By utilizing the document model with $n$-grams (Section~\ref{sec:n-gram}), users who substitute, delete, or insert characters from the desired term may still receive results for their intended term (see Example~\ref{ex:n-gram-comparison} for a demonstration of how $n$-grams overcome character substitutions).
 		
-	\begin{itemize}
-		\item Bad: No analytics
-	\end{itemize}
-		
-\section{Best of both worlds (4 days, week 3)}
-	\begin{itemize}
-		\item Hybrid database defined by both the relational model and the document model
-		\item Translation between relational objects (entities and entity) groups to documents.
-		\item Translation of documents back to relational objects.
-		\item Proof of lossless translation between relational space and document space
-	\end{itemize}
+		Unfortunately the document model does not support the concept of foreign keys (Definition~\ref{def:foreign-keys}).  While information is easily accessible due to flexible search, each document is a discrete unit of information.  Aggregate queries are unsupported, as these units are not linked amongst one another.
