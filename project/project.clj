@@ -3,7 +3,7 @@
   :url          "https://github.com/rdrake/Molly"
   :license      {:name  "Apache License, Version 2.0"
                  :url   "http://www.apache.org/licenses/LICENSE-2.0"}
-  :source-path  "src"
+  :source-paths ["src/clj"]
   :dependencies
     [[org.clojure/clojure                       "1.5.1"]
      [org.apache.lucene/lucene-core             "4.4.0"]
@@ -17,9 +17,15 @@
      [lib-noir                                  "0.6.6"]
      [criterium                                 "0.4.2"]
      [org.clojure/clojurescript                 "0.0-1934"]
+     [shoreleave/shoreleave-remote              "0.3.0"]
      [shoreleave/shoreleave-remote-ring         "0.3.0"]]
   :main         molly.core
   :jvm-opts     ["-Xss1024m"]
   :plugins      [[lein-ring                     "0.8.6"]
                  [lein-cljsbuild                "0.3.4"]]
-  :ring         {:handler molly.server.serve/app})
+  :ring         {:handler molly.server.remotes/app}
+  :cljsbuild
+    {:builds [{:source-paths  ["src/cljs"]
+               :compiler      {:output-to "resources/public/js/app.js"
+                               :optimizations :whitespace
+                               :pretty-print true}}]})
