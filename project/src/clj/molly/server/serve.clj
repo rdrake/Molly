@@ -10,7 +10,8 @@
         [molly.algo.bfs-ref :only (bfs-ref)])
   (:require [noir.response :as response]
             [compojure.handler :as handler]
-            [compojure.route :as route]))
+            [compojure.route :as route]
+            [cemerick.shoreleave.rpc :as rpc]))
 
 (def runtime (Runtime/getRuntime))
 (def props (load-props ".properties"))
@@ -88,7 +89,13 @@
            (GET "/value" [q] (get-value q))
            (GET "/entities" [q] (get-entities q))
            (GET "/entity" [q] (get-entity q))
-           (GET "/span" [e0 eL method] (get-span e0 eL method))
+           ;(GET "/span" [e0 eL method] (get-span e0 eL method))
            (route/files "/" {:root "resources/public"}))
 
-(def app (handler/site app-routes))
+(def site-handler
+  (handler/site app-routes))
+
+(def app (->
+           (var site-handler)
+           (rpc/wrap-rpc)
+           (handler/site)))

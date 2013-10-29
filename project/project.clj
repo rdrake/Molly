@@ -15,8 +15,11 @@
      [korma                                     "0.3.0-RC5"]
      [compojure                                 "1.1.5"]
      [lib-noir                                  "0.6.6"]
-     [criterium                                 "0.4.2"]]
+     [criterium                                 "0.4.2"]
+     [org.clojure/clojurescript                 "0.0-1934"]
+     [shoreleave/shoreleave-remote-ring         "0.3.0"]]
   :main         molly.core
   :jvm-opts     ["-Xss1024m"]
-  :plugins      [[lein-ring                     "0.8.6"]]
+  :plugins      [[lein-ring                     "0.8.6"]
+                 [lein-cljsbuild                "0.3.4"]]
   :ring         {:handler molly.server.serve/app})
