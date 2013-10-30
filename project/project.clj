@@ -18,14 +18,22 @@
      [criterium                                 "0.4.2"]
      [org.clojure/clojurescript                 "0.0-1934"]
      [shoreleave/shoreleave-remote              "0.3.0"]
-     [shoreleave/shoreleave-remote-ring         "0.3.0"]]
+     [shoreleave/shoreleave-remote-ring         "0.3.0"]
+     [prismatic/dommy                           "0.1.2"]]
   :main         molly.core
   :jvm-opts     ["-Xss1024m"]
   :plugins      [[lein-ring                     "0.8.6"]
                  [lein-cljsbuild                "0.3.4"]]
   :ring         {:handler molly.server.remotes/app}
   :cljsbuild
-    {:builds [{:source-paths  ["src/cljs"]
-               :compiler      {:output-to "resources/public/js/app.js"
-                               :optimizations :whitespace
-                               :pretty-print true}}]})
+    {:builds
+     {:dev
+      {:source-paths  ["src/brepl" "src/cljs"]
+       :compiler      {:output-to "resources/public/static/js/app.js"
+                       :optimizations :whitespace
+                       :pretty-print true}}
+      :prod
+      {:source-paths  ["src/cljs"]
+       :compiler      {:output-to "resources/public/static/js/app.min.js"
+                       :optimizations :advanced
+                       :pretty-print false}}}})
