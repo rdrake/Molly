@@ -1,0 +1,28 @@
+.need-background {
+  background-color: white;
+  padding: 0.5em 1em;
+  width: 250px;
+  border: 1px solid #dddddd;
+}
+
+#span-results {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  min-height: 200px;
+  white-space: nowrap;
+}
+
+#span-results .widget {
+  display: inline-block;
+  padding: 0.5em 1em;
+  vertical-align: middle;
+}
+
+.separator i {
+  display: inline-block;
+  font-size: 36pt;
+}
+
+.hidden {
+  display: none;
+}

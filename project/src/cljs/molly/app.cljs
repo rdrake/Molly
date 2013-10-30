@@ -5,7 +5,8 @@
             [dommy.core :as dommy]
             [dommy.attrs :as attrs]
             [dommy.template :as template]
-            [shoreleave.remotes.http-rpc :refer [remote-callback]]))
+            [shoreleave.remotes.http-rpc :refer [remote-callback]]
+            [clojure.walk :refer [keywordize-keys]]))
 
 ; (pr-str obj) is a wonderful debug tool.
 
@@ -25,7 +26,8 @@
       (let [entity (first entities)]
         (dommy/replace-contents!
           target-node
-          (create-widget entity)))
+          (node [:.need-background
+                 (create-widget entity)])))
 
       (let [span-button (sel1 :#span-it)]
         (if (or (nil? @source-entity)
@@ -113,7 +115,6 @@
             (select-button "Source" (:id (:meta data)))
             (select-button "Target" (:id (:meta data)))]]]]))
 
-
 (defn populate-entities [entities]
   (let [container (sel1 :#entities)]
     (dommy/clear! container)
@@ -130,18 +131,54 @@
   (let [[_ value] (q)]
     (remote-callback :get-entities [value] populate-entities)))
 
-(defn compute-span [e]
+(defn process-span [results]
+  (let [prev      (keywordize-keys (:prev results))
+        entities  (:entities results)]
+    (loop [eid    @target-entity
+           path   []]
+      (let [eid-key (keyword eid)]
+        (if (nil? eid)
+          [(reverse path) entities]
+          (recur (eid-key prev) (conj path eid-key)))))))
+
+(defn populate-span [results]
+  (let [container       (sel1 :#span-results)
+        [path entities] results]
+    (dommy/clear! container)
+    
+    (doseq [eid path]
+      (if (not (nil? eid))
+        (let [entity (first (eid entities))]
+          (if (not (nil? entity))
+            (dommy/append! container (create-widget entity))
   
+            (if (not (= (name eid) @target-entity))
+              (dommy/append! container
+                             (node [:i.fi-arrow-right])))))))))
+
+(defn compute-span [e]  
   (let [step-1 (sel1 :section#step-1)
-        step-2 (sel1 :section#step-2)]
-    (attrs/toggle-class! step-1 :active)
-    (attrs/toggle-class! step-2 :active))
-  
-  (remote-callback
-    :get-span
-    [@source-entity @target-entity "bfs"]
-    (fn [results]
-      (.log js/console (pr-str results)))))
+        step-2 (sel1 :section#step-2)
+        preloader (sel1 :.preloader)]
+    (attrs/remove-class! preloader :hidden)
+    (attrs/remove-class! step-1 :active)
+    (attrs/add-class! step-2 :active)
+
+    (remote-callback
+      :get-span
+      [@source-entity
+       @target-entity
+       (dommy/value (sel1 :#search-method))]
+      (fn [results]
+        (let [debug (:debug results)
+              t     (/ (:time debug) 1000 1000 1000)
+              mem   (/ (:mem_used debug) 1024 1024)]
+          (dommy/set-text! (sel1 :#span-results-info)
+                           (str "Took " t "s and used "
+                                mem " MB of memory"))
+          (attrs/remove-class! (sel1 :.alert-box) :hidden)
+          (attrs/add-class! preloader :hidden))
+        (populate-span (process-span results))))))
 
 (defn ^:export init []
   (let [q-elem (sel1 :#q)
@@ -149,8 +186,4 @@
         span-it (sel1 :#span-it)]
     (dommy/listen! q-elem :keyup autosuggest)
     (dommy/listen! search-form :submit find-entities)
-    (dommy/listen! span-it :click compute-span)
-    
-    ; Set some defaults to test out spanning.
-    (set-source! "instructor|108")
-    (set-target! "instructor|109")))
+    (dommy/listen! span-it :click compute-span)))

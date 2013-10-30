@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="static/css/normalize.css">
     <link rel="stylesheet" href="static/css/foundation.min.css">
     <link rel="stylesheet" href="static/icons/foundation-icons.css">
+    <link rel="stylesheet" href="static/css/app.css">
     
     <script src="static/js/custom.modernizr.js"></script>
   </head>
@@ -19,12 +20,11 @@
             <h1><a href="#">Molly</a></h1>
           </li>
         </ul>
-
         <section class="top-bar-section">
           <ul class="right">
             <li class="has-dropdown">
               <a href="#" data-options="is_hover:true">Source</a>
-              <ul class="dropdown">
+              <ul class="dropdown content">
                 <li id="source">
                   <p>Choose an entity.</p>
                 </li>
@@ -32,11 +32,19 @@
             </li>
             <li class="has-dropdown">
               <a href="#" data-options="is_hover:true">Target</a>
-              <ul class="dropdown">
+              <ul class="dropdown content">
                 <li id="target">
                   <p>Choose an entity.</p>
                 </li>
               </ul>
+            </li>
+            <li class="has-form">
+              <select id="search-method">
+                <option value="bfs">BFS</option>
+                <option value="atom">BFS Atom</option>
+                <option value="ref">BFS Ref</option>
+                <option value="ff">Ford-Fulkerson</option>
+              </select>
             </li>
             <li class="has-form">
               <button id="span-it" class="button" disabled>Span!</button>
@@ -45,7 +53,6 @@
         </section>
       </nav>
     </div>
-
     <div class="section-container accordion" data-section="accordion">
       <section class="active" id="step-1">
         <p class="title" data-section-title>
@@ -67,7 +74,6 @@
                     </div>
                   </div>
                 </form>
-
                 <ul id="suggested-values" class="no-bullet">
                 </ul>
               </div>
@@ -83,7 +89,16 @@
         <p class="title" data-section-title>
           <a href="#">Step 2:  Explore Results</a>
         </p>
-        <div class="content" id="span-results" data-section-content>
+        <div class="content" data-section-content>
+          <div id="preloader-wrapper">
+            <span class="preloader hidden"></span>
+          </div>
+
+          <div data-alert id="span-results-info-wrapper" class="alert-box hidden">
+            <span id="span-results-info"></span>
+          </div>
+          <div id="span-results">
+          </div>
         </div>
       </section>
     </div>

@@ -6,8 +6,10 @@
         molly.datatypes.entity
         [molly.algo.bfs :only (bfs)]
         [molly.algo.bfs-atom :only (bfs-atom)]
-        [molly.algo.bfs-ref :only (bfs-ref)]))
+        [molly.algo.bfs-ref :only (bfs-ref)]
+        [molly.algo.ford-fulkerson :only (ford-fulkerson)]))
 
+(def runtime (Runtime/getRuntime))
 (def props (load-props ".properties"))
 (def searcher (idx-searcher (idx-path (props :index))))
 
@@ -45,11 +47,27 @@
   (entities :id id (props :topk_entity)))
 
 (defn compute-span [s t method]
-  (let [[visited dist prev]
+  (let [start         (System/nanoTime)
+        [visited dist prev]
         (condp = method
-          "bfs"  (bfs searcher s t (props :max-hops))
-          "atom" (bfs-atom searcher s t (props :max-hops))
-          "ref"  (bfs-ref searcher s t (props :max-hops)))]
-    {:from s
-     :to   t
-     :prev prev}))
+          "bfs"   (bfs searcher s t (props :max-hops))
+          "atom"  (bfs-atom searcher s t (props :max-hops))
+          "ref"   (bfs-ref searcher s t (props :max-hops))
+          "ff"    (ford-fulkerson searcher s t (props :max-hops)))
+        t             (- (System/nanoTime) start)
+        eids          (conj (for [[k v] prev] k) s)
+        get-entities  (fn [eid]
+                        {(keyword eid)
+                         (entities :id eid
+                                   (props :topk_entity))})
+        entities      (into {} (map get-entities eids))]
+    {:from      s
+     :to        t
+     :prev      prev
+     :entities  entities
+     :debug     {:time        t
+                 :mem_total   (.totalMemory runtime)
+                 :mem_free    (.freeMemory runtime)
+                 :mem_used    (- (.totalMemory runtime)
+                               (.freeMemory runtime))
+                 :properties  props}}))
