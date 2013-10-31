@@ -287,7 +287,7 @@
 	\subsection{Approximate String matching}
 	\label{sec:n-gram}
 		\begin{defn}[N-Gram]
-			An $n$-Gram is a contiguous sequence of substrings of string $S$ of length $n$.  An algorithm for computing the $n$-gram of $S$ is given in Algorithm~\ref{alg:n-gram}.
+			An $n$-Gram is a contiguous sequence of substrings of string $S$ of length $n$.  An algorithm for computing the $n$-gram of $S$ is given in Algorithm~\ref{alg:n-gram}. 
 		\end{defn}
 		
 		% \char"24 - DOLLAR  BILL Y'ALL
@@ -296,78 +296,71 @@
 			\caption{$\textsc{N-Gram}\left(S, n, s\right)$}
 			\label{alg:n-gram}
 			
-			\begin{singlespaced}
+			%\begin{singlespaced}
 				\begin{algorithmic}[1]
 					\REQUIRE $S$ is a string, $n \ge 1$, and $s$ is a character
 					\ENSURE the list of $n$-grams of $S$
 					\medskip
-					\STATE $p \leftarrow \textsc{Repeat}\left(s, n - 1\right)$\label{alg:n-gram:repeat}\label{alg:n-gram:p}
-					\STATE $S \leftarrow \textsc{Replace}\left(S, \mathrm{'\;'}, \mathrm{'\char"24'}\right)$\label{alg:n-gram:replace}
-					\STATE $S \leftarrow \textsc{Concat}\left(p, S, p\right)$\label{alg:n-gram:concat}\label{alg:n-gram:S}
 					\STATE $G \leftarrow \left[\right]$\label{alg:n-gram:G}
-					\STATE $l \leftarrow \textsc{Length}\left(S\right)$\label{alg:n-gram:length}
+					\STATE $p \leftarrow \textsc{Repeat}\left(s, n - 1\right)$
+					\STATE $S \leftarrow \textsc{Pad}\left(S, p\right)$
+					\STATE $S \leftarrow \textsc{Replace}\left(S, `\;', p\right)$\label{alg:n-gram:S}
 					
 					\FOR{$i=0$ \TO $l - n + 1$}
-						\STATE $G \leftarrow \textsc{SubStr}(S, i, i + n)$
+						\STATE append $S\left[i, i + n\right]$ to $G$
 					\ENDFOR
 					
 					\RETURN $G$
-					\medskip
-					\medskip
+			%		\medskip
+			%		\medskip
 				\end{algorithmic}
-			\end{singlespaced}
+			%\end{singlespaced}
 		\end{algorithm}
 		
-		\todo{The medskips above should not be required.}
+		%\todo{The medskips above should not be required, but are in single spaced mode.}
 		
-		Where,
-		 
-		\begin{itemize}
-			\item $\textsc{Repeat}\left(c, i)\right)$ returns a string with character $c$ repeated $i$ times (line \ref{alg:n-gram:repeat}),
-			\item $\textsc{Replace}\left(s, c_1, c_2\right)$ returns string $s$ with all instances of character $c_1$ replaced by $c_2$ (line \ref{alg:n-gram:replace}),
-			\item $\textsc{Concat}\left(s_1, s_2, \dotsc, s_n\right)$ returns the concatenation of $s_1, s_2, \dotsc, s_n$ (line \ref{alg:n-gram:concat}),
-			\item $\textsc{Length}\left(s\right)$ returns the number of characters in string $s$ (line \ref{alg:n-gram:length}),
-			\item and $\textsc{SubStr}\left(s, i_1, i_2\right)$ returns a substring of string $s$ from $i$ (inclusive) to $i + n$ (exclusive).
-		\end{itemize}
+		Where $l$ is the length of $S$, $\textsc{Repeat}\left(S, n\right)$ repeats $s$ character $n$ times, $\textsc{Pad}\left(S, p\right)$ prefixes and postfixes $S$ with $p$, and $\textsc{Replace}\left(S, s, p\right)$ replaces character $s$ with $p$ in string $S$.
 		
 		\begin{ex}
 		\label{ex:ngram-banana}
-			Given a string $S = \mathrm{``banana''}$, compute the trigram of $S$ using Algorithm \ref{alg:n-gram}.  Lines \ref{alg:n-gram:p}-\ref{alg:n-gram:S} would yield $S = \mathrm{``\char"24\char"24banana\char"24\char"24''}$, resulting in $l = 10$ (line \ref{alg:n-gram:length}).
+			Given a string $S = \mathrm{``superman''}$, compute the trigram of $S$ using Algorithm \ref{alg:n-gram}.  Lines \ref{alg:n-gram:G}-\ref{alg:n-gram:S} would yield $S = \mathrm{``\char"24\char"24superman\char"24\char"24''}$, resulting in $l = 12$.
 			
 			$$
 				G = \left\{
-					\mathrm{``\char"24\char"24b''},
-					\mathrm{``\char"24ba''},
-					\mathrm{``ban''},
-					\mathrm{``ana''},
-					\mathrm{``nan''},
-					\mathrm{``ana''},
-					\mathrm{``na\char"24''},
-					\mathrm{``a\char"24\char"24''}
+					\mathrm{``\char"24\char"24s''},
+					\mathrm{``\char"24su''},
+					\mathrm{``sup''},
+					\mathrm{``upe''},
+					\mathrm{``per''},
+					\mathrm{``erm''},
+					\mathrm{``rma''},
+					\mathrm{``man''},
+					\mathrm{``an\char"24''},
+					\mathrm{``n\char"24\char"24''}
 				\right\}
 			$$
-			
-			With a frequency of terms of
-			
-			$$\left\{\mathrm{``ana''}: 2, \mathrm{``na\char"24''}: 1, \mathrm{``\char"24ba''}: 1, \mathrm{``nan''}: 1, \mathrm{``a\char"24\char"24''}: 1, \mathrm{``ban''}: 1, \mathrm{``\char"24\char"24b''}: 1\right\}$$
 		\end{ex}
 		
 		We use $n$-grams in order to permit approximate string matching.
 		
 		\begin{ex}
 		\label{ex:n-gram-comparison}
-			Given a string $S$ (Example~\ref{ex:ngram-banana}), let $S' = \mathrm{``vanana''}$.  Compute the trigram of $S'$ and compare it to $S$.
+			Given a string $S$ (Example~\ref{ex:ngram-banana}), let $S' = \mathrm{``superwoman''}$.  Compute the trigram of $S'$ and compare it to $S$.
 			
 			$$
 				G' = \left\{
-					\mathrm{``\char"24\char"24v''},
-					\mathrm{``\char"24va''},
-					\mathrm{``van''},
-					\mathrm{``ana''},
-					\mathrm{``nan''},
-					\mathrm{``ana''},
-					\mathrm{``na\char"24''},
-					\mathrm{``a\char"24\char"24''}
+					\mathrm{``\char"24\char"24s''},
+					\mathrm{``\char"24su''},
+					\mathrm{``sup''},
+					\mathrm{``upe''},
+					\mathrm{``per''},
+					\mathrm{``erw''},
+					\mathrm{``rwo''},
+					\mathrm{``wom''},
+					\mathrm{``oma''},
+					\mathrm{``man''},
+					\mathrm{``an\char"24''},
+					\mathrm{``n\char"24\char"24''}
 				\right\}
 			$$
 			
@@ -376,9 +369,21 @@
 			\begin{figure}[!ht]
 				$$
 					\bordermatrix{
-					~ & t_1 & t_2 & t_3 & t_4 & t_5 & t_6 & t_7 & t_8 \cr
-					G & \mathrm{``\char"24\char"24b''} & \mathrm{``\char"24ba''} & \mathrm{``ban''} & \mathrm{``ana''} & \mathrm{``nan''} & \mathrm{``ana''} & \mathrm{``na\char"24''} & \mathrm{``a\char"24\char"24''} \cr
-					G' & \mathrm{``\char"24\char"24v''} & \mathrm{``\char"24va''} & \mathrm{``van''} & \mathrm{``ana''} & \mathrm{``nan''} & \mathrm{``ana''} & \mathrm{``na\char"24''} & \mathrm{``a\char"24\char"24''} \cr
+						~ & G & G' \cr
+						t_1 : \mathrm{``an\char"24''} & 1 & 1 \cr
+						t_2 : \mathrm{``oma''} & 0 & 1 \cr
+						t_3 : \mathrm{``\char"24su''} & 1 & 1 \cr
+						t_4 : \mathrm{``rwo''} & 0 & 1 \cr
+						t_5 : \mathrm{``rma''} & 1 & 0 \cr
+						t_6 : \mathrm{``man''} & 1 & 1 \cr
+						t_7 : \mathrm{``erw''} & 0 & 1 \cr
+						t_8 : \mathrm{``\char"24\char"24s''} & 1 & 1 \cr
+						t_9 : \mathrm{``upe''} & 1 & 1 \cr
+						t_{10} : \mathrm{``n\char"24\char"24''} & 1 & 1 \cr
+						t_{11} : \mathrm{``per''} & 1 & 1 \cr
+						t_{12} : \mathrm{``wom''} & 0 & 1 \cr
+						t_{13} : \mathrm{``sup''} & 1 & 1 \cr
+						t_{14} : \mathrm{``erm''} & 1 & 0 \cr
 					}
 				$$
 				
@@ -386,7 +391,7 @@
 				\label{fig:n-gram-misspelling-comparison}
 			\end{figure}
 			
-			As Figure~\ref{fig:n-gram-misspelling-comparison} shows, using $n$-grams yield very similar documents despite the letter substitution.
+			As Figure~\ref{fig:n-gram-misspelling-comparison} shows, using $n$-grams yield a similarity of $\frac{8}{14}$.
 		\end{ex}
 			
 	\subsection{Pros and Cons of the Document Model}
@@ -395,7 +400,7 @@
 		\begin{ex}[Simple Queries]
 			Find all documents related to ``Superman'' or ``Earth''.  This query, if the default operator is \texttt{OR}, would simply be \texttt{Superman Earth}.  The result of the query $q$ would be
 			
-			$$\texttt{superman earth} = \left\{d_1, d_2, d_3, d_4\right\}$$
+			$$\query\left(\mathrm{``superman''}\right) \cup \query\left(\mathrm{``earth''}\right) \rightarrow \left\{d_1, d_2, d_3, d_4\right\}$$
 		\end{ex}
 		
 		Users can also modify queries to require certain terms be present or not present.
@@ -404,7 +409,7 @@
 		\label{ex:and-query}
 			Find all documents containing both ``Superman'' and ``Earth''.  This query would return the following set of documents
 			
-			$$\texttt{superman AND earth} = \left\{d_1\right\}$$
+			$$\query\left(\mathrm{``superman''}\right) \cap \query\left(\mathrm{``earth''}\right) \rightarrow \left\{d_1\right\}$$
 			
 			as only $d_1$ contains both terms.
 		\end{ex}
@@ -412,7 +417,7 @@
 		\begin{ex}[\texttt{NOT} Query]
 			Find all documents containing ``Superman'' but not ``Earth''.  This query would return different results than Example~\ref{ex:and-query}.
 			
-			$$\texttt{superman NOT earth} = \left\{d_4\right\}$$
+			$$\query\left(\mathrm{``superman''}\right) \neg\query\left(\mathrm{``earth''}\right) \rightarrow \left\{d_4\right\}$$
 		\end{ex}
 		
 		While none of the above queries required domain knowledge, it is possible to use the extended document model (Section~\ref{sec:extending-the-document-model}) to search specific fields.  Doing so allows users to have finer control over what documents are retrieved.
@@ -420,7 +425,7 @@
 		\begin{ex}[Extended Query]
 			Find all documents with a superhero named ``Superman'' that contain the term ``Earth''.
 			
-			$$\texttt{name:Superman Earth} = \left\{d_1\right\}$$
+			$$\query\left(\mathrm{``name''}, \mathrm{``superman''}\right) \cap \query\left(\mathrm{``earth''}\right) \rightarrow \left\{d_1\right\}$$
 			
 			Assuming the first term of every document is also the value of the name attribute.
 		\end{ex}
