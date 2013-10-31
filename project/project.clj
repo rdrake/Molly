@@ -7,16 +7,16 @@
   :resource-paths ["resources"]
   :dependencies
     [[org.clojure/clojure                       "1.5.1"]
-     [org.apache.lucene/lucene-core             "4.4.0"]
-     [org.apache.lucene/lucene-analyzers-common "4.4.0"]
+     [org.apache.lucene/lucene-core             "4.5.1"]
+     [org.apache.lucene/lucene-analyzers-common "4.5.1"]
      [org.xerial/sqlite-jdbc                    "3.7.2"]
      [org.clojure/java.jdbc                     "0.3.0-alpha4"]
      [org.clojure/tools.cli                     "0.2.4"]
      [org.clojure/data.json                     "0.2.3"]
      [korma                                     "0.3.0-RC5"]
      [mavericklou/propertea                     "1.3.2"]
-     [compojure                                 "1.1.5"]
-     [lib-noir                                  "0.6.6"]
+     [compojure                                 "1.1.6"]
+     [lib-noir                                  "0.7.4"]
      [criterium                                 "0.4.2"]
      [org.clojure/clojurescript                 "0.0-1934"]
      [shoreleave/shoreleave-remote              "0.3.0"]
@@ -25,10 +25,15 @@
   :main           molly.core
   :aot            [molly.core]
   :jvm-opts       ["-Xss1024m"]
-  :plugins        [[lein-ring                     "0.8.6"]
-                   [lein-cljsbuild                "0.3.4"]]
-  :hooks          [leiningen.cljsbuild]
+  :plugins        [[lein-ring                   "0.8.7"]
+                   [lein-cljsbuild              "0.3.4"]
+                   [lein-ancient                "0.5.2"]]
   :ring           {:handler molly.server.remotes/app}
+  :hooks          [leiningen.cljsbuild]
+  :mirrors
+    {"central"
+     {:name "Ibiblio"
+      :url "http://mirrors.ibiblio.org/pub/mirrors/maven2"}}
   :cljsbuild
     {:builds
      {:dev
