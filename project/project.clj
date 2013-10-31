@@ -1,9 +1,10 @@
-(defproject molly "1.0.0-SNAPSHOT"
-  :description  "Knowledge discovery engine."
-  :url          "https://github.com/rdrake/Molly"
-  :license      {:name  "Apache License, Version 2.0"
-                 :url   "http://www.apache.org/licenses/LICENSE-2.0"}
-  :source-paths ["src/clj"]
+(defproject molly "1.0.0"
+  :description    "Knowledge discovery engine."
+  :url            "https://github.com/rdrake/Molly"
+  :license        {:name  "Apache License, Version 2.0"
+                   :url   "http://www.apache.org/licenses/LICENSE-2.0"}
+  :source-paths   ["src/clj"]
+  :resource-paths ["resources"]
   :dependencies
     [[org.clojure/clojure                       "1.5.1"]
      [org.apache.lucene/lucene-core             "4.4.0"]
@@ -13,6 +14,7 @@
      [org.clojure/tools.cli                     "0.2.4"]
      [org.clojure/data.json                     "0.2.3"]
      [korma                                     "0.3.0-RC5"]
+     [mavericklou/propertea                     "1.3.2"]
      [compojure                                 "1.1.5"]
      [lib-noir                                  "0.6.6"]
      [criterium                                 "0.4.2"]
@@ -20,11 +22,13 @@
      [shoreleave/shoreleave-remote              "0.3.0"]
      [shoreleave/shoreleave-remote-ring         "0.3.0"]
      [prismatic/dommy                           "0.1.2"]]
-  :main         molly.core
-  :jvm-opts     ["-Xss1024m"]
-  :plugins      [[lein-ring                     "0.8.6"]
-                 [lein-cljsbuild                "0.3.4"]]
-  :ring         {:handler molly.server.remotes/app}
+  :main           molly.core
+  :aot            [molly.core]
+  :jvm-opts       ["-Xss1024m"]
+  :plugins        [[lein-ring                     "0.8.6"]
+                   [lein-cljsbuild                "0.3.4"]]
+  :hooks          [leiningen.cljsbuild]
+  :ring           {:handler molly.server.remotes/app}
   :cljsbuild
     {:builds
      {:dev

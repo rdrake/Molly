@@ -17,7 +17,8 @@
        ["--algorithm"   "Algorithm to run"]
        ["-s" "--source" "Source node"]
        ["-t" "--target" "Target node"]
-       ["--max-hops"    "Maximum number of hops before stopping"]
+       ["--max-hops"    "Maximum number of hops before stopping"
+        :parse-fn #(Integer. %)]
        ["--index"       "Build an index of the database"
         :default false
         :flag true]
@@ -40,11 +41,11 @@
 
     (let [properties  (load-props (opts :config))
           max-hops    (if (opts :max-hops)
-                        (Integer. (opts :max-hops))
-                        (properties :max-hops))]
+                        (opts :max-hops)
+                        (properties :idx.search.max-hops))]
       (if (opts :index)
-        (let [database  (properties :database)
-              index     (properties :index)]
+        (let [database  (properties :db.path)
+              index     (properties :idx.path)]
           (build database index))
         nil)
       (if (opts :algorithm)

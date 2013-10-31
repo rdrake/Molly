@@ -2,16 +2,14 @@
   (:use molly.search.lucene
         molly.search.query-builder
         molly.util.nlp
-        molly.conf.config
         molly.datatypes.entity
+        [molly.server.core :refer [config searcher]]
         [molly.algo.bfs :only (bfs)]
         [molly.algo.bfs-atom :only (bfs-atom)]
         [molly.algo.bfs-ref :only (bfs-ref)]
         [molly.algo.ford-fulkerson :only (ford-fulkerson)]))
 
 (def runtime (Runtime/getRuntime))
-(def props (load-props ".properties"))
-(def searcher (idx-searcher (idx-path (props :index))))
 
 (defn dox
   [q field S op topk]
@@ -36,38 +34,39 @@
        :text
        (clojure.string/split (q-gram q) #"\s{1}")
        :or
-       (props :topk_value)))
+       (config :idx.topk.value)))
 
 (defn find-entities [q]
   (entities
     :text (clojure.string/lower-case q)
-    (props :topk_entities)))
+    (config :idx.topk.entities)))
 
 (defn find-entity [id]
-  (entities :id id (props :topk_entity)))
+  (entities :id id (config :idx.topk.entity)))
 
 (defn compute-span [s t method]
-  (let [start         (System/nanoTime)
+  (let [max-hops (config :idx.search.max-hops)
+        start         (System/nanoTime)
         [visited dist prev]
         (condp = method
-          "bfs"   (bfs searcher s t (props :max-hops))
-          "atom"  (bfs-atom searcher s t (props :max-hops))
-          "ref"   (bfs-ref searcher s t (props :max-hops))
-          "ff"    (ford-fulkerson searcher s t (props :max-hops)))
-        t             (- (System/nanoTime) start)
+          "bfs"   (bfs searcher s t max-hops)
+          "atom"  (bfs-atom searcher s t max-hops)
+          "ref"   (bfs-ref searcher s t max-hops)
+          "ff"    (ford-fulkerson searcher s t max-hops))
+        time-taken    (- (System/nanoTime) start)
         eids          (conj (for [[k v] prev] k) s)
         get-entities  (fn [eid]
                         {(keyword eid)
                          (entities :id eid
-                                   (props :topk_entity))})
+                                   (config :idx.topk.entity))})
         entities      (into {} (map get-entities eids))]
     {:from      s
      :to        t
      :prev      prev
      :entities  entities
-     :debug     {:time        t
+     :debug     {:time        time-taken
                  :mem_total   (.totalMemory runtime)
                  :mem_free    (.freeMemory runtime)
                  :mem_used    (- (.totalMemory runtime)
                                (.freeMemory runtime))
-                 :properties  props}}))
+                 :properties  config}}))

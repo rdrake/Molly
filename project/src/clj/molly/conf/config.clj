@@ -1,21 +1,17 @@
 (ns molly.conf.config
-  (:require clojure.java.io))
+  (:use propertea.core))
 
 (defn load-props
   ([]
-   (load-props ".properties"))
+   (load-props "molly.properties"))
   ([file-name]
-   (let [res (clojure.java.io/resource file-name)]
-     (if (nil? res)
-       (throw
-         (IllegalArgumentException. "Unable to load properties."))
-       (with-open [^java.io.Reader reader
-                   (clojure.java.io/reader res)]
-         (let [props (java.util.Properties.)]
-           (.load props reader)
-           (into {}
-                 (for [[k v] props] [(keyword k)
-                                     (read-string v)]))))))))
+   (read-properties file-name
+                    :parse-int  [:idx.topk.value
+                                 :idx.topk.entities
+                                 :idx.topk.entity
+                                 :idx.search.max-hops]
+                    :required   [:db.path
+                                 :idx.path])))
 
 (defprotocol IConfig
   (connection [this])
