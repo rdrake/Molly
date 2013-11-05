@@ -73,7 +73,32 @@
 \DeclareMathOperator{\freq}{freq}
 \DeclareMathOperator{\query}{query}
 
-\newcommand{\fcn}[2]{\ensuremath\textsc{#1}\lbrack #2\rbrack}
+% Expect the function name and any arguments separated by commas
+\newcommand{\prop}[2]{\ensuremath\textsc{#1}\left[#2\right]}
+% Expect the relation name and command-separated list of attributes
+\newcommand{\rel}[2]{\ensuremath\mathrm{#1}\left(\mathrm{#2}\right)}
+
+\newcommand{\relation}{\ensuremath r}
+\newcommand{\tuple}{\ensuremath t}
+\newcommand{\term}{\ensuremath \tau}
+\newcommand{\field}{\ensuremath f}
+\newcommand{\attribute}{\ensuremath \alpha}
+\newcommand{\key}{\ensuremath \Kappa}
+\newcommand{\db}{\ensuremath \mathbb{D}}
+\newcommand{\doc}{\ensuremath d}
+\newcommand{\dc}{\ensuremath \mathbb{C}}
+\newcommand{\terms}{\ensuremath \Tau}
+\newcommand{\q}{\ensuremath q}
+
+\newcommand{\relations}[1]{\prop{Rel}{#1}}
+\newcommand{\attributes}[1]{\prop{Attr}{#1}}
+\newcommand{\fields}[1]{\prop{Field}{#1}}
+\newcommand{\name}[1]{\prop{Name}{#1}}
+\newcommand{\keys}[1]{\prop{Key}{#1}}
+\newcommand{\fks}[1]{\prop{FK}{#1}}
+\newcommand{\bag}[1]{\prop{Bag}{#1}}
+\newcommand{\docs}[1]{\prop{Doc}{#1}}
+%\newcommand{\terms}[1]{\fcn{Term}{#1}}
 
 \newglossary{symbols}{sym}{sbl}{List of Symbols}
 \makeglossaries

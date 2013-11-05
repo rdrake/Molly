@@ -11,9 +11,9 @@
 
 	\begin{defn}[Terms and Document]
 	\label{def:document}
-		A term, $t$, is an indivisible string (e.g.~a proper noun, word, or a phrase).  A document, $d$, is a bag of words.  Let $\freq\left(t, d\right)$ be the frequency of terms $t$ in document $d$.
+		A term, $\term$, is an indivisible string (e.g.~a proper noun, word, or a phrase).  A document, $\doc$, is a bag of words.  Let $\freq\left(\term, \doc\right)$ be the frequency of terms $\term$ in document $\doc$.
 		
-		Let $T$ denote all possible terms, and $\fcn{Bag}{T}$ be all possible bag of terms.
+		Let $\terms$ denote all possible terms, and $\bag{\terms}$ be all possible bag of terms.
 	\end{defn}
 	
 	\begin{remark}
@@ -22,7 +22,7 @@
 	
 	\begin{defn}[Document Collection]
 	\label{def:document-collection}
-		A document collection $D$ is a set of documents, written $D = \left\{d_1, d_2, \dotsc, d_k\right\}$.  The size of $D$ is denoted $\gls{ndocs}$.  The number of unique terms, or size of $\gls{terms}$, in $D$, is denoted $\gls{nterms}$.
+		A document collection $\dc$ is a set of documents, written $D\dc = \left\{\doc_1, \doc_2, \dotsc, \doc_k\right\}$.  The size of $\dc$ is denoted $\gls{ndocs}$.  The number of unique terms, or size of $\gls{terms}$, in $\dc$, is denoted $\gls{nterms}$.
 	\end{defn}
 	
 	\begin{ex}
@@ -39,10 +39,10 @@
 		Each sentence represents a document, giving us the following documents.
 		
 		\begin{eqnarray*}
-			d_1 &=& \left\{\textrm{``and''}: 1, \textrm{``on''}: 2, \textrm{``is''}: 1, \textrm{``lives''}: 1, \textrm{``earth''}: 2, \textrm{``strong''}: 1, \textrm{``superman''}: 1\right\} \\
-			d_2 &=& \left\{\textrm{``batman''}: 1, \textrm{``on''}: 1, \textrm{``was''}: 1, \textrm{``earth''}: 1, \textrm{``born''}: 1\right\} \\
-			d_3 &=& \left\{\textrm{``on''}: 1, \textrm{``is''}: 1, \textrm{``superwoman''}: 1, \textrm{``fast''}: 1, \textrm{``earth''}: 1\right\} \\
-			d_4 &=& \left\{\textrm{``krypton''}: 1, \textrm{``born''}: 1, \textrm{``on''}: 1, \textrm{``was''}: 1, \textrm{``superman''}: 1\right\} \\
+			\doc_1 &=& \left\{\textrm{``and''}: 1, \textrm{``on''}: 2, \textrm{``is''}: 1, \textrm{``lives''}: 1, \textrm{``earth''}: 2, \textrm{``strong''}: 1, \textrm{``superman''}: 1\right\} \\
+			\doc_2 &=& \left\{\textrm{``batman''}: 1, \textrm{``on''}: 1, \textrm{``was''}: 1, \textrm{``earth''}: 1, \textrm{``born''}: 1\right\} \\
+			\doc_3 &=& \left\{\textrm{``on''}: 1, \textrm{``is''}: 1, \textrm{``superwoman''}: 1, \textrm{``fast''}: 1, \textrm{``earth''}: 1\right\} \\
+			\doc_4 &=& \left\{\textrm{``krypton''}: 1, \textrm{``born''}: 1, \textrm{``on''}: 1, \textrm{``was''}: 1, \textrm{``superman''}: 1\right\} \\
 		\end{eqnarray*}
 	\end{ex}
 	
@@ -53,51 +53,51 @@
 		The first step is to convert bag of terms into vectors.  The standard technique \cite{ir-08} uses a scoring function that measures the relative importance terms in documents.
 		
 		\begin{defn}[TF-IDF Score]
-			The term frequency is the number of times a term $t$ appears in a document $d$, as given by $\freq\left(t, d\right)$.  The document frequency of a term $t$, denoted by $\df_t$, is the number of documents in $D$ that contains $t$.  It is defined as
+			The term frequency is the number of times a term $\term$ appears in a document $\doc$, as given by $\freq\left(\term, \doc\right)$.  The document frequency of a term $\term$, denoted by $\df\left(\term\right)$, is the number of documents in $\dc$ that contains $\term$.  It is defined as
 			
-			$$\df_t = \mid \left\{d \in D: t \in d\right\} \mid$$
+			$$\df\left(\term\right) = \mid \left\{\doc \in \dc: \term \in \doc\right\} \mid$$
 			
-			The combined TF-IDF score of $t$ in a document $d$ is given by
+			The combined TF-IDF score of $\term$ in a document $\doc$ is given by
 			
-			$$\tfidf\left(D, t, d\right) = \frac{\freq\left(t, d\right)}{\mid d \mid} \cdot \log{\frac{N}{\df_t}}$$
+			$$\tfidf\left(\dc, \term, \doc\right) = \frac{\freq\left(\term, \doc\right)}{\mid \doc \mid} \cdot \log{\frac{N}{\df\left(\term\right)}}$$
 		\end{defn}
 		
 		\begin{remark}
-			The first component, $\frac{\freq\left(t, d\right)}{\mid d \mid}$, measures the importance of a term within a document.  It is normalized to account for document length.  The second component, $\log{\frac{N}{\df_t}}$, is a measure of the rarity of the term within the document collection $D$.
+			The first component, $\frac{\freq\left(\term, \doc\right)}{\mid \doc \mid}$, measures the importance of a term within a document.  It is normalized to account for document length.  The second component, $\log{\frac{N}{\df\left(\term\right)}}$, is a measure of the rarity of the term within the document collection $\dc$.
 		\end{remark}
 		
 		\begin{ex}
 			Using the documents from Example~\ref{ex:superhero-documents}, the TF-IDF scores are as follows.
 			
 			$$\bordermatrix{
-				~ & d_1 & d_2 & d_3 & d_4 \cr
-				t_1 : \textrm{``and''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
-				t_2 : \textrm{``on''} & 0.0000 & 0.0000 & 0.0000 & 0.0000 \cr
-				t_3 : \textrm{``superwoman''} & 0.0000 & 0.0000 & 0.4000 & 0.0000 \cr
-				t_4 : \textrm{``batman''} & 0.0000 & 0.4000 & 0.0000 & 0.0000 \cr
-				t_5 : \textrm{``is''} & 0.1429 & 0.0000 & 0.2000 & 0.0000 \cr
-				t_6 : \textrm{``fast''} & 0.0000 & 0.0000 & 0.4000 & 0.0000 \cr
-				t_7 : \textrm{``born''} & 0.0000 & 0.2000 & 0.0000 & 0.2000 \cr
-				t_8 : \textrm{``krypton''} & 0.0000 & 0.0000 & 0.0000 & 0.4000 \cr
-				t_9 : \textrm{``earth''} & 0.1186 & 0.0830 & 0.0830 & 0.0000 \cr
-				t_{10} : \textrm{``lives''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
-				t_{11} : \textrm{``strong''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
-				t_{12} : \textrm{``was''} & 0.0000 & 0.2000 & 0.0000 & 0.2000 \cr
-				t_{13} : \textrm{``superman''} & 0.1429 & 0.0000 & 0.0000 & 0.2000 \cr
+				~ & \doc_1 & \doc_2 & \doc_3 & \doc_4 \cr
+				\term_1 : \textrm{``and''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
+				\term_2 : \textrm{``on''} & 0.0000 & 0.0000 & 0.0000 & 0.0000 \cr
+				\term_3 : \textrm{``superwoman''} & 0.0000 & 0.0000 & 0.4000 & 0.0000 \cr
+				\term_4 : \textrm{``batman''} & 0.0000 & 0.4000 & 0.0000 & 0.0000 \cr
+				\term_5 : \textrm{``is''} & 0.1429 & 0.0000 & 0.2000 & 0.0000 \cr
+				\term_6 : \textrm{``fast''} & 0.0000 & 0.0000 & 0.4000 & 0.0000 \cr
+				\term_7 : \textrm{``born''} & 0.0000 & 0.2000 & 0.0000 & 0.2000 \cr
+				\term_8 : \textrm{``krypton''} & 0.0000 & 0.0000 & 0.0000 & 0.4000 \cr
+				\term_9 : \textrm{``earth''} & 0.1186 & 0.0830 & 0.0830 & 0.0000 \cr
+				\term_{10} : \textrm{``lives''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
+				\term_{11} : \textrm{``strong''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
+				\term_{12} : \textrm{``was''} & 0.0000 & 0.2000 & 0.0000 & 0.2000 \cr
+				\term_{13} : \textrm{``superman''} & 0.1429 & 0.0000 & 0.0000 & 0.2000 \cr
 			}$$
 		\end{ex}
 
 		\begin{defn}[Document Vector]
-			Given a document collection $D$ with $M$ unique terms $T = \left[ t_1, t_2, \dotsc, t_n \right]$, each document $d$ can be represented by an $M$-dimensional vector.
+			Given a document collection $\dc$ with $M$ unique terms $\terms = \left[\term_1, \term_2, \dotsc, \term_n \right]$, each document $\doc$ can be represented by an $M$-dimensional vector.
 			
 			$$
-				\vec{d} = 
+				\vec{\doc} = 
 				\left[
 				\begin{array}{c}
-					\tfidf\left(t_1, d\right) \\
-					\tfidf\left(t_2, d\right) \\
+					\tfidf\left(\term_1, \doc\right) \\
+					\tfidf\left(\term_2, \doc\right) \\
 					\vdots \\
-					\tfidf\left(t_n, d\right)
+					\tfidf\left(\term_n, \doc\right)
 				\end{array}
 				\right]
 			$$
@@ -107,25 +107,25 @@
 			The documents in Example~\ref{ex:superhero-documents} would produce the following vectors.
 			
 			$$
-			\vec{d_n} = 
+			\vec{\doc_n} = 
 				\left[
 					\begin{array}{l}
-						\tfidf\left(t_{1}, d_n\right) \\
-						\tfidf\left(t_{2}, d_n\right) \\
-						\tfidf\left(t_{3}, d_n\right) \\
-						\tfidf\left(t_{4}, d_n\right) \\
-						\tfidf\left(t_{5}, d_n\right) \\
-						\tfidf\left(t_{6}, d_n\right) \\
-						\tfidf\left(t_{7}, d_n\right) \\
-						\tfidf\left(t_{8}, d_n\right) \\
-						\tfidf\left(t_{9}, d_n\right) \\
-						\tfidf\left(t_{10}, d_n\right) \\
-						\tfidf\left(t_{11}, d_n\right) \\
-						\tfidf\left(t_{12}, d_n\right) \\
-						\tfidf\left(t_{13}, d_n\right) \\
+						\tfidf\left(\term_{1}, d_n\right) \\
+						\tfidf\left(\term_{2}, d_n\right) \\
+						\tfidf\left(\term_{3}, d_n\right) \\
+						\tfidf\left(\term_{4}, d_n\right) \\
+						\tfidf\left(\term_{5}, d_n\right) \\
+						\tfidf\left(\term_{6}, d_n\right) \\
+						\tfidf\left(\term_{7}, d_n\right) \\
+						\tfidf\left(\term_{8}, d_n\right) \\
+						\tfidf\left(\term_{9}, d_n\right) \\
+						\tfidf\left(\term_{10}, d_n\right) \\
+						\tfidf\left(\term_{11}, d_n\right) \\
+						\tfidf\left(\term_{12}, d_n\right) \\
+						\tfidf\left(\term_{13}, d_n\right) \\
 					\end{array}
 				\right],
-			\vec{d_1} = 
+			\vec{\doc_1} = 
 				\left[
 					\begin{array}{l}
 						0.2857 \\
@@ -143,7 +143,7 @@
 						0.1429 \\
 					\end{array}
 				\right],
-			\vec{d_2} = 
+			\vec{\doc_2} = 
 				\left[
 					\begin{array}{l}
 						0.0000 \\
@@ -161,7 +161,7 @@
 						0.0000 \\
 					\end{array}
 				\right],
-			\vec{d_3} = 
+			\vec{\doc_3} = 
 				\left[
 					\begin{array}{l}
 						0.0000 \\
@@ -179,7 +179,7 @@
 						0.0000 \\
 					\end{array}
 				\right],
-			\vec{d_4} = 
+			\vec{\doc_4} = 
 				\left[
 					\begin{array}{l}
 						0.0000 \\
@@ -201,14 +201,14 @@
 		\end{ex}
 		
 		\begin{defn}[Search Query]
-			A search query $q$ is simply a document, namely a bag of terms.  The top-$k$ answers to $q$ with respect to a collection $D$ is defined as the $k$ documents, $\left\{d_1, d_2, \dotsc, d_k\right\}$, in $D$, such that $\left\{\vec{d}_i\right\}$ are the closest vectors to $\vec{q}$ using Euclidean distance measure in $\mathbb{R}^N$.
+			A search query $\q$ is simply a document, namely a bag of terms.  The top-$k$ answers to $\q$ with respect to a collection $dc$ is defined as the $k$ documents, $\left\{\doc_1, \doc_2, \dotsc, d_k\right\}$, in $\dc$, such that $\left\{\vec{\doc}_i\right\}$ are the closest vectors to $\vec{\q}$ using Euclidean distance measure in $\mathbb{R}^N$.
 		\end{defn}
 		
 		\begin{ex}
-			Given the search query $q = \left\{ \mathrm{superwoman}, \mathrm{was}, \mathrm{born}, \mathrm{on}, \mathrm{krypton} \right\}$, compute the vector $\vec{q}$ within the document collection $D$ (as defined in Example~\ref{ex:superhero-documents}).
+			Given the search query $\q = \left\{\mathrm{superwoman}, \mathrm{was}, \mathrm{born}, \mathrm{on}, \mathrm{krypton}\right\}$, compute the vector $\vec{\q}$ within the document collection $\dc$ (as defined in Example~\ref{ex:superhero-documents}).
 			
 			$$
-			\vec{q} = 
+			\vec{\q} = 
 				\left[
 					\begin{array}{c}
 						0.0000 \\
@@ -229,47 +229,47 @@
 			$$
 		\end{ex}
 		
-		In order to determine the top-$k$ documents for search query $q$, we need a way of measuring the similarity between documents.
+		In order to determine the top-$k$ documents for search query $\q$, we need a way of measuring the similarity between documents.
 		
 		\begin{defn}[Cosine Similarity]
-			Given two document vectors, $\vec{d}_1$ and $\vec{d}_2$, the cosine similarity is the dot product $\vec{d}_1 \cdot \vec{d}_2$, normalized by the product of the Euclidean distance of $\vec{d}_1$ and $\vec{d}_2$ in $\mathbb{R}^N$.  It is denoted as $\similarity\left(\vec{d}_1, \vec{d}_2\right)$.
+			Given two document vectors, $\vec{\doc}_1$ and $\vec{\doc}_2$, the cosine similarity is the dot product $\vec{\doc}_1 \cdot \vec{\doc}_2$, normalized by the product of the Euclidean distance of $\vec{\doc}_1$ and $\vec{\doc}_2$ in $\mathbb{R}^N$.  It is denoted as $\similarity\left(\vec{\doc}_1, \vec{\doc}_2\right)$.
 			
 			\begin{eqnarray}
-				\similarity\left(\vec{d}_1, \vec{d}_2\right) &=& \frac{\vec{d}_1 \cdot \vec{d}_2}{\mid\mid \vec{d}_1 \mid\mid \cdot \mid\mid \vec{d}_2 \mid\mid} \\
-				 &=& \frac{\sum\limits_{i=1}^{N} \vec{d}_{1, i} \times \vec{d}_{2, i}}{\sqrt{\sum\limits_{i=1}^{N} \left(\vec{d}_{1, i}\right)^2} \times \sqrt{\sum\limits_{i=1}^{N} \left(\vec{d}_{2, i}\right)^2}}
+				\similarity\left(\vec{\doc}_1, \vec{\doc}_2\right) &=& \frac{\vec{\doc}_1 \cdot \vec{\doc}_2}{\mid\mid \vec{\doc}_1 \mid\mid \cdot \mid\mid \vec{\doc}_2 \mid\mid} \\
+				 &=& \frac{\sum\limits_{i=1}^{N} \vec{\doc}_{1, i} \times \vec{\doc}_{2, i}}{\sqrt{\sum\limits_{i=1}^{N} \left(\vec{\doc}_{1, i}\right)^2} \times \sqrt{\sum\limits_{i=1}^{N} \left(\vec{\doc}_{2, i}\right)^2}}
 			\end{eqnarray}
 		\end{defn}
 		
-		Recall we may represent search queries as documents and thus document vectors.  Therefore we may compute the score of a document $d$ for a search query $q$ as
+		Recall we may represent search queries as documents and thus document vectors.  Therefore we may compute the score of a document $\doc$ for a search query $\q$ as
 		
-		$$\similarity\left(\vec{d}, \vec{q}\right)$$
+		$$\similarity\left(\vec{\doc}, \vec{\q}\right)$$
 		
 		\begin{ex}
-			Given the document collection $D$ (from Example~\ref{ex:superhero-documents}) and search query $q$, compute the similarity between $q$ and every document $d \in D$.
+			Given the document collection $\dc$ (from Example~\ref{ex:superhero-documents}) and search query $q$, compute the similarity between $\q$ and every document $\doc \in \dc$.
 			
 			\begin{eqnarray}
-				\similarity\left(\vec{d}_1, \vec{q}\right) &=& 0.000000 \\
-				\similarity\left(\vec{d}_2, \vec{q}\right) &=& 0.191533 \\
-				\similarity\left(\vec{d}_3, \vec{q}\right) &=& 0.265877 \\
-				\similarity\left(\vec{d}_4, \vec{q}\right) &=& 0.618553
+				\similarity\left(\vec{\doc}_1, \vec{\q}\right) &=& 0.000000 \\
+				\similarity\left(\vec{\doc}_2, \vec{\q}\right) &=& 0.191533 \\
+				\similarity\left(\vec{\doc}_3, \vec{\q}\right) &=& 0.265877 \\
+				\similarity\left(\vec{\doc}_4, \vec{\q}\right) &=& 0.618553
 			\end{eqnarray}
 		\end{ex}
 		
 	\subsection{Extending the Document Model}
 	\label{sec:extending-the-document-model}
-		In the extended document model, documents have attributes: $\fcn{ATTR}{d}$, and each attribute have values (e.g.~date, string, integer), or bag of terms.  Thus:
+		In the extended document model, documents have fields: $\fields{\doc}$, and each attribute have values (e.g.~date, string, integer), or bag of terms.  Thus:
 
-		$$d:\fcn{ATTR}{d} \to \fcn{BAG}{\mathrm{Terms}}$$
+		$$\doc :\fields{\doc} \to \bag{\terms}$$
 		
 		\begin{ex}[Semi-Structured Document]
-			We see that $d_2$ is about Batman.  The document contents are semi-structured, containing both a name and the name of a planet.  By adding attributes to the document, we are left with Table~\ref{tbl:person-document}.
+			We see that $\doc_2$ is about Batman.  The document contents are semi-structured, containing both a name and the name of a planet.  By adding fields to the document, we are left with Table~\ref{tbl:person-document}.
 			
 			\begin{table}[!ht]
 				\centering
 				
 				\begin{tabular}{ll}
 					\toprule
-					Attribute & Value \\
+					Field & Value \\
 					\midrule
 					name & Batman \\
 					birthplace & Earth \\
@@ -370,20 +370,20 @@
 				$$
 					\bordermatrix{
 						~ & G & G' \cr
-						t_1 : \mathrm{``an\char"24''} & 1 & 1 \cr
-						t_2 : \mathrm{``oma''} & 0 & 1 \cr
-						t_3 : \mathrm{``\char"24su''} & 1 & 1 \cr
-						t_4 : \mathrm{``rwo''} & 0 & 1 \cr
-						t_5 : \mathrm{``rma''} & 1 & 0 \cr
-						t_6 : \mathrm{``man''} & 1 & 1 \cr
-						t_7 : \mathrm{``erw''} & 0 & 1 \cr
-						t_8 : \mathrm{``\char"24\char"24s''} & 1 & 1 \cr
-						t_9 : \mathrm{``upe''} & 1 & 1 \cr
-						t_{10} : \mathrm{``n\char"24\char"24''} & 1 & 1 \cr
-						t_{11} : \mathrm{``per''} & 1 & 1 \cr
-						t_{12} : \mathrm{``wom''} & 0 & 1 \cr
-						t_{13} : \mathrm{``sup''} & 1 & 1 \cr
-						t_{14} : \mathrm{``erm''} & 1 & 0 \cr
+						\term_1 : \mathrm{``an\char"24''} & 1 & 1 \cr
+						\term_2 : \mathrm{``oma''} & 0 & 1 \cr
+						\term_3 : \mathrm{``\char"24su''} & 1 & 1 \cr
+						\term_4 : \mathrm{``rwo''} & 0 & 1 \cr
+						\term_5 : \mathrm{``rma''} & 1 & 0 \cr
+						\term_6 : \mathrm{``man''} & 1 & 1 \cr
+						\term_7 : \mathrm{``erw''} & 0 & 1 \cr
+						\term_8 : \mathrm{``\char"24\char"24s''} & 1 & 1 \cr
+						\term_9 : \mathrm{``upe''} & 1 & 1 \cr
+						\term_{10} : \mathrm{``n\char"24\char"24''} & 1 & 1 \cr
+						\term_{11} : \mathrm{``per''} & 1 & 1 \cr
+						\term_{12} : \mathrm{``wom''} & 0 & 1 \cr
+						\term_{13} : \mathrm{``sup''} & 1 & 1 \cr
+						\term_{14} : \mathrm{``erm''} & 1 & 0 \cr
 					}
 				$$
 				
@@ -398,9 +398,9 @@
 		There are numerous reasons to use the document model.  It allows users without domain knowledge and working knowledge of a complex query language such as \gls{sql} to find information.
 		
 		\begin{ex}[Simple Queries]
-			Find all documents related to ``Superman'' or ``Earth''.  This query, if the default operator is \texttt{OR}, would simply be \texttt{Superman Earth}.  The result of the query $q$ would be
+			Find all documents related to ``Superman'' or ``Earth''.  This query, if the default operator is \texttt{OR}, would simply be \texttt{Superman Earth}.  The result of the query $\q$ would be
 			
-			$$\query\left(\mathrm{``superman''}\right) \cup \query\left(\mathrm{``earth''}\right) \rightarrow \left\{d_1, d_2, d_3, d_4\right\}$$
+			$$\query\left(\mathrm{``superman''}\right) \cup \query\left(\mathrm{``earth''}\right) \rightarrow \left\{\doc_1, \doc_2, \doc_3, \doc_4\right\}$$
 		\end{ex}
 		
 		Users can also modify queries to require certain terms be present or not present.
@@ -409,15 +409,15 @@
 		\label{ex:and-query}
 			Find all documents containing both ``Superman'' and ``Earth''.  This query would return the following set of documents
 			
-			$$\query\left(\mathrm{``superman''}\right) \cap \query\left(\mathrm{``earth''}\right) \rightarrow \left\{d_1\right\}$$
+			$$\query\left(\mathrm{``superman''}\right) \cap \query\left(\mathrm{``earth''}\right) \rightarrow \left\{\doc_1\right\}$$
 			
-			as only $d_1$ contains both terms.
+			as only $\doc_1$ contains both terms.
 		\end{ex}
 		
 		\begin{ex}[\texttt{NOT} Query]
 			Find all documents containing ``Superman'' but not ``Earth''.  This query would return different results than Example~\ref{ex:and-query}.
 			
-			$$\query\left(\mathrm{``superman''}\right) \neg\query\left(\mathrm{``earth''}\right) \rightarrow \left\{d_4\right\}$$
+			$$\query\left(\mathrm{``superman''}\right) \neg\query\left(\mathrm{``earth''}\right) \rightarrow \left\{\doc_4\right\}$$
 		\end{ex}
 		
 		While none of the above queries required domain knowledge, it is possible to use the extended document model (Section~\ref{sec:extending-the-document-model}) to search specific fields.  Doing so allows users to have finer control over what documents are retrieved.
@@ -425,16 +425,16 @@
 		\begin{ex}[Extended Query]
 			Find all documents with a superhero named ``Superman'' that contain the term ``Earth''.
 			
-			$$\query\left(\mathrm{``name''}, \mathrm{``superman''}\right) \cap \query\left(\mathrm{``earth''}\right) \rightarrow \left\{d_1\right\}$$
+			$$\query\left(\mathrm{``name''}, \mathrm{``superman''}\right) \cap \query\left(\mathrm{``earth''}\right) \rightarrow \left\{\doc_3\right\}$$
 			
 			Assuming the first term of every document is also the value of the name attribute.
 		\end{ex}
 		
 		People utilize keyword query search every day through web search engines such as Google\footnote{\url{https://www.google.ca/}}.
 		
-		Not only does the document model provide a familiar interface to search for information with, it also ranks the results.  In the relational model a search for ``Superman'' would return all named tuples that contained that term.  In the document model, documents are ranked against the query $q$ and the top-$k$ documents are returned.
+		Not only does the document model provide a familiar interface to search for information with, it also ranks the results.  In the relational model a search for ``Superman'' would return all named tuples that contained that term.  In the document model, documents are ranked against the query $\q$ and the top-$k$ documents are returned.
 		
-		The advantage is that users have the result of $q$ already ranked so only the most relevant documents may be explored.  As the number of documents matching $q$ for a large corpus can be high, showing only the top-$k$ relevant documents may save the user a substantial amount of time.
+		The advantage is that users have the result of $\q$ already ranked so only the most relevant documents may be explored.  As the number of documents matching $\q$ for a large corpus can be high, showing only the top-$k$ relevant documents may save the user a substantial amount of time.
 		
 		The relational model does not permit approximate string matching.  By utilizing the document model with $n$-grams (Section~\ref{sec:n-gram}), users who substitute, delete, or insert characters from the desired term may still receive results for their intended term (see Example~\ref{ex:n-gram-comparison} for a demonstration of how $n$-grams overcome character substitutions).
 		

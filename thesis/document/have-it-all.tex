@@ -1,4 +1,15 @@
 \chapter{Best of Both Worlds}
+    \section{Encoding Named Tuples into Documents}
+        Recall in the extended document model (Section~\ref{sec:extending-the-document-model}), a document $d$ consists of fields $f_1, f_2, \dotsc, f_n$.  Using the extended document model, we are left with a straight forward mapping of a tuple $t$ to document $d$.
+        
+        For tuple $t$, every attribute $a \in \textsc{ATTR}\left[t\right]$ maps to field $f$ in $d$.  Every attribute value must be analyzed into an indexable form in order to store it in a field.
+        
+        \begin{eqnarray*}
+            \textsc{ATTR}\left[t\right] &\xrightarrow{analyzed}& \textsc{Fields}\left[d\right] \\
+            a_1, a_2, \dotsc, a_n &\xrightarrow{analyzed}& f_1, f_2, \dotsc, f_n
+        \end{eqnarray*}
+        
+        We denote the document encoding of $t$ as $\textsc{Doc}\left[t\right]$.
 
 \begin{itemize}
 	\item Hybrid database defined by both the relational model and the document model

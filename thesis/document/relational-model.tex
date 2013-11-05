@@ -4,24 +4,24 @@
 	
 	\begin{defn}[Named Tuple]
 	\label{def:named-tuple}
-		A named tuple $t$ is an instance of a relation $\gls{r}$, consisting of values corresponding to the attributes of $\gls{r}$.  For example,
+		A named tuple $\tuple$ is an instance of a relation $\relation$, consisting of values corresponding to the attributes of $\relation$.  For example,
 	\end{defn}
 	
 	\begin{ex}
-		Given a tuple $t = \left\{\mathrm{name}: \textrm{``Superman''}, \mathrm{age}: 33, \mathrm{birthplace}: \textrm{``Krypton''}\right\}$, we denote the attributes of $t$ as $\fcn{ATTR}{t} = \left\{\mathrm{name}, \mathrm{age}, \mathrm{birthplace}\right\}$.  The values are $t\lbrack \mathrm{name}\rbrack = \textrm{``Superman''}$, $t\lbrack \mathrm{age}\rbrack = 33$, and $t\lbrack \mathrm{birthplace}\rbrack = \textrm{``Krypton''}$.
+		Given a tuple $\tuple = \left\{\mathrm{name}: \textrm{``Superman''}, \mathrm{age}: 33, \mathrm{birthplace}: \textrm{``Krypton''}\right\}$, we denote the attributes of $t$ as $\attributes{t} = \left\{\mathrm{name}, \mathrm{age}, \mathrm{birthplace}\right\}$.  The values are $\tuple\left[\mathrm{name}\right] = \textrm{``Superman''}$, $\tuple\left[\mathrm{age}\right] = 33$, and $\tuple\left[\mathrm{birthplace}\right] = \textrm{``Krypton''}$.
 	\end{ex}
 	
 	\begin{defn}[Relation]
 	\label{def:relation}
-		A relation $r$ is a set of named tuples, $r = \left\{t_1, t_2, \dotsc, t_n\right\}$, such that all the named tuples share the same attributes.
+		A relation $\relation$ is a set of named tuples, $\relation = \left\{\tuple_1, \tuple_2, \dotsc, \tuple_n\right\}$, such that all the named tuples share the same attributes.
 		
-		$$\forall t, t' \in r, \fcn{ATTR}{t} = \fcn{ATTR}{t'}$$
+		$$\forall \tuple, \tuple' \in \relation, \attributes{\tuple} = \attributes{\tuple'}$$
 	\end{defn}
 	
 	\begin{ex}
-		An example Person relation, $r$, would be as follows,
+		An example Person relation, $\relation$, would be as follows,
 		
-		$$r = \left\{
+		$$\relation = \left\{
 			\begin{array}{l}
 				\left\{\mathrm{name}: \textrm{``Superman''}, \mathrm{age}: 33, \mathrm{birthplace}: \textrm{``Krypton''}\right\}, \\
 				\left\{\mathrm{name}: \textrm{``Batman''}, \mathrm{age}: 30, \mathrm{birthplace}: \textrm{``Earth''}\right\}, \\
@@ -43,7 +43,7 @@
 			Superman & 33 & Krypton \\
 			Batman & 30 & Earth \\
 			Flash & 53 & Earth \\
-			Wonder Woman & 28 & Earth \\
+			Wonder Woman & 30 & Earth \\
 			General Zod & 42 & Krypton \\
 			\bottomrule
 		\end{tabular}
@@ -54,44 +54,44 @@
 	
 	\begin{defn}[Keys]
 	\label{def:keys}
-		Keys are constraints imposed on relations.  A key constraint $K$ on a relation $r$ is a subset of $\fcn{ATTR}{r}$ which may uniquely identify a tuple.  Formally, we say $r$ satisfies the key constraint $K$, denoted as $r \models K$, subject to
+		Keys are constraints imposed on relations.  A key constraint $\key$ on a relation $\relation$ is a subset of $\attributes{\relation}$ which may uniquely identify a tuple.  Formally, we say $\relation$ satisfies the key constraint $\key$, denoted as $\relation \models \key$, subject to
 		
-		$$\forall t, t' \in r, t \not= t' \implies t[K] \not= t'[K]$$
+		$$\forall \tuple, \tuple' \in \relation, \tuple \not= \tuple' \implies \tuple\left[\key\right] \not= \tuple'\left[\key\right]$$
 		
 		For example, in Table~\ref{tbl:person}, the relation satisfies the key constraint $\left\{\mathrm{name}\right\}$, but not $\left\{\mathrm{age}\right\}$.
 	\end{defn}
 	
 	\begin{defn}[Foreign Keys]
 	\label{def:foreign-keys}
-		A foreign key constraint applies to two relations, $r_1, r_2$.  It asserts that values of certain attributes of $r_1$ must appear as values of some corresponding attributes of $r_2$.  A foreign key constraint is written as
+		A \gls{fk} constraint applies to two relations, $\relation_1, \relation_2$.  It asserts that values of certain attributes of $\relation_1$ must appear as values of some corresponding attributes of $\relation_2$.  A \gls{fk} constraint is written as
 		
-		$$\theta = r_1(a_1, a_2, \dotsc, a_k) \rightarrow r_2(b_1, b_2, \dotsc, b_k)$$
+		$$\theta = \relation_1(\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}) \rightarrow \relation_2(\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k})$$
 		
-		where $a_i \subseteq \fcn{ATTR}{r_1}$ and $b_i \subseteq \fcn{ATTR}{r_2}$.  We say $(r_1, r_2)$ satisfies $\theta$, denoted as $(r_1, r_2) \models \theta$, if
+		where $\attribute_{1i} \subseteq \attributes{\relation_1}$ and $\attribute_{2i} \subseteq \attributes{\relation_2}$.  We say $\left(\relation_1, \relation_2\right)$ satisfies $\theta$, denoted as $\left(\relation_1, \relation_2\right) \models \theta$, if
 		
-		$$\forall t \in r_1, \exists t' \in r_2 \mid t\lbrack a_1, a_2, \dotsc, a_k\rbrack = t'\lbrack b_1, b_2, \dotsc, b_k]$$
+		$$\forall \tuple \in \relation_1, \exists \tuple' \in \relation_2 \mid \tuple\left[\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}\right] = \tuple'\left[\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k}\right]$$
 		
 		\begin{ex}
-			Suppose we have a relation Superhero(name, superpower).  We can impose a FK constraint of
+			Suppose we have a relation $\rel{Superhero}{name, superpower}$.  We can impose a \gls{fk} constraint of
 			
-			$$\textrm{Superhero(name)} \rightarrow \textrm{Person(name)}$$
+			$$\rel{Superhero}{name} \rightarrow \rel{Person}{name}$$
 		\end{ex}
 	\end{defn}
 	
 	\begin{defn}[Relational Database]
 	\label{def:relational-database}
-		A relational database, $d$, is a named collection of relations (as defined by Definition~\ref{def:relation}, keys (as defined by Definition~\ref{def:keys}), and foreign key constraints (as defined by Definition~\ref{def:foreign-keys}.
+		A relational database, $\db$, is a named collection of relations (as defined by Definition~\ref{def:relation}), keys (as defined by Definition~\ref{def:keys}), and foreign key constraints (as defined by Definition~\ref{def:foreign-keys}.
 		
-		We use $\fcn{Name}{d}$ to denote the name of $d$, $\fcn{Rel}{d}$ the list of relations in $d$, $\fcn{Key}{d}$ the list of key constraints of $d$, and $\fcn{FK}{d}$ the list of foreign key constraints of $d$.
+		We use $\name{\db}$ to denote the name of $\db$, $\relations{\db}$ the list of relations in $\db$, $\keys{\db}$ the list of key constraints of $\db$, and $\fks{\db}$ the list of foreign key constraints of $\db$.
 	\end{defn}
 	
 	\subsection{Schema Group}
 		\begin{defn}[Schema Graph]
-			If we view relations as vertices, and foreign key constraints as edges, a database $d$ can be viewed as a \emph{schema graph} $G$, formally defined as
+			If we view relations as vertices, and foreign key constraints as edges, a database $\db$ can be viewed as a \emph{schema graph} $G$, formally defined as
 			
 			\begin{eqnarray*}
-				\mathrm{vertices}:  V(G) &=& \fcn{REL}{d} \\
-				\mathrm{edges}:  E(G) &=& \fcn{FK}{d}
+				\mathrm{vertices}:  V(G) &=& \relations{\db} \\
+				\mathrm{edges}:  E(G) &=& \fks{\db}
 			\end{eqnarray*}
 		\end{defn}
 		
@@ -101,19 +101,19 @@
 			\begin{figure}[!ht]
 				\centering
 				
-				Superhero(\underline{name}, power) \\
-				Person(\underline{name}, age, birthplace) \\
-				Planet(\underline{name}, size, age, destroyed, galaxy) \\
-				Link(\underline{name}, peer, relation type) \\
+				$\rel{Superhero}{\underline{name}, power}$ \\
+				$\rel{Person}{\underline{name}, age, birthplace}$ \\
+				$\rel{Planet}{\underline{name}, size, age, destroyed, galaxy}$ \\
+				$\rel{Link}{\underline{name}, peer, relation type}$ \\
 			\end{figure}
 			
 			and the following foreign key constraints
 			
 			\begin{eqnarray*}
-				\textrm{Superhero(name)} &\rightarrow& \textrm{Person(name)} \\
-				\textrm{Person(birthplace)} &\rightarrow& \textrm{Planet(name)} \\
-				\textrm{Link(name)} &\rightarrow& \textrm{Person(name)} \\
-				\textrm{Link(peer)} &\rightarrow& \textrm{Person(name)}
+				\rel{Superhero}{name} &\rightarrow& \rel{Person}{name} \\
+				\rel{Person}{birthplace} &\rightarrow& \rel{Planet}{name} \\
+				\rel{Link}{name} &\rightarrow& \rel{Person}{name} \\
+				\rel{Link}{peer} &\rightarrow& \rel{Person}{name}
 			\end{eqnarray*}
 			
 			we produce the following schema graph
@@ -136,7 +136,7 @@
 			\end{figure}
 		\end{ex}
 		
-		The relational data model is particularly powerful for analytic queries.  Given the schema below above, one can formulate the following analytic queries in a query language known as SQL.
+		The relational data model is particularly powerful for analytic queries.  Given the schema below above, one can formulate the following analytic queries in a query language known as \gls{sql}.
 			
 		\begin{ex}
 			List all superheroes whose home planet has not been destroyed.
@@ -174,11 +174,11 @@ WHERE  NOT Planet.destroyed;
 		
 	\subsection{Entity Group}
 		\begin{defn}[Entity Group]
-			An entity group is a forest, $T$,  of tuples interconnected by join conditions defined by the foreign key constraints in the schema graph.  Given two vertices $t_1, t_2'\in V\left(T\right)$, it must be that:
+			An entity group is a forest, $T$,  of tuples interconnected by join conditions defined by the foreign key constraints in the schema graph.  Given two vertices $\tuple_1, \tuple_2 \in V\left(T\right)$, it must be that:
 
-			$\exists r_1, r_2\in \fcn{REL}{d}$ such that $t_1 \in r_1$, $t_2\in r_2$, and $\left(r_1, r_2\right)\in G$.  This is to say that $t_1$ and $t_2$ belong to two relations that are connected by the schema graph.
+			$\exists \relation_1, \relation_2 \in \relations{\db}$ such that $\tuple_1 \in \relation_1$, $\tuple_2\in \relation_2$, and $\left(\relation_1, \relation_2\right)\in G$.  This is to say that $\tuple_1$ and $\tuple_2$ belong to two relations that are connected by the schema graph.
 
-			Let $r_1\left(a_1, \dotsc, a_k\right) \to r_2\left(b_1, \dotsc, b_k\right)$ be the FK that connects $r_1, r_2$.  We further assert that $t_1\lbrack a_1, \dotsc, a_k\rbrack = t_2\lbrack b_1, \dotsc, b_k\rbrack$.
+			Let $\relation_1\left(\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}\right) \to \relation_2\left(\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k}\right)$ be the \gls{fk} that connects $\relation_1, \relation_2$.  We further assert that $\tuple_1\left[\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}\right] = \tuple_2\left[\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k}\right]$.
 		\end{defn}
 		
 		The motivation of entity groups is to define complex structured objects that can include more information than individual tuples in the relations.
