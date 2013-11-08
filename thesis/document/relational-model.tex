@@ -7,46 +7,46 @@
 		A named tuple $\tuple$ is an instance of a relation $\relation$, consisting of values corresponding to the attributes of $\relation$.  For example,
 	\end{defn}
 	
+	\DTLforeach*[\value{DTLrowi}<1]{db-person}{\name=name,\age=age,\birthplace=birthplace}{
+	    \xdef\name{\name}
+	    \xdef\age{\age}
+	    \xdef\birthplace{\birthplace}
+	}
+	
 	\begin{ex}
-		Given a tuple $\tuple = \left\{\mathrm{name}: \textrm{``Superman''}, \mathrm{age}: 33, \mathrm{birthplace}: \textrm{``Krypton''}\right\}$, we denote the attributes of $t$ as $\attributes{t} = \left\{\mathrm{name}, \mathrm{age}, \mathrm{birthplace}\right\}$.  The values are $\tuple\left[\mathrm{name}\right] = \textrm{``Superman''}$, $\tuple\left[\mathrm{age}\right] = 33$, and $\tuple\left[\mathrm{birthplace}\right] = \textrm{``Krypton''}$.
+		Given a tuple $\tuple = \bigl\{\mathrm{name}: \textrm{``\name''}, \mathrm{age}: \age, \mathrm{birthplace}: \textrm{``\birthplace''}\bigr\}$, we denote the attributes of $\tuple$ as $\attributes{\tuple} = \bigl\{\mathrm{name}, \mathrm{age}, \mathrm{birthplace}\bigr\}$.  The values are $\tuple\bigl[\mathrm{name}\bigr] = \textrm{``\name''}$, $\tuple\bigl[\mathrm{age}\bigr] = \age$, and $\tuple\bigl[\mathrm{birthplace}\bigr] = \textrm{``\birthplace''}$.
 	\end{ex}
 	
 	\begin{defn}[Relation]
 	\label{def:relation}
-		A relation $\relation$ is a set of named tuples, $\relation = \left\{\tuple_1, \tuple_2, \dotsc, \tuple_n\right\}$, such that all the named tuples share the same attributes.
+		A relation $\relation$ is a set of named tuples, $\relation = \bigl\{\tuple_1, \tuple_2, \dotsc, \tuple_n\bigr\}$, such that all the named tuples share the same attributes.
 		
-		$$\forall \tuple, \tuple' \in \relation, \attributes{\tuple} = \attributes{\tuple'}$$
+		\[
+			\forall \tuple, \tuple' \in \relation, \attributes{\tuple} = \attributes{\tuple'}
+		\]
 	\end{defn}
 	
 	\begin{ex}
 		An example Person relation, $\relation$, would be as follows,
 		
-		$$\relation = \left\{
-			\begin{array}{l}
-				\left\{\mathrm{name}: \textrm{``Superman''}, \mathrm{age}: 33, \mathrm{birthplace}: \textrm{``Krypton''}\right\}, \\
-				\left\{\mathrm{name}: \textrm{``Batman''}, \mathrm{age}: 30, \mathrm{birthplace}: \textrm{``Earth''}\right\}, \\
-				\left\{\mathrm{name}: \textrm{``Flash''}, \mathrm{age}: 53, \mathrm{birthplace}: \textrm{``Earth''}\right\}, \\
-				\left\{\mathrm{name}: \textrm{``Wonder Woman''}, \mathrm{age}: 28, \mathrm{birthplace}: \textrm{``Earth''}\right\}, \\
-				\left\{\mathrm{name}: \textrm{``General Zod''}, \mathrm{age}: 42, \mathrm{birthplace}: \textrm{``Krypton''}\right\}
-			\end{array}
-		\right\}$$
+		\[
+			\relation = \bigl\{
+				\begin{array}{l}
+				    \DTLforeach{db-person}{\name=name,\age=age,\birthplace=birthplace}{
+				        \DTLiffirstrow{}{\\}
+				        \bigl\{\mathrm{name}: \textrm{``\name''}, \mathrm{age}: \age, \mathrm{birthplace}: \textrm{``\birthplace''}\bigr\},
+				    }
+				\end{array}
+			\bigr\}
+		\]
 	\end{ex}
 		
 	Relations are typically represented as tables.
 	
 	\begin{table}[!ht]
 		\centering
-		\begin{tabular}{lll}
-			\toprule
-			name & age & birthplace \\
-			\midrule
-			Superman & 33 & Krypton \\
-			Batman & 30 & Earth \\
-			Flash & 53 & Earth \\
-			Wonder Woman & 30 & Earth \\
-			General Zod & 42 & Krypton \\
-			\bottomrule
-		\end{tabular}
+		
+		\DTLdisplaydb{db-person}
 		
 		\caption{Person table}
 		\label{tbl:person}
@@ -56,43 +56,51 @@
 	\label{def:keys}
 		Keys are constraints imposed on relations.  A key constraint $\key$ on a relation $\relation$ is a subset of $\attributes{\relation}$ which may uniquely identify a tuple.  Formally, we say $\relation$ satisfies the key constraint $\key$, denoted as $\relation \models \key$, subject to
 		
-		$$\forall \tuple, \tuple' \in \relation, \tuple \not= \tuple' \implies \tuple\left[\key\right] \not= \tuple'\left[\key\right]$$
+		\[
+			\forall \tuple, \tuple' \in \relation, \tuple \not= \tuple' \implies \tuple\bigl[\key\bigr] \not= \tuple'\bigl[\key\bigr]
+		\]
 		
-		For example, in Table~\ref{tbl:person}, the relation satisfies the key constraint $\left\{\mathrm{name}\right\}$, but not $\left\{\mathrm{age}\right\}$.
+		For example, in \Vref{tbl:person}, the relation satisfies the key constraint $\bigl\{\mathrm{name}\bigr\}$, but not $\bigl\{\mathrm{age}\bigr\}$.
 	\end{defn}
 	
 	\begin{defn}[Foreign Keys]
 	\label{def:foreign-keys}
 		A \gls{fk} constraint applies to two relations, $\relation_1, \relation_2$.  It asserts that values of certain attributes of $\relation_1$ must appear as values of some corresponding attributes of $\relation_2$.  A \gls{fk} constraint is written as
 		
-		$$\theta = \relation_1(\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}) \rightarrow \relation_2(\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k})$$
+		\[
+			\theta = \relation_1\bigl(\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}\bigr) \rightarrow \relation_2\bigl(\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k}\bigr)
+		\]
 		
-		where $\attribute_{1i} \subseteq \attributes{\relation_1}$ and $\attribute_{2i} \subseteq \attributes{\relation_2}$.  We say $\left(\relation_1, \relation_2\right)$ satisfies $\theta$, denoted as $\left(\relation_1, \relation_2\right) \models \theta$, if
+		where $\attribute_{1i} \subseteq \attributes{\relation_1}$ and $\attribute_{2i} \subseteq \attributes{\relation_2}$.  We say $\bigl(\relation_1, \relation_2\bigr)$ satisfies $\theta$, denoted as $\bigl(\relation_1, \relation_2\bigr) \models \theta$, if
 		
-		$$\forall \tuple \in \relation_1, \exists \tuple' \in \relation_2 \mid \tuple\left[\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}\right] = \tuple'\left[\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k}\right]$$
+		\[
+			\forall \tuple \in \relation_1, \exists \tuple' \in \relation_2 \text{ such that } \tuple\bigl[\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}\bigr] = \tuple'\bigl[\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k}\bigr]
+		\]
 		
 		\begin{ex}
 			Suppose we have a relation $\rel{Superhero}{name, superpower}$.  We can impose a \gls{fk} constraint of
 			
-			$$\rel{Superhero}{name} \rightarrow \rel{Person}{name}$$
+			\[
+				\rel{Superhero}{name} \rightarrow \rel{Person}{name}
+			\]
 		\end{ex}
 	\end{defn}
 	
 	\begin{defn}[Relational Database]
 	\label{def:relational-database}
-		A relational database, $\db$, is a named collection of relations (as defined by Definition~\ref{def:relation}), keys (as defined by Definition~\ref{def:keys}), and foreign key constraints (as defined by Definition~\ref{def:foreign-keys}.
+		A relational database, $\db$, is a named collection of relations (as defined by \Vref{def:relation}), keys (as defined by \Vref{def:keys}), and foreign key constraints (as defined by \Vref{def:foreign-keys}.
 		
 		We use $\name{\db}$ to denote the name of $\db$, $\relations{\db}$ the list of relations in $\db$, $\keys{\db}$ the list of key constraints of $\db$, and $\fks{\db}$ the list of foreign key constraints of $\db$.
 	\end{defn}
 	
 	\subsection{Schema Group}
 		\begin{defn}[Schema Graph]
-			If we view relations as vertices, and foreign key constraints as edges, a database $\db$ can be viewed as a \emph{schema graph} $G$, formally defined as
+			If we view relations as vertices, and foreign key constraints as edges, a database $\db$ can be viewed as a \emph{schema graph} $\sgraph{}$, formally defined as
 			
-			\begin{eqnarray*}
-				\mathrm{vertices}:  V(G) &=& \relations{\db} \\
-				\mathrm{edges}:  E(G) &=& \fks{\db}
-			\end{eqnarray*}
+			\begin{align}
+				\mathrm{vertices}:  V\bigl(\sgraph{}\bigr) &= \relations{\db} \\
+				\mathrm{edges}:  E\bigl(\sgraph{}\bigr) &= \fks{\db}
+			\end{align}
 		\end{defn}
 		
 		\begin{ex}
@@ -109,12 +117,12 @@
 			
 			and the following foreign key constraints
 			
-			\begin{eqnarray*}
-				\rel{Superhero}{name} &\rightarrow& \rel{Person}{name} \\
-				\rel{Person}{birthplace} &\rightarrow& \rel{Planet}{name} \\
-				\rel{Link}{name} &\rightarrow& \rel{Person}{name} \\
-				\rel{Link}{peer} &\rightarrow& \rel{Person}{name}
-			\end{eqnarray*}
+			\begin{align}
+				\rel{Superhero}{name} &\rightarrow \rel{Person}{name} \\
+				\rel{Person}{birthplace} &\rightarrow \rel{Planet}{name} \\
+				\rel{Link}{name} &\rightarrow \rel{Person}{name} \\
+				\rel{Link}{peer} &\rightarrow \rel{Person}{name}
+			\end{align}
 			
 			we produce the following schema graph
 			
@@ -155,7 +163,7 @@ WHERE  NOT Planet.destroyed;
 				\caption{Query to find superheroes with a home to go back to}
 			\end{figure}
 			
-			Results in the following output, given the data from Table~\ref{tbl:person},
+			Results in the following output, given the data from \Vref{tbl:person},
 			
 			\begin{table}[!ht]
 				\centering
@@ -174,17 +182,18 @@ WHERE  NOT Planet.destroyed;
 		
 	\subsection{Entity Group}
 		\begin{defn}[Entity Group]
-			An entity group is a forest, $T$,  of tuples interconnected by join conditions defined by the foreign key constraints in the schema graph.  Given two vertices $\tuple_1, \tuple_2 \in V\left(T\right)$, it must be that:
+		\label{def:entity-group}
+			An entity group is a forest, $T$,  of tuples interconnected by join conditions defined by the foreign key constraints in the schema graph.  Given two vertices $\tuple_1, \tuple_2 \in V\bigl(T\bigr)$, it must be that:
 
-			$\exists \relation_1, \relation_2 \in \relations{\db}$ such that $\tuple_1 \in \relation_1$, $\tuple_2\in \relation_2$, and $\left(\relation_1, \relation_2\right)\in G$.  This is to say that $\tuple_1$ and $\tuple_2$ belong to two relations that are connected by the schema graph.
+			$\exists \relation_1, \relation_2 \in \relations{\db}$ such that $\tuple_1 \in \relation_1$, $\tuple_2\in \relation_2$, and $\bigl(\relation_1, \relation_2\bigr)\in G$.  This is to say that $\tuple_1$ and $\tuple_2$ belong to two relations that are connected by the schema graph.
 
-			Let $\relation_1\left(\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}\right) \to \relation_2\left(\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k}\right)$ be the \gls{fk} that connects $\relation_1, \relation_2$.  We further assert that $\tuple_1\left[\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}\right] = \tuple_2\left[\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k}\right]$.
+			Let $\relation_1\bigl(\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}\bigr) \to \relation_2\bigl(\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k}\bigr)$ be the \gls{fk} that connects $\relation_1, \relation_2$.  We further assert that $\tuple_1\bigl[\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}\bigr] = \tuple_2\bigl[\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k}\bigr]$.
 		\end{defn}
 		
 		The motivation of entity groups is to define complex structured objects that can include more information than individual tuples in the relations.
 		
 		\begin{ex}
-			The information in Table~\ref{tbl:superman-properties} all relates to Superman, however no single tuple in the database has all of this information as a result of database normalization.
+			The information in \Vref{tbl:superman-properties} all relates to Superman, however no single tuple in the database has all of this information as a result of database normalization.
 			
 			\begin{table}[!ht]
 				\centering
@@ -206,7 +215,7 @@ WHERE  NOT Planet.destroyed;
 				\label{tbl:superman-properties}
 			\end{table}
 			
-			We require an entity group (Figure~\ref{fig:superhero-entity-group}) to join together all pieces of information related to Superman.
+			We require an entity group (\Vref{fig:superhero-entity-group}) to join together all pieces of information related to Superman.
 			
 			\begin{figure}[!ht]
 				\todo{Revise this figure}
@@ -249,7 +258,7 @@ DETAIL:  Key (name)=(Superman) already exists.
 				\end{verbatim}
 			\end{ex}
 			
-			With the uniqueness of named tuples guaranteed (as demonstrated in Example~\ref{ex:unique-constraint}), we must ensure that any named tuples that are referenced actually exist.  If they do not, the database must not permit the operation to continue.  Doing so would lead to dangling references.
+			With the uniqueness of named tuples guaranteed (as demonstrated in \Vref{ex:unique-constraint}), we must ensure that any named tuples that are referenced actually exist.  If they do not, the database must not permit the operation to continue.  Doing so would lead to dangling references.
 			
 			\begin{ex}[Referential Integrity]
 				Attempt to insert the superhero ``Aquaman'' with the superpower ``telepathy.''
@@ -373,4 +382,4 @@ WHERE  name LIKE '%man';
 			
 			There are a couple of limitations to the \texttt{LIKE} predicate.  First, it only supports basic substring matching.  If a user accidentally searches for all people with a name ending in ``men,'' nothing would be found.
 			
-			Second, unless the column used in the predicate is indexed, performance may be poor ($\mathcal{O}\left(n\right)$).
+			Second, unless the column used in the predicate is indexed, performance may be poor ($\mathcal{O}\bigl(n\bigr)$).

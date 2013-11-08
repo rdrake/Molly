@@ -47,44 +47,11 @@
 	\include{have-it-all}
 	
 	\include{along-came-clojure}
-
-	\chapter{Experimental evaluation (5 days, week 8)}
-		\section{Implementation}
-			\begin{itemize}
-				\item Choice of language
-				\item Statistics about the code base: LOC, classes, ?
-				\item Github hosted
-			\end{itemize}
-
-		\section{The data set}
-			\begin{itemize}
-				\item Description of the data set
-				\item Statistics of the data set
-			\end{itemize}
-
-		\section{Runtime Evaluation}
-			\begin{itemize}
-				\item Index speed
-				\item Keyword search speed
-				\item Graph search speed:
-					\begin{itemize}
-						\item Ford Fulkerson
-						\item BFS
-						\item Concurrent BFS using refs
-						\item Concurrent BFS using atoms
-					\end{itemize}
-			\end{itemize}
-
-		\section{Lessons learned}
-			\begin{itemize}
-				\item Simple algorithms are easier to parallelize
-				\item STM is effective: transactions do not rollback (that much), so we observe impressive speed-up in concurrent versions.
-				\item Fine tuning is beneficial: atom is better than ref.
-				\item The clojure way: correctness first, runtime optimization latter (ref to atom is natural).
-			\end{itemize}
-
-			\chapter{Conclusion (0 days)}
-				Survived Clojure.
+	
+	\include{evaluation}
+	
+	\chapter{Conclusion (0 days)}
+		Survived Clojure.
 
 	\appendix
 	

@@ -1,10 +1,10 @@
-INSERT INTO Planet VALUES ('Krypton', 0, 8700, TRUE, 'Andromeda');
-INSERT INTO Planet VALUES ('Earth', 12742, 4540, FALSE, 'Milky Way');
+INSERT INTO Planet VALUES ('Krypton', 0, 8700, 1, 'Andromeda');
+INSERT INTO Planet VALUES ('Earth', 12742, 4540, 0, 'Milky Way');
 
 INSERT INTO Person VALUES ('Superman', 33, 'Krypton');
 INSERT INTO Person VALUES ('Batman', 30, 'Earth');
 INSERT INTO Person VALUES ('Flash', 53, 'Earth');
-INSERT INTO Person VALUES ('Wonder Woman', 28, 'Earth');
+INSERT INTO Person VALUES ('Wonder Woman', 30, 'Earth');
 INSERT INTO Person VALUES ('General Zod', 42, 'Krypton');
 
 INSERT INTO Superhero VALUES ('Superman', 'flying');

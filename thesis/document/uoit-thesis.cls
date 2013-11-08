@@ -642,7 +642,7 @@
 
 %
 %% Change \begin{abstract}...\end{abstract} to follow SGS guidelines
-%% and put the abstract on a separate page (checking @openright).
+%% and put the abstract on a separate page (checking @openbigr).
 %% >> Changed in v1.4 on 1998/11/05 by Francois Pitt. << %%
 %
 \if@grad

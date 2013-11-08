@@ -1,0 +1,11 @@
+name,peer,relationtype
+Superman,"Wonder Woman",friend
+Superman,Batman,friend
+Superman,"General Zod",foe
+Batman,Superman,friend
+Batman,"Wonder Woman",friend
+Flash,Batman,friend
+Flash,Superman,friend
+"Wonder Woman",Batman,friend
+"Wonder Woman",Superman,friend
+"General Zod","Wonder Woman",foe
