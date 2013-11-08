@@ -33,7 +33,7 @@ if __name__ == "__main__":
     to = settings.get("to")
     project_config = settings.get("project-config")
     
-    hops = list(map(lambda x: x + 1, range(max_hops)))
+    hops = map(lambda x: x + 1, range(max_hops))
     cmd = "lein run --benchmark -c {} -s \"{}\" -t \"{}\"".format(project_config, from_, to)
     run_count = 0
     total_runs = max_hops * len(methods) * runs
@@ -53,7 +53,8 @@ if __name__ == "__main__":
                 logger.info("Benchmarking... ({}, {} of {}, src:  {}, tgt:  {}, hops:  {}, remaining:  {})".format(method, i + 1, runs, from_, to, max_hops, (total_runs - run_count)))
 
                 run_cmd = "{} --algorithm {} --max-hops {}".format(cmd, method, max_hops)
-                output = check_output(run_cmd, shell=True)
+                # Python 3.x now returns bytes instead of a string here.  It must be decoded manually.
+                output = check_output(run_cmd, shell=True).decode("utf-8")
 
                 logger.info(output)
 

@@ -18,8 +18,6 @@ from datetime import datetime
 
 dashes = ["--", "-", ":", "-."] # Dashed, solid, dotted, dashed and dotted
 hatches = ["\\\\\\", "---", "///", "x"]
-#methods = set([method for (hops, method) in results])
-#hops = set([hops for (hops, method) in results])
 
 def ns_to_ms(ns):
     return ns / (1000.0 * 1000.0)
