@@ -25,13 +25,13 @@
 				\item A final forced GC after testing to estimate impact of cleanup on the timing results
 			\end{itemize}
 		
-			Unfortunately this requires a much longer runtime as each function must be invoked numerous times.  In extreme cases (Ford-Fulkerson, 8 hops) this can take upwards of 4 hours in our test environment.
+			Unfortunately this requires a much longer runtime as each function must be invoked numerous times.	In extreme cases (Ford-Fulkerson, 8 hops) this can take upwards of 4 hours in our test environment.
 		
 			\subsubsection{Data Collection}
 			\label{sec:data-collection}
-				Criterium provides us with a Clojure map with performance data.  It performs analysis, presenting us with outliers, samples, etc.  As this data collection process can take several hours or more, this data is collected and stored for offline analysis.
+				Criterium provides us with a Clojure map with performance data.	 It performs analysis, presenting us with outliers, samples, etc.  As this data collection process can take several hours or more, this data is collected and stored for offline analysis.
 				
-				In order to utilize the Clojure output in Python, a data interchange format (JSON) is used.  The benchmark function writes the Criterium performance analysis out as a JSON string to stdout and Python captures the output, JSONifies it, and stores it in an array.  This array is written to disk in JSON as well so it can be loaded into the data transformation script.
+				In order to utilize the Clojure output in Python, a data interchange format (JSON) is used.	 The benchmark function writes the Criterium performance analysis out as a JSON string to stdout and Python captures the output, JSONifies it, and stores it in an array.  This array is written to disk in JSON as well so it can be loaded into the data transformation script.
 				
 				For example:
 				

@@ -8,9 +8,9 @@
 	\end{defn}
 	
 	\DTLforeach*[\value{DTLrowi}<1]{db-person}{\name=name,\age=age,\birthplace=birthplace}{
-	    \xdef\name{\name}
-	    \xdef\age{\age}
-	    \xdef\birthplace{\birthplace}
+		\xdef\name{\name}
+		\xdef\age{\age}
+		\xdef\birthplace{\birthplace}
 	}
 	
 	\begin{ex}
@@ -32,10 +32,10 @@
 		\[
 			\relation = \bigl\{
 				\begin{array}{l}
-				    \DTLforeach{db-person}{\name=name,\age=age,\birthplace=birthplace}{
-				        \DTLiffirstrow{}{\\}
-				        \bigl\{\mathrm{name}: \textrm{``\name''}, \mathrm{age}: \age, \mathrm{birthplace}: \textrm{``\birthplace''}\bigr\},
-				    }
+					\DTLforeach{db-person}{\name=name,\age=age,\birthplace=birthplace}{
+						\DTLiffirstrow{}{\\}
+						\bigl\{\mathrm{name}: \textrm{``\name''}, \mathrm{age}: \age, \mathrm{birthplace}: \textrm{``\birthplace''}\bigr\},
+					}
 				\end{array}
 			\bigr\}
 		\]
@@ -54,7 +54,7 @@
 	
 	\begin{defn}[Keys]
 	\label{def:keys}
-		Keys are constraints imposed on relations.  A key constraint $\key$ on a relation $\relation$ is a subset of $\attributes{\relation}$ which may uniquely identify a tuple.  Formally, we say $\relation$ satisfies the key constraint $\key$, denoted as $\relation \models \key$, subject to
+		Keys are constraints imposed on relations.	A key constraint $\key$ on a relation $\relation$ is a subset of $\attributes{\relation}$ which may uniquely identify a tuple.	Formally, we say $\relation$ satisfies the key constraint $\key$, denoted as $\relation \models \key$, subject to
 		
 		\[
 			\forall \tuple, \tuple' \in \relation, \tuple \not= \tuple' \implies \tuple\bigl[\key\bigr] \not= \tuple'\bigl[\key\bigr]
@@ -65,7 +65,7 @@
 	
 	\begin{defn}[Foreign Keys]
 	\label{def:foreign-keys}
-		A \gls{fk} constraint applies to two relations, $\relation_1, \relation_2$.  It asserts that values of certain attributes of $\relation_1$ must appear as values of some corresponding attributes of $\relation_2$.  A \gls{fk} constraint is written as
+		A \gls{fk} constraint applies to two relations, $\relation_1, \relation_2$.	 It asserts that values of certain attributes of $\relation_1$ must appear as values of some corresponding attributes of $\relation_2$.	 A \gls{fk} constraint is written as
 		
 		\[
 			\theta = \relation_1\bigl(\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}\bigr) \rightarrow \relation_2\bigl(\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k}\bigr)
@@ -78,7 +78,7 @@
 		\]
 		
 		\begin{ex}
-			Suppose we have a relation $\rel{Superhero}{name, superpower}$.  We can impose a \gls{fk} constraint of
+			Suppose we have a relation $\rel{Superhero}{name, superpower}$.	 We can impose a \gls{fk} constraint of
 			
 			\[
 				\rel{Superhero}{name} \rightarrow \rel{Person}{name}
@@ -98,8 +98,8 @@
 			If we view relations as vertices, and foreign key constraints as edges, a database $\db$ can be viewed as a \emph{schema graph} $\sgraph{}$, formally defined as
 			
 			\begin{align}
-				\mathrm{vertices}:  V\bigl(\sgraph{}\bigr) &= \relations{\db} \\
-				\mathrm{edges}:  E\bigl(\sgraph{}\bigr) &= \fks{\db}
+				\mathrm{vertices}:	V\bigl(\sgraph{}\bigr) &= \relations{\db} \\
+				\mathrm{edges}:	 E\bigl(\sgraph{}\bigr) &= \fks{\db}
 			\end{align}
 		\end{defn}
 		
@@ -133,7 +133,7 @@
 					\node[main node] (Superhero)						{Superhero};
 					\node[main node] (Person)	[below of=Superhero]	{Person};
 					\node[main node] (Planet)	[below left of=Person]	{Planet};
-					\node[main node] (Link)		[below right of=Person]	{Link};
+					\node[main node] (Link)		[below right of=Person] {Link};
 					
 					\path
 						(Person)	edge node [right]					{}	(Superhero)
@@ -154,8 +154,8 @@
 					\begin{sqlcode}
 SELECT Person.name
 FROM   Person
-       JOIN Planet
-         ON Person.birthplace = Planet.name
+	   JOIN Planet
+		 ON Person.birthplace = Planet.name
 WHERE  NOT Planet.destroyed;
 					\end{sqlcode}
 				\end{singlespaced}
@@ -183,7 +183,7 @@ WHERE  NOT Planet.destroyed;
 	\subsection{Entity Group}
 		\begin{defn}[Entity Group]
 		\label{def:entity-group}
-			An entity group is a forest, $T$,  of tuples interconnected by join conditions defined by the foreign key constraints in the schema graph.  Given two vertices $\tuple_1, \tuple_2 \in V\bigl(T\bigr)$, it must be that:
+			An entity group is a forest, $T$,  of tuples interconnected by join conditions defined by the foreign key constraints in the schema graph.	Given two vertices $\tuple_1, \tuple_2 \in V\bigl(T\bigr)$, it must be that:
 
 			$\exists \relation_1, \relation_2 \in \relations{\db}$ such that $\tuple_1 \in \relation_1$, $\tuple_2\in \relation_2$, and $\bigl(\relation_1, \relation_2\bigr)\in G$.  This is to say that $\tuple_1$ and $\tuple_2$ belong to two relations that are connected by the schema graph.
 
@@ -235,7 +235,7 @@ WHERE  NOT Planet.destroyed;
 			
 			The enforcement of constraints is essential to the relational model.  There are several types of constraints.  The first constraint maintains uniqueness.
 			
-			The Person relation has the attribute name as its primary key.  In order for other relations to reference a specific named tuple, the name attribute must be unique.
+			The Person relation has the attribute name as its primary key.	In order for other relations to reference a specific named tuple, the name attribute must be unique.
 			
 			\begin{ex}[Unique Constraint]
 			\label{ex:unique-constraint}
@@ -244,21 +244,21 @@ WHERE  NOT Planet.destroyed;
 				\begin{singlespaced}
 					\begin{sqlcode}
 INSERT INTO Person
-VALUES      ('Superman',
-             35,
-             'Earth'); 
+VALUES		('Superman',
+			 35,
+			 'Earth'); 
 					\end{sqlcode}
 				\end{singlespaced}
 				
 				The \gls{rdbms} enforces the primary key constraint on the \texttt{name} attribute, rejecting the insertion.
 				
 				\begin{verbatim}
-ERROR:  duplicate key value violates unique constraint "person_pkey"
-DETAIL:  Key (name)=(Superman) already exists.
+ERROR:	duplicate key value violates unique constraint "person_pkey"
+DETAIL:	 Key (name)=(Superman) already exists.
 				\end{verbatim}
 			\end{ex}
 			
-			With the uniqueness of named tuples guaranteed (as demonstrated in \Vref{ex:unique-constraint}), we must ensure that any named tuples that are referenced actually exist.  If they do not, the database must not permit the operation to continue.  Doing so would lead to dangling references.
+			With the uniqueness of named tuples guaranteed (as demonstrated in \Vref{ex:unique-constraint}), we must ensure that any named tuples that are referenced actually exist.  If they do not, the database must not permit the operation to continue.	Doing so would lead to dangling references.
 			
 			\begin{ex}[Referential Integrity]
 				Attempt to insert the superhero ``Aquaman'' with the superpower ``telepathy.''
@@ -266,17 +266,17 @@ DETAIL:  Key (name)=(Superman) already exists.
 				\begin{singlespaced}
 					\begin{sqlcode}
 INSERT INTO Superhero
-VALUES      ('Aquaman',
-             'telepathy'); 
+VALUES		('Aquaman',
+			 'telepathy'); 
 					\end{sqlcode}
 				\end{singlespaced}
 				
 				Again we see the \gls{rdbms} protecting the integrity of the data.
 				
 				\begin{verbatim}
-ERROR:  insert or update on table "superhero" violates foreign
+ERROR:	insert or update on table "superhero" violates foreign
 key constraint "superhero_name_fkey"
-DETAIL:  Key (name)=(Aquaman) is not present in table "person".
+DETAIL:	 Key (name)=(Aquaman) is not present in table "person".
 				\end{verbatim}
 			\end{ex}
 			
@@ -290,7 +290,7 @@ DETAIL:  Key (name)=(Aquaman) is not present in table "person".
 SELECT COUNT(*)
 FROM   Link
 WHERE  name = 'Superman'
-       AND relationtype = 'friend'; 
+	   AND relationtype = 'friend'; 
 					\end{sqlcode}
 				\end{singlespaced}
 			\end{ex}
@@ -301,7 +301,7 @@ WHERE  name = 'Superman'
 				\begin{singlespaced}
 					\begin{sqlcode}
 SELECT name,
-       Count(name)
+	   Count(name)
 FROM   Link
 WHERE  relationtype = 'foe'
 GROUP  BY name; 
@@ -327,21 +327,21 @@ GROUP  BY name;
 			Information stored within a properly designed database is normalized.  That is, no information is repeated.
 			
 			\begin{ex}[Normalization]
-				For example, suppose the planet Krypton is discovered to have been in the ``Xeno'' Galaxy rather than the ``Andromeda'' Galaxy.  If this information were not normalized, each person whose birthplace was Krypton would need to be updated.  Since this information is normalized, the following query will suffice.
+				For example, suppose the planet Krypton is discovered to have been in the ``Xeno'' Galaxy rather than the ``Andromeda'' Galaxy.	 If this information were not normalized, each person whose birthplace was Krypton would need to be updated.  Since this information is normalized, the following query will suffice.
 				
 				\begin{singlespaced}
 					\begin{sqlcode}
 UPDATE planet
-SET    galaxy = 'Xeno'
+SET	   galaxy = 'Xeno'
 WHERE  name = 'Krypton';
 					\end{sqlcode}
 				\end{singlespaced}
 			\end{ex}
 			
-			The above examples are some of the most important reasons for choosing the relation model over others.  Unfortunately the relational model is not without its downsides.
+			The above examples are some of the most important reasons for choosing the relation model over others.	Unfortunately the relational model is not without its downsides.
 		
 		\subsubsection{Cons}
-			While the relational model excels at ensuring data consistency, aggregation, and reporting, it is not suitable for every task.  In order to issue queries, a user must be familiar with the schema.  This requires specific domain knowledge of the data.
+			While the relational model excels at ensuring data consistency, aggregation, and reporting, it is not suitable for every task.	In order to issue queries, a user must be familiar with the schema.	 This requires specific domain knowledge of the data.
 			
 			\begin{ex}
 				Find all enemies of superheroes from Earth.
@@ -352,21 +352,21 @@ WHERE  name = 'Krypton';
 					\begin{sqlcode}
 SELECT peer
 FROM   Link
-       JOIN Person
-         ON Person.name = Link.name
-       JOIN Planet
-         ON Planet.name = Person.birthplace
+	   JOIN Person
+		 ON Person.name = Link.name
+	   JOIN Planet
+		 ON Planet.name = Person.birthplace
 WHERE  relationtype = 'foe'
-       AND Planet.name = 'Earth';
+	   AND Planet.name = 'Earth';
 					\end{sqlcode}
 				\end{singlespaced}
 			\end{ex}
 			
-			A casual user is unlikely to determine the correct join path, name of the tables, name of the attributes, etc.  This is in contrast to the document model, where the data is semi-structure or unstructured, requiring minimal domain knowledge.
+			A casual user is unlikely to determine the correct join path, name of the tables, name of the attributes, etc.	This is in contrast to the document model, where the data is semi-structure or unstructured, requiring minimal domain knowledge.
 
 			The relational model is also rigid in structure.  If a relation is modified, every query referencing said relation may require a rewrite.  Even a simple attribute being renamed (e.g.~$\rho_{\mathrm{name/alias}}(\mathrm{Person})$) is capable of modifying the join paths.  This rigidity places additional cognitive burden on users.
 			
-			In addition to having a rigid structure, most relational database management systems lack flexible string matching options.  Assuming basic SQL-92 compliance, a \gls{rdbms} only supports the \texttt{LIKE} predicate \cite{sql-2011}.
+			In addition to having a rigid structure, most relational database management systems lack flexible string matching options.	 Assuming basic SQL-92 compliance, a \gls{rdbms} only supports the \texttt{LIKE} predicate \cite{sql-2011}.
 			
 			\begin{ex}[\texttt{LIKE} Predicate]
 				Find all people with a name ending in ``man.''

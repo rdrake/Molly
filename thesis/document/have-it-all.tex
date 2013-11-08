@@ -1,75 +1,75 @@
 \chapter{Best of Both Worlds}
-    \section{Encoding Named Tuples into Documents}
-    \label{sec:named-tuples-documents}
-        Recall in the extended document model (\Vref{sec:extending-the-document-model}), a document $\doc$ consists of fields $\field_1, \field_2, \dotsc, \field_n$.  Using the extended document model, we are left with a straight forward mapping of a tuple $\tuple$ to document $\doc$.
-        
-        For tuple $\tuple$, every attribute $\attribute \in \attributes{\tuple}$ maps to field $\field$ in $\doc$.  Every attribute value must be analyzed into an indexable form in order to store it in a field.
-        
-        \begin{align}
-            \attributes{\tuple} &\xrightarrow{analyzed} \fields{\doc} \\
-            \attribute_1, \attribute_2, \dotsc, \attribute_n &\xrightarrow{analyzed} \field_1, \field_2, \dotsc, \field_n
-        \end{align}
-        
-        We denote the document encoding of $\tuple$ as $\docs{\tuple}$.
-    
-    \section{Mapping of Entity Groups to Documents}
-        Recall that an entity group (\Vref{def:entity-group}) is a forest $\egraph$ of tuples $t$ such that
-        
-        \[
-            \forall \bigl(\tuple, \tuple'\bigr) \in \egraph, \tuple \nequal \tuple' \Rightarrow \relations{\tuple} \nequal \relations{\tuple'}
-        \]
-        
-        That is, all tuples are from distinct relations.
-        
-        Given the restriction
-        
-        \[
-            \forall \bigl(\relation, \relation'\bigr) \in \sgraph{\db}, \exists! \bigl(\relation, \relation'\bigr) \models \theta
-        \]
-        
-        we assert that if $\bigl(\tuple, \tuple'\bigr) \in \egraph$, then $\bigl(\tuple, \tuple'\bigr) \in \relations{\tuple} \bowtie \relations{\tuple'}$.
-        
-        Let $V\bigl(\egraph\bigr)$ be the vertices of $\egraph$, $E\bigl(\egraph\bigr)$ be the edges of $\egraph$.
-        
-        \begin{claim}
-        \label{clm:lossless}
-            $\egraph$ can always be reconstructed from $V\bigl(\egraph\bigr)$ without loss of information.
-        \end{claim}
-        
-        \begin{proof}
-            Given $V\bigl(\egraph\bigr)$, we must reconstruct $E\bigl(\egraph\bigr)$ in order to complete $\egraph$.
-            
-            Choose any $\bigl(\tuple, \tuple'\bigr) \in V\bigl(\egraph\bigr)$.  If $\bigl(\relations{\tuple}, \relations{\tuple'}\bigr) \in \sgraph{\db}$, then $\bigl(\tuple, \tuple'\bigr)$ is an edge in $\egraph$.
-            
-            Recall our earlier assertion that $\sgraph{\db}$ is cycle-free and foreign keys must be unique.
-        \end{proof}
-        
-    \section{Encoding an Entity Group as a Document Group}
-        Given a entity group $\egraph$, we construct two or more documents in order to represent the entity group in the document model.
-        
-        For every $\tuple \in V\bigl(\egraph\bigr)$, we construct a document $\docs{\tuple}$ (\Vref{sec:named-tuples-documents}).  With each tuple $\tuple$ stored in the document collection $\dc$, we construct an additional document which stores the association information.
-        
-        Let $x$ be the indexing document of $\egraph$.
-        
-        \[
-            x\bigl[\mathrm{``entities''}\bigr] = \bigcup_{\tuple \in V\left(\egraph\right)} \uid{\tuple}
-        \]
-        
-        Thus, the encoding of $\egraph$ is defined as
-        
-        \[
-            \egraph \xrightarrow{\mathrm{encode}} \Bigl\{\docs{\tuple} : \tuple \in V\bigl(\egraph\bigr)\Bigr\} \cup \Bigl\{x\Bigr\}
-        \]
-        
-        It's easy to see that from encode(G) we can recover V(G), the tuples in G.
-        
-        By \Vref{clm:lossless}, this is sufficient to recover G entirely.
-    
-    \section{Encoding Attribute Values into Searchable Documents}
+	\section{Encoding Named Tuples into Documents}
+	\label{sec:named-tuples-documents}
+		Recall in the extended document model (\Vref{sec:extending-the-document-model}), a document $\doc$ consists of fields $\field_1, \field_2, \dotsc, \field_n$.  Using the extended document model, we are left with a straight forward mapping of a tuple $\tuple$ to document $\doc$.
+		
+		For tuple $\tuple$, every attribute $\attribute \in \attributes{\tuple}$ maps to field $\field$ in $\doc$.	Every attribute value must be analyzed into an indexable form in order to store it in a field.
+		
+		\begin{align}
+			\attributes{\tuple} &\xrightarrow{analyzed} \fields{\doc} \\
+			\attribute_1, \attribute_2, \dotsc, \attribute_n &\xrightarrow{analyzed} \field_1, \field_2, \dotsc, \field_n
+		\end{align}
+		
+		We denote the document encoding of $\tuple$ as $\docs{\tuple}$.
+	
+	\section{Mapping of Entity Groups to Documents}
+		Recall that an entity group (\Vref{def:entity-group}) is a forest $\egraph$ of tuples $t$ such that
+		
+		\[
+			\forall \bigl(\tuple, \tuple'\bigr) \in \egraph, \tuple \nequal \tuple' \Rightarrow \relations{\tuple} \nequal \relations{\tuple'}
+		\]
+		
+		That is, all tuples are from distinct relations.
+		
+		Given the restriction
+		
+		\[
+			\forall \bigl(\relation, \relation'\bigr) \in \sgraph{\db}, \exists! \bigl(\relation, \relation'\bigr) \models \theta
+		\]
+		
+		we assert that if $\bigl(\tuple, \tuple'\bigr) \in \egraph$, then $\bigl(\tuple, \tuple'\bigr) \in \relations{\tuple} \bowtie \relations{\tuple'}$.
+		
+		Let $V\bigl(\egraph\bigr)$ be the vertices of $\egraph$, $E\bigl(\egraph\bigr)$ be the edges of $\egraph$.
+		
+		\begin{claim}
+		\label{clm:lossless}
+			$\egraph$ can always be reconstructed from $V\bigl(\egraph\bigr)$ without loss of information.
+		\end{claim}
+		
+		\begin{proof}
+			Given $V\bigl(\egraph\bigr)$, we must reconstruct $E\bigl(\egraph\bigr)$ in order to complete $\egraph$.
+			
+			Choose any $\bigl(\tuple, \tuple'\bigr) \in V\bigl(\egraph\bigr)$.	If $\bigl(\relations{\tuple}, \relations{\tuple'}\bigr) \in \sgraph{\db}$, then $\bigl(\tuple, \tuple'\bigr)$ is an edge in $\egraph$.
+			
+			Recall our earlier assertion that $\sgraph{\db}$ is cycle-free and foreign keys must be unique.
+		\end{proof}
+		
+	\section{Encoding an Entity Group as a Document Group}
+		Given a entity group $\egraph$, we construct two or more documents in order to represent the entity group in the document model.
+		
+		For every $\tuple \in V\bigl(\egraph\bigr)$, we construct a document $\docs{\tuple}$ (\Vref{sec:named-tuples-documents}).  With each tuple $\tuple$ stored in the document collection $\dc$, we construct an additional document which stores the association information.
+		
+		Let $x$ be the indexing document of $\egraph$.
+		
+		\[
+			x\bigl[\mathrm{``entities''}\bigr] = \bigcup_{\tuple \in V\left(\egraph\right)} \uid{\tuple}
+		\]
+		
+		Thus, the encoding of $\egraph$ is defined as
+		
+		\[
+			\egraph \xrightarrow{\mathrm{encode}} \Bigl\{\docs{\tuple} : \tuple \in V\bigl(\egraph\bigr)\Bigr\} \cup \Bigl\{x\Bigr\}
+		\]
+		
+		It's easy to see that from encode(G) we can recover V(G), the tuples in G.
+		
+		By \Vref{clm:lossless}, this is sufficient to recover G entirely.
+	
+	\section{Encoding Attribute Values into Searchable Documents}
 		Each value for user selected attributes are converted into $n$-grams, and stored in special documents.
 	
 	\section{Iterative Search Using Document Encodings}
-		A document database supports fast and flexible keyword search queries.  A search query is characterized by $q = \bigl(f, w\bigr)$, where $f$ is a field name, and $w$ is a search phrase.
+		A document database supports fast and flexible keyword search queries.	A search query is characterized by $q = \bigl(f, w\bigr)$, where $f$ is a field name, and $w$ is a search phrase.
 		
 		Search[q] is the set of documents returned by the text index.  The search function allows us to do many things:
 		
