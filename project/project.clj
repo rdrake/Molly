@@ -30,10 +30,10 @@
                    [lein-ancient                "0.5.2"]]
   :ring           {:handler molly.server.remotes/app}
   :hooks          [leiningen.cljsbuild]
-  :mirrors
-    {"central"
-     {:name "Ibiblio"
-      :url "http://mirrors.ibiblio.org/pub/mirrors/maven2"}}
+  ;:mirrors
+  ;  {"central"
+  ;   {:name "Ibiblio"
+  ;    :url "http://mirrors.ibiblio.org/pub/mirrors/maven2"}}
   :cljsbuild
     {:builds
      {:dev

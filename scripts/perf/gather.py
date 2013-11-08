@@ -1,57 +1,67 @@
+#!/usr/bin/env python3
+import argparse
 import logging
+import logging.config
 import json
 
 from datetime import datetime
 from subprocess import check_output
+from configparser import ConfigParser
 
 from common import get_datetime, dt_to_str
 
-# Configure logging so we can be informed of progress, issues, etc.
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+if __name__ == "__main__":
+    # Argument tells us where the configuration file is.
+    parser = argparse.ArgumentParser(description="Gather benchmarks")
+    parser.add_argument("--config", dest="config_path", required=True, help="path to configuration file")
+    args = parser.parse_args()
+    
+    # Load configuration from INI file.
+    config = ConfigParser()
+    config.read(args.config_path)
 
-# Some constants/settings
-RUNS = 1
-HOPS = 8
+    # Configure logging so we can be informed of progress, issues, etc.
+    logger = logging.getLogger(config.get("misc", "logger"))
+    logging.config.fileConfig(args.config_path, disable_existing_loggers=False)
+    
+    # Get/parse settings
+    settings = config["DEFAULT"]
+    runs = settings.getint("runs")
+    max_hops = settings.getint("max-hops")
+    methods = settings.get("methods").split(",")
+    from_ = settings.get("from")
+    to = settings.get("to")
+    project_config = settings.get("project-config")
+    
+    hops = list(map(lambda x: x + 1, range(max_hops)))
+    cmd = "lein run --benchmark -c {} -s \"{}\" -t \"{}\"".format(project_config, from_, to)
+    run_count = 0
+    total_runs = max_hops * len(methods) * runs
 
-FROM = "instructor|109"
-TO = "instructor|108"
+    bench_start = get_datetime()
+    bench_start_str = dt_to_str(bench_start)
 
-methods = ["bfs", "bfs-atom", "bfs-ref", "ford-fulkerson"]
-hops = map(lambda x: x + 1, range(HOPS))
+    logger.info("Began benchmarks at {}".format(bench_start))
 
-cmd = "lein run --benchmark -c .properties -s \"%s\" -t \"%s\"" % (FROM, TO) 
+    results = []
 
-run_count = 0
+    for max_hops in hops:
+        for method in methods:
+            for i in range(runs):
+                run_count += 1
 
-TOTAL_RUNS = len(hops) * len(methods) * RUNS
+                logger.info("Benchmarking... ({}, {} of {}, src:  {}, tgt:  {}, hops:  {}, remaining:  {})".format(method, i + 1, runs, from_, to, max_hops, (total_runs - run_count)))
 
-bench_start = get_datetime()
-bench_start_str = dt_to_str(bench_start)
+                run_cmd = "{} --algorithm {} --max-hops {}".format(cmd, method, max_hops)
+                output = check_output(run_cmd, shell=True)
 
-logger.info("Began benchmarks at %s" % bench_start)
+                logger.info(output)
 
-results = []
+                results.append(json.loads(output))
 
-for max_hops in hops:
-    for method in methods:
-        for i in range(RUNS):
-            run_count += 1
+                with open("{}-result.json".format(bench_start_str), "w") as f:
+                    json.dump(results, f)
 
-            logger.info("Benchmarking... (%s, %d of %d, src:  %s, tgt:  %s, hops:  %d, remaining:  %d)" % (method, i + 1, RUNS, FROM, TO, max_hops, (TOTAL_RUNS - run_count)))
+    bench_end = get_datetime()
 
-            run_cmd = "%s --algorithm %s --max-hops %d" % (cmd, method, max_hops)
-            output = check_output(run_cmd, shell=True)
-
-            print "==="
-            print "%d %s %d" % (max_hops, method, i)
-            print(output)   # Can monitor stdout in case of failure.
-
-            results.append(json.loads(output))
-
-            with open("%s-result.json" % bench_start_str, "w") as f:
-                json.dump(results, f)
-
-bench_end = get_datetime()
-
-logger.info("Completed benchmarks at %s (%s elapsed)" % (bench_end, (bench_end - bench_start)))
+    logger.info("Completed benchmarks at {} ({} elapsed)".format(bench_end, (bench_end - bench_start)))

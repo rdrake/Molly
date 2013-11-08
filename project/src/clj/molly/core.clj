@@ -51,7 +51,7 @@
       (if (opts :algorithm)
         (let [searcher  (idx-searcher
                           (idx-path
-                            (properties :index)))
+                            (properties :idx.path)))
               source    (opts :source)
               target    (opts :target)
               f         (condp = (opts :algorithm)
