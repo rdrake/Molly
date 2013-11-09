@@ -1,0 +1,28 @@
+backend      : pgf # Agg?
+
+font.family         : serif
+font.size           : 10.0
+font.serif          : Garamond Premier Pro
+
+text.usetex         : True
+
+pgf.texsystem: xelatex
+#pgf.rcfonts: False
+#pgf.preamble: \usepackage{fontspec}, \setmainfont{Garamond Premier Pro}, \setmathfont{XITS Math}, \setmathfont[range=\mathbfsfit/{greek,Greek,latin,Latin}]{Garamond Premier Pro}
+
+axes.facecolor      : none    # axes background color
+
+#figure.figsize   : 8, 6    # figure size in inches
+#figure.dpi       : 80      # figure dots per inch
+figure.facecolor : none    # figure facecolor; 0.75 is scalar gray
+figure.edgecolor : none   # figure edgecolor
+
+# the default savefig params can be different from the display params
+# e.g., you may want a higher resolution, or to make the figure
+# background white
+savefig.dpi         : 600      # figure dots per inch
+savefig.facecolor   : none     # figure facecolor when saving
+savefig.edgecolor   : none     # figure edgecolor when saving
+savefig.format      : pdf      # png, ps, pdf, svg
+#savefig.bbox        : standard # 'tight' or 'standard'.
+#savefig.pad_inches  : 0.1      # Padding to be used when bbox is set to 'tight'
