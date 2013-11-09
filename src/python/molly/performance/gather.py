@@ -8,12 +8,11 @@ from datetime import datetime
 from subprocess import check_output
 from configparser import ConfigParser
 
-from common import get_datetime, dt_to_str
-
 if __name__ == "__main__":
     # Argument tells us where the configuration file is.
     parser = argparse.ArgumentParser(description="Gather benchmarks")
     parser.add_argument("--config", dest="config_path", required=True, help="path to configuration file")
+    parser.add_argument("--output", dest="output_path", required=True, help="path to output JSON file")
     args = parser.parse_args()
     
     # Load configuration from INI file.
@@ -37,9 +36,7 @@ if __name__ == "__main__":
     cmd = "lein run --benchmark -c {} -s \"{}\" -t \"{}\"".format(project_config, from_, to)
     run_count = 0
     total_runs = max_hops * len(methods) * runs
-
-    bench_start = get_datetime()
-    bench_start_str = dt_to_str(bench_start)
+    bench_start = datetime.now()
 
     logger.info("Began benchmarks at {}".format(bench_start))
 
@@ -54,15 +51,15 @@ if __name__ == "__main__":
 
                 run_cmd = "{} --algorithm {} --max-hops {}".format(cmd, method, max_hops)
                 # Python 3.x now returns bytes instead of a string here.  It must be decoded manually.
-                output = check_output(run_cmd, shell=True).decode("utf-8")
+                output = check_output(run_cmd, shell=True).decode("utf-8").split("\n")[-2]
 
                 logger.info(output)
 
                 results.append(json.loads(output))
 
-                with open("{}-result.json".format(bench_start_str), "w") as f:
+                with open(args.output_path, "w") as f:
                     json.dump(results, f)
 
-    bench_end = get_datetime()
+    bench_end = datetime.now()
 
     logger.info("Completed benchmarks at {} ({} elapsed)".format(bench_end, (bench_end - bench_start)))

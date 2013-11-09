@@ -7,14 +7,14 @@
 		A named tuple $\tuple$ is an instance of a relation $\relation$, consisting of values corresponding to the attributes of $\relation$.  For example,
 	\end{defn}
 	
-	\DTLforeach*[\value{DTLrowi}<1]{db-person}{\name=name,\age=age,\birthplace=birthplace}{
-		\xdef\name{\name}
-		\xdef\age{\age}
-		\xdef\birthplace{\birthplace}
-	}
+	%\DTLforeach*[\value{DTLrowi}<1]{db-person}{\name=name,\age=age,\birthplace=birthplace}{
+	%	\xdef\name{\name}
+	%	\xdef\age{\age}
+	%	\xdef\birthplace{\birthplace}
+	%}
 	
 	\begin{ex}
-		Given a tuple $\tuple = \bigl\{\mathrm{name}: \textrm{``\name''}, \mathrm{age}: \age, \mathrm{birthplace}: \textrm{``\birthplace''}\bigr\}$, we denote the attributes of $\tuple$ as $\attributes{\tuple} = \bigl\{\mathrm{name}, \mathrm{age}, \mathrm{birthplace}\bigr\}$.  The values are $\tuple\bigl[\mathrm{name}\bigr] = \textrm{``\name''}$, $\tuple\bigl[\mathrm{age}\bigr] = \age$, and $\tuple\bigl[\mathrm{birthplace}\bigr] = \textrm{``\birthplace''}$.
+		%Given a tuple $\tuple = \bigl\{\mathrm{name}: \textrm{``\name''}, \mathrm{age}: \age, \mathrm{birthplace}: \textrm{``\birthplace''}\bigr\}$, we denote the attributes of $\tuple$ as $\attributes{\tuple} = \bigl\{\mathrm{name}, \mathrm{age}, \mathrm{birthplace}\bigr\}$.  The values are $\tuple\bigl[\mathrm{name}\bigr] = \textrm{``\name''}$, $\tuple\bigl[\mathrm{age}\bigr] = \age$, and $\tuple\bigl[\mathrm{birthplace}\bigr] = \textrm{``\birthplace''}$.
 	\end{ex}
 	
 	\begin{defn}[Relation]
@@ -31,12 +31,12 @@
 		
 		\[
 			\relation = \bigl\{
-				\begin{array}{l}
-					\DTLforeach{db-person}{\name=name,\age=age,\birthplace=birthplace}{
-						\DTLiffirstrow{}{\\}
-						\bigl\{\mathrm{name}: \textrm{``\name''}, \mathrm{age}: \age, \mathrm{birthplace}: \textrm{``\birthplace''}\bigr\},
-					}
-				\end{array}
+				%\begin{array}{l}
+				%	\DTLforeach{db-person}{\name=name,\age=age,\birthplace=birthplace}{
+				%		\DTLiffirstrow{}{\\}
+				%		\bigl\{\mathrm{name}: \textrm{``\name''}, \mathrm{age}: \age, \mathrm{birthplace}: \textrm{``\birthplace''}\bigr\},
+				%	}
+				%\end{array}
 			\bigr\}
 		\]
 	\end{ex}
@@ -46,7 +46,7 @@
 	\begin{table}[!ht]
 		\centering
 		
-		\DTLdisplaydb{db-person}
+		%\DTLdisplaydb{db-person}
 		
 		\caption{Person table}
 		\label{tbl:person}

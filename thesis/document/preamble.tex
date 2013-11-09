@@ -21,6 +21,7 @@
 \usepackage{forest}										% Simple trees
 \usepackage{subdepth}
 \usepackage{comment}									% How is this not built-in?
+\usepackage{pgf}
 \usepackage{varioref}
 \usepackage[linktocpage=true,colorlinks=true]{hyperref} % Helpful links
 \usepackage{cleveref}
@@ -61,6 +62,7 @@
 \setmainfont[
 	Kerning=Uppercase
 ]{Garamond Premier Pro}
+\setsansfont{Garamond Premier Pro}
 \setmathfont{XITS Math}
 \setmathfont[range=\mathbfsfit/{greek,Greek,latin,Latin}]{Garamond Premier Pro}
 \setmonofont[Scale=0.9]{Consolas}
@@ -119,10 +121,10 @@
 \renewcommand{\dtldisplayendtab}{\\\bottomrule}
 
 % Load databases
-\DTLloaddb{db-link}{../../project/data/superheroes/Link.csv}
-\DTLloaddb{db-person}{../../project/data/superheroes/Person.csv}
-\DTLloaddb{db-superhero}{../../project/data/superheroes/Superhero.csv}
-\DTLloaddb{db-planet}{../../project/data/superheroes/Planet.csv}
+%\DTLloaddb{db-link}{../../project/data/superheroes/Link.csv}
+%\DTLloaddb{db-person}{../../project/data/superheroes/Person.csv}
+%\DTLloaddb{db-superhero}{../../project/data/superheroes/Superhero.csv}
+%\DTLloaddb{db-planet}{../../project/data/superheroes/Planet.csv}
 
 \newglossary{symbols}{sym}{sbl}{List of Symbols}
 \makeglossaries
