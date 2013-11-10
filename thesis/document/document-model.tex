@@ -1,19 +1,15 @@
 % !TEX root = Thesis.tex
 \section{Document Model}
 \label{sec:document-model}
-	In this section we formally define the document model.
-	
-	Documents are a unit of information.  The definition of unit can vary.	It may represent an email, a book chapter, a memo, etc.	 Contained within each document is a set of terms.
-	
 	In contrast to the relational model, the document model represents semi-structured as well as unstructured data.  Examples of information suitable to the document model includes emails, memos, book chapters, etc.
 	
 	These pieces, or units, of information are broken into documents.  Groups of related documents (for example, a library catalogue) are referred to as a document collection.
 
 	\begin{defn}[Terms and Document]
 	\label{def:document}
-		A term, $\term$, is an indivisible string (e.g.~a proper noun, word, or a phrase).	A document, $\doc$, is a bag of words.	Let $\freq\bigl(\term, \doc\bigr)$ be the frequency of terms $\term$ in document $\doc$.
+		A term, \(\term\), is an indivisible string (e.g.~a proper noun, word, or a phrase).	A document, \(\doc\), is a bag of words.	Let \(\freq(\term, \doc)\) be the frequency of terms \(\term\) in document \(\doc\).
 		
-		Let $\terms$ denote all possible terms, and $\bag{\terms}$ be all possible bag of terms.
+		Let \(\terms\) denote all possible terms, and \(\bag{\terms}\) be all possible bag of terms.
 	\end{defn}
 	
 	\begin{remark}
@@ -22,7 +18,7 @@
 	
 	\begin{defn}[Document Collection]
 	\label{def:document-collection}
-		A document collection $\dc$ is a set of documents, written $D\dc = \bigl\{\doc_1, \doc_2, \dotsc, \doc_k\bigr\}$.  The size of $\dc$ is denoted $\gls{ndocs}$.	The number of unique terms, or size of $\gls{terms}$, in $\dc$, is denoted $\gls{nterms}$.
+		A document collection \(\dc\) is a set of documents, written \(D\dc = \{\doc_1, \doc_2, \dotsc, \doc_k\}\).  The size of \(\dc\) is denoted \(\gls{ndocs}\).
 	\end{defn}
 	
 	\begin{ex}
@@ -39,96 +35,96 @@
 		Each sentence represents a document, giving us the following documents.
 		
 		\begin{align}
-			\doc_1 &= \bigl\{\textrm{``and''}: 1, \textrm{``on''}: 2, \textrm{``is''}: 1, \textrm{``lives''}: 1, \textrm{``earth''}: 2, \textrm{``strong''}: 1, \textrm{``superman''}: 1\bigr\} \\
-			\doc_2 &= \bigl\{\textrm{``batman''}: 1, \textrm{``on''}: 1, \textrm{``was''}: 1, \textrm{``earth''}: 1, \textrm{``born''}: 1\bigr\} \\
-			\doc_3 &= \bigl\{\textrm{``on''}: 1, \textrm{``is''}: 1, \textrm{``superwoman''}: 1, \textrm{``fast''}: 1, \textrm{``earth''}: 1\bigr\} \\
-			\doc_4 &= \bigl\{\textrm{``krypton''}: 1, \textrm{``born''}: 1, \textrm{``on''}: 1, \textrm{``was''}: 1, \textrm{``superman''}: 1\bigr\} \\
+			\doc_1 &= \{\text{``and''}: 1, \text{``on''}: 2, \text{``is''}: 1, \text{``lives''}: 1, \text{``earth''}: 2, \text{``strong''}: 1, \text{``superman''}: 1\} \\
+			\doc_2 &= \{\text{``batman''}: 1, \text{``on''}: 1, \text{``was''}: 1, \text{``earth''}: 1, \text{``born''}: 1\} \\
+			\doc_3 &= \{\text{``on''}: 1, \text{``is''}: 1, \text{``superwoman''}: 1, \text{``fast''}: 1, \text{``earth''}: 1\} \\
+			\doc_4 &= \{\text{``krypton''}: 1, \text{``born''}: 1, \text{``on''}: 1, \text{``was''}: 1, \text{``superman''}: 1\} \\
 		\end{align}
 	\end{ex}
 	
 	\subsection{Vectorization of Documents}
 	\label{sec:vectorization-of-documents}
-		One of the most fundamental approach for search documents is to treat documents as high dimensional vectors, and the document collection as a subset in a vector space.	 The search query becomes a nearest neighbour query in a vector space equipped with a distance measure.
+		One of the most fundamental approaches for searching documents is to treat documents as high dimensional vectors, and the document collection as a subset in a vector space.	 The search query becomes a nearest neighbour query in a vector space equipped with a distance measure.
 		
-		The first step is to convert bag of terms into vectors.	 The standard technique \cite{ir-08} uses a scoring function that measures the relative importance terms in documents.
+		The first step is to convert a bag of terms into vectors.	 The standard technique \cite{ir-08} uses a scoring function that measures the relative importance of terms in documents.
 		
-		\begin{defn}[TF-IDF Score]
-			The term frequency is the number of times a term $\term$ appears in a document $\doc$, as given by $\freq\bigl(\term, \doc\bigr)$.	The document frequency of a term $\term$, denoted by $\df\bigl(\term\bigr)$, is the number of documents in $\dc$ that contains $\term$.	 It is defined as
+		\begin{defn}[TF-IDF Score] \todo{What is a TF-IDF? What does TF-IDF stand for?}
+			The term frequency is the number of times a term \(\term\) appears in a document \(\doc\), as given by \(\freq(\term, \doc)\).	The document frequency of a term \(\term\), denoted by \(\df(\term)\), is the number of documents in \(\dc\) that contains \(\term\).	 It is defined as
 			
 			\[
-				\df\bigl(\term\bigr) = \abs{\bigl\{\doc \in \dc: \term \in \doc\bigr\}}
+				\df(\term) = \abs{\{\doc \in \dc: \term \in \doc\}}
 			\]
 			
-			The combined TF-IDF score of $\term$ in a document $\doc$ is given by
+			The combined TF-IDF score of \(\term\) in a document \(\doc\) is given by
 			
 			\[
-				\tfidf\bigl(\dc, \term, \doc\bigr) = \frac{\freq\bigl(\term, \doc\bigr)}{\abs{\doc}} \cdot \log{\frac{N}{\df\bigl(\term\bigr)}}
+				\tfidf(\dc, \term, \doc) = \frac{\freq(\term, \doc)}{\abs{\doc}} \cdot \log{\frac{N}{\df(\term)}}
 			\]
 		\end{defn}
 		
 		\begin{remark}
-			The first component, $\frac{\freq\left(\term, \doc\right)}{\abs{\doc}}$, measures the importance of a term within a document.  It is normalized to account for document length.	 The second component, $\log{\frac{N}{\df\left(\term\right)}}$, is a measure of the rarity of the term within the document collection $\dc$.
+			The first component, \(\frac{\freq\left(\term, \doc\right)}{\abs{\doc}}\), measures the importance of a term within a document.  It is normalized to account for document length.	 The second component, \(\log{\frac{N}{\df\left(\term\right)}}\), is a measure of the rarity of the term within the document collection \(\dc\).
 		\end{remark}
 		
 		\begin{ex}
-			Using the documents from \Vref{ex:superhero-documents}, the TF-IDF scores are as follows.
+			Using the documents from \vref{ex:superhero-documents}, the TF-IDF scores are as follows.
 			
 			\[
 				\bordermatrix{
 					~ & \doc_1 & \doc_2 & \doc_3 & \doc_4 \cr
-					\term_1 : \textrm{``and''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
-					\term_2 : \textrm{``on''} & 0.0000 & 0.0000 & 0.0000 & 0.0000 \cr
-					\term_3 : \textrm{``superwoman''} & 0.0000 & 0.0000 & 0.4000 & 0.0000 \cr
-					\term_4 : \textrm{``batman''} & 0.0000 & 0.4000 & 0.0000 & 0.0000 \cr
-					\term_5 : \textrm{``is''} & 0.1429 & 0.0000 & 0.2000 & 0.0000 \cr
-					\term_6 : \textrm{``fast''} & 0.0000 & 0.0000 & 0.4000 & 0.0000 \cr
-					\term_7 : \textrm{``born''} & 0.0000 & 0.2000 & 0.0000 & 0.2000 \cr
-					\term_8 : \textrm{``krypton''} & 0.0000 & 0.0000 & 0.0000 & 0.4000 \cr
-					\term_9 : \textrm{``earth''} & 0.1186 & 0.0830 & 0.0830 & 0.0000 \cr
-					\term_{10} : \textrm{``lives''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
-					\term_{11} : \textrm{``strong''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
-					\term_{12} : \textrm{``was''} & 0.0000 & 0.2000 & 0.0000 & 0.2000 \cr
-					\term_{13} : \textrm{``superman''} & 0.1429 & 0.0000 & 0.0000 & 0.2000 \cr
+					\term_1 : \text{``and''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
+					\term_2 : \text{``on''} & 0.0000 & 0.0000 & 0.0000 & 0.0000 \cr
+					\term_3 : \text{``superwoman''} & 0.0000 & 0.0000 & 0.4000 & 0.0000 \cr
+					\term_4 : \text{``batman''} & 0.0000 & 0.4000 & 0.0000 & 0.0000 \cr
+					\term_5 : \text{``is''} & 0.1429 & 0.0000 & 0.2000 & 0.0000 \cr
+					\term_6 : \text{``fast''} & 0.0000 & 0.0000 & 0.4000 & 0.0000 \cr
+					\term_7 : \text{``born''} & 0.0000 & 0.2000 & 0.0000 & 0.2000 \cr
+					\term_8 : \text{``krypton''} & 0.0000 & 0.0000 & 0.0000 & 0.4000 \cr
+					\term_9 : \text{``earth''} & 0.1186 & 0.0830 & 0.0830 & 0.0000 \cr
+					\term_{10} : \text{``lives''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
+					\term_{11} : \text{``strong''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
+					\term_{12} : \text{``was''} & 0.0000 & 0.2000 & 0.0000 & 0.2000 \cr
+					\term_{13} : \text{``superman''} & 0.1429 & 0.0000 & 0.0000 & 0.2000 \cr
 				}
 			\]
 		\end{ex}
 
 		\begin{defn}[Document Vector]
-			Given a document collection $\dc$ with $M$ unique terms $\terms = \bigl[\term_1, \term_2, \dotsc, \term_n \bigr]$, each document $\doc$ can be represented by an $M$-dimensional vector.
+			Given a document collection \(\dc\) with \(M\) unique terms \(\terms = [\term_1, \term_2, \dotsc, \term_n ]\), each document \(\doc\) can be represented by an \(M\)-dimensional vector.
 			
 			\[
 				\vec{\doc} = 
 				\left[
 				\begin{array}{c}
-					\tfidf\bigl(\term_1, \doc\bigr) \\
-					\tfidf\bigl(\term_2, \doc\bigr) \\
+					\tfidf(\term_1, \doc) \\
+					\tfidf(\term_2, \doc) \\
 					\vdots \\
-					\tfidf\bigl(\term_n, \doc\bigr)
+					\tfidf(\term_n, \doc)
 				\end{array}
 				\right]
 			\]
 		\end{defn}
 		
 		\begin{ex}
-			The documents in \Vref{ex:superhero-documents} would produce the following vectors.
+			The documents in \vref{ex:superhero-documents} would produce the following vectors.
 			
 			\[
 				\vec{\doc_n} = 
 					\left[
 						\begin{array}{l}
-							\tfidf\bigl(\term_{1}, d_n\bigr) \\
-							\tfidf\bigl(\term_{2}, d_n\bigr) \\
-							\tfidf\bigl(\term_{3}, d_n\bigr) \\
-							\tfidf\bigl(\term_{4}, d_n\bigr) \\
-							\tfidf\bigl(\term_{5}, d_n\bigr) \\
-							\tfidf\bigl(\term_{6}, d_n\bigr) \\
-							\tfidf\bigl(\term_{7}, d_n\bigr) \\
-							\tfidf\bigl(\term_{8}, d_n\bigr) \\
-							\tfidf\bigl(\term_{9}, d_n\bigr) \\
-							\tfidf\bigl(\term_{10}, d_n\bigr) \\
-							\tfidf\bigl(\term_{11}, d_n\bigr) \\
-							\tfidf\bigl(\term_{12}, d_n\bigr) \\
-							\tfidf\bigl(\term_{13}, d_n\bigr) \\
+							\tfidf(\term_{1}, d_n) \\
+							\tfidf(\term_{2}, d_n) \\
+							\tfidf(\term_{3}, d_n) \\
+							\tfidf(\term_{4}, d_n) \\
+							\tfidf(\term_{5}, d_n) \\
+							\tfidf(\term_{6}, d_n) \\
+							\tfidf(\term_{7}, d_n) \\
+							\tfidf(\term_{8}, d_n) \\
+							\tfidf(\term_{9}, d_n) \\
+							\tfidf(\term_{10}, d_n) \\
+							\tfidf(\term_{11}, d_n) \\
+							\tfidf(\term_{12}, d_n) \\
+							\tfidf(\term_{13}, d_n) \\
 						\end{array}
 					\right],
 				\vec{\doc_1} = 
@@ -207,11 +203,11 @@
 		\end{ex}
 		
 		\begin{defn}[Search Query]
-			A search query $\q$ is simply a document, namely a bag of terms.  The top-$k$ answers to $\q$ with respect to a collection $dc$ is defined as the $k$ documents, $\bigl\{\doc_1, \doc_2, \dotsc, d_k\bigr\}$, in $\dc$, such that $\bigl\{\vec{\doc}_i\bigr\}$ are the closest vectors to $\vec{\q}$ using Euclidean distance measure in $\mathbb{R}^N$.
+			A search query \(\q\) is simply a document, namely a bag of terms. \todo{Awkward wording} The top-\(k\) answers to \(\q\) with respect to a collection \(\dc\) is defined as the \(k\) documents, \(\{\doc_1, \doc_2, \dotsc, d_k\}\), in \(\dc\), such that \(\{\vec{\doc}_i\}\) are the closest vectors to \(\vec{\q}\) using Euclidean distance measure in \(\mathbb{R}^N\).
 		\end{defn}
 		
 		\begin{ex}
-			Given the search query $\q = \bigl\{\mathrm{superwoman}, \mathrm{was}, \mathrm{born}, \mathrm{on}, \mathrm{krypton}\bigr\}$, compute the vector $\vec{\q}$ within the document collection $\dc$ (as defined in \Vref{ex:superhero-documents}).
+			Given the search query \(\q = \{\text{superwoman}, \text{was}, \text{born}, \text{on}, \text{krypton}\}\), compute the vector \(\vec{\q}\) within the document collection \(\dc\) (as defined in \vref{ex:superhero-documents}).
 			
 			\[
 				\vec{\q} = 
@@ -235,44 +231,44 @@
 			\]
 		\end{ex}
 		
-		In order to determine the top-$k$ documents for search query $\q$, we need a way of measuring the similarity between documents.
+		In order to determine the top-\(k\) documents for search query \(\q\), we need a way of measuring the similarity between documents.
 		
 		\begin{defn}[Cosine Similarity]
-			Given two document vectors, $\vec{\doc}_1$ and $\vec{\doc}_2$, the cosine similarity is the dot product $\vec{\doc}_1 \cdot \vec{\doc}_2$, normalized by the product of the Euclidean distance of $\vec{\doc}_1$ and $\vec{\doc}_2$ in $\mathbb{R}^N$.	It is denoted as $\similarity\bigl(\vec{\doc}_1, \vec{\doc}_2\bigr)$.
+			Given two document vectors, \(\vec{\doc}_1\) and \(\vec{\doc}_2\), the cosine similarity is the dot product \(\vec{\doc}_1 \cdot \vec{\doc}_2\), normalized by the product of the Euclidean distance of \(\vec{\doc}_1\) and \(\vec{\doc}_2\) in \(\mathbb{R}^N\).	It is denoted as \(\similarity(\vec{\doc}_1, \vec{\doc}_2)\).
 			
 			\begin{align}
-				\similarity\bigl(\vec{\doc}_1, \vec{\doc}_2\bigr) &= \frac{\vec{\doc}_1 \cdot \vec{\doc}_2}{\norm{\vec{\doc}_1} \cdot \norm{\vec{\doc}_2}} \\
-				 &= \frac{\sum\limits_{i=1}^{N} \vec{\doc}_{1, i} \times \vec{\doc}_{2, i}}{\sqrt{\sum\limits_{i=1}^{N} \bigl(\vec{\doc}_{1, i}\bigr)^2} \times \sqrt{\sum\limits_{i=1}^{N} \bigl(\vec{\doc}_{2, i}\bigr)^2}}
+				\similarity(\vec{\doc}_1, \vec{\doc}_2) &= \frac{\vec{\doc}_1 \cdot \vec{\doc}_2}{\norm{\vec{\doc}_1} \cdot \norm{\vec{\doc}_2}} \\
+				 &= \frac{\sum\limits_{i=1}^{N} \vec{\doc}_{1, i} \times \vec{\doc}_{2, i}}{\sqrt{\sum\limits_{i=1}^{N} (\vec{\doc}_{1, i})^2} \times \sqrt{\sum\limits_{i=1}^{N} (\vec{\doc}_{2, i})^2}}
 			\end{align}
 		\end{defn}
 		
-		Recall we may represent search queries as documents and thus document vectors.	Therefore we may compute the score of a document $\doc$ for a search query $\q$ as
+		Recall we may represent search queries as documents and thus document vectors.	Therefore we may compute the score of a document \(\doc\) for a search query \(\q\) as
 		
 		\[
-			\similarity\bigl(\vec{\doc}, \vec{\q}\bigr)
+			\similarity(\vec{\doc}, \vec{\q})
 		\]
 		
 		\begin{ex}
-			Given the document collection $\dc$ (from \Vref{ex:superhero-documents}) and search query $q$, compute the similarity between $\q$ and every document $\doc \in \dc$.
+			Given the document collection \(\dc\) (from \vref{ex:superhero-documents}) and search query \(q\), compute the similarity between \(\q\) and every document \(\doc \in \dc\).
 			
 			\begin{align}
-				\similarity\bigl(\vec{\doc}_1, \vec{\q}\bigr) &= 0.000000 \\
-				\similarity\bigl(\vec{\doc}_2, \vec{\q}\bigr) &= 0.191533 \\
-				\similarity\bigl(\vec{\doc}_3, \vec{\q}\bigr) &= 0.265877 \\
-				\similarity\bigl(\vec{\doc}_4, \vec{\q}\bigr) &= 0.618553
+				\similarity(\vec{\doc}_1, \vec{\q}) &= 0.000000 \\
+				\similarity(\vec{\doc}_2, \vec{\q}) &= 0.191533 \\
+				\similarity(\vec{\doc}_3, \vec{\q}) &= 0.265877 \\
+				\similarity(\vec{\doc}_4, \vec{\q}) &= 0.618553
 			\end{align}
 		\end{ex}
 		
 	\subsection{Extending the Document Model}
 	\label{sec:extending-the-document-model}
-		In the extended document model, documents have fields: $\fields{\doc}$, and each attribute have values (e.g.~date, string, integer), or bag of terms.  Thus:
+		In the extended document model, documents have fields: \(\fields{\doc}\), and each attribute have values (e.g.~date, string, integer), or bag of terms.  Thus:
 
 		\[
 			\doc : \fields{\doc} \to \bag{\terms}
 		\]
 		
 		\begin{ex}[Semi-Structured Document]
-			We see that $\doc_2$ is about Batman.  The document contents are semi-structured, containing both a name and the name of a planet.	By adding fields to the document, we are left with \Vref{tbl:person-document}.
+			We see that \(\doc_2\) is about Batman.  The document contents are semi-structured, containing both a name and the name of a planet.	By adding fields to the document, we are left with \vref{tbl:person-document}.
 			
 			\begin{table}[!ht]
 				\centering
@@ -291,36 +287,36 @@
 				\label{tbl:person-document}
 			\end{table}
 			
-			which is similar in structure to the \texttt{Person} table.
+			which is similar in structure to the \texttt{Person} table. \todo{What table number}
 		\end{ex}
 		
 	\subsection{Approximate String matching}
 	\label{sec:n-gram}
 		\begin{defn}[N-Gram]
-			An $n$-Gram is a contiguous sequence of substrings of string $S$ of length $n$.	 An algorithm for computing the $n$-gram of $S$ is given in \Vref{alg:n-gram}. 
+			An \(n\)-gram is a contiguous sequence of substrings of string \(S\) of length \(n\).	 An algorithm for computing the \(n\)-gram of \(S\) is given in \vref{alg:n-gram}. 
 		\end{defn}
 		
 		% \char"24 - DOLLAR	 BILL Y'ALL
 
 		\begin{algorithm}[!ht]
-			\caption{$\textsc{N-Gram}\bigl(S, n, s\bigr)$}
+			\caption{\(\textsc{N-Gram}(S, n, s)\)}
 			\label{alg:n-gram}
 			
 			%\begin{singlespaced}
 				\begin{algorithmic}[1]
-					\REQUIRE $S$ is a string, $n \ge 1$, and $s$ is a character
-					\ENSURE the list of $n$-grams of $S$
+					\REQUIRE \(S\) is a string, \(n \ge 1\), and \(s\) is a character
+					\ENSURE the list of \(n\)-grams of \(S\)
 					\medskip
-					\STATE $G \leftarrow \bigl[\bigr]$\label{alg:n-gram:G}
-					\STATE $p \leftarrow \textsc{Repeat}\bigl(s, n - 1\bigr)$
-					\STATE $S \leftarrow \textsc{Pad}\bigl(S, p\bigr)$
-					\STATE $S \leftarrow \textsc{Replace}\bigl(S, `\;', p\bigr)$\label{alg:n-gram:S}
+					\STATE \(G \leftarrow []\)\label{alg:n-gram:G}
+					\STATE \(p \leftarrow \textsc{Repeat}(s, n - 1)\)
+					\STATE \(S \leftarrow \textsc{Pad}(S, p)\)
+					\STATE \(S \leftarrow \textsc{Replace}(S, `\;', p)\)\label{alg:n-gram:S}
 					
-					\FOR{$i=0$ \TO $l - n + 1$}
-						\STATE append $S\bigl[i, i + n\bigr]$ to $G$
+					\FOR{\(i=0\) \TO \(l - n + 1\)}
+						\STATE append \(S[i, i + n]\) to \(G\)
 					\ENDFOR
 					
-					\RETURN $G$
+					\RETURN \(G\)
 			%		\medskip
 			%		\medskip
 				\end{algorithmic}
@@ -329,89 +325,89 @@
 		
 		%\todo{The medskips above should not be required, but are in single spaced mode.}
 		
-		Where $l$ is the length of $S$, $\textsc{Repeat}\bigl(S, n\bigr)$ repeats $s$ character $n$ times, $\textsc{Pad}\bigl(S, p\bigr)$ prefixes and postfixes $S$ with $p$, and $\textsc{Replace}\bigl(S, s, p\bigr)$ replaces character $s$ with $p$ in string $S$.
+		Where \(l\) is the length of \(S\), \(\textsc{Repeat}(S, n)\) repeats \(s\) character \(n\) times, \(\textsc{Pad}(S, p)\) prefixes and postfixes \(S\) with \(p\), and \(\textsc{Replace}(S, s, p)\) replaces character \(s\) with \(p\) in string \(S\).
 		
 		\begin{ex}
 		\label{ex:ngram-banana}
-			Given a string $S = \mathrm{``superman''}$, compute the trigram of $S$ using \Vref{alg:n-gram}.
+			Given a string \(S = \text{``superman''}\), compute the trigram of \(S\) using \vref{alg:n-gram}.
 			
 			\[
-				G = \bigl\{
-					\mathrm{``\char"24\char"24s''},
-					\mathrm{``\char"24su''},
-					\mathrm{``sup''},
-					\mathrm{``upe''},
-					\mathrm{``per''},
-					\mathrm{``erm''},
-					\mathrm{``rma''},
-					\mathrm{``man''},
-					\mathrm{``an\char"24''},
-					\mathrm{``n\char"24\char"24''}
-				\bigr\}
+				G = \{
+					\text{``\char"24\char"24s''},
+					\text{``\char"24su''},
+					\text{``sup''},
+					\text{``upe''},
+					\text{``per''},
+					\text{``erm''},
+					\text{``rma''},
+					\text{``man''},
+					\text{``an\char"24''},
+					\text{``n\char"24\char"24''}
+				\}
 			\]
 		\end{ex}
 		
-		We use $n$-grams in order to permit approximate string matching.
+		We use \(n\)-grams in order to permit approximate string matching.
 		
 		\begin{ex}
 		\label{ex:n-gram-comparison}
-			Given a string $S$ (\Vref{ex:ngram-banana}), let $S' = \mathrm{``superwoman''}$.  Compute the trigram of $S'$ and compare it to $S$.
+			Given a string \(S\) (\vref{ex:ngram-banana}), let \(S' = \text{``superwoman''}\).  Compute the trigram of \(S'\) and compare it to \(S\).
 			
 			\[
-				G' = \bigl\{
-					\mathrm{``\char"24\char"24s''},
-					\mathrm{``\char"24su''},
-					\mathrm{``sup''},
-					\mathrm{``upe''},
-					\mathrm{``per''},
-					\mathrm{``erw''},
-					\mathrm{``rwo''},
-					\mathrm{``wom''},
-					\mathrm{``oma''},
-					\mathrm{``man''},
-					\mathrm{``an\char"24''},
-					\mathrm{``n\char"24\char"24''}
-				\bigr\}
+				G' = \{
+					\text{``\char"24\char"24s''},
+					\text{``\char"24su''},
+					\text{``sup''},
+					\text{``upe''},
+					\text{``per''},
+					\text{``erw''},
+					\text{``rwo''},
+					\text{``wom''},
+					\text{``oma''},
+					\text{``man''},
+					\text{``an\char"24''},
+					\text{``n\char"24\char"24''}
+				\}
 			\]
 			
-			Comparing $G$ to $G'$ results in the following matrix
+			Comparing \(G\) to \(G'\) results in the following matrix
 			
 			\begin{figure}[!ht]
 				\[
 					\bordermatrix{
 						~ & G & G' \cr
-						\term_1 : \mathrm{``an\char"24''} & 1 & 1 \cr
-						\term_2 : \mathrm{``oma''} & 0 & 1 \cr
-						\term_3 : \mathrm{``\char"24su''} & 1 & 1 \cr
-						\term_4 : \mathrm{``rwo''} & 0 & 1 \cr
-						\term_5 : \mathrm{``rma''} & 1 & 0 \cr
-						\term_6 : \mathrm{``man''} & 1 & 1 \cr
-						\term_7 : \mathrm{``erw''} & 0 & 1 \cr
-						\term_8 : \mathrm{``\char"24\char"24s''} & 1 & 1 \cr
-						\term_9 : \mathrm{``upe''} & 1 & 1 \cr
-						\term_{10} : \mathrm{``n\char"24\char"24''} & 1 & 1 \cr
-						\term_{11} : \mathrm{``per''} & 1 & 1 \cr
-						\term_{12} : \mathrm{``wom''} & 0 & 1 \cr
-						\term_{13} : \mathrm{``sup''} & 1 & 1 \cr
-						\term_{14} : \mathrm{``erm''} & 1 & 0 \cr
+						\term_1 : \text{``an\char"24''} & 1 & 1 \cr
+						\term_2 : \text{``oma''} & 0 & 1 \cr
+						\term_3 : \text{``\char"24su''} & 1 & 1 \cr
+						\term_4 : \text{``rwo''} & 0 & 1 \cr
+						\term_5 : \text{``rma''} & 1 & 0 \cr
+						\term_6 : \text{``man''} & 1 & 1 \cr
+						\term_7 : \text{``erw''} & 0 & 1 \cr
+						\term_8 : \text{``\char"24\char"24s''} & 1 & 1 \cr
+						\term_9 : \text{``upe''} & 1 & 1 \cr
+						\term_{10} : \text{``n\char"24\char"24''} & 1 & 1 \cr
+						\term_{11} : \text{``per''} & 1 & 1 \cr
+						\term_{12} : \text{``wom''} & 0 & 1 \cr
+						\term_{13} : \text{``sup''} & 1 & 1 \cr
+						\term_{14} : \text{``erm''} & 1 & 0 \cr
 					}
 				\]
 				
-				\caption{Comparison between $n$-grams of $G$ and $G'$.}
+				\caption{Comparison between \(n\)-grams of \(G\) and \(G'\).}
 				\label{fig:n-gram-misspelling-comparison}
 			\end{figure}
 			
-			As \Vref{fig:n-gram-misspelling-comparison} shows, using $n$-grams yield a similarity of $\frac{8}{14}$.
+			As \vref{fig:n-gram-misspelling-comparison} shows, using \(n\)-grams yield a similarity of \(\frac{8}{14}\).
 		\end{ex}
 			
 	\subsection{Pros and Cons of the Document Model}
-		There are numerous reasons to use the document model.  It allows users without domain knowledge and working knowledge of a complex query language such as \gls{sql} to find information.
+		There are numerous reasons to use the document model.  It allows users without domain knowledge and working knowledge of a complex query language such as \gls{sql} to find information. \todo{You state that there are numerous reasons, but only list one}
 		
 		\begin{ex}[Simple Queries]
-			Find all documents related to ``Superman'' or ``Earth''.  This query, if the default operator is \texttt{OR}, would simply be \texttt{Superman Earth}.	The result of the query $\q$ would be
+			Find all documents related to ``Superman'' or ``Earth''.  This query, if the default operator is \texttt{OR}, would simply be \texttt{Superman Earth}.	The result of the query \(\q\) would be
 			
 			\[
-				\query\bigl(\mathrm{``superman''}\bigr) \cup \query\bigl(\mathrm{``earth''}\bigr) \rightarrow \bigl\{\doc_1, \doc_2, \doc_3, \doc_4\bigr\}
+				\query(\text{``superman''}) \cup \query(\text{``earth''}) \rightarrow \{\doc_1, \doc_2, \doc_3, \doc_4\}
 			\]
 		\end{ex}
 		
@@ -422,38 +418,38 @@
 			Find all documents containing both ``Superman'' and ``Earth''.	This query would return the following set of documents
 			
 			\[
-				\query\bigl(\mathrm{``superman''}\bigr) \cap \query\bigl(\mathrm{``earth''}\bigr) \rightarrow \bigl\{\doc_1\bigr\}
+				\query(\text{``superman''}) \cap \query(\text{``earth''}) \rightarrow \{\doc_1\}
 			\]
 			
-			as only $\doc_1$ contains both terms.
+			as only \(\doc_1\) contains both terms.
 		\end{ex}
 		
 		\begin{ex}[\texttt{NOT} Query]
-			Find all documents containing ``Superman'' but not ``Earth''.  This query would return different results than \Vref{ex:and-query}.
+			Find all documents containing ``Superman'' but not ``Earth''.  This query would return different results than \vref{ex:and-query}.
 			
 			\[
-				\query\bigl(\mathrm{``superman''}\bigr) \neg\query\bigl(\mathrm{``earth''}\bigr) \rightarrow \bigl\{\doc_4\bigr\}
+				\query(\text{``superman''}) \neg\query(\text{``earth''}) \rightarrow \{\doc_4\}
 			\]
 		\end{ex}
 		
-		While none of the above queries required domain knowledge, it is possible to use the extended document model (\Vref{sec:extending-the-document-model}) to search specific fields.  Doing so allows users to have finer control over what documents are retrieved.
+		While none of the above queries required domain knowledge, it is possible to use the extended document model (\vref{sec:extending-the-document-model}) to search specific fields.  Doing so allows users to have finer control over what documents are retrieved.
 		
 		\begin{ex}[Extended Query]
 			Find all documents with a superhero named ``Superman'' that contain the term ``Earth''.
 			
 			\[
-				\query\bigl(\mathrm{``name''}, \mathrm{``superman''}\bigr) \cap \query\bigl(\mathrm{``earth''}\bigr) \rightarrow \bigl\{\doc_3\bigr\}
+				\query(\text{``name''}, \text{``superman''}) \cap \query(\text{``earth''}) \rightarrow \{\doc_3\}
 			\]
 			
 			Assuming the first term of every document is also the value of the name attribute.
 		\end{ex}
 		
-		People utilize keyword query search every day through web search engines such as Google\footnote{\url{https://www.google.ca/}}.
+		People utilize keyword query search every day through web search engines such as Google.
 		
-		Not only does the document model provide a familiar interface to search for information with, it also ranks the results.  In the relational model a search for ``Superman'' would return all named tuples that contained that term.	 In the document model, documents are ranked against the query $\q$ and the top-$k$ documents are returned.
+		Not only does the document model provide a familiar interface to search for information with, it also ranks the results.  In the relational model a search for ``Superman'' would return all named tuples that contained that term.	 In the document model, documents are ranked against the query \(\q\) and the top-\(k\) documents are returned.
 		
-		The advantage is that users have the result of $\q$ already ranked so only the most relevant documents may be explored.	 As the number of documents matching $\q$ for a large corpus can be high, showing only the top-$k$ relevant documents may save the user a substantial amount of time.
+		The advantage is that users have the result of \(\q\) already ranked so only the most relevant documents may be explored.	 As the number of documents matching \(\q\) for a large corpus can be high, showing only the top-\(k\) relevant documents may save the user a substantial amount of time.
 		
-		The relational model does not permit approximate string matching.  By utilizing the document model with $n$-grams (\Vref{sec:n-gram}), users who substitute, delete, or insert characters from the desired term may still receive results for their intended term (see \Vref{ex:n-gram-comparison} for a demonstration of how $n$-grams overcome character substitutions).
+		The relational model does not permit approximate string matching.  By utilizing the document model with \(n\)-grams (\vref{sec:n-gram}), users who substitute, delete, or insert characters from the desired term may still receive results for their intended term (see \vref{ex:n-gram-comparison} for a demonstration of how \(n\)-grams overcome character substitutions).
 		
-		Unfortunately the document model does not support the concept of foreign keys (\Vref{def:foreign-keys}).  While information is easily accessible due to flexible search, each document is a discrete unit of information.  Aggregate queries are unsupported, as these units are not linked amongst one another.
+		Unfortunately the document model does not support the concept of foreign keys (\vref{def:foreign-keys}).  While information is easily accessible due to flexible search, each document is a discrete unit of information.  Aggregate queries are unsupported, as these units are not linked amongst one another.

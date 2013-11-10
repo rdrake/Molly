@@ -1,0 +1,12 @@
+
+\begin{tikzpicture}[>=latex,line join=bevel,]
+%%
+\node (Course) at (28bp,90bp) [draw,draw=none] {Course};
+  \node (Term) at (101bp,90bp) [draw,draw=none] {Term};
+  \node (Section) at (64bp,162bp) [draw,draw=none] {Section};
+  \node (Subject) at (28bp,18bp) [draw,draw=none] {Subject};
+  \draw [->] (Section) ..controls (77.403bp,135.64bp) and (82.556bp,125.89bp)  .. (Term);
+  \draw [->] (Section) ..controls (51.003bp,135.73bp) and (46.051bp,126.1bp)  .. (Course);
+  \draw [->] (Course) ..controls (28bp,63.983bp) and (28bp,54.712bp)  .. (Subject);
+%
+\end{tikzpicture}

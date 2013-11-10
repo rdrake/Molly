@@ -4,40 +4,31 @@
 	
 	\begin{defn}[Named Tuple]
 	\label{def:named-tuple}
-		A named tuple $\tuple$ is an instance of a relation $\relation$, consisting of values corresponding to the attributes of $\relation$.  For example,
+		A named tuple \(\tuple\) is an instance of a relation \(\relation\), consisting of values corresponding to the attributes of \(\relation\).  For example,
 	\end{defn}
 	
-	%\DTLforeach*[\value{DTLrowi}<1]{db-person}{\name=name,\age=age,\birthplace=birthplace}{
-	%	\xdef\name{\name}
-	%	\xdef\age{\age}
-	%	\xdef\birthplace{\birthplace}
-	%}
-	
 	\begin{ex}
-		%Given a tuple $\tuple = \bigl\{\mathrm{name}: \textrm{``\name''}, \mathrm{age}: \age, \mathrm{birthplace}: \textrm{``\birthplace''}\bigr\}$, we denote the attributes of $\tuple$ as $\attributes{\tuple} = \bigl\{\mathrm{name}, \mathrm{age}, \mathrm{birthplace}\bigr\}$.  The values are $\tuple\bigl[\mathrm{name}\bigr] = \textrm{``\name''}$, $\tuple\bigl[\mathrm{age}\bigr] = \age$, and $\tuple\bigl[\mathrm{birthplace}\bigr] = \textrm{``\birthplace''}$.
+		Given a tuple \(\tuple = \{\text{code}: \text{``CDPS 101''}, \text{title}: \text{``Human-Mutant Relations''}, \text{subject}: \text{``CDPS''}\}\), we denote the attributes of \(\tuple\) as \(\attributes{\tuple} = \{\text{code}, \text{title}, \text{subject}\}\).  The values are \(\tuple\lbrack\text{code}\rbrack = \text{``CDPS 101''}\), \(\tuple\lbrack\text{title}\rbrack = \text{``Human-Mutant Relations''}\), and \(\tuple\lbrack\text{subject}\rbrack = \text{``CDPS''}\).
 	\end{ex}
 	
 	\begin{defn}[Relation]
 	\label{def:relation}
-		A relation $\relation$ is a set of named tuples, $\relation = \bigl\{\tuple_1, \tuple_2, \dotsc, \tuple_n\bigr\}$, such that all the named tuples share the same attributes.
-		
-		\[
+		A relation \(\relation\) is a set of named tuples, \(\relation = \{\tuple_1, \tuple_2, \dotsc, \tuple_n\}\), such that all the named tuples share the same attributes.
+		\begin{equation}
 			\forall \tuple, \tuple' \in \relation, \attributes{\tuple} = \attributes{\tuple'}
-		\]
+		\end{equation}
 	\end{defn}
 	
 	\begin{ex}
-		An example Person relation, $\relation$, would be as follows,
-		
+		An example Course relation, \(\relation\), would be
 		\[
-			\relation = \bigl\{
-				%\begin{array}{l}
-				%	\DTLforeach{db-person}{\name=name,\age=age,\birthplace=birthplace}{
-				%		\DTLiffirstrow{}{\\}
-				%		\bigl\{\mathrm{name}: \textrm{``\name''}, \mathrm{age}: \age, \mathrm{birthplace}: \textrm{``\birthplace''}\bigr\},
-				%	}
-				%\end{array}
-			\bigr\}
+			\relation = \left\{
+				\begin{array}{llllll}
+					\{\text{code} &: \text{``CDPS 101''}, &\text{title} &: \text{``Human-Mutant Relations''}, &\text{subject} &: \text{``CDPS''}\}, \\
+					\{\text{code} &: \text{``CDPS 201''}, &\text{title} &: \text{``Humans and You''}, &\text{subject} &: \text{``CDPS''}\}, \\
+					\{\text{code} &: \text{``MATH 360''}, &\text{title} &: \text{``Complex Analysis''}, &\text{subject} &: \text{``MATH''}\}
+				\end{array}
+			\right\}
 		\]
 	\end{ex}
 		
@@ -46,154 +37,172 @@
 	\begin{table}[!ht]
 		\centering
 		
-		%\DTLdisplaydb{db-person}
+		\begin{tabular}{lll}
+			\toprule
+			code & title & subject \\
+			\midrule
+			CDPS 101 & Human-Mutant Relations & CDPS \\
+			CDPS 201 & Humans and You & CDPS \\
+			MATH 360 & Complex Analysis & MATH \\
+			\bottomrule
+		\end{tabular}
 		
-		\caption{Person table}
-		\label{tbl:person}
+		\caption{Course relation}
+		\label{tbl:course-relation}
 	\end{table}
 	
 	\begin{defn}[Keys]
 	\label{def:keys}
-		Keys are constraints imposed on relations.	A key constraint $\key$ on a relation $\relation$ is a subset of $\attributes{\relation}$ which may uniquely identify a tuple.	Formally, we say $\relation$ satisfies the key constraint $\key$, denoted as $\relation \models \key$, subject to
-		
+		Keys are constraints imposed on relations.	A key constraint \(\key\) on a relation \(\relation\) is a subset of \(\attributes{\relation}\) which may uniquely identify a tuple.	Formally, we say \(\relation\) satisfies the key constraint \(\key\), denoted as \(\relation \models \key\), subject to
 		\[
-			\forall \tuple, \tuple' \in \relation, \tuple \not= \tuple' \implies \tuple\bigl[\key\bigr] \not= \tuple'\bigl[\key\bigr]
+			\forall \tuple, \tuple' \in \relation, \tuple \not= \tuple' \implies \tuple\lbrack\key\rbrack \not= \tuple'\lbrack\key\rbrack
 		\]
 		
-		For example, in \Vref{tbl:person}, the relation satisfies the key constraint $\bigl\{\mathrm{name}\bigr\}$, but not $\bigl\{\mathrm{age}\bigr\}$.
+		For example, in \vref{tbl:course-relation}, the relation satisfies the key constraint \(\{\text{code}\}\) or \(\{\text{title}\}\), but not \(\{\text{subject}\}\).
 	\end{defn}
 	
 	\begin{defn}[Foreign Keys]
 	\label{def:foreign-keys}
-		A \gls{fk} constraint applies to two relations, $\relation_1, \relation_2$.	 It asserts that values of certain attributes of $\relation_1$ must appear as values of some corresponding attributes of $\relation_2$.	 A \gls{fk} constraint is written as
-		
+		A \gls{fk} constraint applies to two relations, \(\relation_1, \relation_2\).  It asserts that values of certain attributes of \(\relation_1\) must appear as values of some corresponding attributes of \(\relation_2\).  A \gls{fk} constraint is written as
 		\[
-			\theta = \relation_1\bigl(\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}\bigr) \rightarrow \relation_2\bigl(\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k}\bigr)
+			\theta = \relation_1(\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}) \rightarrow \relation_2(\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k})
 		\]
 		
-		where $\attribute_{1i} \subseteq \attributes{\relation_1}$ and $\attribute_{2i} \subseteq \attributes{\relation_2}$.  We say $\bigl(\relation_1, \relation_2\bigr)$ satisfies $\theta$, denoted as $\bigl(\relation_1, \relation_2\bigr) \models \theta$, if
+		where \(\attribute_{1i} \subseteq \attributes{\relation_1}\) and \(\attribute_{2i} \subseteq \attributes{\relation_2}\).  We say \((\relation_1, \relation_2)\) satisfies \(\theta\), denoted as \((\relation_1, \relation_2) \models \theta\), if for every tuple \(\tuple \in \relation_1\), there exists a tuple \(\tuple' \in \relation_2\) such that \(\tuple\lbrack\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}\rbrack = \tuple'\lbrack\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k}\rbrack\).
 		
-		\[
-			\forall \tuple \in \relation_1, \exists \tuple' \in \relation_2 \text{ such that } \tuple\bigl[\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}\bigr] = \tuple'\bigl[\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k}\bigr]
-		\]
-		
+		We say \(\relation_1\) is the source, while \(\relation_2\) is the target.
+				
 		\begin{ex}
-			Suppose we have a relation $\rel{Superhero}{name, superpower}$.	 We can impose a \gls{fk} constraint of
+			Suppose we have a relation \(\rel{Course}{code, title, subject}\).	 We impose a \gls{fk} constraint of
+			\begin{equation}
+				\theta = \rel{Course}{subject} \rightarrow \rel{Subject}{id}
+			\end{equation}
 			
+			which asserts \((\text{Course}, \text{Subject}) \models \theta\).  Therefore, if
 			\[
-				\rel{Superhero}{name} \rightarrow \rel{Person}{name}
+				t = \{\text{code}: \text{``CDPS 101''}, \text{title}: \text{``Human-Mutant Relations''}, \text{subject}: \text{``CDPS''}\}
 			\]
+			
+			then \(\exists! t' \in \text{Subject}\) such that \(t'\lbrack\text{id}\rbrack = \text{``CDPS''}\).
 		\end{ex}
 	\end{defn}
 	
 	\begin{defn}[Relational Database]
 	\label{def:relational-database}
-		A relational database, $\db$, is a named collection of relations (as defined by \Vref{def:relation}), keys (as defined by \Vref{def:keys}), and foreign key constraints (as defined by \Vref{def:foreign-keys}.
+		A relational database, \(\db\), is a named collection of relations (as defined by \vref{def:relation}), keys (as defined by \vref{def:keys}), and foreign key constraints (as defined by \vref{def:foreign-keys}).
 		
-		We use $\name{\db}$ to denote the name of $\db$, $\relations{\db}$ the list of relations in $\db$, $\keys{\db}$ the list of key constraints of $\db$, and $\fks{\db}$ the list of foreign key constraints of $\db$.
+		We use \(\name{\db}\) to denote the name of \(\db\), \(\relations{\db}\) the list of relations in \(\db\), \(\keys{\db}\) the list of key constraints of \(\db\), and \(\fks{\db}\) the list of foreign key constraints of \(\db\).
 	\end{defn}
 	
 	\subsection{Schema Group}
 		\begin{defn}[Schema Graph]
-			If we view relations as vertices, and foreign key constraints as edges, a database $\db$ can be viewed as a \emph{schema graph} $\sgraph{}$, formally defined as
-			
+		\label{def:schema-graph}
+			If we view relations as vertices, and foreign key constraints as edges, a database \(\db\) can be viewed as a \emph{schema graph} \(\sgraph{}\), formally defined as
 			\begin{align}
-				\mathrm{vertices}:	V\bigl(\sgraph{}\bigr) &= \relations{\db} \\
-				\mathrm{edges}:	 E\bigl(\sgraph{}\bigr) &= \fks{\db}
+				\text{vertices} &: \text{V}(\sgraph) = \relations{\db} \\
+				\text{edges} &: \text{E}(\sgraph) = \fks{\db}
 			\end{align}
 		\end{defn}
 		
 		\begin{ex}
-			Given the following schema
+			Given the schema in \vref{fig:schema}
 			
 			\begin{figure}[!ht]
 				\centering
 				
-				$\rel{Superhero}{\underline{name}, power}$ \\
-				$\rel{Person}{\underline{name}, age, birthplace}$ \\
-				$\rel{Planet}{\underline{name}, size, age, destroyed, galaxy}$ \\
-				$\rel{Link}{\underline{name}, peer, relation type}$ \\
+				\(\rel{Subject}{\underline{id}, name}\) \\
+				\(\rel{Course}{\underline{code}, title, subject}\) \\
+				\(\rel{Term}{\underline{id}, name}\) \\
+				\(\rel{Section}{\underline{crn}, term, course}\) \\
+				
+				\caption{Subset of mycampus dataset schema}
+				\label{fig:schema}
 			\end{figure}
 			
-			and the following foreign key constraints
+			and the \gls{fk} constraints in \vref{eqn:fk-constraints}
 			
-			\begin{align}
-				\rel{Superhero}{name} &\rightarrow \rel{Person}{name} \\
-				\rel{Person}{birthplace} &\rightarrow \rel{Planet}{name} \\
-				\rel{Link}{name} &\rightarrow \rel{Person}{name} \\
-				\rel{Link}{peer} &\rightarrow \rel{Person}{name}
+			\begin{align}\label{eqn:fk-constraints}
+				\rel{Course}{subject} &\rightarrow \rel{Subject}{id} \\
+				\rel{Section}{term} &\rightarrow \rel{Term}{id} \\
+				\rel{Section}{course} &\rightarrow \rel{Course}{code}
 			\end{align}
 			
-			we produce the following schema graph
+			we produce the schema graph in \vref{fig:schema-graph}
 			
 			\begin{figure}[!ht]
 				\centering
 				
-				\begin{tikzpicture}[->,node distance=3cm,thick,main node/.style={rectangle,thick}]
-					\node[main node] (Superhero)						{Superhero};
-					\node[main node] (Person)	[below of=Superhero]	{Person};
-					\node[main node] (Planet)	[below left of=Person]	{Planet};
-					\node[main node] (Link)		[below right of=Person] {Link};
-					
-					\path
-						(Person)	edge node [right]					{}	(Superhero)
-									edge node [left]					{}	(Planet)
-						(Link)		edge [bend left]	node [left]		{}	(Person)
-									edge [bend right]	node [right]	{}	(Person);
-				\end{tikzpicture}
+				\begin{dot2tex}[dot]
+					digraph G {
+						node [shape=plaintext]; Subject; Course; Term; Section;
+						
+						Course -> Subject;
+						Section -> Term
+						Section -> Course;
+					}
+				\end{dot2tex}
+				
+				\caption{Graph representation of relations (\cref{fig:schema}) and \gls{fk} (\cref{eqn:fk-constraints}).}
+				\label{fig:schema-graph}
 			\end{figure}
 		\end{ex}
 		
-		The relational data model is particularly powerful for analytic queries.  Given the schema below above, one can formulate the following analytic queries in a query language known as \gls{sql}.
+		The relational data model is particularly powerful for analytic queries.  Given the schema graph in \vref{fig:schema-graph}, one can formulate the following analytic queries in a query language known as \gls{sql}.
 			
 		\begin{ex}
-			List all superheroes whose home planet has not been destroyed.
+			Using \gls{sql}, find all section CRNs for the subject titled ``Community Development \& Policy Studies.''
 			
 			\begin{figure}[!ht]
 				\begin{singlespaced}
 					\begin{sqlcode}
-SELECT Person.name
-FROM   Person
-	   JOIN Planet
-		 ON Person.birthplace = Planet.name
-WHERE  NOT Planet.destroyed;
+SELECT section.crn
+FROM   section 
+       JOIN course 
+         ON section.course_code = course.code 
+       JOIN subject 
+         ON subject.id = course.subject_id 
+WHERE  subject.name = 'Community Development & Policy Studies'; 
 					\end{sqlcode}
 				\end{singlespaced}
 				
-				\caption{Query to find superheroes with a home to go back to}
+				\caption{Query to find section CRNs for a subject name.}
+				\label{fig:query-section-crns}
 			\end{figure}
 			
-			Results in the following output, given the data from \Vref{tbl:person},
+			The \gls{sql} query in \vref{fig:query-section-crns} results in \vref{tbl:query-section-crns-output}.
 			
 			\begin{table}[!ht]
 				\centering
 				
 				\begin{tabular}{l}
 					\toprule
-					name \\
+					crn \\
 					\midrule
-					Batman \\
-					Flash \\
-					Wonder Woman \\
+					10000 \\
+					10001 \\
+					10002 \\
 					\bottomrule
 				\end{tabular}
+				
+				\caption{Results of the query in \vref{fig:query-section-crns}.}
+				\label{tbl:query-section-crns-output}
 			\end{table}
 		\end{ex}
 		
 	\subsection{Entity Group}
 		\begin{defn}[Entity Group]
 		\label{def:entity-group}
-			An entity group is a forest, $T$,  of tuples interconnected by join conditions defined by the foreign key constraints in the schema graph.	Given two vertices $\tuple_1, \tuple_2 \in V\bigl(T\bigr)$, it must be that:
+			An entity group is a forest, \(\egraph\), of tuples interconnected by join conditions defined by the \gls{fk} constraints in the schema graph \(\sgraph\).
+			
+			Given two vertices \(\tuple, \tuple' \in \text{V}(\egraph)\), \(\exists \relation_1, \relation_2 \in \relations{\db}\) such that \(\tuple \in \relation_1\), \(\tuple'\in \relation_2\), and \((\relation_1, \relation_2)\in \sgraph\).  That is, \(\tuple\) and \(\tuple'\) belong to two relations that are connected by the schema graph.
 
-			$\exists \relation_1, \relation_2 \in \relations{\db}$ such that $\tuple_1 \in \relation_1$, $\tuple_2\in \relation_2$, and $\bigl(\relation_1, \relation_2\bigr)\in G$.  This is to say that $\tuple_1$ and $\tuple_2$ belong to two relations that are connected by the schema graph.
-
-			Let $\relation_1\bigl(\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}\bigr) \to \relation_2\bigl(\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k}\bigr)$ be the \gls{fk} that connects $\relation_1, \relation_2$.  We further assert that $\tuple_1\bigl[\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}\bigr] = \tuple_2\bigl[\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k}\bigr]$.
+			Let \(\relation_1(\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}) \to \relation_2(\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k})\) be the \gls{fk} that connects \(\relation_1, \relation_2\).  We further assert that \(\tuple\lbrack\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}\rbrack = \tuple'\lbrack\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k}\rbrack\).
 		\end{defn}
 		
-		The motivation of entity groups is to define complex structured objects that can include more information than individual tuples in the relations.
+		Entity groups define complex, structured objects that include more information than individual tuples in the relations.
 		
 		\begin{ex}
-			The information in \Vref{tbl:superman-properties} all relates to Superman, however no single tuple in the database has all of this information as a result of database normalization.
+			The information in \vref{tbl:hmr-properties} all relates to the Course titled Human-Mutant Relations, however no single tuple in the database has all of this information as a result of database normalization.
 			
 			\begin{table}[!ht]
 				\centering
@@ -202,27 +211,31 @@ WHERE  NOT Planet.destroyed;
 					\toprule
 					Attribute & Value \\
 					\midrule
-					name & Superman \\
-					age & 33 \\
-					birthplace & Krypton \\
-					superpower & flying, strength, speed \\
-					friends & Wonder Woman, Batman \\
-					enemies & General Zod \\
+					code & CDPS 101 \\
+					title & Human-Mutant Relations \\
+					subject & Community Development \& Policy Studies \\
 					\bottomrule
 				\end{tabular}
 				
-				\caption{Superman's properties}
-				\label{tbl:superman-properties}
+				\caption{Properties of the Course titled Human-Mutant Relations.}
+				\label{tbl:hmr-properties}
 			\end{table}
 			
-			We require an entity group (\Vref{fig:superhero-entity-group}) to join together all pieces of information related to Superman.
+			We require an entity group (\vref{fig:hmr-entity-group}) to join together all pieces of information related to this course. 
 			
 			\begin{figure}[!ht]
-				\todo{Revise this figure}
-				\texttt{SELECT * FROM Link JOIN Superhero ON Link.name = Superhero.name JOIN Person ON Person.name = Superhero.name JOIN Planet ON Person.birthplace = Planet.name WHERE Person.name = 'Superman';}
+				\centering
 				
-				\caption{Superhero entity group}
-				\label{fig:superhero-entity-group}
+				\begin{dot2tex}[dot]
+digraph G {
+	node [shape=plaintext]; "Human-Mutant Relations"; "Community Development & Policy Studies";
+	
+	"Human-Mutant Relations" -> "Community Development & Policy Studies";
+}
+				\end{dot2tex}
+				
+				\caption{Human-Mutant Relations entity group}
+				\label{fig:hmr-entity-group}
 			\end{figure}
 
 		\end{ex}
@@ -231,155 +244,108 @@ WHERE  NOT Planet.destroyed;
 		In order to better understand the motivation behind this work, it is important to examine both the strong and weak points of the relational model.
 		
 		\subsubsection{Pros}
-			The relational model was first proposed by Edgar F. Codd in 1969 while working at IBM \cite{codd-69}.
+			The enforcement of constraints is essential to the relational model.  There are several types of constraints, including uniqueness and \glspl{fk}.  The first constraint maintains uniqueness.
 			
-			The enforcement of constraints is essential to the relational model.  There are several types of constraints.  The first constraint maintains uniqueness.
-			
-			The Person relation has the attribute name as its primary key.	In order for other relations to reference a specific named tuple, the name attribute must be unique.
+			The Course relation (\vref{tbl:course-relation}) has the attribute \texttt{code} as its primary key.	In order for other relations to reference a specific named tuple, the \texttt{code} attribute must be unique.
 			
 			\begin{ex}[Unique Constraint]
 			\label{ex:unique-constraint}
-				Attempt to insert another person named ``Superman.''
+				Attempt to insert another course with a \texttt{code} of ``CDPS 101.''
 				
 				\begin{singlespaced}
 					\begin{sqlcode}
-INSERT INTO Person
-VALUES		('Superman',
-			 35,
-			 'Earth'); 
+INSERT INTO course
+VALUES      ('CDPS 101',
+             'Mutant-Human Relations',
+             'CDPS');
 					\end{sqlcode}
 				\end{singlespaced}
 				
-				The \gls{rdbms} enforces the primary key constraint on the \texttt{name} attribute, rejecting the insertion.
+				The \gls{rdbms} enforces the primary key constraint on the \texttt{code} attribute, rejecting the insertion.
 				
 				\begin{verbatim}
-ERROR:	duplicate key value violates unique constraint "person_pkey"
-DETAIL:	 Key (name)=(Superman) already exists.
+Error: column code is not unique
 				\end{verbatim}
 			\end{ex}
 			
-			With the uniqueness of named tuples guaranteed (as demonstrated in \Vref{ex:unique-constraint}), we must ensure that any named tuples that are referenced actually exist.  If they do not, the database must not permit the operation to continue.	Doing so would lead to dangling references.
+			With the uniqueness of named tuples guaranteed (as demonstrated in \vref{ex:unique-constraint}), we must ensure that any named tuples that are referenced actually exist.  If they do not, the database must not permit the operation to continue.  Doing so would lead to dangling references.
 			
 			\begin{ex}[Referential Integrity]
-				Attempt to insert the superhero ``Aquaman'' with the superpower ``telepathy.''
+				Attempt to insert the tuple (``CHEM 101'', ``Introductory Chemistry'', ``'CHEM'') in the Course relation.
 				
 				\begin{singlespaced}
 					\begin{sqlcode}
-INSERT INTO Superhero
-VALUES		('Aquaman',
-			 'telepathy'); 
+INSERT INTO course
+VALUES      ('CHEM 101',
+             'Introductory Chemistry',
+             'CHEM');
 					\end{sqlcode}
 				\end{singlespaced}
 				
 				Again we see the \gls{rdbms} protecting the integrity of the data.
 				
 				\begin{verbatim}
-ERROR:	insert or update on table "superhero" violates foreign
-key constraint "superhero_name_fkey"
-DETAIL:	 Key (name)=(Aquaman) is not present in table "person".
+Error: foreign key constraint failed
 				\end{verbatim}
 			\end{ex}
 			
 			In addition to enforcing consistency, the relational model is capable of providing higher-level views of the data through aggregation.
 			
-			\begin{ex}[Aggregation (Simple)]
-				Find the number of friends Superman has.
+			\begin{ex}[Aggregation]
+				Find the number of sections offered for the subject named ``Community Development \& Policy Studies.''
 				
 				\begin{singlespaced}
 					\begin{sqlcode}
-SELECT COUNT(*)
-FROM   Link
-WHERE  name = 'Superman'
-	   AND relationtype = 'friend'; 
+SELECT Count(*)
+FROM   section
+       JOIN course
+         ON section.course = course.code
+       JOIN subject
+         ON subject.id = course.subject
+WHERE  subject.name = 'Community Development & Policy Studies';
 					\end{sqlcode}
 				\end{singlespaced}
-			\end{ex}
-			
-			\begin{ex}[Aggregation (Group By)]
-				List the number of enemies of each Person.
-				
-				\begin{singlespaced}
-					\begin{sqlcode}
-SELECT name,
-	   Count(name)
-FROM   Link
-WHERE  relationtype = 'foe'
-GROUP  BY name; 
-					\end{sqlcode}
-				\end{singlespaced}
-				
-				The above query produces the following output.
-				
-				\begin{table}[!ht]
-					\centering
-					
-					\begin{tabular}{ll}
-						\toprule
-						name & count \\
-						\midrule
-						Superman & 1 \\
-						General Zod & 1 \\
-						\bottomrule
-					\end{tabular}
-				\end{table}
 			\end{ex}
 			
 			Information stored within a properly designed database is normalized.  That is, no information is repeated.
 			
 			\begin{ex}[Normalization]
-				For example, suppose the planet Krypton is discovered to have been in the ``Xeno'' Galaxy rather than the ``Andromeda'' Galaxy.	 If this information were not normalized, each person whose birthplace was Krypton would need to be updated.  Since this information is normalized, the following query will suffice.
+				For example, suppose Emma Frost became headmistress and the subject named ``Community Development \& Policy Studies'' was renamed to ``Community Destruction \& Policy Studies.''  If this information were not normalized, each course in this subject would need to be updated.  Since this information is normalized, the following query will suffice.
 				
 				\begin{singlespaced}
 					\begin{sqlcode}
-UPDATE planet
-SET	   galaxy = 'Xeno'
-WHERE  name = 'Krypton';
+UPDATE subject
+SET    name = 'Community Destruction & Policy Studies'
+WHERE  id = 'CDPS';
 					\end{sqlcode}
 				\end{singlespaced}
 			\end{ex}
 			
-			The above examples are some of the most important reasons for choosing the relation model over others.	Unfortunately the relational model is not without its downsides.
+			The above examples are some of the most important reasons for choosing the relational model over others.	Unfortunately, the relational model is not without its downsides.
 		
 		\subsubsection{Cons}
-			While the relational model excels at ensuring data consistency, aggregation, and reporting, it is not suitable for every task.	In order to issue queries, a user must be familiar with the schema.	 This requires specific domain knowledge of the data.
+			While the relational model excels at ensuring data consistency, aggregation, and reporting; it is not suitable for every task.	In order to issue queries, a user must be familiar with the schema.	 This requires specific domain knowledge of the data.
 			
-			\begin{ex}
-				Find all enemies of superheroes from Earth.
-				
-				The above query requires the use of two joins.
-				
-				\begin{singlespaced}
-					\begin{sqlcode}
-SELECT peer
-FROM   Link
-	   JOIN Person
-		 ON Person.name = Link.name
-	   JOIN Planet
-		 ON Planet.name = Person.birthplace
-WHERE  relationtype = 'foe'
-	   AND Planet.name = 'Earth';
-					\end{sqlcode}
-				\end{singlespaced}
-			\end{ex}
+			An example of a complicated query involving two joins is give in \vref{fig:query-section-crns}.
 			
-			A casual user is unlikely to determine the correct join path, name of the tables, name of the attributes, etc.	This is in contrast to the document model, where the data is semi-structure or unstructured, requiring minimal domain knowledge.
+			A casual user is unlikely to determine the correct join path, name of the tables, name of the attributes, etc.	This is in contrast to the document model, where the data is semi-structured or unstructured, requiring minimal domain knowledge.
 
-			The relational model is also rigid in structure.  If a relation is modified, every query referencing said relation may require a rewrite.  Even a simple attribute being renamed (e.g.~$\rho_{\mathrm{name/alias}}(\mathrm{Person})$) is capable of modifying the join paths.  This rigidity places additional cognitive burden on users.
+			The relational model is also rigid in structure.  If a relation is modified, every query referencing said relation may require a rewrite.  Even a simple attribute being renamed (e.g.~\(\rho_{\text{name/alias}}(\text{Person})\)) is capable of modifying the join paths.  This rigidity places additional cognitive burden on users.
 			
 			In addition to having a rigid structure, most relational database management systems lack flexible string matching options.	 Assuming basic SQL-92 compliance, a \gls{rdbms} only supports the \texttt{LIKE} predicate \cite{sql-2011}.
 			
 			\begin{ex}[\texttt{LIKE} Predicate]
-				Find all people with a name ending in ``man.''
+				Find all courses with a title that contains ``man.''
 				
 				\begin{singlespaced}
 					\begin{sqlcode}
 SELECT *
-FROM   Person
-WHERE  name LIKE '%man';
+FROM   course
+WHERE  title LIKE '%man%';
 					\end{sqlcode}
 				\end{singlespaced}
 			\end{ex}
 			
-			There are a couple of limitations to the \texttt{LIKE} predicate.  First, it only supports basic substring matching.  If a user accidentally searches for all people with a name ending in ``men,'' nothing would be found.
+			There are a couple of limitations to the \texttt{LIKE} predicate.  First, it only supports basic substring matching.  If a user accidentally searches for all courses with a title containing ``men,'' nothing would be found.
 			
-			Second, unless the column used in the predicate is indexed, performance may be poor ($\mathcal{O}\bigl(n\bigr)$).
+			Second, unless the predicate is applied to the end of the string and the column is indexed, performance will be poor.  The database must scan the entire table in order to answer the query, resulting in performance of \(\mathcal{O}(n)\), where \(n\) is the number of named tuples in the relation.

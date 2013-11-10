@@ -1,0 +1,7 @@
+digraph G {
+node [shape=plaintext]; Subject; Course; Term; Section;
+
+Course -> Subject;
+Section -> Term
+Section -> Course;
+}

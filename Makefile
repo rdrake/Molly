@@ -22,7 +22,7 @@ benchmark : index
 
 postprocess : 
 	./src/python/molly/performance/postprocess.py \
-	  --results gathered.json --output thesis/document/images
+	  --results gathered.json --output thesis/document/figures/images
 
 clean :
 	rm -Rf mycampus.idx target

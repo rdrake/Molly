@@ -7,9 +7,10 @@
 \usepackage{amsmath}									% Allow use of amsthm
 \usepackage{amsthm}										% Pretty theorem environments
 \usepackage{amssymb}									% More math symbols
+\usepackage{mathtools}
 \usepackage{algorithm}									% Pretty algorithm environment
 \usepackage{algorithmic}								% Pretty algorithms
-\usepackage[nounderscore]{syntax}						% BNF grammars
+\usepackage[outputdir={figures/graphs/dot/}]{dot2texi} % If minted doesn't work, it's probably this package's fault.
 \usepackage{minted}										% Pretty code
 \usepackage{tikz}										% Diagrams
 \usepackage{booktabs}									% Pretty tables
@@ -24,7 +25,7 @@
 \usepackage{pgf}
 \usepackage{varioref}
 \usepackage[linktocpage=true,colorlinks=true]{hyperref} % Helpful links
-\usepackage{cleveref}
+\usepackage[capitalize]{cleveref}
 
 % Apparently must go after hyperref to get pretty links
 \usepackage[acronym,style=tree]{glossaries}				% Glossary of terms
@@ -40,7 +41,7 @@
 
 % Configure tikz for pretty diagrams
 \input tikz
-\usetikzlibrary{fit}
+\usetikzlibrary{fit,shapes,arrows}
 
 % For some reason using minted with tikz causes minted to fail to colourize
 % the output.  Should find a solution later, not really important right now.
