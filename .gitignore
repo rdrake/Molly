@@ -39,7 +39,6 @@
 *.vrb
 *.xdy
 .DS_Store
-*.pgf
 *.pyc
 *.bcf
 *.run.xml
