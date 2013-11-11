@@ -7,9 +7,9 @@
 
 	\begin{defn}[Terms and Document]
 	\label{def:document}
-		A term, \(\term\), is an indivisible string (e.g.~a proper noun, word, or a phrase).	A document, \(\doc\), is a bag of words.	Let \(\freq(\term, \doc)\) be the frequency of terms \(\term\) in document \(\doc\).
+		A term, \(\term\), is an indivisible string (e.g.~a proper noun, word, or a phrase).	A document, \(\doc\), is a bag of words; order is irrelevant.
 		
-		Let \(\terms\) denote all possible terms, and \(\bag{\terms}\) be all possible bag of terms.
+		Let \(\freq(\term, \doc)\) be the frequency of term \(\term\) in \(\doc\), \(\terms\) denote all possible terms, and \(\bag{\terms}\) be all possible bag of terms.
 	\end{defn}
 	
 	\begin{remark}
@@ -18,80 +18,70 @@
 	
 	\begin{defn}[Document Collection]
 	\label{def:document-collection}
-		A document collection \(\dc\) is a set of documents, written \(D\dc = \{\doc_1, \doc_2, \dotsc, \doc_k\}\).  The size of \(\dc\) is denoted \(\gls{ndocs}\).
+		A document collection \(\dc\) is a set of documents, written \(\dc = \{\doc_1, \doc_2, \dotsc, \doc_k\}\).  The cardinality of \(\dc\) is denoted by \(\gls{ndocs}\).
 	\end{defn}
 	
 	\begin{ex}
-	\label{ex:superhero-documents}
-		Consider the following short sentences.
+	\label{ex:documents}
+		Consider the following short phrases
 		
 		\begin{enumerate}
-			\item Superman is strong on Earth and lives on Earth.
-			\item Batman was born on Earth.
-			\item Superwoman is fast on Earth.
-			\item Superman was born on Krypton.
+			\item math 360 is a math class
+			\item cdps 101 is a boring lecture
+			\item mathematics lecture was great
 		\end{enumerate}
 		
-		Each sentence represents a document, giving us the following documents.
-		
+		Each sentence phrase produces a document, giving us the following
 		\begin{align}
-			\doc_1 &= \{\text{``and''}: 1, \text{``on''}: 2, \text{``is''}: 1, \text{``lives''}: 1, \text{``earth''}: 2, \text{``strong''}: 1, \text{``superman''}: 1\} \\
-			\doc_2 &= \{\text{``batman''}: 1, \text{``on''}: 1, \text{``was''}: 1, \text{``earth''}: 1, \text{``born''}: 1\} \\
-			\doc_3 &= \{\text{``on''}: 1, \text{``is''}: 1, \text{``superwoman''}: 1, \text{``fast''}: 1, \text{``earth''}: 1\} \\
-			\doc_4 &= \{\text{``krypton''}: 1, \text{``born''}: 1, \text{``on''}: 1, \text{``was''}: 1, \text{``superman''}: 1\} \\
+			\doc_1 &= \{\text{``math''}: 2, \text{``a''}: 1, \text{``is''}: 1, \text{``360''}: 1, \text{``class''}: 1\} \\
+			\doc_2 &= \{\text{``a''}: 1, \text{``boring''}: 1, \text{``is''}: 1, \text{``cdps''}: 1, \text{``lecture''}: 1, \text{``101''}: 1\} \\
+			\doc_3 &= \{\text{``mathematics''}: 1, \text{``great''}: 1, \text{``was''}: 1, \text{``lecture''}: 1\}
 		\end{align}
 	\end{ex}
 	
 	\subsection{Vectorization of Documents}
 	\label{sec:vectorization-of-documents}
-		One of the most fundamental approaches for searching documents is to treat documents as high dimensional vectors, and the document collection as a subset in a vector space.	 The search query becomes a nearest neighbour query in a vector space equipped with a distance measure.
+		One of the most fundamental approaches for searching documents is to treat documents as high-dimensional vectors, and the document collection as a subset in a vector space.  Search queries become a nearest neighbour search in a vector space using a distance metric.
 		
-		The first step is to convert a bag of terms into vectors.	 The standard technique \cite{ir-08} uses a scoring function that measures the relative importance of terms in documents.
+		The first step is to convert a bag of terms into vectors.  The standard technique \cite{ir-08} uses a scoring function that measures the relative importance of terms in documents.
 		
-		\begin{defn}[TF-IDF Score] \todo{What is a TF-IDF? What does TF-IDF stand for?}
+		\begin{defn}[\Gls{tfidf} Score]
 			The term frequency is the number of times a term \(\term\) appears in a document \(\doc\), as given by \(\freq(\term, \doc)\).	The document frequency of a term \(\term\), denoted by \(\df(\term)\), is the number of documents in \(\dc\) that contains \(\term\).	 It is defined as
-			
 			\[
 				\df(\term) = \abs{\{\doc \in \dc: \term \in \doc\}}
 			\]
 			
-			The combined TF-IDF score of \(\term\) in a document \(\doc\) is given by
-			
+			The combined \gls{tfidf} score of \(\term\) in a document \(\doc\) is given by
 			\[
 				\tfidf(\dc, \term, \doc) = \frac{\freq(\term, \doc)}{\abs{\doc}} \cdot \log{\frac{N}{\df(\term)}}
 			\]
 		\end{defn}
 		
-		\begin{remark}
-			The first component, \(\frac{\freq\left(\term, \doc\right)}{\abs{\doc}}\), measures the importance of a term within a document.  It is normalized to account for document length.	 The second component, \(\log{\frac{N}{\df\left(\term\right)}}\), is a measure of the rarity of the term within the document collection \(\dc\).
-		\end{remark}
+		The first component, \(\frac{\freq\left(\term, \doc\right)}{\abs{\doc}}\), measures the importance of a term within a document.  It is normalized to account for document length.	 The second component, \(\log{\frac{N}{\df\left(\term\right)}}\), is a measure of the rarity of the term within the document collection \(\dc\).
 		
 		\begin{ex}
-			Using the documents from \vref{ex:superhero-documents}, the TF-IDF scores are as follows.
-			
+			Using the documents from \vref{ex:documents}, the \gls{tfidf} scores are as follows.
 			\[
 				\bordermatrix{
-					~ & \doc_1 & \doc_2 & \doc_3 & \doc_4 \cr
-					\term_1 : \text{``and''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
-					\term_2 : \text{``on''} & 0.0000 & 0.0000 & 0.0000 & 0.0000 \cr
-					\term_3 : \text{``superwoman''} & 0.0000 & 0.0000 & 0.4000 & 0.0000 \cr
-					\term_4 : \text{``batman''} & 0.0000 & 0.4000 & 0.0000 & 0.0000 \cr
-					\term_5 : \text{``is''} & 0.1429 & 0.0000 & 0.2000 & 0.0000 \cr
-					\term_6 : \text{``fast''} & 0.0000 & 0.0000 & 0.4000 & 0.0000 \cr
-					\term_7 : \text{``born''} & 0.0000 & 0.2000 & 0.0000 & 0.2000 \cr
-					\term_8 : \text{``krypton''} & 0.0000 & 0.0000 & 0.0000 & 0.4000 \cr
-					\term_9 : \text{``earth''} & 0.1186 & 0.0830 & 0.0830 & 0.0000 \cr
-					\term_{10} : \text{``lives''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
-					\term_{11} : \text{``strong''} & 0.2857 & 0.0000 & 0.0000 & 0.0000 \cr
-					\term_{12} : \text{``was''} & 0.0000 & 0.2000 & 0.0000 & 0.2000 \cr
-					\term_{13} : \text{``superman''} & 0.1429 & 0.0000 & 0.0000 & 0.2000 \cr
+					~ & d_1 & d_2 & d_3 \cr
+					\term_{1} : \text{``101''} & 0.0000 & 0.2642 & 0.0000 \cr
+					\term_{2} : \text{``360''} & 0.3170 & 0.0000 & 0.0000 \cr
+					\term_{3} : \text{``a''} & 0.1170 & 0.0975 & 0.0000 \cr
+					\term_{4} : \text{``boring''} & 0.0000 & 0.2642 & 0.0000 \cr
+					\term_{5} : \text{``cdps''} & 0.0000 & 0.2642 & 0.0000 \cr
+					\term_{6} : \text{``class''} & 0.3170 & 0.0000 & 0.0000 \cr
+					\term_{7} : \text{``great''} & 0.0000 & 0.0000 & 0.3962 \cr
+					\term_{8} : \text{``is''} & 0.1170 & 0.0975 & 0.0000 \cr
+					\term_{9} : \text{``lecture''} & 0.0000 & 0.0975 & 0.1462 \cr
+					\term_{10} : \text{``math''} & 0.6340 & 0.0000 & 0.0000 \cr
+					\term_{11} : \text{``mathematics''} & 0.0000 & 0.0000 & 0.3962 \cr
+					\term_{12} : \text{``was''} & 0.0000 & 0.0000 & 0.3962 \cr
 				}
 			\]
 		\end{ex}
 
 		\begin{defn}[Document Vector]
 			Given a document collection \(\dc\) with \(M\) unique terms \(\terms = [\term_1, \term_2, \dotsc, \term_n ]\), each document \(\doc\) can be represented by an \(M\)-dimensional vector.
-			
 			\[
 				\vec{\doc} = 
 				\left[
@@ -106,109 +96,85 @@
 		\end{defn}
 		
 		\begin{ex}
-			The documents in \vref{ex:superhero-documents} would produce the following vectors.
-			
+			The documents in \vref{ex:documents} would produce the following vectors.
 			\[
 				\vec{\doc_n} = 
 					\left[
 						\begin{array}{l}
-							\tfidf(\term_{1}, d_n) \\
-							\tfidf(\term_{2}, d_n) \\
-							\tfidf(\term_{3}, d_n) \\
-							\tfidf(\term_{4}, d_n) \\
-							\tfidf(\term_{5}, d_n) \\
-							\tfidf(\term_{6}, d_n) \\
-							\tfidf(\term_{7}, d_n) \\
-							\tfidf(\term_{8}, d_n) \\
-							\tfidf(\term_{9}, d_n) \\
-							\tfidf(\term_{10}, d_n) \\
-							\tfidf(\term_{11}, d_n) \\
-							\tfidf(\term_{12}, d_n) \\
-							\tfidf(\term_{13}, d_n) \\
+							\tfidf(\term_{1}, \doc_{n}) \\
+							\tfidf(\term_{2}, \doc_{n}) \\
+							\tfidf(\term_{3}, \doc_{n}) \\
+							\tfidf(\term_{4}, \doc_{n}) \\
+							\tfidf(\term_{5}, \doc_{n}) \\
+							\tfidf(\term_{6}, \doc_{n}) \\
+							\tfidf(\term_{7}, \doc_{n}) \\
+							\tfidf(\term_{8}, \doc_{n}) \\
+							\tfidf(\term_{9}, \doc_{n}) \\
+							\tfidf(\term_{10}, \doc_{n}) \\
+							\tfidf(\term_{11}, \doc_{n}) \\
+							\tfidf(\term_{12}, \doc_{n}) \\
 						\end{array}
 					\right],
-				\vec{\doc_1} = 
+				\vec{\doc_1} =
 					\left[
-						\begin{array}{l}
-							0.2857 \\
+						\begin{array}{c}
+							0.0000 \\
+							0.3170 \\
+							0.1170 \\
 							0.0000 \\
 							0.0000 \\
+							0.3170 \\
 							0.0000 \\
-							0.1429 \\
+							0.1170 \\
 							0.0000 \\
+							0.6340 \\
 							0.0000 \\
-							0.0000 \\
-							0.1186 \\
-							0.2857 \\
-							0.2857 \\
-							0.0000 \\
-							0.1429 \\
-						\end{array}
-					\right],
-				\vec{\doc_2} = 
-					\left[
-						\begin{array}{l}
-							0.0000 \\
-							0.0000 \\
-							0.0000 \\
-							0.4000 \\
-							0.0000 \\
-							0.0000 \\
-							0.2000 \\
-							0.0000 \\
-							0.0830 \\
-							0.0000 \\
-							0.0000 \\
-							0.2000 \\
 							0.0000 \\
 						\end{array}
 					\right],
-				\vec{\doc_3} = 
+				\vec{\doc_2} =
 					\left[
-						\begin{array}{l}
+						\begin{array}{c}
+							0.2642 \\
+							0.0000 \\
+							0.0975 \\
+							0.2642 \\
+							0.2642 \\
 							0.0000 \\
 							0.0000 \\
-							0.4000 \\
-							0.0000 \\
-							0.2000 \\
-							0.4000 \\
-							0.0000 \\
-							0.0000 \\
-							0.0830 \\
-							0.0000 \\
+							0.0975 \\
+							0.0975 \\
 							0.0000 \\
 							0.0000 \\
 							0.0000 \\
 						\end{array}
 					\right],
-				\vec{\doc_4} = 
+				\vec{\doc_3} =
 					\left[
-						\begin{array}{l}
+						\begin{array}{c}
 							0.0000 \\
 							0.0000 \\
 							0.0000 \\
 							0.0000 \\
 							0.0000 \\
 							0.0000 \\
-							0.2000 \\
-							0.4000 \\
+							0.3962 \\
 							0.0000 \\
+							0.1462 \\
 							0.0000 \\
-							0.0000 \\
-							0.2000 \\
-							0.2000 \\
+							0.3962 \\
+							0.3962 \\
 						\end{array}
 					\right]
 			\]
 		\end{ex}
 		
 		\begin{defn}[Search Query]
-			A search query \(\q\) is simply a document, namely a bag of terms. \todo{Awkward wording} The top-\(k\) answers to \(\q\) with respect to a collection \(\dc\) is defined as the \(k\) documents, \(\{\doc_1, \doc_2, \dotsc, d_k\}\), in \(\dc\), such that \(\{\vec{\doc}_i\}\) are the closest vectors to \(\vec{\q}\) using Euclidean distance measure in \(\mathbb{R}^N\).
+			A search query \(\q\) is simply a document (as defined by \vref{def:document}).  The top-\(k\) answers to \(\q\) with respect to a collection \(\dc\) is defined as the \(k\) documents, \(\{\doc_1, \doc_2, \dotsc, d_k\}\) in \(\dc\), such that \(\{\vec{\doc_1}, \vec{\doc_2}, \dotsc, \vec{d_k}\}\) are the closest vectors to \(\vec{\q}\) using a Euclidean distance measure in \(\mathbb{R}^N\).
 		\end{defn}
 		
 		\begin{ex}
-			Given the search query \(\q = \{\text{superwoman}, \text{was}, \text{born}, \text{on}, \text{krypton}\}\), compute the vector \(\vec{\q}\) within the document collection \(\dc\) (as defined in \vref{ex:superhero-documents}).
-			
+			Given the search query \(\q = \{\text{math}, \text{lecture}, \text{was}, \text{great}\}\), compute the vector \(\vec{\q}\) within the document collection \(\dc\) (as defined in \vref{ex:documents}).
 			\[
 				\vec{\q} = 
 					\left[
@@ -219,12 +185,11 @@
 							0.0000 \\
 							0.0000 \\
 							0.0000 \\
+							0.2500 \\
+							0.1038 \\
+							0.1038 \\
+							0.2500 \\
 							0.0000 \\
-							0.1474 \\
-							0.2644 \\
-							0.0000 \\
-							0.2644 \\
-							0.1474 \\
 							0.0000 \\
 						\end{array}
 					\right]
@@ -235,7 +200,6 @@
 		
 		\begin{defn}[Cosine Similarity]
 			Given two document vectors, \(\vec{\doc}_1\) and \(\vec{\doc}_2\), the cosine similarity is the dot product \(\vec{\doc}_1 \cdot \vec{\doc}_2\), normalized by the product of the Euclidean distance of \(\vec{\doc}_1\) and \(\vec{\doc}_2\) in \(\mathbb{R}^N\).	It is denoted as \(\similarity(\vec{\doc}_1, \vec{\doc}_2)\).
-			
 			\begin{align}
 				\similarity(\vec{\doc}_1, \vec{\doc}_2) &= \frac{\vec{\doc}_1 \cdot \vec{\doc}_2}{\norm{\vec{\doc}_1} \cdot \norm{\vec{\doc}_2}} \\
 				 &= \frac{\sum\limits_{i=1}^{N} \vec{\doc}_{1, i} \times \vec{\doc}_{2, i}}{\sqrt{\sum\limits_{i=1}^{N} (\vec{\doc}_{1, i})^2} \times \sqrt{\sum\limits_{i=1}^{N} (\vec{\doc}_{2, i})^2}}
@@ -243,32 +207,45 @@
 		\end{defn}
 		
 		Recall we may represent search queries as documents and thus document vectors.	Therefore we may compute the score of a document \(\doc\) for a search query \(\q\) as
-		
 		\[
 			\similarity(\vec{\doc}, \vec{\q})
 		\]
 		
 		\begin{ex}
-			Given the document collection \(\dc\) (from \vref{ex:superhero-documents}) and search query \(q\), compute the similarity between \(\q\) and every document \(\doc \in \dc\).
-			
+			Given the document collection \(\dc\) (from \vref{ex:documents}) and search query \(q\), compute the similarity between \(\q\) and every document \(\doc \in \dc\).
 			\begin{align}
-				\similarity(\vec{\doc}_1, \vec{\q}) &= 0.000000 \\
-				\similarity(\vec{\doc}_2, \vec{\q}) &= 0.191533 \\
-				\similarity(\vec{\doc}_3, \vec{\q}) &= 0.265877 \\
-				\similarity(\vec{\doc}_4, \vec{\q}) &= 0.618553
+				\similarity(\vec{\doc_1}, \vec{\q}) = 0.390890 \\
+				\similarity(\vec{\doc_2}, \vec{\q}) = 0.061592 \\
+				\similarity(\vec{\doc_3}, \vec{\q}) = 0.252789
 			\end{align}
 		\end{ex}
 		
 	\subsection{Extending the Document Model}
 	\label{sec:extending-the-document-model}
-		In the extended document model, documents have fields: \(\fields{\doc}\), and each attribute have values (e.g.~date, string, integer), or bag of terms.  Thus:
-
+		In the extended document model, documents have fields, denoted as \(\fields{\doc}\), and each field has a value.  Thus
 		\[
 			\doc : \fields{\doc} \to \bag{\terms}
 		\]
 		
 		\begin{ex}[Semi-Structured Document]
-			We see that \(\doc_2\) is about Batman.  The document contents are semi-structured, containing both a name and the name of a planet.	By adding fields to the document, we are left with \vref{tbl:person-document}.
+			We see that \(\doc_1\) is about MATH 360.  The document contents are semi-structured, containing both a course code and the subject ID.  By adding fields to the document, we are left with \vref{tbl:course-document}.
+			
+			\begin{table}[!ht]
+				\centering
+				
+				\begin{tabular}{ll}
+					\toprule
+					Attribute & Value \\
+					\midrule
+					code & CDPS 101 \\
+					title & Human-Mutant Relations \\
+					subject & Community Development \& Policy Studies \\
+					\bottomrule
+				\end{tabular}
+				
+				\caption{Properties of the Course titled Human-Mutant Relations.}
+				\label{tbl:hmr-properties}
+			\end{table}
 			
 			\begin{table}[!ht]
 				\centering
@@ -277,17 +254,17 @@
 					\toprule
 					Field & Value \\
 					\midrule
-					name & Batman \\
-					birthplace & Earth \\
-					body & Batman was born on Earth. \\
+					code & MATH 360 \\
+					id & MATH \\
+					body & math 360 is a math class \\
 					\bottomrule
 				\end{tabular}
 				
-				\caption{Person document for Batman}
-				\label{tbl:person-document}
+				\caption{Course document for MATH 360.}
+				\label{tbl:course-document}
 			\end{table}
 			
-			which is similar in structure to the \texttt{Person} table. \todo{What table number}
+			which is similar in structure to \vref{tbl:hmr-properties}.
 		\end{ex}
 		
 	\subsection{Approximate String matching}
@@ -302,7 +279,7 @@
 			\caption{\(\textsc{N-Gram}(S, n, s)\)}
 			\label{alg:n-gram}
 			
-			%\begin{singlespaced}
+			\begin{singlespaced}
 				\begin{algorithmic}[1]
 					\REQUIRE \(S\) is a string, \(n \ge 1\), and \(s\) is a character
 					\ENSURE the list of \(n\)-grams of \(S\)
@@ -317,10 +294,10 @@
 					\ENDFOR
 					
 					\RETURN \(G\)
-			%		\medskip
-			%		\medskip
+					\medskip
+					\medskip
 				\end{algorithmic}
-			%\end{singlespaced}
+			\end{singlespaced}
 		\end{algorithm}
 		
 		%\todo{The medskips above should not be required, but are in single spaced mode.}
@@ -328,18 +305,14 @@
 		Where \(l\) is the length of \(S\), \(\textsc{Repeat}(S, n)\) repeats \(s\) character \(n\) times, \(\textsc{Pad}(S, p)\) prefixes and postfixes \(S\) with \(p\), and \(\textsc{Replace}(S, s, p)\) replaces character \(s\) with \(p\) in string \(S\).
 		
 		\begin{ex}
-		\label{ex:ngram-banana}
-			Given a string \(S = \text{``superman''}\), compute the trigram of \(S\) using \vref{alg:n-gram}.
-			
+		\label{ex:ngram}
+			Given a string \(S = \text{``human''}\), compute the trigram of \(S\) using \vref{alg:n-gram}.
 			\[
 				G = \{
-					\text{``\char"24\char"24s''},
-					\text{``\char"24su''},
-					\text{``sup''},
-					\text{``upe''},
-					\text{``per''},
-					\text{``erm''},
-					\text{``rma''},
+					\text{``\char"24\char"24h''},
+					\text{``\char"24hu''},
+					\text{``hum''},
+					\text{``uma''},
 					\text{``man''},
 					\text{``an\char"24''},
 					\text{``n\char"24\char"24''}
@@ -351,22 +324,17 @@
 		
 		\begin{ex}
 		\label{ex:n-gram-comparison}
-			Given a string \(S\) (\vref{ex:ngram-banana}), let \(S' = \text{``superwoman''}\).  Compute the trigram of \(S'\) and compare it to \(S\).
-			
+			Given a string \(S\) (\vref{ex:ngram}), let \(S' = \text{``humans''}\).  Compute the trigram of \(S'\) and compare it to \(S\).
 			\[
 				G' = \{
-					\text{``\char"24\char"24s''},
-					\text{``\char"24su''},
-					\text{``sup''},
-					\text{``upe''},
-					\text{``per''},
-					\text{``erw''},
-					\text{``rwo''},
-					\text{``wom''},
-					\text{``oma''},
+					\text{``\char"24\char"24h''},
+					\text{``\char"24hu''},
+					\text{``hum''},
+					\text{``uma''},
 					\text{``man''},
-					\text{``an\char"24''},
-					\text{``n\char"24\char"24''}
+					\text{``ans''},
+					\text{``ns\char"24''},
+					\text{``s\char"24\char"24''}
 				\}
 			\]
 			
@@ -376,20 +344,16 @@
 				\[
 					\bordermatrix{
 						~ & G & G' \cr
-						\term_1 : \text{``an\char"24''} & 1 & 1 \cr
-						\term_2 : \text{``oma''} & 0 & 1 \cr
-						\term_3 : \text{``\char"24su''} & 1 & 1 \cr
-						\term_4 : \text{``rwo''} & 0 & 1 \cr
-						\term_5 : \text{``rma''} & 1 & 0 \cr
-						\term_6 : \text{``man''} & 1 & 1 \cr
-						\term_7 : \text{``erw''} & 0 & 1 \cr
-						\term_8 : \text{``\char"24\char"24s''} & 1 & 1 \cr
-						\term_9 : \text{``upe''} & 1 & 1 \cr
-						\term_{10} : \text{``n\char"24\char"24''} & 1 & 1 \cr
-						\term_{11} : \text{``per''} & 1 & 1 \cr
-						\term_{12} : \text{``wom''} & 0 & 1 \cr
-						\term_{13} : \text{``sup''} & 1 & 1 \cr
-						\term_{14} : \text{``erm''} & 1 & 0 \cr
+						\term_{1} : \text{``ns\char"24''} & 0 & 1 \cr
+						\term_{2} : \text{``n\char"24\char"24''} & 1 & 0 \cr
+						\term_{3} : \text{``s\char"24\char"24''} & 0 & 1 \cr
+						\term_{4} : \text{``ans''} & 0 & 1 \cr
+						\term_{5} : \text{``man''} & 1 & 1 \cr
+						\term_{6} : \text{``uma''} & 1 & 1 \cr
+						\term_{7} : \text{``\char"24\char"24h''} & 1 & 1 \cr
+						\term_{8} : \text{``hum''} & 1 & 1 \cr
+						\term_{9} : \text{``\char"24hu''} & 1 & 1 \cr
+						\term_{10} : \text{``an\char"24''} & 1 & 0 \cr
 					}
 				\]
 				
@@ -397,7 +361,7 @@
 				\label{fig:n-gram-misspelling-comparison}
 			\end{figure}
 			
-			As \vref{fig:n-gram-misspelling-comparison} shows, using \(n\)-grams yield a similarity of \(\frac{8}{14}\).
+			As \vref{fig:n-gram-misspelling-comparison} shows, using \(n\)-grams yield a similarity of \(\frac{5}{10}\).
 		\end{ex}
 			
 	\subsection{Pros and Cons of the Document Model}
