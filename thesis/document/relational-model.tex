@@ -80,10 +80,10 @@
 			
 			which asserts \((\text{Course}, \text{Subject}) \models \theta\).  Therefore, if
 			\[
-				t = \{\text{code}: \text{``CDPS 101''}, \text{title}: \text{``Human-Mutant Relations''}, \text{subject}: \text{``CDPS''}\}
+				\tuple = \{\text{code}: \text{``CDPS 101''}, \text{title}: \text{``Human-Mutant Relations''}, \text{subject}: \text{``CDPS''}\}
 			\]
 			
-			then \(\exists! t' \in \text{Subject}\) such that \(t'\lbrack\text{id}\rbrack = \text{``CDPS''}\).
+			then \(\exists! \tuple' \in \text{Subject}\) such that \(\tuple'\lbrack\text{id}\rbrack = \text{``CDPS''}\).
 		\end{ex}
 	\end{defn}
 	
@@ -114,6 +114,8 @@
 				\(\rel{Course}{\underline{code}, title, subject}\) \\
 				\(\rel{Term}{\underline{id}, name}\) \\
 				\(\rel{Section}{\underline{crn}, term, course}\) \\
+				\(\rel{Schedule}{\underline{id}, days, sch\_type, time\_start, time\_end, location, section, instructor}\) \\
+				\(\rel{Instructor}{\underline{id}, name}\) \\
 				
 				\caption{Subset of mycampus dataset schema}
 				\label{fig:schema}
@@ -125,7 +127,9 @@
 				\begin{align*}
 					\rel{Course}{subject} &\rightarrow \rel{Subject}{id} \\
 					\rel{Section}{term} &\rightarrow \rel{Term}{id} \\
-					\rel{Section}{course} &\rightarrow \rel{Course}{code}
+					\rel{Section}{course} &\rightarrow \rel{Course}{code} \\
+					\rel{Schedule}{section} &\rightarrow \rel{Section}{crn} \\
+					\rel{Schedule}{instructor} &\rightarrow \rel{Instructor}{id}
 				\end{align*}
 				
 				\caption{\gls{fk} constraints on schema in \vref{fig:schema}}
@@ -137,13 +141,15 @@
 			\begin{figure}[!ht]
 				\centering
 				
-				\begin{dot2tex}[dot]
+				\begin{dot2tex}[neato]
 					digraph G {
-						node [shape=plaintext]; Subject; Course; Term; Section;
+						node [shape=plaintext]; Subject; Course; Term; Section; Schedule; Instructor;
 						
 						Course -> Subject;
 						Section -> Term
 						Section -> Course;
+						Schedule -> Section;
+						Schedule -> Instructor;
 					}
 				\end{dot2tex}
 				

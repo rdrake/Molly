@@ -18,16 +18,22 @@
 			\]
 			
 			produce the document encoding \(\docs{\tuple}\).
-			\[
-				\docs{\tuple} =
-					\left[
-						\begin{array}{rl}
-							\text{code}: & \{\text{cdps}, \text{101}\} \\
-							\text{title}: & \{\text{human}, \text{mutant}, \text{relations}\} \\
-							\text{subject}: & \{\text{cdps}\}
-						\end{array}
-					\right]
-			\]
+			
+			\begin{table}[!ht]
+				\centering
+				
+				\begin{tabular}{ll}
+					\toprule
+					Field & Terms \\
+					\midrule
+					code & \(\{\text{cdps}, \text{101}\}\) \\
+					title & \(\{\text{human}, \text{mutant}, \text{relations}\}\) \\
+					subject & \(\{\text{cdps}\}\) \\
+					\bottomrule
+				\end{tabular}
+				
+				\caption{\(\docs{\tuple}\)}
+			\end{table}
 		\end{ex}
 
 	
@@ -42,7 +48,7 @@
 		we assert that if \(\tuple\) and \(\tuple'\) are in the entity group \(\egraph\), then there is a foreign key constraint between \(\tuple\) and \(\tuple'\).  We denote the vertices of \(\egraph\) as \(\text{V}(\egraph)\), and the edges of \(\egraph\) as \(\text{E}(\egraph)\).
 		
 		\begin{ex}
-			Using the schema graph 
+			Using the schema graph...
 		\end{ex}
 		
 		\begin{claim}
@@ -58,22 +64,93 @@
 			Recall our earlier assertion that \(\sgraph{\db}\) is cycle-free and foreign keys must be unique.
 		\end{proof}
 		
+		\todo{Above proof could use some love}
+		
 	\section{Encoding an Entity Group as a Document Group}
 		Given a entity group \(\egraph\), we construct two or more documents in order to represent the entity group in the document model.
 		
 		For every \(\tuple \in \text{V}(\egraph)\), we construct a document \(\docs{\tuple}\) (\vref{sec:named-tuples-documents}).  With each tuple \(\tuple\) stored in the document collection \(\dc\), we construct an additional document which stores the association information.
 		
 		Let \(x\) be the indexing document of \(\egraph\).
-		
-		\[
+		\begin{align}
 			x[\text{``entities''}] = \bigcup_{\tuple \in \text{V}\left(\egraph\right)} \uid{\tuple}
-		\]
+		\end{align}
 		
 		Thus, the encoding of \(\egraph\) is defined as
+		\begin{align}
+			\egraph \xrightarrow{\text{encode}} \{\docs{\tuple} : \tuple \in \text{V}(\egraph)\} \cup \{x\}
+		\end{align}
 		
-		\[
-			\egraph \xrightarrow{\text{encode}} \{\docs{\tuple} : \tuple \in V(\egraph)\} \cup \{x\}
-		\]
+		\begin{ex}
+			An entity group produced from the schema in \vref{fig:schema-graph} would be as follows
+			
+			\begin{figure}[!ht]
+				\centering
+				
+				\begin{dot2tex}[dot]
+					digraph G {
+						node [shape=plaintext]; {node [label="Course(MATH 360, Complex Analysis, MATH)"] course;}
+						node [shape=plaintext]; {node [label="Subject(MATH, Mathematics)"] subject;}
+						
+						course -> subject;
+					}
+				\end{dot2tex}
+				
+				\caption{Example entity group}
+				\label{fig:entity-group}
+			\end{figure}
+			
+			Transforming the example entity group in \vref{fig:entity-group} would produce documents shown in \vref{tbl:document-encoding}
+			
+			\begin{table}[!ht]
+				\begin{subtable}[b]{0.33\linewidth}
+					\centering
+					
+					\begin{tabular}{ll}
+						\toprule
+						Field & Terms \\
+						\midrule
+						code & \(\{\text{math}, \text{360}\}\) \\
+						title & \(\{\text{complex}, \text{analysis}\}\) \\
+						subject & \(\{\text{math}\}\) \\
+						\bottomrule
+					\end{tabular}
+					
+					\caption{Course}
+				\end{subtable}
+				\begin{subtable}[b]{0.33\linewidth}
+					\centering
+					
+					\begin{tabular}{ll}
+						\toprule
+						Field & Terms \\
+						\midrule
+						id & \(\{\text{math}\}\) \\
+						name & \(\{\text{mathematics}\}\) \\
+						\bottomrule
+					\end{tabular}
+					
+					\caption{Subject}
+				\end{subtable}
+				\begin{subtable}[b]{0.33\linewidth}
+					\centering
+					
+					\begin{tabular}{ll}
+						\toprule
+						Field & Terms \\
+						\midrule
+						entities & \(\{\text{course|math\_360}\), \\
+						& \(\text{subject|math}\}\) \\
+						\bottomrule
+					\end{tabular}
+					
+					\caption{Indexing document}
+				\end{subtable}
+				
+				\caption{Document encoding of \vref{fig:entity-group}}
+				\label{tbl:document-encoding}
+			\end{table}
+		\end{ex}
 		
 		It's easy to see that from \(\text{encode}(\egraph)\) we can recover \(\text{V}(\egraph)\), the tuples in \(\egraph\).
 		
@@ -83,13 +160,39 @@
 		Each value for user selected attributes are converted into \(n\)-grams, and stored in special documents.
 	
 	\section{Iterative Search Using Document Encodings}
-		A document database supports fast and flexible keyword search queries.	A search query is characterized by \(q = (f, w)\), where \(f\) is a field name, and \(w\) is a search phrase.
+		A document database supports fast and flexible keyword search queries.	A search query is characterized by \(\q = (\field, \w)\), where \(\field\) is an optional field name, and \(\w\) is a search phrase.
 		
-		Search[q] is the set of documents returned by the text index.  The search function allows us to do many things:
+		\(\query(\q)\) is the set of documents returned by the text index.  The query function, combined with the extended document model, permits powerful search queries to be issued.  Our implementation supports approximate string matching using \(n\)-grams (\cref{sec:n-gram}) for values, searching for entities containing keywords (see \vref{ex:entity-search}), and the discovery of intermediate entities given two known entities.
 		
-		\begin{enumerate}
-			\item Suggest values, correcting spelling errors
-			\item Given attribute values, search all relevant entities
-			\item Search for all relevant entity groups of one or more entities, using the indexing document
-			\item We can connect entities via entity groups using (hyper)graph search algorithms.
-		\end{enumerate}
+		\begin{ex}[Entity Search]
+		\label{ex:entity-search}
+			Find all entities that match the keyword ``math''.
+			
+			Let \(\q = \text{``math''}\) be the search query.  The results are
+			\begin{align*}
+				\query(\q) &= \query(\text{``math''}) \\
+				&= \{\text{subject|math}, \text{course|math\_360}\}
+			\end{align*}
+			
+			which are coincidentally related.  The results of an entity search query are not necessarily related.
+		\end{ex}
+		
+		\begin{ex}[Entity Graph Search]
+			Find the shortest path between the two entities with the unique identities of ``subject|math'' and ``instructor|5''.
+			
+			
+		\end{ex}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		

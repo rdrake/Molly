@@ -1,7 +1,9 @@
 digraph G {
-node [shape=plaintext]; Subject; Course; Term; Section;
+node [shape=plaintext]; Subject; Course; Term; Section; Schedule; Instructor;
 
 Course -> Subject;
 Section -> Term
 Section -> Course;
+Schedule -> Section;
+Schedule -> Instructor;
 }
