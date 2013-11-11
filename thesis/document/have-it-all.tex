@@ -3,37 +3,51 @@
 	\label{sec:named-tuples-documents}
 		Recall in the extended document model (\vref{sec:extending-the-document-model}), a document \(\doc\) consists of fields \(\field_1, \field_2, \dotsc, \field_n\).  Using the extended document model, we are left with a straight forward mapping of a tuple \(\tuple\) to document \(\doc\).
 		
-		For tuple \(\tuple\), every attribute \(\attribute \in \attributes{\tuple}\) maps to field \(\field\) in \(\doc\).	Every attribute value must be analyzed into an indexable form in order to store it in a field.
-		
+		For tuple \(\tuple\), every attribute \(\attribute \in \attributes{\tuple}\) maps to a field \(\field\) in document \(\doc\).	Every attribute value must be analyzed into an indexable form in order to store it in a field.
 		\begin{align}
 			\attributes{\tuple} &\xrightarrow{analyzed} \fields{\doc} \\
 			\attribute_1, \attribute_2, \dotsc, \attribute_n &\xrightarrow{analyzed} \field_1, \field_2, \dotsc, \field_n
 		\end{align}
 		
 		We denote the document encoding of \(\tuple\) as \(\docs{\tuple}\).
+		
+		\begin{ex}
+			Given the tuple
+			\[
+				\tuple = \{\text{code}: \text{``CDPS 101''}, \text{title}: \text{``Human-Mutant Relations''}, \text{subject}: \text{``CDPS''}\}
+			\]
+			
+			produce the document encoding \(\docs{\tuple}\).
+			\[
+				\docs{\tuple} =
+					\left[
+						\begin{array}{rl}
+							\text{code}: & \{\text{cdps}, \text{101}\} \\
+							\text{title}: & \{\text{human}, \text{mutant}, \text{relations}\} \\
+							\text{subject}: & \{\text{cdps}\}
+						\end{array}
+					\right]
+			\]
+		\end{ex}
+
 	
 	\section{Mapping of Entity Groups to Documents}
-		Recall that an entity group (\vref{def:entity-group}) is a forest \(\egraph\) of tuples \(\tuple\) such that
-		
-		\[
-			\forall (\tuple, \tuple') \in \egraph, \tuple \nequal \tuple' \Rightarrow \relations{\tuple} \nequal \relations{\tuple'}
-		\]
-		
-		That is, all tuples are from distinct relations.
+		Recall that an entity group (\vref{def:entity-group}) is a forest \(\egraph\) of tuples \(\tuple\) such that for every \((\tuple, \tuple') \in \egraph\), where \(\tuple \nequal \tuple'\), implies \(\relations{\tuple} \nequal \relations{\tuple'}\).  That is, every distinct tuple is from a distinct relation.
 		
 		Given the restriction
-		
 		\[
-			\forall (\relation, \relation') \in \sgraph{\db}, \exists! (\relation, \relation') \models \theta
+			\forall (\relation, \relation') \in \sgraph, \exists! (\relation, \relation') \models \theta
 		\]
 		
-		we assert that if \((\tuple, \tuple') \in \egraph\), then \((\tuple, \tuple') \in \relations{\tuple} \bowtie \relations{\tuple'}\).
+		we assert that if \(\tuple\) and \(\tuple'\) are in the entity group \(\egraph\), then there is a foreign key constraint between \(\tuple\) and \(\tuple'\).  We denote the vertices of \(\egraph\) as \(\text{V}(\egraph)\), and the edges of \(\egraph\) as \(\text{E}(\egraph)\).
 		
-		Let \(\text{V}(\egraph)\) be the vertices of \(\egraph\), \(\text{E}(\egraph)\) be the edges of \(\egraph\).
+		\begin{ex}
+			Using the schema graph 
+		\end{ex}
 		
 		\begin{claim}
 		\label{clm:lossless}
-			\(\egraph\) can always be reconstructed from \(\text{V}(\egraph)\) without loss of information.
+			Given \(\text{V}(\egraph)\), we are always able to reconstruct \(\egraph\).
 		\end{claim}
 		
 		\begin{proof}

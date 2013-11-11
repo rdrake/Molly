@@ -255,7 +255,7 @@
 					Field & Value \\
 					\midrule
 					code & MATH 360 \\
-					id & MATH \\
+					subject & MATH \\
 					body & math 360 is a math class \\
 					\bottomrule
 				\end{tabular}
@@ -365,13 +365,12 @@
 		\end{ex}
 			
 	\subsection{Pros and Cons of the Document Model}
-		There are numerous reasons to use the document model.  It allows users without domain knowledge and working knowledge of a complex query language such as \gls{sql} to find information. \todo{You state that there are numerous reasons, but only list one}
+		There are numerous reasons to use the document model.  The most significant reason is that it allows users without domain knowledge and working knowledge of a complex query language such as \gls{sql} to find information.
 		
 		\begin{ex}[Simple Queries]
-			Find all documents related to ``Superman'' or ``Earth''.  This query, if the default operator is \texttt{OR}, would simply be \texttt{Superman Earth}.	The result of the query \(\q\) would be
-			
+			Find all documents related to ``mathematics'' or ``lecture''.  The result of the query \(\q\) would be
 			\[
-				\query(\text{``superman''}) \cup \query(\text{``earth''}) \rightarrow \{\doc_1, \doc_2, \doc_3, \doc_4\}
+				\query(\text{``mathematics''}) \cup \query(\text{``lecture''}) \rightarrow \{\doc_2, \doc_3\}
 			\]
 		\end{ex}
 		
@@ -379,41 +378,34 @@
 		
 		\begin{ex}[\texttt{AND} Query]
 		\label{ex:and-query}
-			Find all documents containing both ``Superman'' and ``Earth''.	This query would return the following set of documents
-			
+			Find all documents containing both ``mathematics'' and ``lecture''.  This query would return the following set of documents
 			\[
-				\query(\text{``superman''}) \cap \query(\text{``earth''}) \rightarrow \{\doc_1\}
+				\query(\text{``mathematics''}) \cap \query(\text{``lecture''}) \rightarrow \{\doc_3\}
 			\]
 			
 			as only \(\doc_1\) contains both terms.
 		\end{ex}
 		
 		\begin{ex}[\texttt{NOT} Query]
-			Find all documents containing ``Superman'' but not ``Earth''.  This query would return different results than \vref{ex:and-query}.
-			
+			Find all documents containing ``mathematics'' but not ``lecture''.  This query would return different results than \vref{ex:and-query}.
 			\[
-				\query(\text{``superman''}) \neg\query(\text{``earth''}) \rightarrow \{\doc_4\}
+				\query(\text{``mathematics''})\neg\query(\text{``lecture''}) \rightarrow \emptyset
 			\]
 		\end{ex}
 		
-		While none of the above queries required domain knowledge, it is possible to use the extended document model (\vref{sec:extending-the-document-model}) to search specific fields.  Doing so allows users to have finer control over what documents are retrieved.
+		While none of the above queries required domain knowledge, it is possible to use the extended document model (\vref{sec:extending-the-document-model}) to search specific fields.  Doing so permits users to leverage their existing domain knowledge in order to achieve finer control over what documents are retrieved.
 		
 		\begin{ex}[Extended Query]
-			Find all documents with a superhero named ``Superman'' that contain the term ``Earth''.
-			
+			Find all documents with a subject of ``MATH'' that contain the term ``class''.
 			\[
-				\query(\text{``name''}, \text{``superman''}) \cap \query(\text{``earth''}) \rightarrow \{\doc_3\}
+				\query(\text{``subject''}, \text{``MATH''}) \cap \query(\text{``class''}) \rightarrow \{\doc_1\}
 			\]
-			
-			Assuming the first term of every document is also the value of the name attribute.
 		\end{ex}
 		
-		People utilize keyword query search every day through web search engines such as Google.
-		
-		Not only does the document model provide a familiar interface to search for information with, it also ranks the results.  In the relational model a search for ``Superman'' would return all named tuples that contained that term.	 In the document model, documents are ranked against the query \(\q\) and the top-\(k\) documents are returned.
+		Not only does the document model provide a familiar interface to search for information with, it also ranks the results.  In the relational model a search for ``mathematics'' would return all named tuples that contained that term.  In the document model, documents are ranked against the query \(\q\) and the top-\(k\) documents are returned.
 		
 		The advantage is that users have the result of \(\q\) already ranked so only the most relevant documents may be explored.	 As the number of documents matching \(\q\) for a large corpus can be high, showing only the top-\(k\) relevant documents may save the user a substantial amount of time.
 		
-		The relational model does not permit approximate string matching.  By utilizing the document model with \(n\)-grams (\vref{sec:n-gram}), users who substitute, delete, or insert characters from the desired term may still receive results for their intended term (see \vref{ex:n-gram-comparison} for a demonstration of how \(n\)-grams overcome character substitutions).
+		The relational model does not permit approximate string matching.  By utilizing the document model with \(n\)-grams (\vref{sec:n-gram}), users who substitute, delete, or insert characters from the desired term may still receive results for their intended term (see \vref{ex:n-gram-comparison} for a demonstration of how \(n\)-grams overcome character insertion).
 		
 		Unfortunately the document model does not support the concept of foreign keys (\vref{def:foreign-keys}).  While information is easily accessible due to flexible search, each document is a discrete unit of information.  Aggregate queries are unsupported, as these units are not linked amongst one another.

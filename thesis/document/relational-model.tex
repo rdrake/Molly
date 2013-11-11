@@ -121,11 +121,16 @@
 			
 			and the \gls{fk} constraints in \vref{eqn:fk-constraints}
 			
-			\begin{align}\label{eqn:fk-constraints}
-				\rel{Course}{subject} &\rightarrow \rel{Subject}{id} \\
-				\rel{Section}{term} &\rightarrow \rel{Term}{id} \\
-				\rel{Section}{course} &\rightarrow \rel{Course}{code}
-			\end{align}
+			\begin{figure}[!ht]
+				\begin{align*}
+					\rel{Course}{subject} &\rightarrow \rel{Subject}{id} \\
+					\rel{Section}{term} &\rightarrow \rel{Term}{id} \\
+					\rel{Section}{course} &\rightarrow \rel{Course}{code}
+				\end{align*}
+				
+				\caption{\gls{fk} constraints on schema in \vref{fig:schema}}
+				\label{eqn:fk-constraints}
+			\end{figure}
 			
 			we produce the schema graph in \vref{fig:schema-graph}
 			
@@ -142,7 +147,7 @@
 					}
 				\end{dot2tex}
 				
-				\caption{Graph representation of relations (\cref{fig:schema}) and \gls{fk} (\cref{eqn:fk-constraints}).}
+				\caption{Graph representation of relations (\cref{fig:schema}) and \gls{fk} (\cref{eqn:fk-constraints})}
 				\label{fig:schema-graph}
 			\end{figure}
 		\end{ex}

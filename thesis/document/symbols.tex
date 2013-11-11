@@ -1,25 +1,13 @@
-\newglossaryentry{terms}
-{
-	type = symbols,
-	name = {\ensuremath{T}},
-	description = {all terms in document collection},
-	sort = terms
-}
+% Improve the empty set symbol.
+\let\oldemptyset\emptyset
+\let\emptyset\varnothing
 
 \newglossaryentry{ndocs}
 {
 	type = symbols,
 	name = {\ensuremath{N}},
 	description = {number of documents in collection},
-	sort = ndocs
-}
-
-\newglossaryentry{nterms}
-{
-	type = symbols,
-	name = {\ensuremath{M}},
-	description = {size of \(\gls{terms}\)},
-	sort = nterms
+	sort = dm_ndocs
 }
 
 % Expect the function name and any arguments separated by commas
@@ -35,52 +23,134 @@
 \newcommand{\fks}[1]{\prop{FK}{#1}}
 \newcommand{\bag}[1]{\prop{Bag}{#1}}
 \newcommand{\docs}[1]{\prop{Doc}{#1}}
-%\newcommand{\sgraph}[1]{\prop{SchemaGraph}{#1}}
 \newcommand{\uid}[1]{\prop{UID}{#1}}
-%\newcommand{\terms}[1]{\fcn{Term}{#1}}
 
-\newcommand{\relation}{\gls{relation}}
-\newcommand{\tuple}{\gls{tuple}}
-\newcommand{\term}{\gls{term}}
-\newcommand{\field}{\gls{field}}
-\newcommand{\attribute}{\ensuremath \alpha}
-\newcommand{\key}{\ensuremath \Kappa}
-\newcommand{\db}{\ensuremath \mathbb{D}}
-\newcommand{\doc}{\ensuremath d}
-\newcommand{\dc}{\ensuremath \mathbb{C}}
-\newcommand{\terms}{\ensuremath \Tau}
-\newcommand{\q}{\ensuremath q}
-\newcommand{\sgraph}{\ensuremath G}
-\newcommand{\egraph}{\ensuremath T}
+\newcommand{\db}{\glssymbol{db}}
+\newglossaryentry{db}
+{
+	type = symbols,
+	name = {database},
+	symbol = {\ensuremath D}, % I desire \mathbb{D}, not D.
+	description = {set of \glspl{relation}},
+	sort = rm_10_db
+}
 
+\newcommand{\relation}{\glssymbol{relation}}
 \newglossaryentry{relation}
 {
 	type = symbols,
-	name = {\ensuremath r},
+	name = {relation},
+	symbol = {\ensuremath r},
 	description = {set of named tuples},
-	sort = relation
+	sort = rm_20_relation
 }
 
+\newcommand{\tuple}{\glssymbol{tuple}}
 \newglossaryentry{tuple}
 {
 	type = symbols,
-	name = {\ensuremath t},
-	description = {named tuple},
-	sort = relation
+	name = {named tuple},
+	symbol = {\ensuremath t},
+	description = {ordered set of values},
+	sort = rm_30_tuple
 }
 
-\newglossaryentry{term}
+\newcommand{\attribute}{\glssymbol{attribute}}
+\newglossaryentry{attribute}
 {
 	type = symbols,
-	name = {\ensuremath \tau},
-	description = {unique terms in \gls{document}},
-	sort = relation
+	name = {attribute},
+	symbol = {\ensuremath \alpha},
+	description = {named column},
+	sort = rm_40_attribute
 }
 
+\newcommand{\key}{\glssymbol{key}}
+\newglossaryentry{key}
+{
+	type = symbols,
+	name = {key},
+	symbol = {\ensuremath \Kappa},
+	description = {uniquely identifies a \gls{tuple} in a \gls{relation}},
+	sort = rm_50_key
+}
+
+\newcommand{\sgraph}{\glssymbol{sgraph}}
+\newglossaryentry{sgraph}
+{
+	type = symbols,
+	name = {schema graph},
+	symbol = {\ensuremath G},
+	description = {graph representation of schema},
+	sort = dm_00_sgraph
+}
+
+\newcommand{\egraph}{\glssymbol{egraph}}
+\newglossaryentry{egraph}
+{
+	type = symbols,
+	name = {entity group},
+	symbol = {\ensuremath T},
+	description = {forest of \glspl{tuple}},
+	sort = dm_05_egraph
+}
+
+\newcommand{\dc}{\glssymbol{dc}}
+\newglossaryentry{dc}
+{
+	type = symbols,
+	name = {document collection},
+	symbol = {\ensuremath C},
+	description = {set of \glspl{doc}},
+	sort = dm_10_dc
+}
+
+\newcommand{\terms}{\glssymbol{terms}}
+\newglossaryentry{terms}
+{
+	type = symbols,
+	name = {terms},
+	symbol = {\ensuremath \Tau},
+	description = {set of unique \glspl{term} in a \gls{dc}},
+	sort = dm_20_terms
+}
+
+\newcommand{\doc}{\glssymbol{doc}}
+\newglossaryentry{doc}
+{
+	type = symbols,
+	name = {document},
+	symbol = {\ensuremath d},
+	description = {set of fields},
+	sort = dm_30_doc
+}
+
+\newcommand{\q}{\glssymbol{q}}
+\newglossaryentry{q}
+{
+	type = symbols,
+	name = {search query},
+	symbol = {\ensuremath q},
+	description = {special case of \gls{doc}},
+	sort = dm_35_q
+}
+
+\newcommand{\field}{\glssymbol{field}}
 \newglossaryentry{field}
 {
 	type = symbols,
-	name = {\ensuremath f},
-	description = {unique terms in \gls{document}},
-	sort = relation
+	name = {field},
+	symbol = {\ensuremath f},
+	description = {named sub-document in \gls{document}},
+	sort = dm_40_field
+}
+
+\newcommand{\term}{\glssymbol{term}}
+\newglossaryentry{term}
+{
+	type = symbols,
+	name = {term},
+	symbol = {\ensuremath \tau},
+	description = {unique term in \gls{dc}},
+	sort = dm_50_term
 }

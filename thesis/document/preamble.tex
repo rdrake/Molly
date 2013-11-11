@@ -27,7 +27,8 @@
 \usepackage[capitalize]{cleveref}
 
 % Apparently must go after hyperref to get pretty links
-\usepackage[acronym,style=tree]{glossaries}				% Glossary of terms
+\usepackage[acronym,style=tree,sanitize={name=false,description=false,%
+symbol=false}]{glossaries}				% Glossary of terms
 
 % Use and configure bibliography
 \usepackage[backend=biber,style=trad-alpha]{biblatex}
