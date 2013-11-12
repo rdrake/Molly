@@ -1,0 +1,6 @@
+digraph G {
+node [shape=plaintext]; {node [label="Course(MATH 360, Complex Analysis, MATH)"] course;}
+node [shape=plaintext]; {node [label="Subject(MATH, Mathematics)"] subject;}
+
+course -> subject;
+}
