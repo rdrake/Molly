@@ -3,7 +3,7 @@
 
 (defn load-props
   ([]
-   (load-props "molly.properties"))
+   (load-props "config/molly.properties"))
   ([file-name]
    (read-properties file-name
                     :parse-int  [:idx.topk.value
