@@ -1,7 +1,6 @@
 (ns molly.search.query-builder
   (:import (org.apache.lucene.index Term)
-           (org.apache.lucene.search BooleanClause$Occur
-                                     BooleanQuery
+           (org.apache.lucene.search BooleanClause$Occur BooleanQuery
                                      PhraseQuery)))
 
 (defn query
@@ -17,7 +16,7 @@
                           java.lang.String      kind))
         phrase-query  (PhraseQuery.)]
     (doseq [arg args]
-      (. phrase-query add (Term. field-name (name arg))))
+      (.add phrase-query (Term. field-name (name arg))))
 
     phrase-query))
 
@@ -25,9 +24,9 @@
   [args]
   (let [query (BooleanQuery.)]
     (doseq [[q op] args]
-      (. query add q (condp = op
-                       :and BooleanClause$Occur/MUST
-                       :or  BooleanClause$Occur/SHOULD
-                       :not BooleanClause$Occur/MUST_NOT)))
+      (.add query q (condp = op
+                      :and BooleanClause$Occur/MUST
+                      :or  BooleanClause$Occur/SHOULD
+                      :not BooleanClause$Occur/MUST_NOT)))
 
     query))

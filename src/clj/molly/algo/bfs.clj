@@ -1,5 +1,5 @@
 (ns molly.algo.bfs
-  (use molly.algo.common))
+  (:require [molly.algo.common :refer [find-adj]]))
 
 (defn update-adj
   [G marked dist prev u max-hops]
@@ -8,7 +8,8 @@
          dist     dist
          prev     prev
          frontier []]
-    (if (or (empty? adj) (>= (dist u) max-hops))
+    (if (or (empty? adj)
+            (>= (dist u) max-hops))
       [(conj marked u) dist prev frontier]
       (let [v     (first adj)
             adj'  (rest adj)]
@@ -21,12 +22,11 @@
 
 (defn bfs
   [G s t max-hops]
-  (loop [Q      (-> (clojure.lang.PersistentQueue/EMPTY) (conj s))
-         marked #{}
+  (loop [Q      (conj (clojure.lang.PersistentQueue/EMPTY) s)
+         marked #{s}
          dist   {s 0}
          prev   {s nil}]
-    (if (or (empty? Q)
-            (some (fn [node] (= node t)) marked))
+    (if (empty? Q)
       [marked dist prev]
       (let [u   (first Q)
             Q'  (rest Q)

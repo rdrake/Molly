@@ -1,8 +1,3 @@
-(ns molly.server.util
-  (:use molly.conf.config
-        molly.datatypes.entity
-        molly.search.lucene
-        molly.search.query-builder
-        molly.util.nlp))
+(ns molly.server.util)
 
 (println "loading properties")

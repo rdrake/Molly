@@ -1,13 +1,13 @@
 (ns molly.server.search
-  (:use molly.search.lucene
-        molly.search.query-builder
-        molly.util.nlp
-        molly.datatypes.entity
-        [molly.server.core :refer [config searcher]]
-        [molly.algo.bfs :only (bfs)]
-        [molly.algo.bfs-atom :only (bfs-atom)]
-        [molly.algo.bfs-ref :only (bfs-ref)]
-        [molly.algo.ford-fulkerson :only (ford-fulkerson)]))
+  (:require [molly.algo.bfs :refer [bfs]]
+            [molly.algo.bfs-atom :refer [bfs-atom]]
+            [molly.algo.bfs-ref :refer [bfs-ref]]
+            [molly.algo.ford-fulkerson :refer [ford-fulkerson]]
+            [molly.datatypes.entity :refer [doc->data]]
+            [molly.search.lucene :refer [idx-search]]
+            [molly.search.query-builder :refer [boolean-query query]]
+            [molly.server.core :refer [config searcher]]
+            [molly.util.nlp :refer [q-gram]]))
 
 (def runtime (Runtime/getRuntime))
 

@@ -1,45 +1,48 @@
 (ns molly.conf.mycampus
-  (:use molly.conf.config
-        molly.datatypes.database
-        molly.datatypes.schema
-        korma.core
-        korma.db)
-  (:import (molly.datatypes.database Sqlite)
+  (:require [korma.core :refer [belongs-to
+                                defentity
+                                has-many
+                                pk
+                                select*
+                                with]]
+            [korma.db :refer [defdb sqlite3]])
+  (:import (molly.conf.config IConfig)
+           (molly.datatypes.database Sqlite)
            (molly.datatypes.schema EntitySchema)))
 
 (declare Campus Course Subject Term Section Schedule
          Location Instructor db-conn)
 
 (defentity Campus
-           (has-many Location))
+  (has-many Location))
 
 (defentity Location
-           (belongs-to Campus))
+  (belongs-to Campus))
 
 (defentity Subject
-           (has-many Course))
+  (has-many Course))
 
 (defentity Course
-           (pk :code)
-           (belongs-to Subject)
-           (has-many Section))
+  (pk :code)
+  (belongs-to Subject)
+  (has-many Section))
 
 (defentity Instructor
-           (has-many Schedule))
+  (has-many Schedule))
 
 (defentity Term
-           (has-many Section))
+  (has-many Section))
 
 (defentity Section
-           (pk :crn)
-           (has-many Schedule)
-           (belongs-to Term)
-           (belongs-to Course {:fk :course_code}))
+  (pk :crn)
+  (has-many Schedule)
+  (belongs-to Term)
+  (belongs-to Course {:fk :course_code}))
 
 (defentity Schedule
-           (belongs-to Section)
-           (belongs-to Instructor)
-           (belongs-to Location))
+  (belongs-to Section)
+  (belongs-to Instructor)
+  (belongs-to Location))
 
 (def mycampus-schema
   [(EntitySchema.
@@ -154,7 +157,7 @@
               [:term     :term_id  "Term"]]})
    ])
 
-(deftype Mycampus [db-path idx-path]
+(defrecord Mycampus [db-path idx-path]
   IConfig
   (connection
     [this]

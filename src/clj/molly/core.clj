@@ -1,14 +1,14 @@
 (ns molly.core
-  (:gen-class)
-  (:use molly.conf.config
-        molly.index.build
-        molly.search.lucene
-        [clojure.tools.cli :only (cli)]
-        [molly.algo.bfs-atom :only (bfs-atom)]
-        [molly.algo.bfs-ref :only (bfs-ref)]
-        [molly.algo.bfs :only (bfs)]
-        [molly.algo.ford-fulkerson :only (ford-fulkerson)]
-        [molly.bench.benchmark :only (benchmark-search)]))
+  (:require [clojure.tools.cli :refer [cli]]
+            [molly.algo.bfs :refer [bfs]]
+            [molly.algo.bfs-atom :refer [bfs-atom]]
+            [molly.algo.bfs-ref :refer [bfs-ref]]
+            [molly.algo.ford-fulkerson :refer [ford-fulkerson]]
+            [molly.bench.benchmark :refer [benchmark-search]]
+            [molly.conf.config :refer [load-props]]
+            [molly.index.build :refer [build]]
+            [molly.search.lucene :refer [idx-path idx-searcher]])
+  (:gen-class))
 
 (defn parse-args
   [args]
@@ -43,12 +43,11 @@
           max-hops    (if (opts :max-hops)
                         (opts :max-hops)
                         (properties :idx.search.max-hops))]
-      (if (opts :index)
+      (when (opts :index)
         (let [database  (properties :db.path)
               index     (properties :idx.path)]
-          (build database index))
-        nil)
-      (if (opts :algorithm)
+          (build database index)))
+      (when (opts :algorithm)
         (let [searcher  (idx-searcher
                           (idx-path
                             (properties :idx.path)))
@@ -71,5 +70,4 @@
               (println dist)
               (println prev))
             (benchmark-search f searcher source target max-hops))
-          (shutdown-agents))
-        nil))))
+          (shutdown-agents))))))

@@ -1,12 +1,11 @@
 (ns molly.search.lucene
-  (:import
-    (java.io File)
-    (org.apache.lucene.analysis.core WhitespaceAnalyzer)
-    (org.apache.lucene.index IndexReader IndexWriter
-                             IndexWriterConfig)
-    (org.apache.lucene.search IndexSearcher)
-    (org.apache.lucene.store Directory SimpleFSDirectory)
-    (org.apache.lucene.util Version)))
+  (:import (java.io File)
+           (org.apache.lucene.analysis.core WhitespaceAnalyzer)
+           (org.apache.lucene.index IndexReader IndexWriter
+                                    IndexWriterConfig)
+           (org.apache.lucene.search IndexSearcher)
+           (org.apache.lucene.store Directory SimpleFSDirectory)
+           (org.apache.lucene.util Version)))
 
 (def version
      Version/LUCENE_44)
@@ -19,7 +18,7 @@
 
 (defn idx-searcher
   [^IndexSearcher idx-path]
-  (-> (IndexReader/open idx-path) IndexSearcher.))
+  (IndexSearcher. (IndexReader/open idx-path)))
 
 (defn ^IndexWriter idx-writer
   ([^Directory idx-path analyzer]
@@ -35,9 +34,9 @@
 
 (defn idx-search
   [idx-searcher query topk]
-  (let [results (. (. idx-searcher search query topk) scoreDocs)]
+  (let [results (.scoreDocs (.search idx-searcher query topk))]
     (map (fn [result] (.doc idx-searcher (.doc result))) results)))
 
 (defn add-doc
   [idx doc]
-  (. idx addDocument doc))
+  (.addDocument idx doc))

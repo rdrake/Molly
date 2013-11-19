@@ -1,6 +1,5 @@
 (ns molly.datatypes.database
-  (:use korma.core
-        korma.db))
+  (:require [korma.core :refer [select]] [korma.db :refer [with-db]]))
 
 (defprotocol Database
   (execute-query [this query f]))
@@ -10,5 +9,5 @@
   (execute-query
     [this query f]
     (with-db conn
-             (doseq [result (-> query (select))]
+             (doseq [result (select query)]
                (f result)))))

@@ -1,6 +1,6 @@
 (ns molly.bench.benchmark
-  (use criterium.core)
-  (require [clojure.data.json :as json]))
+  (:require [clojure.data.json :as json]
+            [criterium.core :refer [benchmark]]))
 
 (defn benchmark-search
   [f G s t max-hops]

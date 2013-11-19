@@ -1,9 +1,9 @@
 (ns molly.server.core
-  (:use molly.search.lucene)
-  (:require [molly.conf.config :refer [load-props]]
-            [compojure.core :refer [defroutes GET]]
-            [compojure.route :refer [files resources not-found]]
-            [compojure.handler :refer [site]]))
+  (:require [compojure.core :refer [GET defroutes]]
+            [compojure.handler :refer [site]]
+            [compojure.route :refer [not-found resources]]
+            [molly.conf.config :refer [load-props]]
+            [molly.search.lucene :refer [idx-path idx-searcher]]))
 
 (defroutes app-routes
            (GET "/" [] "root")

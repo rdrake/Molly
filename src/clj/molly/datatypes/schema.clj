@@ -1,9 +1,8 @@
-(ns molly.datatypes.schema 
-  (:use molly.datatypes.database
-        molly.datatypes.entity
-        molly.search.lucene
-        molly.util.nlp
-        korma.core))
+(ns molly.datatypes.schema
+  (:require [korma.core :refer [fields group modifier]]
+            [molly.datatypes.database :refer [execute-query]]
+            [molly.datatypes.entity :refer [data->doc row->data]]
+            [molly.search.lucene :refer [add-doc]]))
 
 (defprotocol Schema
   (crawl [this db-conn idx-w])

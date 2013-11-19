@@ -1,10 +1,7 @@
 (ns molly.datatypes.entity
-  (:use molly.util.nlp)
-  (:import
-    [clojure.lang IPersistentMap IPersistentList]
-    [org.apache.lucene.document
-     Document Field
-     Field$Index Field$Store]))
+  (:require [molly.util.nlp :refer [q-gram]])
+  (:import (org.apache.lucene.document Document Field Field$Index
+                                       Field$Store)))
 
 (defn special?
   [field-name]
@@ -37,10 +34,9 @@
 (defn document
   [fields]
   (let [doc (Document.)]
-    (do
-      (doseq [[field-name field-value] fields]
-        (.add doc (field (name field-name) (str field-value))))
-      doc)))
+    (doseq [[field-name field-value] fields]
+      (.add doc (field (name field-name) (str field-value))))
+    doc))
 
 (defn row->data
   ^{:doc "Transforms a row into the internal representation."}

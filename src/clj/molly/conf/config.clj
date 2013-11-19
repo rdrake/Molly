@@ -1,5 +1,5 @@
 (ns molly.conf.config
-  (:use propertea.core))
+  (:require [propertea.core :refer [read-properties]]))
 
 (defn load-props
   ([]

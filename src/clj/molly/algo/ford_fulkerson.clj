@@ -1,16 +1,15 @@
 (ns molly.algo.ford-fulkerson
-  (:use molly.algo.common
-        clojure.set))
+  (:require [molly.algo.common :refer [find-adj]]))
 
 (defn need-relax? [u v dist]
   (if (dist v)
-    (> (dist v) (+ (dist u) 1))
+    (> (dist v) (inc (dist u)))
     true))
 
 (defn relax
   [u v dist prev]
     (if (need-relax? u v dist)
-      [(assoc dist v (+ (dist u) 1))
+      [(assoc dist v (inc (dist u)))
        (assoc prev v u)]
       [dist prev]))
 
@@ -35,7 +34,7 @@
 
 (defn ford-fulkerson
   [G s t max-hops]
-  (loop [Q      (-> (clojure.lang.PersistentQueue/EMPTY) (conj s))
+  (loop [Q      (conj (clojure.lang.PersistentQueue/EMPTY) s)
          marked #{}
          dist   {s 0}
          prev   {s nil}]

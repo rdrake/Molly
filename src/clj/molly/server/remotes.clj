@@ -1,9 +1,11 @@
 (ns molly.server.remotes
-  (:require [molly.server.core :refer [handler]]
-            [compojure.handler :refer [site]]
-            [shoreleave.middleware.rpc :refer [defremote wrap-rpc]]
-            [molly.server.search :refer [find-entities find-entity
-                                         find-value compute-span]]))
+  (:require [compojure.handler :refer [site]]
+            [molly.server.core :refer [handler]]
+            [molly.server.search :refer [compute-span
+                                         find-entities
+                                         find-entity
+                                         find-value]]
+            [shoreleave.middleware.rpc :refer [defremote wrap-rpc]]))
 
 (defremote get-value [q]
            (find-value q))
