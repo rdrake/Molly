@@ -17,6 +17,3 @@
                           (for [i (range
                                     (inc (- (count padded-S) n)))]
                             (.substring padded-S i (+ i n)))))))
-
-(println "Using nlp incorrectly.")
-

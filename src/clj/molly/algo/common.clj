@@ -1,4 +1,5 @@
 (ns molly.algo.common
+  (:use clojure.pprint)
   (:require [molly.datatypes.entity :refer [doc->data]]
             [molly.search.lucene :refer [idx-search]]
             [molly.search.query-builder :refer [boolean-query query]]))
@@ -19,27 +20,32 @@
     (distinct (clojure.string/split big-str #"\s{1}"))))
 
 (defn find-adj
-  [G v]
-  (remove #{v} (find-group-for-id G v)))
+  [G u]
+  (remove #{u} (find-group-for-id G u)))
 
 (defn initial-state
   [s]
   {:Q       (conj (clojure.lang.PersistentQueue/EMPTY) s)
    :marked  #{s}
    :dist    {s 0}
-   :prev    {s nil}})
+   :prev    {s nil}
+   :done    false})
 
 (defn update-state
-  [state u v]
+  [state u v max-hops]
   (let [Q       (state :Q)
         marked  (state :marked)
         dist    (state :dist)
-        prev    (state :prev)]
-      (assoc state
-             :Q       (conj Q v)
-             :marked  (conj marked v)
-             :dist    (assoc dist v (inc (dist u)))
-             :prev    (assoc prev v u))))
+        prev    (state :prev)
+        done    (> (dist u) max-hops)]
+    (assoc state
+           :Q       (if done
+                      Q
+                      (conj Q v))
+           :marked  (conj marked u v)
+           :dist    (assoc dist v (inc (dist u)))
+           :prev    (assoc prev v u)
+           :done    done)))
 
 (defn deref-future
   [dfd]
