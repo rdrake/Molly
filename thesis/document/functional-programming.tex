@@ -7,7 +7,7 @@
 	
 	Unfortunately immutable values can also lead to inefficiency.  For example, in order to add a key-value pair to a map, an entirely new map must be created with the existing key-value pairs copied to it.  In practice this is avoided through the use of persistent data structures with multi-versioning.
 	
-	The second tenet, that functions must be free of side-effects, meaning the output of a function must be predictable for any given input.  This purity reduces a large source of bugs, and allows out-of-order execution. \cite{fp-89}.
+	The second tenet, that functions must be free of side-effects, means that the output of a function must be predictable for any given input.  This purity reduces a large source of bugs, and allows out-of-order execution. \cite{fp-89}.
 
 	\subsection{Features of Clojure}
 		The creator of Clojure, Rich Hickey, describes his language as follows:
@@ -19,11 +19,11 @@
 		As the above quote describes, Clojure follows the basic tenets of functional programming.
 		
 		\subsubsection{Immutable, Persistent Data Structures}
-			Clojure supports a rich set of data structures.  These are immutable, satisfying the first tenet, as well as persistent, in order to overcome the inefficiency described in the first tenet.
+			Clojure supports a rich set of data structures.  These are immutable, satisfying the first tenet, as well as persistent, in order to overcome the inefficiency described previously.
 			
-			The provided data structures range from scalars (numbers, strings, characters, keywords, symbols), to collections (lists, vectors, maps, array maps, sets) \cite{clj-data-structures}.  These data structures are sufficient enough to allow us to use the Universal Design Pattern \cite{udp-08}.
+			The provided data structures range from scalars (numbers, strings, characters, keywords, symbols), to collections (lists, vectors, maps, array maps, sets) \cite{clj-data-structures}.  These data structures are sufficient enough to allow us to use the universal design pattern \cite{udp-08}.
 			
-			Clojure also has the concept of persistent data structures.  These are used in order to avoid the inefficiency of creating a new data structure and copying over the contents of the old data structure simply to make a change.  Clojure creates a skeleton of the existing data structure, inserts the value into the data structure, then retains a pointer to the old data structure.  If an old property is accessed on the new data structure, Clojure follows the pointers until the property is found on a previous data structure.  See \vref{fig:persistent-data-structure} for an example.
+			Clojure also has the concept of persistent data structures.  These are used in order to avoid the inefficiency of creating a new data structure and copying over the contents of the old data structure simply to make a change.  Clojure creates a skeleton of the existing data structure, inserts the value into the data structure, then retains a pointer to the old data structure.  If an old property is accessed on the new data structure, Clojure follows the pointers until the property is found on a previous data structure.
 			
 			\begin{figure}
 				\centering
@@ -34,7 +34,7 @@
 				\label{fig:persistent-data-structure}
 			\end{figure}
 			
-			\todo{Ensure this is sourced properly}
+			In \vref{fig:persistent-data-structure}, we see what happens when a persistent data structure is ``changed'' in Clojure.  The root of the left tree is the data structure before, and the root of the right tree is the data structure after.  Note how the changed map retains pointers to all but the updated value; the newly created value is pointed to instead of the previous one.
 		
 		\subsubsection{Concurrency}
 			Clojure supports four systems for concurrency:  \gls{stm}, agents, atoms, and dynamic vars.  The differences between these systems are summarized in \vref{tbl:concurrency-system-comparison}.
@@ -60,7 +60,7 @@
 			\todo{More concurrency}
 			
 		\subsubsection{Interoperability With the \gls{jvm}}
-			Traditionally functional programming languages have been undesirable for numerous reasons, many of which are detailed in the classic paper titled \citetitle{no-fp-98}.  Clojure attempts to avoid many of these reasons by running on the \gls{jvm}.  The \gls{jvm} allows Clojure to both call and be called by Java and other languages.  It includes syntactic sugar to transparently call Java code, as well as make itself available to Java.  This avoids the issues of compatibility, libraries, portability, availability, packagability, and tools.
+			Traditionally, functional programming languages have been undesirable for numerous reasons:  compatibility, libraries, portability, availability, packagability, and tools \cite{no-fp-98}.  Clojure attempts to avoid many of these reasons by running on the \gls{jvm}.  The \gls{jvm} allows Clojure to both call and be called by Java and other languages.  It includes syntactic sugar -- features of a language added in order to simplify the language from a human perspective -- to transparently call Java code, as well as make itself available to Java.  This avoids the above issues.
 			
 			The syntactic sugar provided by Clojure allows for the accessing of object members, the creation of objects, the calling of methods on an instance or class, etc.  Clojure also includes shortcuts to perform multiple operations on the same object.  The syntax is given in \vref{tbl:jvm-interop-syntax}.
 			
@@ -69,9 +69,14 @@
 				
 				\begin{tabular}{lll}
 					\toprule
-					Operation & Description & Example \\
+					Operation & Form & Example \\
 					\midrule
-					Member Access &  & \\%\mint{clj}{(.toString 5)} \\
+					Member Access & \texttt{(.<member> <obj> [args])} & \texttt{(.toString 5)} \\
+					 & \texttt{(. <obj> <member> [args])} & \texttt{(. 5 toString)} \\
+					 & \texttt{(<class>/<member> [args])} & \texttt{(Integer/parseInt ``5'')} \\
+					Object Instantiation & \texttt{(<class>. [args])} & \texttt{(Integer. 5)} \\
+					 & \texttt{(new <class> [args])} & \texttt{(new Integer 5)} \\
+					Multiple Operations & \texttt{(doto <obj> [forms])} & \texttt{(doto (Vector.) (.add 1))} \\
 					\bottomrule
 				\end{tabular}
 				
@@ -81,8 +86,10 @@
 			
 			We utilize Clojure's \gls{jvm} interoperability to make use of Apache Lucene and \gls{jdbc}.
 			
-		\begin{itemize}
-			\item Data structures supporting the universal design pattern
-			\item Concurrency + STM
-			\item Interoperability with JVM (including Lucene)
-		\end{itemize}
+			\begin{figure}
+				\begin{singlespaced}
+				\cljcode[firstline=15,firstnumber=15,lastline=17]{../../src/clj/molly/search/lucene.clj}
+				\end{singlespaced}
+				
+				\caption{Clojure code that, given a path, returns a \texttt{Directory} object}
+			\end{figure}

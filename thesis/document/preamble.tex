@@ -15,7 +15,7 @@
 \usepackage{tikz}										% Diagrams
 \usepackage{booktabs}									% Pretty tables
 \usepackage{nag}										% Complain
-\usepackage{csquotes}
+\usepackage[autopunct=true]{csquotes}
 \usepackage[all]{xypic}									% Easy (compared to tikz) diagrams
 \usepackage{unicode-math}								% Unicode symbols in math
 \usepackage{subcaption}									% Possible del for subcaption
@@ -87,4 +87,16 @@ symbol=false}]{glossaries}				% Glossary of terms
 \newglossary{symbols}{sym}{sbl}{List of Symbols}
 \makeglossaries
 
-%\includeonly{along-came-clojure}
+\includeonly{along-came-clojure}
+
+% Fix quotations so punctuation marks go inside.
+\makeatletter
+\DeclareRobustCommand{\squote}[1]{``#1\futurelet\@squotenext\@squotedecide}
+\def\@squotedecide{%
+	\if\noexpand\@squotenext,\let\next\@squotecorrect\else
+		\if\noexpand\@squotenext.\let\next\@squotecorrect\else
+			''\let\next\relax
+		\fi
+	\fi\next}
+\def\@squotecorrect#1{\@squotenext''}
+\makeatother
