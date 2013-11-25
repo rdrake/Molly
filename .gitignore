@@ -56,3 +56,7 @@ venv
 *.sym
 .texpadtmp
 .nrepl-port
+.tex
+*.glsdefs
+*.pytxcode
+pythontex-files-*
