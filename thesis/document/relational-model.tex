@@ -34,7 +34,7 @@
 		
 	Relations are typically represented as tables.
 	
-	\begin{table}[!ht]
+	\begin{table}
 		\centering
 		
 		\begin{tabular}{lll}
@@ -107,7 +107,7 @@
 		\begin{ex}
 			Given the schema in \vref{fig:schema}
 			
-			\begin{figure}[!ht]
+			\begin{figure}
 				\centering
 				
 				\(\rel{Subject}{\underline{id}, name}\) \\
@@ -123,7 +123,7 @@
 			
 			and the \gls{fk} constraints in \vref{eqn:fk-constraints}
 			
-			\begin{figure}[!ht]
+			\begin{figure}
 				\begin{align*}
 					\rel{Course}{subject} &\rightarrow \rel{Subject}{id} \\
 					\rel{Section}{term} &\rightarrow \rel{Term}{id} \\
@@ -138,7 +138,7 @@
 			
 			we produce the schema graph in \vref{fig:schema-graph}
 			
-			\begin{figure}[!ht]
+			\begin{figure}
 				\centering
 				
 				\begin{dot2tex}[neato]
@@ -163,9 +163,9 @@
 		\begin{ex}
 			Using \gls{sql}, find all section CRNs for the subject titled ``Community Development \& Policy Studies.''
 			
-			\begin{figure}[!ht]
+			\begin{figure}
 				\begin{singlespaced}
-					\begin{sqlcode}
+					\begin{pygments}{sql}
 SELECT section.crn
 FROM   section 
        JOIN course 
@@ -173,7 +173,7 @@ FROM   section
        JOIN subject 
          ON subject.id = course.subject_id 
 WHERE  subject.name = 'Community Development & Policy Studies'; 
-					\end{sqlcode}
+					\end{pygments}
 				\end{singlespaced}
 				
 				\caption{Query to find section CRNs for a subject name.}
@@ -182,7 +182,7 @@ WHERE  subject.name = 'Community Development & Policy Studies';
 			
 			The \gls{sql} query in \vref{fig:query-section-crns} results in \vref{tbl:query-section-crns-output}.
 			
-			\begin{table}[!ht]
+			\begin{table}
 				\centering
 				
 				\begin{tabular}{l}
@@ -215,7 +215,7 @@ WHERE  subject.name = 'Community Development & Policy Studies';
 		\begin{ex}
 			The information in \vref{tbl:hmr-properties} all relates to the Course titled Human-Mutant Relations, however no single tuple in the database has all of this information as a result of database normalization.
 			
-			\begin{table}[!ht]
+			\begin{table}
 				\centering
 				
 				\begin{tabular}{ll}
@@ -234,7 +234,7 @@ WHERE  subject.name = 'Community Development & Policy Studies';
 			
 			We require an entity group (\vref{fig:hmr-entity-group}) to join together all pieces of information related to this course. 
 			
-			\begin{figure}[!ht]
+			\begin{figure}
 				\centering
 				
 				\begin{dot2tex}[dot]
@@ -264,12 +264,12 @@ digraph G {
 				Attempt to insert another course with a \texttt{code} of ``CDPS 101.''
 				
 				\begin{singlespaced}
-					\begin{sqlcode}
+					\begin{pygments}{sql}
 INSERT INTO course
 VALUES      ('CDPS 101',
              'Mutant-Human Relations',
              'CDPS');
-					\end{sqlcode}
+					\end{pygments}
 				\end{singlespaced}
 				
 				The \gls{rdbms} enforces the primary key constraint on the \texttt{code} attribute, rejecting the insertion.
@@ -285,12 +285,12 @@ Error: column code is not unique
 				Attempt to insert the tuple (``CHEM 101'', ``Introductory Chemistry'', ``'CHEM'') in the Course relation.
 				
 				\begin{singlespaced}
-					\begin{sqlcode}
+					\begin{pygments}{sql}
 INSERT INTO course
 VALUES      ('CHEM 101',
              'Introductory Chemistry',
              'CHEM');
-					\end{sqlcode}
+					\end{pygments}
 				\end{singlespaced}
 				
 				Again we see the \gls{rdbms} protecting the integrity of the data.
@@ -306,7 +306,7 @@ Error: foreign key constraint failed
 				Find the number of sections offered for the subject named ``Community Development \& Policy Studies.''
 				
 				\begin{singlespaced}
-					\begin{sqlcode}
+					\begin{pygments}{sql}
 SELECT Count(*)
 FROM   section
        JOIN course
@@ -314,7 +314,7 @@ FROM   section
        JOIN subject
          ON subject.id = course.subject
 WHERE  subject.name = 'Community Development & Policy Studies';
-					\end{sqlcode}
+					\end{pygments}
 				\end{singlespaced}
 			\end{ex}
 			
@@ -324,11 +324,11 @@ WHERE  subject.name = 'Community Development & Policy Studies';
 				For example, suppose Emma Frost became headmistress and the subject named ``Community Development \& Policy Studies'' was renamed to ``Community Destruction \& Policy Studies.''  If this information were not normalized, each course in this subject would need to be updated.  Since this information is normalized, the following query will suffice.
 				
 				\begin{singlespaced}
-					\begin{sqlcode}
+					\begin{pygments}{sql}
 UPDATE subject
 SET    name = 'Community Destruction & Policy Studies'
 WHERE  id = 'CDPS';
-					\end{sqlcode}
+					\end{pygments}
 				\end{singlespaced}
 			\end{ex}
 			
@@ -349,11 +349,11 @@ WHERE  id = 'CDPS';
 				Find all courses with a title that contains ``man.''
 				
 				\begin{singlespaced}
-					\begin{sqlcode}
+					\begin{pygments}{sql}
 SELECT *
 FROM   course
 WHERE  title LIKE '%man%';
-					\end{sqlcode}
+					\end{pygments}
 				\end{singlespaced}
 			\end{ex}
 			

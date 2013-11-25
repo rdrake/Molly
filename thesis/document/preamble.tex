@@ -1,52 +1,63 @@
 % !TEX root = Thesis.tex
-\usepackage{morewrites}									% Greedy packages...
-\usepackage{fontspec}									% Use nicer system fonts
-%\usepackage{mathdesign}
-\usepackage{graphicx}									% Pretty pictures
-\usepackage{todo}										% List of things to do
-\usepackage{amsmath}									% Allow use of amsthm
-\usepackage{amsthm}										% Pretty theorem environments
-\usepackage{amssymb}									% More math symbols
+\usepackage{morewrites}
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage{todo}
+
+% Nicer math
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
 \usepackage{mathtools}
-\usepackage{algorithm}									% Pretty algorithm environment
-\usepackage{algorithmic}								% Pretty algorithms
-\usepackage[outputdir={figures/graphs/dot/}]{dot2texi} % If minted doesn't work, it's probably this package's fault.
-\usepackage{minted}										% Pretty code
-\usepackage{tikz}										% Diagrams
-\usepackage{booktabs}									% Pretty tables
-\usepackage{nag}										% Complain
-\usepackage[autopunct=true]{csquotes}
-\usepackage[all]{xypic}									% Easy (compared to tikz) diagrams
-\usepackage{unicode-math}								% Unicode symbols in math
-\usepackage{subcaption}									% Possible del for subcaption
-\usepackage{forest}										% Simple trees
+\usepackage{unicode-math}
 \usepackage{subdepth}
-\usepackage{comment}									% How is this not built-in?
+
+% Algorithms
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+% Syntax highlighting
+\usepackage{pythontex}
+\setpygmentsfv{numbers=left,frame=topline,frame=lines,framesep=2mm}
+
+% Diagrams
+\usepackage[outputdir={figures/graphs/dot/}]{dot2texi}
+\usepackage{tikz}
 \usepackage{pgf}
+%\input tikz
+\usetikzlibrary{fit,shapes,arrows}
+
+% Pretty tables
+\usepackage{booktabs}
+
+% Complain when we do bad things
+\usepackage{nag}
+
+% Proper quotation environments
+\usepackage[autopunct=true]{csquotes}
+
+% Create sub-figures/sub-tables/etc.
+\usepackage{subcaption}
+
+% Comment out large sections of code
+\usepackage{comment}
+
+% References
 \usepackage{varioref}
-\usepackage[linktocpage=true,colorlinks=true]{hyperref} % Helpful links
+\usepackage[linktocpage=true,colorlinks=true]{hyperref}
 \usepackage[capitalize]{cleveref}
 
-% Apparently must go after hyperref to get pretty links
-\usepackage[acronym,style=tree,sanitize={name=false,description=false,%
-symbol=false}]{glossaries}				% Glossary of terms
+% Glossaries, list of nomenclature, etc. (must go after hyperref)
+\usepackage[acronym,style=tree,sanitize={name=false,description=false,symbol=false}]{glossaries}
 
 % Use and configure bibliography
 \usepackage[backend=biber,style=trad-alpha]{biblatex}
 \addbibresource{Thesis.bib}
 
 % Define a new environment for Clojure code
-\newmintedfile[cljcode]{clj}{linenos,frame=topline,frame=lines,framesep=2mm}
+%\newmintedfile[cljcode]{clj}{linenos,frame=topline,frame=lines,framesep=2mm}
 % SQL too!
-\newminted{sql}{linenos,frame=topline,frame=lines,framesep=2mm}
-
-% Configure tikz for pretty diagrams
-\input tikz
-\usetikzlibrary{fit,shapes,arrows}
-
-% For some reason using minted with tikz causes minted to fail to colourize
-% the output.  Should find a solution later, not really important right now.
-\usemintedstyle{bw}
+%\newminted{sql}{linenos,frame=topline,frame=lines,framesep=2mm}
 
 % Define new theorem environments
 \theoremstyle{definition}
@@ -54,6 +65,9 @@ symbol=false}]{glossaries}				% Glossary of terms
 \newtheorem{ex}{Example}
 \newtheorem{remark}{Remark}
 \newtheorem{claim}{Claim}
+
+\newglossary{symbols}{sym}{sbl}{List of Symbols}
+\makeglossaries
 
 % Change the image path prefix
 \graphicspath{{figures/images/}}
@@ -84,10 +98,8 @@ symbol=false}]{glossaries}				% Glossary of terms
 \DeclareMathOperator{\freq}{freq}
 \DeclareMathOperator{\query}{query}
 
-\newglossary{symbols}{sym}{sbl}{List of Symbols}
-\makeglossaries
-
-\includeonly{along-came-clojure}
+% Include only items we're currently working on to speed up compilation
+%\includeonly{along-came-clojure}
 
 % Fix quotations so punctuation marks go inside.
 \makeatletter

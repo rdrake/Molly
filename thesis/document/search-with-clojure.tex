@@ -11,7 +11,13 @@
 		
 		\begin{figure}
 			\begin{singlespaced}
-				\cljcode[firstline=16,firstnumber=16,lastline=19]{../../src/clj/molly/conf/config.clj}
+				\begin{pygments}{clj}
+(defprotocol IConfig
+  (connection [this])
+  (schema [this])
+  (index [this]))
+				\end{pygments}
+				\todo{re-enable this}
 			\end{singlespaced}
 			
 			\caption{\texttt{IConfig} protocol all configurations must adhere to}
@@ -47,27 +53,76 @@
 			The \texttt{EntitySchema} records contain not only the information required to construct them, but also the required behaviour.  Every record, given the database and index connections, is capable of retrieving the set of all named tuples it represents in the database.  It iterates through every tuple and constructs a document for each tuple, as well as any value documents, if applicable.
 			
 		\subsubsection{Indexing Process}
-			With the database, index, and schema graph defined, the system is able to transform the data from the relational model into the document model.  The first step is to open the database for reading and the index for writing.  This paths to the database and index are given by the \texttt{.properties} file.
+			With the database, index, and schema graph defined, the system is able to transform the data from the relational model into the document model.
 			
-			The second step is to read in the configuration file which describes the schema graph.  The schema graph is given as \texttt{EntitySchema} records.  These records contain the \gls{sql} required to retrieve the named tuples from the database, as well as other information required to transform each named tuple into a document.
+			The first step is to retrieve the list of named tuples from the database.  Each \texttt{EntitySchema} record is iterated over; the \gls{sql} defined for each record is executed against the database.  A function is executed on every tuple that is retrieved.
 			
-			The indexing process iterates over every \texttt{EntitySchema} record, calling the \texttt{crawl} function on each one.  The \texttt{crawl} function uses the configuration map attached to the \texttt{EntitySchema} record to construct itself.uf, which in turn executes a \gls{sql} query using \texttt{execute-query} (defined by the \texttt{Database} protocol).  For every named tuple, a function (provided by the \texttt{EntitySchema} record) is executed on it.
+			The second step is to transform these tuples into the internal representation.  The function executed on every tuple is responsible for this conversion.
 			
-			%The first half of the indexing process is shown in \vref{fig:indexing-process-first-step}.
+			The third step is to convert the internal representation into a document.  Again this is performed by the function operating on every tuple.
 			
-			%\begin{figure}
-			%	\centering
-			%	\includegraphics[scale=0.7]{figures/diagrams/indexing-process}
-			%	
-			%	\caption{First part of indexing process demonstrating how named tuples are generated}
-			%	\label{fig:indexing-process-first-step}
-			%\end{figure}
-
+			Finally, every document is indexed.
+			
+			\begin{table}
+				\begin{subtable}[b]{0.33\linewidth}
+					\centering
+					
+					\begin{tabular}{p{1.5cm}p{2.5cm}}
+						\toprule
+						Attribute & Value \\
+						\midrule
+						code & CDPS 101 \\
+						title & Human-Mutant Relations \\
+						subject & CDPS \\
+						\bottomrule
+					\end{tabular}
+					
+					\caption{Tuple}
+				\end{subtable}
+				\begin{subtable}[b]{0.33\linewidth}
+					\centering
+					
+					\begin{tabular}{p{1.5cm}p{2.5cm}}
+						\toprule
+						Key & Value \\
+						\midrule
+						\texttt{:type} & \texttt{:entity} \\
+						\texttt{:class} & \texttt{:course} \\
+						\texttt{:id} & \texttt{``course|cdps\_101''} \\
+						\texttt{:code} & \texttt{``CDPS 101''} \\
+						\texttt{:title} & \texttt{``Human-Mutant Relations''} \\
+						\texttt{:subject} & \texttt{``CDPS''} \\
+						\bottomrule
+					\end{tabular}
+					
+					\caption{Internal Representation}
+				\end{subtable}
+				\begin{subtable}[b]{0.33\linewidth}
+					\centering
+					
+					\begin{tabular}{p{1.5cm}p{2.5cm}}
+						\toprule
+						Field & Terms \\
+						\midrule
+						\_\_type\_\_ & :entity \\
+						\_\_class\_\_ & :course \\
+						\_\_id\_\_ & course|cdps\_101 \\
+						\_\_all\_\_ & ``cdps 101 human mutant relations cdps'' \\
+						code & \(\{\text{cdps}, \text{101}\}\) \\
+						title & \(\{\)human, mutant, relations\(\}\) \\
+						subject & \(\{\text{cdps}\}\) \\
+						\bottomrule
+					\end{tabular}
+					
+					\caption{Document}
+				\end{subtable}
+				
+				\caption{Transformation from tuple to internal representation to document}
+				\label{tbl:tuple-to-document}
+			\end{table}
+			
 	\subsection{Indexing of relational objects (5 days, week 5)}
 		\begin{itemize}
-			\item Schema definition
-			\item Crawling using SQL
-			\item Indexing using relational objects
 			\item Fuzzy indexing of values (typed by classes)
 		\end{itemize}
 

@@ -1,76 +1,88 @@
 % !TEX root = Thesis.tex
-
+	
 \chapter{Source Code}
-  Each namespace in the code is divided into sections in the thesis document.
-  
-  \section{molly}
-	\subsection{molly.core}
-	  \cljcode{../../src/clj/molly/core.clj}
-  
-  \clearpage
-  \section{molly.conf}
-	\subsection{molly.conf.config}
-	  \cljcode{../../src/clj/molly/conf/config.clj}
+	Each namespace in the code is divided into sections in the thesis document.
 	  
-	\clearpage
-	\subsection{molly.conf.mycampus}
-	  \cljcode{../../src/clj/molly/conf/mycampus.clj}
-  
-  \clearpage
-  \section{molly.datatypes}
-	\subsection{molly.datatypes.database}
-	  \cljcode{../../src/clj/molly/datatypes/database.clj}
-  
-	\clearpage
-	\subsection{molly.datatypes.entity}
-	  \cljcode{../../src/clj/molly/datatypes/entity.clj}
-  
-	\clearpage
-	\subsection{molly.datatypes.schema}
-	  \cljcode{../../src/clj/molly/datatypes/schema.clj}
-  
-  \clearpage
-  \section{molly.index}
-	\subsection{molly.index.build}
-	  \cljcode{../../src/clj/molly/index/build.clj}
-  
-  \clearpage
-  \section{molly.util}
-	\subsection{molly.util.nlp}
-	  \cljcode{../../src/clj/molly/util/nlp.clj}
-  
-  \clearpage
-  \section{molly.search}
-	\subsection{molly.search.lucene}
-	  \cljcode{../../src/clj/molly/search/lucene.clj}
-  
-	\clearpage
-	\subsection{molly.search.query\_builder}
-	  \cljcode{../../src/clj/molly/search/query_builder.clj}
-  
-  \clearpage
-  \section{molly.server}
-	\subsection{molly.server.serve}
-	  \cljcode{../../src/clj/molly/server/serve.clj}
-  
-  \clearpage
-  \section{molly.algo}
-	\subsection{molly.algo.common}
-	  \cljcode{../../src/clj/molly/algo/common.clj}
-  
-	\clearpage
-	\subsection{molly.algo.bfs}
-	  \cljcode{../../src/clj/molly/algo/bfs.clj}
+	\section{molly}
+		\subsection{molly.core}
+			\inputpygments{clj}{../../src/clj/molly/core.clj}
 	
 	\clearpage
-	\subsection{molly.algo.bfs\_atom}
-	  \cljcode{../../src/clj/molly/algo/bfs_atom.clj}
+	\section{molly.conf}
+		\subsection{molly.conf.config}
+			\inputpygments{clj}{../../src/clj/molly/conf/config.clj}
+		  
+		\clearpage
+		\subsection{molly.conf.mycampus}
+			\inputpygments{clj}{../../src/clj/molly/conf/mycampus.clj}
 	
 	\clearpage
-	\subsection{molly.algo.bfs\_ref}
-	  \cljcode{../../src/clj/molly/algo/bfs_ref.clj}
-
-  \clearpage
-  \section{molly.bench}
-	\subsection{molly.bench.benchmark}
-	  \cljcode{../../src/clj/molly/bench/benchmark.clj}
+	\section{molly.datatypes}
+		\subsection{molly.datatypes.database}
+			\inputpygments{clj}{../../src/clj/molly/datatypes/database.clj}
+		
+		\clearpage
+		\subsection{molly.datatypes.entity}
+			\inputpygments{clj}{../../src/clj/molly/datatypes/entity.clj}
+		
+		\clearpage
+		\subsection{molly.datatypes.schema}
+			\inputpygments{clj}{../../src/clj/molly/datatypes/schema.clj}
+	
+	\clearpage
+	\section{molly.index}
+		\subsection{molly.index.build}
+			\inputpygments{clj}{../../src/clj/molly/index/build.clj}
+	
+	\clearpage
+	\section{molly.util}
+		\subsection{molly.util.nlp}
+			\inputpygments{clj}{../../src/clj/molly/util/nlp.clj}
+	
+	\clearpage
+	\section{molly.search}
+		\subsection{molly.search.lucene}
+			\inputpygments{clj}{../../src/clj/molly/search/lucene.clj}
+		
+		\clearpage
+		\subsection{molly.search.query\_builder}
+			\inputpygments{clj}{../../src/clj/molly/search/query_builder.clj}
+	
+	\clearpage
+	\section{molly.server}
+		\subsection{molly.server.core}
+			\inputpygments{clj}{../../src/clj/molly/server/core.clj}
+		
+		\clearpage
+		\subsection{molly.server.remotes}
+			\inputpygments{clj}{../../src/clj/molly/server/remotes.clj}
+		
+		\clearpage
+		\subsection{molly.server.search}
+			\inputpygments{clj}{../../src/clj/molly/server/search.clj}
+		
+		\clearpage
+		\subsection{molly.server.util}
+			\inputpygments{clj}{../../src/clj/molly/server/util.clj}
+	
+	\clearpage
+	\section{molly.algo}
+		\subsection{molly.algo.common}
+			\inputpygments{clj}{../../src/clj/molly/algo/common.clj}
+		
+		\clearpage
+		\subsection{molly.algo.bfs}
+			\inputpygments{clj}{../../src/clj/molly/algo/bfs.clj}
+		
+		\clearpage
+		\subsection{molly.algo.bfs\_atom}
+			\inputpygments{clj}{../../src/clj/molly/algo/bfs_atom.clj}
+		
+		\clearpage
+		\subsection{molly.algo.bfs\_ref}
+			\inputpygments{clj}{../../src/clj/molly/algo/bfs_ref.clj}
+	
+	\clearpage
+	\section{molly.bench}
+		\subsection{molly.bench.benchmark}
+			\inputpygments{clj}{../../src/clj/molly/bench/benchmark.clj}

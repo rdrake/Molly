@@ -88,7 +88,11 @@
 			
 			\begin{figure}
 				\begin{singlespaced}
-				\cljcode[firstline=15,firstnumber=15,lastline=17]{../../src/clj/molly/search/lucene.clj}
+					\begin{pygments}{clj}
+(defn ^Directory idx-path
+  [path]
+  (-> path File. SimpleFSDirectory.))
+					\end{pygments}
 				\end{singlespaced}
 				
 				\caption{Clojure code that, given a path, returns a \texttt{Directory} object}
