@@ -170,6 +170,7 @@
 		\end{ex}
 		
 		\begin{defn}[Search Query]
+		\label{def:search-query}
 			A search query \(\q\) is simply a document (as defined by \vref{def:document}).  The top-\(k\) answers to \(\q\) with respect to a collection \(\dc\) is defined as the \(k\) documents, \(\{\doc_1, \doc_2, \dotsc, d_k\}\) in \(\dc\), such that \(\{\vec{\doc_1}, \vec{\doc_2}, \dotsc, \vec{d_k}\}\) are the closest vectors to \(\vec{\q}\) using a Euclidean distance measure in \(\mathbb{R}^N\).
 		\end{defn}
 		
@@ -396,6 +397,7 @@
 		While none of the above queries required domain knowledge, it is possible to use the extended document model (\vref{sec:extending-the-document-model}) to search specific fields.  Doing so permits users to leverage their existing domain knowledge in order to achieve finer control over what documents are retrieved.
 		
 		\begin{ex}[Extended Query]
+		\label{ex:extended-query}
 			Find all documents with a subject of ``MATH'' that contain the term ``class''.
 			\[
 				\query(\text{``subject''}, \text{``MATH''}) \cap \query(\text{``class''}) \rightarrow \{\doc_1\}

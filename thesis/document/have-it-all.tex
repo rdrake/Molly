@@ -38,6 +38,7 @@
 
 	
 	\section{Mapping of Entity Groups to Documents}
+	\label{sec:mapping-entity-groups-to-documents}
 		Recall that an entity group (\vref{def:entity-group}) is a forest \(\egraph\) of tuples \(\tuple\) such that for every \((\tuple, \tuple') \in \egraph\), where \(\tuple \nequal \tuple'\), implies \(\relations{\tuple} \nequal \relations{\tuple'}\).  That is, every distinct tuple is from a distinct relation.
 		
 		Given the restriction
@@ -67,6 +68,7 @@
 		\todo{Above proof could use some love}
 		
 	\section{Encoding an Entity Group as a Document Group}
+	\label{sec:encoding-entity-group-as-document-group}
 		Given a entity group \(\egraph\), we construct two or more documents in order to represent the entity group in the document model.
 		
 		For every \(\tuple \in \text{V}(\egraph)\), we construct a document \(\docs{\tuple}\) (\vref{sec:named-tuples-documents}).  With each tuple \(\tuple\) stored in the document collection \(\dc\), we construct an additional document which stores the association information.
