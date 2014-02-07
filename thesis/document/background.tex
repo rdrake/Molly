@@ -10,14 +10,14 @@
 		
 		The success of the relational model can only be appreciated when one looks at the continuous success of \gls{rdbms} such as Oracle and IBM DB2 which span over 3 decades without any significant decline.
 		
-		Since the 90s, the emergence of Business Intelligence \cite{todo-2} furthered the development of \gls{rdbms} by specializing the relational data model to multidimensional data model \cite{colliat-96}.  The family of databases known as \gls{olap} produced a new query language known as \gls{mdx}.
+		Since the 90s, the emergence of Business Intelligence \cite{bikm-02} furthered the development of \gls{rdbms} by specializing the relational data model to multidimensional data model \cite{colliat-96}.  The family of databases known as \gls{olap} produced a new query language known as \gls{mdx}.
 		
 		Both \gls{sql} and \gls{mdx} are highly structured query languages: they are completely described by their respective grammar and operational semantics.  Users who wish to harness the power of \gls{sql} and \gls{mdx} must be well versed in the languages themselves, and understand precisely the semantics of each syntactic constructs.
 		
 	\section{Text data and keyword search:  1970 -- 2014}
-		Parallel to the development of the relational data base technology, research in the information retrieval has been focusing on text data \cite{todo-3}.  Unlike the relational data, text data does not have much complex structure to its schema.  Thus, it's not immediately possible to design a rich set of data operators (as was the case for relational algebra).  Consequently, for text data, there is no structured query language like \gls{sql}.
+		Parallel to the development of the relational data base technology, research in the information retrieval has been focusing on text data \cite{salton-88, jones-72}.  Unlike the relational data, text data does not have much complex structure to its schema.  Thus, it's not immediately possible to design a rich set of data operators (as was the case for relational algebra).  Consequently, for text data, there is no structured query language like \gls{sql}.
 		
-		The research, thus, has been focusing on pattern matching queries using keyword search.  Though the semantics of keyword search is very simple, the statistical methods developed by the information retrieval community \cite{tfidf, bm25, latent-semantic-indexing} have been extremely effective.  In fact, one can argue that the modern World Wide Web and its related commercial successes founded on the ideas of text databases and keyword search over Internet scale data sets.
+		The research, thus, has been focusing on pattern matching queries using keyword search.  Though the semantics of keyword search is very simple, the statistical methods developed by the information retrieval community \cite{salton-88, robertson-09, dumais-88} have been extremely effective.  In fact, one can argue that the modern World Wide Web and its related commercial successes founded on the ideas of text databases and keyword search over Internet scale data sets.
 		
 	\section{Semi-structured Data and Query Languages:  1990 -- 2010}
 		
@@ -36,7 +36,7 @@
 			\item The volume of data is often Internet scale.
 		\end{itemize}
 		
-		The mixture of relational structure and rich text components of such data sets make them challenging for the purpose of data management and data analytics.  There has been several attempts to integrate keyword search from information retrieval with \gls{sql} \cite{banks-02, fuzzy-11, ir-03}.  However, these methods, so far, suffers from scalability and restricted search capabilities.
+		The mixture of relational structure and rich text components of such data sets make them challenging for the purpose of data management and data analytics.  There has been several attempts to integrate keyword search from information retrieval with \gls{sql} \cite{banks-02, fuzzy-11, ir-03}.  However, these methods, thus far, suffer from scalability and restricted search capabilities.
 		
 		In this thesis, we are motivated by the following problems:
 		
@@ -47,17 +47,8 @@
 		\end{itemize}
 		
 	\section{Outline of Thesis}
-		Chapter 2 provides a formal definition of the relational data model and the document data model.  Rather than introducing a new hybrid model, our thesis is to provide efficient mappings between the two models, and thus allow the data to freely be exchanged between query operators of the domains.  We demonstrate that complex relational data can be encoded into a linked document space (and back).
+		\cref{sec:tale-of-two-data-models} provides a formal definition of the relational data model and the document data model.  Rather than introducing a new hybrid model, our thesis is to provide efficient mappings between the two models, and thus allow the data to freely be exchanged between query operators of the domains.  We demonstrate that complex relational data can be encoded into a linked document space (and back).
 		
-		Chapter 3 describes the details of our implementation the data transformation and query operators for graph search in the linked document space.  Our choice of utilizing a modern functional programming language for our implementation makes high degree of concurrency possible.
+		\cref{sec:along-came-clojure} describes the details of our implementation the data transformation and query operators for graph search in the linked document space.  Our choice of utilizing a modern functional programming language for our implementation makes high degree of concurrency possible.
 		
-		Chapter 4 provides further justification to our choice of data model mapping and the choice of programming language used.  Through a series of experiments, we see that our proposal allows a tight integration of the relational database engines and keyword search libraries.  Furthermore, the implementation enjoys a linear speed up with respect to the number of processors available.
-
-todo-2:
-Find a BI paper
-
-todo-3:
-Find several papers / books (e.g. Salton, Baeza-Yates, K Spark Jones)
-
-keyword2:
-Guoliang Li, Shengyue Ji, Chen Li, and Jianhua Feng. 2011. Efficient fuzzy full-text type-ahead search. The VLDB Journal 20, 4 (August 2011), 617-640
+		\cref{sec:experimental-evaluation} provides further justification to our choice of data model mapping and the choice of programming language used.  Through a series of experiments, we see that our proposal allows a tight integration of the relational database engines and keyword search libraries.  Furthermore, the implementation enjoys a linear speed up with respect to the number of processors available.
