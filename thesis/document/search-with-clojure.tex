@@ -201,9 +201,7 @@
 		\subsubsection{Translation of Search Results to Relational Space}
 
 	\subsection{Graph Search in Document Space}
-		With the ability for users to find relevant entities using fuzzy value search and the flexible keyword search \gls{api} (\cref{sec:keyword-search-document-space}), they must be able to find connections between two entities.  As stated previously (\cref{clm:lossless}), the document encoding of relational data is a graph.  This allows the system to search for links between entities by utilizing one or more graph search algorithms, such as \gls{bfs}, \gls{ff}, etc.
-		
-		
+		With the ability for users to find relevant entities using fuzzy value search and the flexible keyword search \gls{api} (\cref{sec:keyword-search-document-space}), they must be able to find connections between two entities.  As stated previously (\cref{clm:lossless}), the document encoding of relational data is a graph.  This allows the system to search for links between entities by utilizing one or more graph search algorithms, such as \gls{bfs} or \gls{ff}.
 		
 		\begin{figure}
 			\centering
@@ -219,6 +217,8 @@ node [shape=plaintext]; "Human-Mutant Relations"; "Community Development & Polic
 			\caption{Human-Mutant Relations entity group}
 			\label{fig:hmr-entity-group}
 		\end{figure}
+		
+		
 		
 		\begin{itemize}
 			\item Why we need graph search

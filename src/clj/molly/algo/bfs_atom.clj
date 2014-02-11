@@ -4,8 +4,7 @@
                                        initial-state update-state]]))
 
 (defn update-adj
-  [G state-ref u max-hops]
-  ;(if (or (empty? (
+  [state-ref G u max-hops]
   (let [marked?   (@state-ref :marked)
         done?     (@state-ref :done)
         deferred  (if done?

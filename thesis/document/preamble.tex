@@ -44,7 +44,7 @@
 
 % References
 \usepackage{varioref}
-\usepackage[linktocpage=true,colorlinks=true]{hyperref}
+\usepackage[linktocpage=true,colorlinks=true,urlcolor=dark-gray,linkcolor=dark-gray,citecolor=dark-gray]{hyperref}
 \usepackage[capitalize]{cleveref}
 
 % Glossaries, list of nomenclature, etc. (must go after hyperref)
@@ -97,6 +97,8 @@
 \DeclareMathOperator{\score}{score}
 \DeclareMathOperator{\freq}{freq}
 \DeclareMathOperator{\query}{query}
+
+\definecolor{dark-gray}{gray}{0.10}
 
 % Include only items we're currently working on to speed up compilation
 %\includeonly{along-came-clojure}
