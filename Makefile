@@ -5,6 +5,7 @@ LATEXMK=/usr/texbin/latexmk
 JAR=target/molly-1.0.0-standalone.jar
 CONFIG=config/benchmark.ini
 PROPS=config/molly.properties
+OUT_FILE=gathered.json
 DOC_DIR=thesis/document
 
 build-jar : 
@@ -18,7 +19,7 @@ index : build-jar
 
 benchmark : index
 	./src/python/molly/performance/gather.py \
-	  --config $(CONFIG) --output gathered.json
+	  --config $(CONFIG) --output $(OUT_FILE)
 
 postprocess : 
 	./src/python/molly/performance/postprocess.py \

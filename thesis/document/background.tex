@@ -1,5 +1,5 @@
 \chapter{Background \& Introduction}
-	In this chapter, we provide a background to the motivation of this thesis.  We will discuss the evolution of data sets, their logical models, and the corresponding query languages.  We feel that the modern day data sets call for a new data model with a new query language.  This thesis is an attempt to make an incremental advance toward a new data model and new way of querying data.
+	In this chapter, we provide a background to the motivation of this thesis.  We will discuss the evolution of data sets, their logical models, and the corresponding query languages.  We feel that  modern day data sets call for a new data model with a new query language.  This thesis is an attempt to make an incremental advance toward a new data model and new way of querying data.
 
 	\section{Structured Data and Structured Language:  1970 -- 2000}
 		The proliferation of database system research and development started with the disruptive invention of the relational data model by Edgar F.~Codd \cite{codd-79}.
@@ -46,7 +46,7 @@
 		\end{itemize}
 		
 	\section{Outline of Thesis}
-		\cref{sec:tale-of-two-data-models} provides a formal definition of the relational data model and the document data model.  Rather than introducing a new hybrid model, our thesis is to provide efficient mappings between the two models, and thus allow the data to freely be exchanged between query operators of the domains.  We demonstrate that complex relational data can be encoded into a linked document space (and back).
+		\cref{sec:tale-of-two-data-models} provides a formal definition of the relational data model and the document data model.  Rather than introducing a new hybrid model, our thesis is to provide efficient mappings between the two models, and thus allow the data to freely be exchanged between query operators of the domains.  We demonstrate that complex relational data can be encoded into a linked document space (and back).\todo{last sentence doesn't flow}
 		
 		\cref{sec:along-came-clojure} describes the details of our implementation the data transformation and query operators for graph search in the linked document space.  Our choice of utilizing a modern functional programming language for our implementation makes high degree of concurrency possible.
 		
