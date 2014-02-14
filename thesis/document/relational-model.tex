@@ -342,7 +342,7 @@ WHERE  id = 'CDPS';
 
 			The relational model is also rigid in structure.  If a relation is modified, every query referencing said relation may require a rewrite.  Even a simple attribute being renamed (e.g.~\(\rho_{\text{name/alias}}(\text{Person})\)) is capable of modifying the join paths.  This rigidity places additional cognitive burden on users.
 			
-			In addition to having a rigid structure, most relational database management systems lack flexible string matching options.	 Assuming basic SQL-92 compliance, a \gls{rdbms} only supports the \texttt{LIKE} predicate \cite{sql-2011}.
+			In addition to having a rigid structure, most relational database management systems lack flexible string matching options.	 Assuming basic SQL-92 compliance, a \gls{rdbms} only supports the \texttt{LIKE} predicate \cite{sql-11}.
 			
 			\begin{ex}[\texttt{LIKE} Predicate]
 				Find all courses with a title that contains ``man.''

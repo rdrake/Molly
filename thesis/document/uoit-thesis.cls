@@ -436,6 +436,8 @@
   {\ifx\empty#1\empty\else\gdef\@supervisor{#1}\fi}
 \newcommand{\degree}[1]%
   {\ifx\empty#1\empty\else\gdef\@degree{#1}\fi}
+\newcommand{\institution}[1]%
+  {\ifx\empty#1\empty\else\gdef\@institution{#1}\fi}
 \newcommand{\faculty}[1]%
   {\ifx\empty#1\empty\else\gdef\@faculty{#1}\fi}
 \newcommand{\department}[1]%
@@ -590,7 +592,7 @@
       \vfill
       {\@department}\\
       \vfill
-      University of Ontario Institute of Technology\\
+      {\@institution}\\
       \vfill
       Supervisor: {\@supervisor}\\
       \vfill
