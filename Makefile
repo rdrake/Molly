@@ -19,9 +19,10 @@ build-document:
 index : build-jar
 	$(JAVA) -jar $(JAR) -c $(PROPS) --index
 
-benchmark : index
+benchmark : clean index
 	./src/python/molly/performance/gather.py \
-	  --config $(CONFIG) --output $(OUT_FILE)
+	  --config $(CONFIG) --output $(OUT_FILE) \
+	  --properties $(PROPS)
 
 postprocess : 
 	./src/python/molly/performance/postprocess.py \

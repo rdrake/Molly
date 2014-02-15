@@ -4,12 +4,11 @@ font.family         : serif
 font.size           : 10.0
 #font.serif          : Garamond Premier Pro
 
-text.usetex         : True
+text.usetex         : False
 
 pgf.texsystem: xelatex
 pgf.rcfonts: False
-#pgf.preamble: \usepackage{fontspec}, \setmainfont{Garamond Premier Pro}, \setmathfont{XITS Math}, \setmathfont[range=\mathbfsfit/{greek,Greek,latin,Latin}]{Garamond Premier Pro}
-pgf.preamble: \usepackage{fontspec}, \usepackage{unicode-math}, \setmathfont{XITS Math}, \setmainfont{Garamond Premier Pro}
+#pgf.preamble: \usepackage{fontspec}, \usepackage{unicode-math}, \setmathfont{XITS Math}, \setmainfont{Garamond Premier Pro}
 
 
 axes.facecolor      : none    # axes background color

@@ -3,17 +3,27 @@ import argparse
 import logging
 import logging.config
 import json
+import os
 
 from datetime import datetime
 from subprocess import check_output
 from configparser import ConfigParser
 
+from jinja2 import Environment, FileSystemLoader
+
 if __name__ == "__main__":
     # Argument tells us where the configuration file is.
     parser = argparse.ArgumentParser(description="Gather benchmarks")
     parser.add_argument("--config", dest="config_path", required=True, help="path to configuration file")
+    parser.add_argument("--properties", dest="project_config", required=True, help="path to properties file")
     parser.add_argument("--output", dest="output_path", required=True, help="path to output JSON file")
+    parser.add_argument("--ident", dest="ident", required=False, default="", help="unique identifier for performance run")
+    parser.add_argument("--topk-value", dest="tkv", required=False, default=50, type=int, help="top-k hits for values")
+    parser.add_argument("--topk-entities", dest="tkes", required=False, default=10, type=int, help="top-k for entities")
+    parser.add_argument("--topk-entity", dest="tke", required=False, default=5, type=int, help="top-k for entity")
     args = parser.parse_args()
+
+    print("Ident?", args.ident)
     
     # Load configuration from INI file.
     config = ConfigParser()
@@ -30,10 +40,16 @@ if __name__ == "__main__":
     methods = settings.get("methods").split(",")
     from_ = settings.get("from")
     to = settings.get("to")
-    project_config = settings.get("project-config")
+
+    env = Environment(loader=FileSystemLoader(os.getcwd()))
+    template = env.get_template("config/molly.properties.jinja2")
+    result = template.render(topk_value=args.tkv, topk_entities=args.tkes, topk_entity=args.tke)
+
+    with open(args.project_config, "w") as f:
+        f.write(result)
     
     hops = map(lambda x: x + 1, range(max_hops))
-    cmd = "lein run --benchmark -c {} -s \"{}\" -t \"{}\"".format(project_config, from_, to)
+    cmd = "lein run --benchmark -c {} -s \"{}\" -t \"{}\"".format(args.project_config, from_, to)
     run_count = 0
     total_runs = max_hops * len(methods) * runs
     bench_start = datetime.now()
