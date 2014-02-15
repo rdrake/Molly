@@ -17,14 +17,11 @@ if __name__ == "__main__":
     parser.add_argument("--config", dest="config_path", required=True, help="path to configuration file")
     parser.add_argument("--properties", dest="project_config", required=True, help="path to properties file")
     parser.add_argument("--output", dest="output_path", required=True, help="path to output JSON file")
-    parser.add_argument("--ident", dest="ident", required=False, default="", help="unique identifier for performance run")
     parser.add_argument("--topk-value", dest="tkv", required=False, default=50, type=int, help="top-k hits for values")
     parser.add_argument("--topk-entities", dest="tkes", required=False, default=10, type=int, help="top-k for entities")
     parser.add_argument("--topk-entity", dest="tke", required=False, default=5, type=int, help="top-k for entity")
     args = parser.parse_args()
 
-    print("Ident?", args.ident)
-    
     # Load configuration from INI file.
     config = ConfigParser()
     config.read(args.config_path)

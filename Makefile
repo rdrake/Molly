@@ -10,6 +10,10 @@ OUT_FILE=gathered$(IDENT).json
 OUT_DIR=thesis/document/figures/charts
 DOC_DIR=thesis/document
 
+TOPK_VALUE=50
+TOPK_ENTITIES=10
+TOPK_ENTITY=5
+
 build-jar : 
 	$(LEIN) uberjar
 
@@ -22,7 +26,8 @@ index : build-jar
 benchmark : clean index
 	./src/python/molly/performance/gather.py \
 	  --config $(CONFIG) --output $(OUT_FILE) \
-	  --properties $(PROPS)
+	  --properties $(PROPS) --topk-entity $(TOPK_ENTITY) \
+	  --topk-entities $(TOPK_ENTITIES) --topk-value $(TOPK_VALUE)
 
 postprocess : 
 	./src/python/molly/performance/postprocess.py \
