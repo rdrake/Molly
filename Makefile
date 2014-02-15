@@ -2,10 +2,12 @@ LEIN=/usr/local/bin/lein
 JAVA=/usr/bin/java
 LATEXMK=/usr/texbin/latexmk
 
+IDENT=
 JAR=target/molly-1.0.0-standalone.jar
 CONFIG=config/benchmark.ini
-PROPS=config/molly.properties
-OUT_FILE=gathered.json
+PROPS=config/molly$(IDENT).properties
+OUT_FILE=gathered$(IDENT).json
+OUT_DIR=thesis/document/figures/charts
 DOC_DIR=thesis/document
 
 build-jar : 
@@ -23,8 +25,8 @@ benchmark : index
 
 postprocess : 
 	./src/python/molly/performance/postprocess.py \
-	  --results gathered.json --output thesis/document/figures/charts
+	  --results $(OUT_FILE) --output $(OUT_DIR)
 
-clean :
+clean : 
 	rm -Rf mycampus.idx target
 	cd $(DOC_DIR) && $(LATEXMK) -c -pvc- Thesis
