@@ -2,17 +2,19 @@ LEIN=/usr/local/bin/lein
 JAVA=/usr/bin/java
 LATEXMK=/usr/texbin/latexmk
 
-IDENT=
 JAR=target/molly-1.0.0-standalone.jar
 CONFIG=config/benchmark.ini
-PROPS=config/molly$(IDENT).properties
-OUT_FILE=gathered$(IDENT).json
-OUT_DIR=thesis/document/figures/charts
+
 DOC_DIR=thesis/document
+OUT_DIR=$(DOC_DIR)/figures/charts
 
 TOPK_VALUE=50
 TOPK_ENTITIES=10
 TOPK_ENTITY=5
+
+IDENT=-tkv-$(TOPK_VALUE)-tkes-$(TOPK_ENTITIES)-tke-$(TOPK_ENTITY)
+PROPS=config/molly$(IDENT).properties
+OUT_FILE=gathered$(IDENT).json
 
 build-jar : 
 	$(LEIN) uberjar
@@ -23,7 +25,7 @@ build-document:
 index : build-jar
 	$(JAVA) -jar $(JAR) -c $(PROPS) --index
 
-benchmark : clean index
+benchmark : 
 	./src/python/molly/performance/gather.py \
 	  --config $(CONFIG) --output $(OUT_FILE) \
 	  --properties $(PROPS) --topk-entity $(TOPK_ENTITY) \
