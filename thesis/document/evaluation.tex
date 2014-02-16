@@ -7,7 +7,7 @@
 		The system was implemented in Clojure, which \textcquote{clj-home}{is a dynamic programming language that targets the \gls{jvm}}.  Clojure was chosen due to its rich, immutable, and persistent data structures, excellent concurrency support, and seamless \gls{jvm} interoperability.  These features were discussed in detail in \cref{sec:features-of-clojure}.
 		
 		\subsection{Code Base Statistics}
-			The system consists of 802 lines of Clojure, along with 453 lines of Python.  The Python code is used to construct the data set by crawling the course information site, as well as to aggregate the benchmark data produced by the system.
+			The system consists of over 800 lines of Clojure, along with  lines of Python.  The Python code is used to construct the data set by crawling the course information site, as well as to aggregate the benchmark data produced by the system.
 			
 			All development has occurred on GitHub \cite{molly-repo}.
 	
@@ -72,15 +72,18 @@
 				
 				\begin{figure}
 					\centering
-					\input{figures/charts/methods-subplots.pgf}
-					
+					\resizebox{\linewidth}{!}{
+						\input{figures/charts/methods-subplots.pgf}
+					}
 					\caption{Growth of graph search times based on number of hops, plotted separately}
 					\label{fig:methods-subplots}
 				\end{figure}
 				
 				\begin{figure}
 					\centering
-					\input{figures/charts/methods-compared.pgf}
+					\resizebox{\linewidth}{!}{
+						\input{figures/charts/methods-compared.pgf}
+					}
 					
 					\caption{Growth of graph search times based on number of hops, combined plot}
 					\label{fig:methods-compared}
