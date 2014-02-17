@@ -37,5 +37,5 @@ class BoxPlot(Graph):
             plt.savefig(os.path.join(self.args.output_path, "boxplot-{}-{}.pgf".format(self.args.ident, method)))
 
 if __name__ == "__main__":
-    plot = BoxPlot("wut", "Box plots for all samples", "Hops", "Time (ns)")
+    plot = BoxPlot("wut", "Box plots for all samples", "Maximum Number of Hops", "Time (ns)")
     plot.plot()

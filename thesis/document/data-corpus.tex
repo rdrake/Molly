@@ -1,0 +1,142 @@
+\chapter{Data Corpus}
+\label{chap:data-corpus-def}
+	Tables representing various object classes of data corpus used in thesis implementation and evaluation.
+	
+	\begin{table}[H]
+		\begin{subtable}[b]{.5\linewidth}
+			\centering
+			\begin{tabular}{ll}
+				\toprule
+				Property & Data Type \\
+				\midrule
+				id & INT \\
+				name & VARCHAR \\
+				\bottomrule
+			\end{tabular}
+			
+			\caption{Campus Data Structure}
+			\label{tbl:corpus-campus}
+		\end{subtable}
+		\begin{subtable}[b]{.5\linewidth}
+			\centering
+			\begin{tabular}{ll}
+				\toprule
+				Property & Data Type \\
+				\midrule
+				id & INT \\
+				name & VARCHAR \\
+				\bottomrule
+			\end{tabular}
+			
+			\caption{Instructor Data Structure}
+			\label{tbl:corpus-instructor}
+		\end{subtable}
+		\begin{subtable}[b]{.5\linewidth}
+			\centering
+			\begin{tabular}{ll}
+				\toprule
+				Property & Data Type \\
+				\midrule
+				code & VARCHAR \\
+				title & VARCHAR \\
+				subject\_id & VARCHAR \\
+				\bottomrule
+			\end{tabular}
+			
+			\caption{Course Data Structure}
+			\label{tbl:corpus-course}
+		\end{subtable}
+		\begin{subtable}[b]{.5\linewidth}
+			\centering
+			\begin{tabular}{ll}
+				\toprule
+				Property & Data Type \\
+				\midrule
+				id & INT \\
+				name & VARCHAR \\
+				campus\_id & VARCHAR \\
+				\bottomrule
+			\end{tabular}
+			
+			\caption{Location Data Structure}
+			\label{tbl:corpus-location}
+		\end{subtable}
+	\end{table}
+	
+	\begin{table}
+		\ContinuedFloat
+		\begin{subtable}[b]{.5\linewidth}
+			\centering
+			\begin{tabular}{ll}
+				\toprule
+				Property & Data Type \\
+				\midrule
+				id & VARCHAR \\
+				name & VARCHAR \\
+				\bottomrule
+			\end{tabular}
+			
+			\caption{Subject Data Structure}
+			\label{tbl:corpus-subject}
+		\end{subtable}
+		\begin{subtable}[b]{.5\linewidth}
+			\centering
+			\begin{tabular}{ll}
+				\toprule
+				Property & Data Type \\
+				\midrule
+				id & VARCHAR \\
+				name & VARCHAR \\
+				\bottomrule
+			\end{tabular}
+			
+			\caption{Term Data Structure}
+			\label{tbl:corpus-term}
+		\end{subtable}
+		\begin{subtable}[b]{.5\linewidth}
+			\centering
+			\begin{tabular}{ll}
+				\toprule
+				Property & Data Type \\
+				\midrule
+				id & INT \\
+				days & VARCHAR \\
+				sch\_type & VARCHAR \\
+				date\_start & DATE \\
+				date\_end & DATE \\
+				week & VARCHAR \\
+				time\_start & TIME \\
+				time\_end & TIME \\
+				location\_id & INT \\
+				section\_id & INT \\
+				instructor\_id & INT \\
+				\bottomrule
+			\end{tabular}
+			
+			\caption{Schedule Data Structure}
+			\label{tbl:corpus-schedule}
+		\end{subtable}
+		\begin{subtable}[b]{.5\linewidth}
+			\centering
+			\begin{tabular}{ll}
+				\toprule
+				Property & Data Type \\
+				\midrule
+				crn & VARCHAR \\
+				reg\_start & DATE \\
+				reg\_end & DATE \\
+				credits & FLOAT \\
+				section\_num & VARCHAR \\
+				term\_id & VARCHAR \\
+				course\_code & VARCHAR \\
+				levels & VARCHAR \\
+				\bottomrule
+			\end{tabular}
+			
+			\caption{Section Data Structure}
+			\label{tbl:corpus-section}
+		\end{subtable}
+		
+		\caption{Structure of data corpus}
+		\label{tbl:data-corpus-defn}
+	\end{table}

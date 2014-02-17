@@ -18,6 +18,8 @@ axes.facecolor      : none    # axes background color
 figure.facecolor : none    # figure facecolor; 0.75 is scalar gray
 figure.edgecolor : none   # figure edgecolor
 
+image.cmap   : hot
+
 # the default savefig params can be different from the display params
 # e.g., you may want a higher resolution, or to make the figure
 # background white
