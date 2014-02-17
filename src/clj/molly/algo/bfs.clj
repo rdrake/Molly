@@ -2,24 +2,6 @@
   (:require [molly.algo.common :refer [find-adj initial-state
                                        update-state]]))
 
-(comment(defn update-adj
-  [state-ref G u max-hops]
-  (let [marked?   (@state-ref :marked)
-        done?     (@state-ref :done)]
-    (if (not done?)
-      (doall
-        (for [v (find-adj G u)]
-          ((println max-hops)
-           (if (marked? v)
-             nil
-             (swap!
-               state-ref
-               update-state
-               u
-               v
-               max-hops)))))
-      nil))))
-
 (defn update-adj
   [state-ref G u max-hops]
   (let [marked?   (@state-ref :marked)
