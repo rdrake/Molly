@@ -33,7 +33,10 @@ class LinePlot(Graph):
         plt.xlabel(self.xlabel)
         plt.ylabel(self.ylabel)
 
-        for method in self.data.keys():
+        methods = list(self.data.keys())
+        methods.sort()
+
+        for method in methods:
             y = [mean for (max_hops, mean) in self.data[method]]
             plt.plot(self.max_hops, y, label=METHODS[method])
 
@@ -43,6 +46,6 @@ class LinePlot(Graph):
         plt.savefig(os.path.join(self.args.output_path, "lineplot-{}.pgf".format(self.args.ident)))
 
 if __name__ == "__main__":
-    plot = LinePlot("wut", "Line plots for all samples", "Hops", "Time (s)")
+    plot = LinePlot("wut", "Line plots for all samples", "Maximum Number of Hops", "Elapsed Time (s)")
     plot.plot()
 
