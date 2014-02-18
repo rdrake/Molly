@@ -86,8 +86,14 @@
 				\end{figure}
 		
 		\subsection{Performance}
+			The indexing process is computationally intensive but short lived.  After the initial \gls{jvm} warmup period
+			
 			\input{figures/charts/lineplot-tkv-50-tkes-25-tke-5.pgf}
 			\input{figures/charts/lineplot-tkv-50-tkes-5-tke-5.pgf}
+			
+			\input{figures/charts/boxplot-tkv-50-tkes-20-tke-5-bfs_atom.pgf}
+			\input{figures/charts/boxplot-tkv-50-tkes-20-tke-5-bfs_ref.pgf}
+			\input{figures/charts/boxplot-tkv-50-tkes-20-tke-5-bfs.pgf}
 		
 		\begin{itemize}
 			\item Index speed
@@ -103,6 +109,7 @@
 	
 	\section{Lessons learned}
 	\label{sec:lessons-learned}
+	
 		\begin{itemize}
 			\item Simple algorithms are easier to parallelize
 			\item STM is effective: transactions do not rollback (that much), so we observe impressive speed-up in concurrent versions.
