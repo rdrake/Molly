@@ -164,10 +164,4 @@
 		
 		Sometimes a simpler approach to concurrency is the most appropriate one.  In our evaluation, atoms provided better performance than references.  Atoms allow for finer granularity in concurrency, reducing the overhead associated with references.  This is desirable in situations that do not require much shared state.
 		
-		Clojure is a powerful language that encouraged us to write correct code first, then optimize it later.  
-		\begin{itemize}
-			\item Simple algorithms are easier to parallelize
-			\item STM is effective: transactions do not rollback (that much), so we observe impressive speed-up in concurrent versions.
-			\item Fine tuning is beneficial: atom is better than ref.
-			\item The clojure way: correctness first, runtime optimization latter (ref to atom is natural).
-		\end{itemize}
+		Clojure is a powerful language that encouraged us to write correct code first, then optimize it later.  The transition to a concurrent implementation of \gls{bfs} was trivial.  The switch from atoms to references was also trivial.
