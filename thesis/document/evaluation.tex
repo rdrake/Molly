@@ -54,7 +54,7 @@
 				\item A final forced garbage collection after testing to estimate impact of cleanup on the timing results
 			\end{itemize}
 		
-			This requires a much longer runtime as each function must be invoked numerous times.  In extreme cases (Ford-Fulkerson, 8 hops) this can take upwards of 4 hours in our test environment.
+			This requires a much longer runtime as each function must be invoked numerous times.
 			
 			During evaluation, Criterium collects performance metrics.  Upon completion of the evaluation, it performs statistical analysis of these metrics using the bootstrap procedure developed by \citeauthor{efron-87} \cite{efron-87}.  These metrics include mean, samples, variance, quartiles, outliers, and more.
 		
@@ -67,18 +67,16 @@
 				\begin{figure}[H]
 					\centering % Pointless, but who knows in the future.
 					\begin{verbatim}
-[
-    {
-        "max-hops": ...,
-        "method": ...,
-        "results": {
-            "execution-count": ...,
-            "final-gc-time": ...,
-            "lower-q": [...],
-            "mean": [...],
-        ...
-    }, ...
-]
+                    [{
+                        "max-hops": ...,
+                        "method": ...,
+                        "results": {
+                            "execution-count": ...,
+                            "final-gc-time": ...,
+                            "lower-q": [...],
+                            "mean": [...],
+                        ...
+                    }, ...]
 					\end{verbatim}
 					
 					\caption{Partial \gls{json} output from Criterium.}
@@ -86,30 +84,87 @@
 				\end{figure}
 		
 		\subsection{Performance}
-			The indexing process is computationally intensive but short lived.  After the initial \gls{jvm} warmup period
+		\label{sec:performance}
+			Performance was measured for the various system components.  An analysis of the metrics collected is presented in this section.
 			
-			\input{figures/charts/lineplot-tkv-50-tkes-25-tke-5.pgf}
-			\input{figures/charts/lineplot-tkv-50-tkes-5-tke-5.pgf}
+			\subsubsection{Indexing}
+				The indexing process is computationally intensive but short lived.  After the initial \gls{jvm} warmup period, the time required to construct the index scales with the number of named tuples and relations between them.
+				
+				\begin{table}[H]
+					\centering
+					\begin{tabular}{ll}
+						\toprule
+						Number of Groups & Elapsed Time (s) \\
+						\midrule
+						1 & 16.895 \\
+						2 & 21.624 \\
+						3 & 24.436 \\
+						4 & 24.528 \\
+						5 & 25.334 \\
+						\bottomrule
+					\end{tabular}
+					
+					\caption{Indexing time growth by number of entity groups}
+					\label{tbl:index-growth-entity-groups}
+				\end{table}
+				
+				We see in \cref{tbl:index-growth-entity-groups} the indexing time increases considerably between 1 and 2 groups.  The number of entity groups also grew considerably, explaining the time increase.  The number of entity groups grew at a slower pace from 2 to 3, and 3 to 5, causing the reduced increase in elapsed time.
+				
+			\subsubsection{Keyword Search}
 			
-			\input{figures/charts/boxplot-tkv-50-tkes-20-tke-5-bfs_atom.pgf}
-			\input{figures/charts/boxplot-tkv-50-tkes-20-tke-5-bfs_ref.pgf}
-			\input{figures/charts/boxplot-tkv-50-tkes-20-tke-5-bfs.pgf}
-		
-		\begin{itemize}
-			\item Index speed
-			\item Keyword search speed
-			\item Graph search speed:
-				\begin{itemize}
-					\item Ford Fulkerson
-					\item BFS
-					\item Concurrent BFS using refs
-					\item Concurrent BFS using atoms
-				\end{itemize}
-		\end{itemize}
+			
+			\subsubsection{Graph Search}
+				The worst-case performance of \gls{bfs} is \(\mathcal{O}(n^2)\).  This is reflected in \cref{fig:method-runtime-tkes-25} which follows an exponential growth curve.  In an attempt to mitigate the rapid increase in search time, concurrent variants of \gls{bfs} were also implemented and benchmarked.
+				
+				We see in \cref{fig:method-runtime-tkes-25} the decrease in rate of growth is not as high as expected.  \gls{bfs} is the slowest, closely followed by \gls{bfs} with references and \gls{bfs} with atoms.
+				
+				\begin{figure}[H]
+					\centering
+					\input{figures/charts/lineplot-tkv-50-tkes-25-tke-5-stopsat4.pgf}
+					
+					\caption{Comparison of time taken per hop between all methods (top-\(k\) entities:  25), target found}
+					\label{fig:method-runtime-tkes-25-stopsat4}
+				\end{figure}
+				
+				The most likely cause for the similarity is how the concurrency is implemented.  In our implementation, we concurrently search for neighbours.  These neighbours must be added to the frontier before proceeding.  Therefore the algorithm must synchronize upon completion of the neighbour search in order to populate the new frontier.
+				
+				Atoms are less expensive to use than references as they are handled in an uncoordinated manner in Clojure, reducing the amount of overhead \cite{narkis-12}.  This explains the difference between the two concurrent implementations of \gls{bfs}.
+				
+				%\begin{table}[H]
+				%	\centering
+				%	\begin{tabular}{lll}
+				%		\toprule
+				%		Hops & Elapsed Time (s) & Factor \\
+				%		\midrule
+				%		1 & 0.00092 & N/A \\
+				%		2 & 0.00342 & 3.72x \\
+				%		3 & 0.02015 & 5.89x \\
+				%		4 & 0.05267 & 2.61x \\
+				%		\bottomrule
+				%	\end{tabular}
+				%	
+				%	\caption{}
+				%\end{table}
+				
+				Also of note is the growth of \cref{fig:method-runtime-tkes-25-stopsat4} compared to that of \cref{fig:method-runtime-tkes-25}.  In the former figure, the target is located by the fourth hop.  In the latter, the target is not found.  This leads to hops 4 through 8 having approximately the same runtime as one another.
+				
+				\begin{figure}[H]
+					\centering
+					\input{figures/charts/lineplot-tkv-50-tkes-25-tke-5.pgf}
+					
+					\caption{Comparison of time taken per hop between all methods (top-\(k\) entities:  25), target not found}
+					\label{fig:method-runtime-tkes-25}
+				\end{figure}
 	
 	\section{Lessons learned}
 	\label{sec:lessons-learned}
-	
+		The system evaluation has yielded several important insights.  We have found that the simplest algorithms are the easiest to parallelize.  The reduced complexity, and thus state, reduces the amount of shared data that must be synchronized.  This allows for higher concurrency.
+		
+		Clojure's \gls{stm} implementation is simple to use and effective.  A few simple functions provide a powerful concurrency model.
+		
+		Sometimes a simpler approach to concurrency is the most appropriate one.  In our evaluation, atoms provided better performance than references.  Atoms allow for finer granularity in concurrency, reducing the overhead associated with references.  This is desirable in situations that do not require much shared state.
+		
+		Clojure is a powerful language that encouraged us to write correct code first, then optimize it later.  
 		\begin{itemize}
 			\item Simple algorithms are easier to parallelize
 			\item STM is effective: transactions do not rollback (that much), so we observe impressive speed-up in concurrent versions.

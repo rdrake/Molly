@@ -30,6 +30,10 @@ class Graph:
         data = []
         json_data = json.load(results_file)
 
+        for result in json_data:
+            mean = "%.5f" % result["results"]["mean"][0]
+            print(result["max-hops"], result["method"], mean)
+
         return json_data
 
     def parse_args(self):
@@ -50,3 +54,6 @@ class Graph:
 
     def plot(self, figsize=(6.25, 3)):
         self.figsize = figsize
+
+if __name__ == "__main__":
+    g = Graph("wat", "wat", "wat", "wat")
