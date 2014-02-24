@@ -155,13 +155,3 @@
 					\caption{Comparison of time taken per hop between all methods (top-\(k\) entities:  25), target not found}
 					\label{fig:method-runtime-tkes-25}
 				\end{figure}
-	
-	\section{Lessons learned}
-	\label{sec:lessons-learned}
-		The system evaluation has yielded several important insights.  We have found that the simplest algorithms are the easiest to parallelize.  The reduced complexity, and thus state, reduces the amount of shared data that must be synchronized.  This allows for higher concurrency.
-		
-		Clojure's \gls{stm} implementation is simple to use and effective.  A few simple functions provide a powerful concurrency model.
-		
-		Sometimes a simpler approach to concurrency is the most appropriate one.  In our evaluation, atoms provided better performance than references.  Atoms allow for finer granularity in concurrency, reducing the overhead associated with references.  This is desirable in situations that do not require much shared state.
-		
-		Clojure is a powerful language that encouraged us to write correct code first, then optimize it later.  The transition to a concurrent implementation of \gls{bfs} was trivial.  The switch from atoms to references was also trivial.

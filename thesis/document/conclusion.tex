@@ -1,0 +1,18 @@
+\chapter{Conclusion}
+\label{chap:conclusion}
+	\section{Summary}
+		While the relational model is a powerful and well understood method of storing data, it is not without its shortcomings.  The rigidity of the relational model comes at the cost of usability.  A change to the data model may require a rewrite of queries to account for the different join paths, increasing the cognitive burden on users.
+		
+		In contrast, the document model represents semi-structured and unstructured data.  The queries issued against the document model are unstructured and flexible.  This allows users with little or no prior domain knowledge to issue queries.  Unfortunately this flexibility comes at the cost of foreign keys, data consistency, and aggregate queries.
+		
+		In \cref{chap:tale-of-two-data-models} we introduced the relational and document data models.  We compared and contrasted the two data models, paving the way for our contribution.  We introduced our contribution in \cref{chap:best-of-both-worlds}, providing a formal definition of a framework for the translation between the relational and document data models.  Our implementation was introduced in \cref{chap:along-came-clojure}, which also covered Clojure.  In \cref{chap:experimental-evaluation}, we evaluated our implementation, identifying performance characteristics.
+		
+	\section{Lessons Learned}
+		The system evaluation in \cref{chap:experimental-evaluation} yielded several important insights.
+		
+		\begin{itemize}
+			\item We have found that the simplest algorithms are the easiest to parallelize.  The reduced complexity, and thus state, reduces the amount of shared data that must be synchronized.  This allows for higher concurrency.
+			\item Clojure's \gls{stm} implementation is simple to use and effective.  A few simple functions provide a powerful concurrency model.
+			\item Sometimes a simpler approach to concurrency is the most appropriate one.  In our evaluation, atoms provided better performance than references.  Atoms allow for finer granularity in concurrency, reducing the overhead associated with references.  This is desirable in situations that do not require much shared state.
+			\item Clojure is a powerful language that encouraged us to write correct code first, then optimize it later.  The transition to a concurrent implementation of \gls{bfs} was trivial.  The switch from atoms to references was also trivial.
+		\end{itemize}
