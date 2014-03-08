@@ -38,7 +38,7 @@
 			In \vref{fig:persistent-data-structure}, we see what happens when a persistent data structure is ``changed'' in Clojure.  The root of the left tree is the data structure before, and the root of the right tree is the data structure after.  Note how the changed map retains pointers to all but the updated value; the newly created value is pointed to instead of the previous one.
 		
 		\subsubsection{Concurrency}
-			Clojure supports four systems for concurrency:  \gls{stm}, agents, atoms, and dynamic vars.  The differences between these systems are summarized in \vref{tbl:concurrency-system-comparison}.
+			Clojure supports four systems for concurrency:  \gls{stm}, agents, atoms, and dynamic vars.  The differences between these systems -- including whether or not they are synchronous, coordinated, and what scope they encompass -- are summarized in \vref{tbl:concurrency-system-comparison}.
 			
 			\begin{table}
 				\centering
@@ -57,6 +57,8 @@
 				\caption{Comparison between Clojure's four systems for concurrency}
 				\label{tbl:concurrency-system-comparison}
 			\end{table}
+			
+			In this context, synchronous refers to the fact that each operation waits for the proceeding operation to complete before continuing.  When a system is coordinated, operations occur in a transaction.  If one operation fails, the entire transaction fails and is rolled back.  This results in additional overhead, but is considered safer as the system shall not be left in an inconsistent state as a result of a failed transaction.
 			
 			\todo{More concurrency}
 			
@@ -82,7 +84,7 @@
 					\bottomrule
 				\end{tabular}
 				
-				\caption{Syntactic sugar for \gls{jvm} interoperability}
+				\caption{\gls{jvm} interoperability}
 				\label{tbl:jvm-interop-syntax}
 			\end{table}
 			
@@ -93,7 +95,7 @@
 					\begin{pygments}{clj}
 (defn ^Directory idx-path
   [path]
-  (-> path File. SimpleFSDirectory.))
+  (SimpleFSDirectory. (File. path)))
 					\end{pygments}
 				\end{singlespaced}
 				

@@ -5,65 +5,92 @@
 	  
 	\section{molly}
 		\subsection{molly.core}
+			The core namespace is responsible for determining, provided a series of command line arguments, which action to take.  This namespace is invoked as the main class when the \gls{jar} is executed.
+			
 			\inputpygments{clj}{../../src/clj/molly/core.clj}
 	
 	\clearpage
 	\section{molly.conf}
 		\subsection{molly.conf.config}
+			This namespace contains helper functions for loading part of the system configuration.  It also provides a protocol, \texttt{IConfig}, that is used to define the rest of the system configuration.
+			
 			\inputpygments{clj}{../../src/clj/molly/conf/config.clj}
 		  
 		\clearpage
 		\subsection{molly.conf.mycampus}
+			This is a sample configuration.  It defines the entities and relations in the mycampus dataset.
+			
 			\inputpygments{clj}{../../src/clj/molly/conf/mycampus.clj}
 	
 	\clearpage
 	\section{molly.datatypes}
+		There are several datatypes used in the system.
 		\subsection{molly.datatypes.database}
+			A protocol and concrete datatype are defined which provide access to a relational database.  Users creating an instance of this datatype are able to execute arbitrary queries, and must provide a function to apply to every tuple that is returned.
+			
 			\inputpygments{clj}{../../src/clj/molly/datatypes/database.clj}
 		
 		\clearpage
 		\subsection{molly.datatypes.entity}
+			One of the most important namespaces represents entities.  It includes functions to transform a named tuple from a database row into the internal representation as well as into documents.  It also includes auxiliary functions to produce a unique identifier.
+			
 			\inputpygments{clj}{../../src/clj/molly/datatypes/entity.clj}
 		
 		\clearpage
 		\subsection{molly.datatypes.schema}
+			The final datatype represents a schema.  These schemas contain a function that is used to execute the necessary \gls{sql} statements to retrieve all data from the relational database and place it in the full-text search index.
+			
+			Several of these schema datatypes are joined together in a configuration in order to produce a schema graph.
+			
 			\inputpygments{clj}{../../src/clj/molly/datatypes/schema.clj}
 	
 	\clearpage
 	\section{molly.index}
 		\subsection{molly.index.build}
+			This namespace contains the function used to build the full-text search database.  It takes advantage of the fact that each schema knows how to construct its own documents.  The function simply iterates through every schema in the configuration, instructing them to index themselves.
+			
 			\inputpygments{clj}{../../src/clj/molly/index/build.clj}
 	
 	\clearpage
 	\section{molly.util}
 		\subsection{molly.util.nlp}
+			The \texttt{q-gram} function computes the \(q\)-gram of a string.  Optionally a value for \(q\) and the padding character can be specified.
+			
 			\inputpygments{clj}{../../src/clj/molly/util/nlp.clj}
 	
 	\clearpage
 	\section{molly.search}
 		\subsection{molly.search.lucene}
+			This namespace contains various functions for interfacing with the Lucene library.  These functions include opening, adding documents, searching, and closing indices.
+			
 			\inputpygments{clj}{../../src/clj/molly/search/lucene.clj}
 		
 		\clearpage
 		\subsection{molly.search.query\_builder}
+			Phrase queries are used as they require each term in the phrase to be in a specific order.  This permits more accurate results as course titles and other items are in a specific order.
+			
+			These queries may be combined, creating a boolean query.
+			
 			\inputpygments{clj}{../../src/clj/molly/search/query_builder.clj}
 	
 	\clearpage
 	\section{molly.server}
+		This namespace contains functionality to expose the system functionality to clients over \gls{http}.
+		
 		\subsection{molly.server.core}
 			\inputpygments{clj}{../../src/clj/molly/server/core.clj}
 		
 		\clearpage
 		\subsection{molly.server.remotes}
+			Rather than handle serialization over \gls{http} manually, the system uses the Shoreleave library\footnote{\url{https://github.com/shoreleave/shoreleave-remote}}.  It permits ClojureScript clients to transparently call functions exposed on the server.  The \texttt{defremote} macro is used to expose these functions.
+			
 			\inputpygments{clj}{../../src/clj/molly/server/remotes.clj}
 		
 		\clearpage
 		\subsection{molly.server.search}
+			This namespace provides the ``glue'' between the system and \gls{http} interface.
+			
 			\inputpygments{clj}{../../src/clj/molly/server/search.clj}
-		
-		\clearpage
-		\subsection{molly.server.util}
-			\inputpygments{clj}{../../src/clj/molly/server/util.clj}
 	
 	\clearpage
 	\section{molly.algo}

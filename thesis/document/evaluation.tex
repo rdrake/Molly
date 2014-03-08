@@ -1,6 +1,6 @@
 \chapter{Experimental Evaluation}
 \label{chap:experimental-evaluation}
-	In this chapter we evaluate our implementation of the system for transforming data in the relational model to the document model and vice versa described in \cref{chap:tale-of-two-data-models}.  We detail the implementation details in \cref{sec:implementation}, the methodology and evaluation in \cref{sec:runtime-evaluation}, and provide a number of lessons we learned from evaluating our system in \cref{sec:lessons-learned}.
+	In this chapter we evaluate our implementation of the system for transforming data in the relational model to the document model and vice versa described in \cref{chap:tale-of-two-data-models}.  We cover the implementation details in \cref{sec:implementation}, and the methodology and evaluation in \cref{sec:runtime-evaluation}.
 	
 	\section{Implementation}
 	\label{sec:implementation}
@@ -151,6 +151,8 @@
 				\begin{figure}[H]
 					\centering
 					\input{figures/charts/lineplot-tkv-50-tkes-25-tke-5.pgf}
+					% Result from running on Leda.  Shows irregular results.
+					%\input{figures/charts/lineplot-tkv-50-tkes-10-tke-5.pgf}
 					
 					\caption{Comparison of time taken per hop between all methods (top-\(k\) entities:  25), target not found}
 					\label{fig:method-runtime-tkes-25}

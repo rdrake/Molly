@@ -201,7 +201,7 @@
 		\subsubsection{Translation of Search Results to Relational Space}
 
 	\subsection{Graph Search in Document Space}
-		With the ability for users to find relevant entities using fuzzy value search and the flexible keyword search \gls{api} (\cref{sec:keyword-search-document-space}), they must be able to find connections between two entities.  As stated previously (\cref{clm:lossless}), the document encoding of relational data is a graph.  This allows the system to search for links between entities by utilizing one or more graph search algorithms, such as \gls{bfs} or \gls{ff}.
+		With the ability for users to find relevant entities using fuzzy value search and the flexible keyword search \gls{api} (\cref{sec:keyword-search-document-space}), they must be able to find connections between two entities.  As stated previously (\cref{clm:lossless}), the document encoding of relational data is a graph.  This allows the system to search for links between entities by utilizing one or more graph search algorithms, such as \gls{bfs}.
 		
 		\begin{figure}
 			\centering
@@ -218,7 +218,91 @@ node [shape=plaintext]; "Human-Mutant Relations"; "Community Development & Polic
 			\label{fig:hmr-entity-group}
 		\end{figure}
 		
+		\subsubsection{Why We Need Graph Search}
+			Tuples are fragments of larger pieces of knowledge.  By utilizing graph search, we 
 		
+		Why we need graph search:
+		=========================
+		
+		- Tuples are fragments for larger pieces of knowledges.
+		Graph search allows ammagomation of pieces of knowledge so user can gain
+		access to facts at broader scopes through search.
+		
+		Example:
+		
+		Person X        is a tuple/entity
+		Course A        is a tuple/entity
+		
+		Person X teaches Course A       is an entity group
+		Person Y teaches Course A       is an entity group
+		
+		Did you know that "Person X and Person Y can work together to teach Course
+		A?" -- this requires group search.
+		
+		- Graph search automatically connects related facts (tuples).  So, if certain
+		entity groups are omitted in the database, search might be able to recover
+		them by connecting tuples to form graphs.
+		
+		
+		Graph search algorithms
+		=======================
+		
+		# Definition of the graph
+		
+		G = (V, E)
+		
+		V = all entity-groups in DB
+		Let $Ent(v)$ be the set of entities in entity group $v$.
+		We say that two vertices in $G$ are connected if and only if:
+		
+		$Ent(v)\cap Ent(v')\not=\emptyset$.
+		
+		# Definition of graph search
+		
+		Given a keyword query q, find a subgraph, $H$, of G to:
+		- minimize the vertices in H
+		- maximize the satisfaction of keywords in $q$ by vertices in $H$.
+		
+		Example (based on UOIT or superhero) should be given here.
+		- just use the canonical example for benchmark testing.
+		
+		# Logical specification of the graph search algorithm:
+		
+		- find all vertices by entity group search, and call this C.
+		- use any graph search algorithm to minimally connect the vertices in C
+		as follows. 
+		let s\in C be a source.
+		for each t\in C-{s}:
+		find path connecting s->t such that len(path) <= user-defined-bound.
+		
+		# Why use document space for graph search (THESIS OF YOUR THESIS)
+		
+		- finding the relevant "seed" vertices is really fast.  This is done by
+		using full text search on the documents of an entity graph.  Therefore, it
+		allows fuzzy search for the seeds.
+		- finding connected entity groups is really fast - this is done by using the
+		indexing document.  Using a single keyword query, we can find all relevant
+		entity groups in the database.
+		
+		Example: spell this out:
+		
+		index-doc(v0) = student:ABC, course:XYZ
+		query: (:or (:and (id:ABC) (C:student)) 
+		(:and (id:XYZ) (C:course)))
+		
+		# Breadth-first search
+		
+		Description: copy this from CLRS
+		<Richard>
+		
+		Functional description of BFS
+		
+		Distributed functional description of BFS
+		
+		Implementation details:
+		- Ref
+		- Atoms
+		- Agent
 		
 		\begin{itemize}
 			\item Why we need graph search
