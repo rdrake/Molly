@@ -219,35 +219,59 @@ node [shape=plaintext]; "Human-Mutant Relations"; "Community Development & Polic
 		\end{figure}
 		
 		\subsubsection{Why We Need Graph Search}
-			Tuples are fragments of larger pieces of knowledge.  By utilizing graph search, we 
+			Tuples are fragments, or facts, of larger pieces of knowledge.  By utilizing graph search, we amalgamate these facts to provide a user with a broader view.
+			
+			\begin{ex}
+				By utilizing graph search, we can take the facts in \cref{tbl:facts} and compose new facts.  For example, we could learn who teaches Complex Analysis.  It also allows us to ask questions, such as ``who taught Complex Analysis with Instructor X?''
+				
+				\begin{table}
+					\begin{subtable}[b]{0.5\linewidth}
+						\centering
+						
+						\begin{tabular}{ll}
+							\toprule
+							Field & Terms \\
+							\midrule
+							code & \(\{\text{math}, \text{360}\}\) \\
+							title & \(\{\text{complex}, \text{analysis}\}\) \\
+							subject & \(\{\text{math}\}\) \\
+							\bottomrule
+						\end{tabular}
+						
+						\caption{Fact representing a Course}
+						\label{subtbl:fact-course}
+					\end{subtable}
+					\begin{subtable}[b]{0.5\linewidth}
+						\centering
+						
+						\begin{tabular}{ll}
+							\toprule
+							Field & Terms \\
+							\midrule
+							id & \(\{\text{math}\}\) \\
+							name & \(\{\text{mathematics}\}\) \\
+							\bottomrule
+						\end{tabular}
+						
+						\caption{Fact representing a Subject}
+						\label{subtbl:fact-subject}
+					\end{subtable}
+					
+					\caption{Fragments, or facts, of information in a dataset}
+					\label{tbl:facts}
+				\end{table}
+			\end{ex}
+			
+			This automated discovery of relations between facts is why graph search is important.
 		
-		Why we need graph search:
-		=========================
-		
-		- Tuples are fragments for larger pieces of knowledges.
-		Graph search allows ammagomation of pieces of knowledge so user can gain
-		access to facts at broader scopes through search.
-		
-		Example:
-		
-		Person X        is a tuple/entity
-		Course A        is a tuple/entity
-		
-		Person X teaches Course A       is an entity group
-		Person Y teaches Course A       is an entity group
-		
-		Did you know that "Person X and Person Y can work together to teach Course
-		A?" -- this requires group search.
-		
-		- Graph search automatically connects related facts (tuples).  So, if certain
-		entity groups are omitted in the database, search might be able to recover
-		them by connecting tuples to form graphs.
-		
+		\subsubsection{Graph Search Algorithms}
+			Recall we defined a graph as \(G = (V, E)\), where \(V\) is the set of all facts in the database, and \(E\) is the set of relations between facts.
+			
 		
 		Graph search algorithms
 		=======================
 		
-		# Definition of the graph
+		%# Definition of the graph
 		
 		G = (V, E)
 		
@@ -257,7 +281,7 @@ node [shape=plaintext]; "Human-Mutant Relations"; "Community Development & Polic
 		
 		$Ent(v)\cap Ent(v')\not=\emptyset$.
 		
-		# Definition of graph search
+		%# Definition of graph search
 		
 		Given a keyword query q, find a subgraph, $H$, of G to:
 		- minimize the vertices in H
@@ -266,7 +290,7 @@ node [shape=plaintext]; "Human-Mutant Relations"; "Community Development & Polic
 		Example (based on UOIT or superhero) should be given here.
 		- just use the canonical example for benchmark testing.
 		
-		# Logical specification of the graph search algorithm:
+		%# Logical specification of the graph search algorithm:
 		
 		- find all vertices by entity group search, and call this C.
 		- use any graph search algorithm to minimally connect the vertices in C
@@ -275,7 +299,7 @@ node [shape=plaintext]; "Human-Mutant Relations"; "Community Development & Polic
 		for each t\in C-{s}:
 		find path connecting s->t such that len(path) <= user-defined-bound.
 		
-		# Why use document space for graph search (THESIS OF YOUR THESIS)
+		%# Why use document space for graph search (THESIS OF YOUR THESIS)
 		
 		- finding the relevant "seed" vertices is really fast.  This is done by
 		using full text search on the documents of an entity graph.  Therefore, it
@@ -290,7 +314,7 @@ node [shape=plaintext]; "Human-Mutant Relations"; "Community Development & Polic
 		query: (:or (:and (id:ABC) (C:student)) 
 		(:and (id:XYZ) (C:course)))
 		
-		# Breadth-first search
+		%# Breadth-first search
 		
 		Description: copy this from CLRS
 		<Richard>
