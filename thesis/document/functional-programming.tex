@@ -1,4 +1,5 @@
 \section{Basic Principles of Functional Programming}
+\label{sec:basic-principles-fp}
 	The functional programming paradigm follows a handful of basic tenets; values are immutable, and functions must be free of side-effects \cite{fp-89}.
 	
 	The first tenet, that values are immutable, refers to the fact that once a value is bound, this value may not change.  In procedural programming there is the concept of assignment, whereas in functional programming, a value is bound.  Assignment allows a value to change, binding does not.
@@ -60,6 +61,29 @@
 				\caption{Comparison between Clojure's four systems for concurrency}
 				\label{tbl:concurrency-system-comparison}
 			\end{table}
+			
+			In this system we use references and atoms.  Changes made to an atom are, as the name suggests, atomic.  While a change is occurring, any threads dereferencing the value of an atom will see its old version.  Only upon completion of the change will the new value be visible.  In Clojure this isolation is accomplished via persistent data structures (\cref{fig:persistent-data-structure}).  For a demonstration using the canonical bank account example, see \cref{tbl:updating-an-atom}.
+			
+			\begin{table}
+				\centering
+				
+				\begin{tabular}{llll}
+					\toprule
+					Timestamp & Action & Code & Result \\
+					\midrule
+					00000001 & Create account with value of 1000 & \texttt{(def account (atom 1000))} &  \\
+					00000002 & Begin deposit of 1000 & \texttt{(alter account + 1000)} &  \\
+					00000003 & Read value of account & \texttt{(deref account)} & 1000 \\
+					00000004 & Complete deposit of 1000 & N/A &  \\
+					00000005 & Read value of account & \texttt{(deref account)} & 2000 \\
+					\bottomrule
+				\end{tabular}
+				
+				\caption{Updating an atom}
+				\label{tbl:updating-an-atom}
+			\end{table}
+			
+			\gls{stm} provides more control than atoms.  In addition to updates being atomic, they are also guaranteed to be consistent and isolated.  \gls{stm} also supports constraints on transactions.
 			
 			In this context, synchronous refers to the fact that each operation waits for the proceeding operation to complete before continuing.  When a system is coordinated, operations occur in a transaction.  If one operation fails, the entire transaction fails and is rolled back.  This results in additional overhead, but is considered safer as the system shall not be left in an inconsistent state as a result of a failed transaction.
 			
