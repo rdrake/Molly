@@ -51,8 +51,7 @@
         (condp = method
           "bfs"   (bfs searcher s t max-hops)
           "atom"  (bfs-atom searcher s t max-hops)
-          "ref"   (bfs-ref searcher s t max-hops)
-          "ff"    (ford-fulkerson searcher s t max-hops))
+          "ref"   (bfs-ref searcher s t max-hops))
         time-taken    (- (System/nanoTime) start)
         eids          (conj (for [[k v] prev] k) s)
         get-entities  (fn [eid]

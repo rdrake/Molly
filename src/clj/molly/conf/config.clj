@@ -11,7 +11,11 @@
                                  :idx.topk.entity
                                  :idx.search.max-hops]
                     :required   [:db.path
-                                 :idx.path])))
+                                 :idx.path
+                                 :idx.topk.value
+                                 :idx.topk.entities
+                                 :idx.topk.entity
+                                 :idx.search.max-hops])))
 
 (defprotocol IConfig
   (connection [this])
