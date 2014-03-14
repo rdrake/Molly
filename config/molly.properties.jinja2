@@ -14,6 +14,9 @@ db.path = data/mycampus.sq3
 idx.path = mycampus.idx
 
 # Limits
-idx.topk.value = {{ topk_value }}       # 50
-idx.topk.entities = {{ topk_entities }} # 10
-idx.topk.entity = {{ topk_entity }}     # 5
+idx.topk.value = {{ topk_value }}
+idx.topk.entities = {{ topk_entities }}
+idx.topk.entity = {{ topk_entity }}
+
+# This is required for the server (ignored if using CLI)
+idx.search.max-hops = 8
