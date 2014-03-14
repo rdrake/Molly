@@ -57,7 +57,6 @@
                           "bfs"             bfs
                           "bfs-atom"        bfs-atom
                           "bfs-ref"         bfs-ref
-                          "ford-fulkerson"  ford-fulkerson
                           (throw
                             (Exception.
                               "Not a valid algorithm choice.")))]
