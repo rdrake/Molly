@@ -3,7 +3,6 @@
             [molly.algo.bfs :refer [bfs]]
             [molly.algo.bfs-atom :refer [bfs-atom]]
             [molly.algo.bfs-ref :refer [bfs-ref]]
-            [molly.algo.ford-fulkerson :refer [ford-fulkerson]]
             [molly.bench.benchmark :refer [benchmark-search]]
             [molly.conf.config :refer [load-props]]
             [molly.index.build :refer [build]]
@@ -63,10 +62,9 @@
           (if (opts :debug)
             (let [[marked dist prev] (f searcher
                                         source
-                                        target
-                                        max-hops)]
+                                        target)]
               (println marked)
               (println dist)
               (println prev))
-            (benchmark-search f searcher source target max-hops))
+            (benchmark-search f searcher source target))
           (shutdown-agents))))))

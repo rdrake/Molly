@@ -2,7 +2,6 @@
   (:require [molly.algo.bfs :refer [bfs]]
             [molly.algo.bfs-atom :refer [bfs-atom]]
             [molly.algo.bfs-ref :refer [bfs-ref]]
-            [molly.algo.ford-fulkerson :refer [ford-fulkerson]]
             [molly.datatypes.entity :refer [doc->data]]
             [molly.search.lucene :refer [idx-search]]
             [molly.search.query-builder :refer [boolean-query query]]
@@ -49,9 +48,9 @@
         start         (System/nanoTime)
         [visited dist prev]
         (condp = method
-          "bfs"   (bfs searcher s t max-hops)
-          "atom"  (bfs-atom searcher s t max-hops)
-          "ref"   (bfs-ref searcher s t max-hops))
+          "bfs"   (bfs searcher s t)
+          "atom"  (bfs-atom searcher s t)
+          "ref"   (bfs-ref searcher s t))
         time-taken    (- (System/nanoTime) start)
         eids          (conj (for [[k v] prev] k) s)
         get-entities  (fn [eid]

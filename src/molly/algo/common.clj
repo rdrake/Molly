@@ -18,6 +18,6 @@
     (distinct (clojure.string/split big-str #"\s{1}"))))
 
 (defn find-adj
-  [G u]
+  [G v]
   ;(find-group-for-id G v))
-  (remove #{u} (find-group-for-id G u)))
+  (remove #{v} (find-group-for-id G v)))

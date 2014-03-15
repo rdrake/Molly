@@ -3,14 +3,13 @@
             [criterium.core :refer [benchmark]]))
 
 (defn benchmark-search
-  [f G s t max-hops]
+  [f G s t]
   (let [method  (last (clojure.string/split (str (class f)) #"\$"))
         result 
         (dissoc
-          (benchmark (f G s t max-hops) {:verbose false})
+          (benchmark (f G s t) {:verbose false})
           :results)]
     (println
       (json/write-str
         {:method    method
-         :max-hops  max-hops
          :results   result}))))
