@@ -14,7 +14,7 @@
      [org.clojure/java.jdbc                     "0.2.3"]
      [org.clojure/tools.cli                     "0.3.1"]
      [org.clojure/data.json                     "0.2.4"]
-     [korma                                     "0.3.0-RC6"]
+     [clojureql                                 "1.0.4"]
      [mavericklou/propertea                     "1.3.2"]
      [compojure                                 "1.1.6"]
      [lib-noir                                  "0.8.1"]

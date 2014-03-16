@@ -21,7 +21,7 @@
 (defn bfs
   [G s t]
   (loop [Q      (-> (clojure.lang.PersistentQueue/EMPTY) (conj s))
-         marked #{}
+         marked #{s}
          dist   {s 0}
          prev   {s nil}]
     (if (or (empty? Q)

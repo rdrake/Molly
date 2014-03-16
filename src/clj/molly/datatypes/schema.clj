@@ -1,8 +1,8 @@
 (ns molly.datatypes.schema
-  (:require [korma.core :refer [fields group modifier]]
-            [molly.datatypes.database :refer [execute-query]]
+  (:require [molly.datatypes.database :refer [execute-query]]
             [molly.datatypes.entity :refer [data->doc row->data]]
-            [molly.search.lucene :refer [add-doc]]))
+            [molly.search.lucene :refer [add-doc]]
+            [clojureql.core :as cql]))
 
 (defprotocol Schema
   (crawl [this db-conn idx-w])
@@ -23,9 +23,8 @@
         (doseq [value (S :values)]
           (let [query (->
                         sql
-                        (modifier "DISTINCT")
-                        (fields value)
-                        (group value))]
+                        (cql/project [value])
+                        (cql/grouped [value]))]
             (execute-query db-conn query
                            (fn [row]
                              (add-doc idx-w (data->doc

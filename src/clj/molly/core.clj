@@ -60,11 +60,16 @@
                             (Exception.
                               "Not a valid algorithm choice.")))]
           (if (opts :debug)
-            (let [[marked dist prev] (f searcher
-                                        source
-                                        target)]
-              (println marked)
+            (let [[visited dist prev] (f searcher source target)]
+              (println visited)
               (println dist)
-              (println prev))
+              (println prev)
+
+              (loop [node target]
+                (println node)
+                (let [prev-node (prev node)]
+                  (when-not (nil? prev-node)
+                    (recur prev-node))))
+              )
             (benchmark-search f searcher source target))
           (shutdown-agents))))))

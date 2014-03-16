@@ -1,5 +1,7 @@
 (ns molly.datatypes.database
-  (:require [korma.core :refer [select]] [korma.db :refer [with-db]]))
+  (:require
+    [clojure.java.jdbc :as sql]
+    [clojureql.core :as cql]))
 
 (defprotocol Database
   (execute-query [this query f]))
@@ -8,6 +10,6 @@
   Database
   (execute-query
     [this query f]
-    (with-db conn
-             (doseq [result (select query)]
-               (f result)))))
+    (sql/with-connection conn (cql/with-results [rs query]
+                                                (doseq [res rs]
+                                                  (f res))))))

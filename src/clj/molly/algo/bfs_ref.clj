@@ -1,14 +1,6 @@
 (ns molly.algo.bfs-ref
   (use molly.algo.common))
 
-(defn initial-state
-  [s]
-  (ref {:Q      (-> (clojure.lang.PersistentQueue/EMPTY) (conj s))
-        :marked #{s}
-        :dist   {s 0}
-        :prev   {}
-        :done   false}))
-
 (defn update-state
   [state u v]
   (let [Q       (state :Q)
@@ -20,12 +12,6 @@
            :marked  (conj marked v)
            :dist    (assoc dist v (inc (dist u)))
            :prev    (assoc prev v u))))
-
-(defn deref-future
-  [dfd]
-  (if (future? dfd)
-    (deref dfd)
-    dfd))
 
 (defn update-adj
   [state-ref G u]
@@ -43,13 +29,11 @@
 
 (defn bfs-ref
   [G s t]
-  (let [state-ref (initial-state s)]
+  (let [state-ref (ref (initial-state s))]
     (while (and (not (empty? (@state-ref :Q)))
-                (not (@state-ref :done)))
+                (nil? ((@state-ref :marked) t)))
       (let [u   (first (@state-ref :Q))
             Q'  (pop (@state-ref :Q))]
         (dosync (alter state-ref assoc :Q Q'))
-        (if (some (fn [node] (= node t)) (@state-ref :marked))
-          (dosync (alter state-ref assoc :done true))
-          (update-adj state-ref G u))))
+        (update-adj state-ref G u)))
      [(@state-ref :marked) (@state-ref :dist) (@state-ref :prev)]))

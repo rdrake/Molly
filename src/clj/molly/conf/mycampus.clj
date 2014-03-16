@@ -1,168 +1,90 @@
 (ns molly.conf.mycampus
-  (:require [korma.core :refer [belongs-to
-                                defentity
-                                has-many
-                                pk
-                                select*
-                                with]]
-            [korma.db :refer [defdb sqlite3]])
+  (:use [clojureql.core :only (table project join where rename)])
   (:import (molly.conf.config IConfig)
            (molly.datatypes.database Sqlite)
            (molly.datatypes.schema EntitySchema)))
 
-(declare Campus Course Subject Term Section Schedule
-         Location Instructor db-conn)
+(def schedules-table
+  (->
+    (join
+      (->
+        (table :sections)
+        (project [[:id :as :sec_id] [:id :as :section_id] :actual :campus :capacity :credits :levels :registration_start :registration_end :semester :sec_code :sec_number :year :course]))
+      (->
+        (join
+          (->
+            (table :schedules)
+            (project [[:id :as :sch_id] :date_start :date_end :day :schedtype :hour_start :hour_end :min_start :min_end :classtype :location]))
+          (->
+            (table :teaches)
+            (project [:position :teaches.schedule_id :teaches.instructor_id [:id :as :teaches_id]]))
+          (where (= :schedules.id :teaches.schedule_id))))
+      (where (= :sections.id :section_id)))))
 
-(defentity Campus
-  (has-many Location))
-
-(defentity Location
-  (belongs-to Campus))
-
-(defentity Subject
-  (has-many Course))
-
-(defentity Course
-  (pk :code)
-  (belongs-to Subject)
-  (has-many Section))
-
-(defentity Instructor
-  (has-many Schedule))
-
-(defentity Term
-  (has-many Section))
-
-(defentity Section
-  (pk :crn)
-  (has-many Schedule)
-  (belongs-to Term)
-  (belongs-to Course {:fk :course_code}))
-
-(defentity Schedule
-  (belongs-to Section)
-  (belongs-to Instructor)
-  (belongs-to Location))
+(def schedules-id
+  [[:schedules  :schedule_id]
+   [:teaches    :teaches_id]
+   [:sections   :section_id]])
 
 (def mycampus-schema
   [(EntitySchema.
      {:T      :entity
-      :C      :course
-      :sql    Course
+      :C      :courses
+      :sql    (table :courses)
       :ID     :code
-      :attrs  [:code :title]
+      :attrs  [:code :title :description]
       :values [:code :title]})
    (EntitySchema.
      {:T      :entity
-      :C      :instructor
-      :sql    Instructor
+      :C      :instructors
+      :sql    (table :instructors)
       :ID     :id
       :attrs  [:name]
       :values [:name]})
    (EntitySchema.
      {:T      :entity
-      :C      :location
-      :sql    Location
+      :C      :schedules
+      :sql    (table :v_schedules)
       :ID     :id
-      :attrs  [:name]
-      :values [:name]})
-   (EntitySchema.
-     {:T      :entity
-      :C      :subject
-      :sql    Subject
-      :ID     :id
-      :attrs  [:id :name]
-      :values [:id :name]})
-   (EntitySchema.
-     {:T      :entity
-      :C      :campus
-      :sql    Campus
-      :ID     :id
-      :attrs  [:name]
-      :values [:name]})
-   (EntitySchema.
-     {:T      :entity
-      :C      :term
-      :sql    Term
-      :ID     :id
-      :attrs  [:id :name]
-      :values [:id :name]})
-   (EntitySchema.
-     {:T      :entity
-      :C      :section
-      :sql    Section
-      :ID     :crn
-      :attrs  [:crn :reg_start :reg_end :credits
-               :section_num :levels]
-      :values [:crn]})
-   (EntitySchema.
-     {:T      :entity
-      :C      :schedule
-      :sql    Schedule
-      :ID     :id
-      :attrs  [:days :sch_type :date_start :date_end
-               :time_start :time_end :week]
-      :values []})
+      :attrs  [:position :actual :campus :capacity :credits :levels :registration_start :registration_end :semester :sec_code :sec_number :year :course :date_start :date_end :day :schedtype :hour_start :hour_end :min_start :min_end :classtype :location]
+      :values [:campus :location]})
    (EntitySchema.
      {:T      :group
       :C      "Instructor schedule"
       :sql    (->
-                (select* Schedule)
-                (with Instructor))
-      :ID     [[:instructor :instructor_id  "Instructor ID"]
-               [:schedule   :id             "Schedule ID"]]
+                (join
+                  (table :v_schedules)
+                  (->
+                    (table :instructors)
+                    (project [:id]))
+                  (where (= :instructor_id :instructors.id))))
+      :ID     [[:instructors  :instructors.id "Instructor ID"]
+               [:schedules    :id "Schedule ID"]]
       :attrs  []
       :values []})
    (EntitySchema.
      {:T      :group
       :C      "Course schedule"
       :sql    (->
-                (select* Schedule)
-                (with Section
-                      (with Course)))
-      :ID     [[:section  :crn  "CRN"]
-               [:course   :code "Code"]
-               [:schedule :id   "Schedule ID"]]
+                (join
+                  (table :v_schedules)
+                  (->
+                    (table :courses)
+                    (project [:code]))
+                  (where (= :course :code))))
+      :ID     [[:courses    :courses.code   "Course code"]
+               [:schedules  :id     "Schedule ID"]]
       :attrs  []
       :values []})
-   (EntitySchema.
-     {:T      :group
-      :C      "Schedule location"
-      :sql    (->
-                (select* Schedule)
-                (with Location
-                      (with Campus)))
-      :ID     [[:campus   :campus_id    "Campus ID"]
-               [:location :location_id  "Location ID"]
-               [:schedule :id           "Schedule ID"]]
-      :attrs  []
-      :values []})
-   (EntitySchema.
-     {:T      :group
-      :C      "Course subject"
-      :sql    (->
-                (select* Course)
-                (with Subject))
-      :ID     [[:course   :id         "Course"]
-               [:subject  :subject_id "Subject"]]
-      :attrs  []
-      :values []})
-   (EntitySchema.
-     {:T     :group
-      :C     "Section term"
-      :sql   (->
-               (select* Section)
-               (with Term))
-      :ID    [[:section  :id       "Section"]
-              [:term     :term_id  "Term"]]})
    ])
 
-(defrecord Mycampus [db-path idx-path]
+(deftype Mycampus [db-path idx-path]
   IConfig
   (connection
     [this]
-    (defdb db-conn (sqlite3 {:db db-path}))
-    (Sqlite. db-conn))
+    (Sqlite. {:classname "org.sqlite.JDBC"
+              :subprotocol "sqlite"
+              :subname db-path}))
   (schema
     [this]
     mycampus-schema)
