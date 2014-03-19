@@ -14,20 +14,6 @@
 				\bottomrule
 			\end{tabular}
 			
-			\caption{Campus Data Structure}
-			\label{tbl:corpus-campus}
-		\end{subtable}
-		\begin{subtable}[b]{.5\linewidth}
-			\centering
-			\begin{tabular}{ll}
-				\toprule
-				Property & Data Type \\
-				\midrule
-				id & INT \\
-				name & VARCHAR \\
-				\bottomrule
-			\end{tabular}
-			
 			\caption{Instructor Data Structure}
 			\label{tbl:corpus-instructor}
 		\end{subtable}
@@ -39,7 +25,7 @@
 				\midrule
 				code & VARCHAR \\
 				title & VARCHAR \\
-				subject\_id & VARCHAR \\
+				description & VARCHAR \\
 				\bottomrule
 			\end{tabular}
 			
@@ -53,17 +39,18 @@
 				Property & Data Type \\
 				\midrule
 				id & INT \\
-				name & VARCHAR \\
-				campus\_id & VARCHAR \\
+				schedule\_id & INT \\
+				instructor\_id & INT \\
+				position & VARCHAR \\
 				\bottomrule
 			\end{tabular}
 			
-			\caption{Location Data Structure}
-			\label{tbl:corpus-location}
+			\caption{Teaches Data Structure}
+			\label{tbl:corpus-teaches}
 		\end{subtable}
 	\end{table}
 	
-	\begin{table}
+	\begin{table}[H]
 		\ContinuedFloat
 		\begin{subtable}[b]{.5\linewidth}
 			\centering
@@ -71,27 +58,25 @@
 				\toprule
 				Property & Data Type \\
 				\midrule
-				id & VARCHAR \\
-				name & VARCHAR \\
+				id & INT \\
+				%crn & VARCHAR \\
+				registration\_start & DATE \\
+				registration\_end & DATE \\
+				credits & FLOAT \\
+				sec\_code & VARCHAR \\
+				sec\_number & VARCHAR \\
+				semester & VARCHAR \\
+				course & VARCHAR \\
+				levels & VARCHAR \\
+				campus & VARCHAR \\
+				capacity & INT \\
+				actual & INT \\
+				year & VARCHAR \\
 				\bottomrule
 			\end{tabular}
 			
-			\caption{Subject Data Structure}
-			\label{tbl:corpus-subject}
-		\end{subtable}
-		\begin{subtable}[b]{.5\linewidth}
-			\centering
-			\begin{tabular}{ll}
-				\toprule
-				Property & Data Type \\
-				\midrule
-				id & VARCHAR \\
-				name & VARCHAR \\
-				\bottomrule
-			\end{tabular}
-			
-			\caption{Term Data Structure}
-			\label{tbl:corpus-term}
+			\caption{Section Data Structure}
+			\label{tbl:corpus-section}
 		\end{subtable}
 		\begin{subtable}[b]{.5\linewidth}
 			\centering
@@ -100,41 +85,22 @@
 				Property & Data Type \\
 				\midrule
 				id & INT \\
-				days & VARCHAR \\
-				sch\_type & VARCHAR \\
+				day & VARCHAR \\
+				schedtype & VARCHAR \\
 				date\_start & DATE \\
 				date\_end & DATE \\
-				week & VARCHAR \\
-				time\_start & TIME \\
-				time\_end & TIME \\
-				location\_id & INT \\
+				hour\_start & INT \\
+				hour\_end & INT \\
+				min\_start & INT \\
+				min\_end & INT \\
+				classtype & VARCHAR \\
+				location & VARCHAR \\
 				section\_id & INT \\
-				instructor\_id & INT \\
 				\bottomrule
 			\end{tabular}
 			
 			\caption{Schedule Data Structure}
 			\label{tbl:corpus-schedule}
-		\end{subtable}
-		\begin{subtable}[b]{.5\linewidth}
-			\centering
-			\begin{tabular}{ll}
-				\toprule
-				Property & Data Type \\
-				\midrule
-				crn & VARCHAR \\
-				reg\_start & DATE \\
-				reg\_end & DATE \\
-				credits & FLOAT \\
-				section\_num & VARCHAR \\
-				term\_id & VARCHAR \\
-				course\_code & VARCHAR \\
-				levels & VARCHAR \\
-				\bottomrule
-			\end{tabular}
-			
-			\caption{Section Data Structure}
-			\label{tbl:corpus-section}
 		\end{subtable}
 		
 		\caption{Structure of data corpus}

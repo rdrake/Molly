@@ -110,26 +110,26 @@
 			\begin{figure}
 				\centering
 				
-				\(\rel{Subject}{\underline{id}, name}\) \\
 				\(\rel{Course}{\underline{code}, title, subject}\) \\
-				\(\rel{Term}{\underline{id}, name}\) \\
-				\(\rel{Section}{\underline{crn}, term, course}\) \\
-				\(\rel{Schedule}{\underline{id}, days, sch\_type, time\_start, time\_end, location, section, instructor}\) \\
+				\(\rel{Section}{\underline{id}, actual, campus, capacity, credits, levels, registration\_start, registration\_end, semester, sec\_code, sec\_number, year, course}\) \\
+				\(\rel{Schedule}{\underline{id}, date\_start, date\_end, day, schedtype, hour\_start, hour\_end, min\_start, min\_end, classtype, location, section\_id}\) \\
 				\(\rel{Instructor}{\underline{id}, name}\) \\
+				\(\rel{Teaches}{\underline{id}, schedule\_id, instructor\_id, position}\) \\
 				
 				\caption{Subset of mycampus dataset schema}
 				\label{fig:schema}
 			\end{figure}
 			
+			\todo{Split over multiple lines}
+			
 			and the \gls{fk} constraints in \vref{eqn:fk-constraints}
 			
 			\begin{figure}
 				\begin{align*}
-					\rel{Course}{subject} &\rightarrow \rel{Subject}{id} \\
-					\rel{Section}{term} &\rightarrow \rel{Term}{id} \\
+					\rel{Schedule}{section\_id} &\rightarrow \rel{Section}{id} \\
 					\rel{Section}{course} &\rightarrow \rel{Course}{code} \\
-					\rel{Schedule}{section} &\rightarrow \rel{Section}{crn} \\
-					\rel{Schedule}{instructor} &\rightarrow \rel{Instructor}{id}
+					\rel{Teaches}{schedule\_id} &\rightarrow \rel{Schedule}{id} \\
+					\rel{Teaches}{instructor\_id} &\rightarrow \rel{Instructor}{id} \\
 				\end{align*}
 				
 				\caption{\gls{fk} constraints on schema in \vref{fig:schema}}
@@ -143,13 +143,12 @@
 				
 				\begin{dot2tex}[neato]
 					digraph G {
-						node [shape=plaintext]; Subject; Course; Term; Section; Schedule; Instructor;
+						node [shape=plaintext]; Course; Section; Schedule; Instructor; Teaches;
 						
-						Course -> Subject;
-						Section -> Term
-						Section -> Course;
 						Schedule -> Section;
-						Schedule -> Instructor;
+						Section -> Course;
+						Teaches -> Schedule;
+						Teaches -> Instructor;
 					}
 				\end{dot2tex}
 				
@@ -179,6 +178,8 @@ WHERE  subject.name = 'Community Development & Policy Studies';
 				\caption{Query to find section CRNs for a subject name.}
 				\label{fig:query-section-crns}
 			\end{figure}
+			
+			\todo{Fix SQL to reference ``new'' schema}
 			
 			The \gls{sql} query in \vref{fig:query-section-crns} results in \vref{tbl:query-section-crns-output}.
 			

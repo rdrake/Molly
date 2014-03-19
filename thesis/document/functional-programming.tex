@@ -39,9 +39,6 @@
 			In \vref{fig:persistent-data-structure}, we see what happens when a persistent data structure is ``changed'' in Clojure.  The root of the left tree is the data structure before, and the root of the right tree is the data structure after.  Note how the changed map retains pointers to all but the updated value; the newly created value is pointed to instead of the previous one.
 		
 		\subsubsection{Concurrency}
-			\todo{Introduce transactions}
-			\todo{Explain, with examples, the difference between coordinated and uncoordinated}
-			
 			Clojure supports four systems for concurrency:  \gls{stm}, agents, atoms, and dynamic vars.  The differences between these systems -- including whether or not they are synchronous, coordinated, and what scope they encompass -- are summarized in \vref{tbl:concurrency-system-comparison}.
 			
 			\begin{table}
@@ -62,7 +59,7 @@
 				\label{tbl:concurrency-system-comparison}
 			\end{table}
 			
-			In this system we use references and atoms.  Changes made to an atom are, as the name suggests, atomic.  While a change is occurring, any threads dereferencing the value of an atom will see its old version.  Only upon completion of the change will the new value be visible.  In Clojure this isolation is accomplished via persistent data structures (\cref{fig:persistent-data-structure}).  For a demonstration using the canonical bank account example, see \cref{tbl:updating-an-atom}.
+			In this system we use references and atoms.  Changes made to an atom are, as the name suggests, atomic.  While a change is occurring, any threads dereferencing the value of an atom will see its old version.  Only upon completion of the change will the new value be visible.  In Clojure this isolation is accomplished via persistent data structures (\cref{fig:persistent-data-structure}).  For a demonstration using the canonical bank account transfer problem, see \cref{tbl:updating-an-atom} \cite{bank-problem}.
 			
 			\begin{table}
 				\centering
@@ -83,7 +80,11 @@
 				\label{tbl:updating-an-atom}
 			\end{table}
 			
-			\gls{stm} provides more control than atoms.  In addition to updates being atomic, they are also guaranteed to be consistent and isolated.  \gls{stm} also supports constraints on transactions.
+			\gls{stm} provides more control than atoms.  In addition to updates being atomic, they are also guaranteed to be consistent (constraints may be placed on a transaction), as well as isolated (due to persistent data structures).
+			
+			\gls{stm} supports two high-level methods of manipulating values within a transaction:  \texttt{alter} and \texttt{commute}.  Within a transaction, operations performed by \texttt{alter} must occur in order.  That is, they are coordinated.  One may also mark operations as commutable using \texttt{commute}.
+			
+			In the context of the bank account transfer problem, one would use \texttt{alter} when order does matter, such as performing a deposit and then a withdrawal.  If the money is withdrawn before the deposit, there may not be enough left in the account and the operation may fail when it should have succeeded.  Contrast this to two deposits or two withdrawals where the order would not matter, and thus \texttt{commute} would be suitable.
 			
 			In this context, synchronous refers to the fact that each operation waits for the proceeding operation to complete before continuing.  When a system is coordinated, operations occur in a transaction.  If one operation fails, the entire transaction fails and is rolled back.  This results in additional overhead, but is considered safer as the system shall not be left in an inconsistent state as a result of a failed transaction.
 			

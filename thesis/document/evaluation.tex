@@ -11,13 +11,13 @@
 		\subsection{Code Base Statistics}
 			The system consists of over 800 lines of Clojure, along with approximately 550 lines of Python.  The Python code is used to construct the data set by crawling the course information site, as well as to aggregate the benchmark data produced by the system, producing graphs.
 			
-			All development has occurred on GitHub \cite{molly-repo}. \todo{Expand on this.  Why is GitHub significant?}
+			All development has occurred on GitHub \cite{molly-repo}.  The use of Git and GitHub permits collaboration between researchers.  With the code publicly available, future researchers may study and run it.
 	
 	\section{The Data Corpus}
 	\label{sec:data-corpus}
 		The data corpus was derived from the \gls{uoit} mycampus database.  An \gls{html} crawler was written in Python that scraped the information from the \gls{uoit} class schedule search page.  This data was parsed, normalized, then placed in a SQLite database.
 		
-		The data corpus consists of numerous classes of objects.  These are campuses (\cref{tbl:corpus-campus}), courses (\cref{tbl:corpus-course}), instructors (\cref{tbl:corpus-instructor}), locations (\cref{tbl:corpus-location}), schedules (\cref{tbl:corpus-schedule}), sections (\cref{tbl:corpus-section}), subjects (\cref{tbl:corpus-subject}), and terms (\cref{tbl:corpus-term}).  A graph representation of how these classes of objects are related can be found in \cref{fig:schema-graph}.  The data corpus is defined in \cref{chap:data-corpus-def}
+		The data corpus consists of numerous classes of objects.  These are:  courses (\cref{tbl:corpus-course}), instructors (\cref{tbl:corpus-instructor}), schedules (\cref{tbl:corpus-schedule}), sections (\cref{tbl:corpus-section}), and teaches (\cref{tbl:corpus-teach}).  A graph representation of how these classes of objects are related can be found in \cref{fig:schema-graph}.  The data corpus is defined in \cref{chap:data-corpus-def}
 		
 		The number of objects, as of the publication of this thesis, can be found in \cref{tbl:data-corpus-count}.
 		
@@ -27,14 +27,11 @@
 			\toprule
 			Class & Count \\
 			\midrule
-			Campus & 8 \\
-			Course & 1797 \\
-			Instructor & 560 \\
-			Location & 220 \\
-			Schedule & 20985 \\
-			Section & 6211 \\
-			Subject & 68 \\
-			Term & 32 \\
+			Course & 1340 \\
+			Instructor & 849 \\
+			Schedule & 25755 \\
+			Section & 14463 \\
+			Teaches & 15358 \\
 			\bottomrule
 			\end{tabular}
 			
@@ -98,74 +95,94 @@
 						\toprule
 						Number of Groups & Elapsed Time (s) \\
 						\midrule
-						1 & 16.895 \\
-						2 & 21.624 \\
-						3 & 24.436 \\
-						4 & 24.528 \\
-						5 & 25.334 \\
+						0 & 11.800 \\
+						1 & 12.446 \\
+						2 & 19.771 \\
 						\bottomrule
 					\end{tabular}
 					
-					\caption{Indexing time growth by number of entity groups}
+					\caption{Indexing time growth by number of entity groups, averaged over 5 runs}
 					\label{tbl:index-growth-entity-groups}
 				\end{table}
 				
-				We see in \cref{tbl:index-growth-entity-groups} the indexing time increases considerably between 1 and 2 groups.  The number of entity groups also grew considerably, explaining the time increase.  The number of entity groups grew at a slower pace from 2 to 3, and 3 to 5, causing the reduced increase in elapsed time.
-				
-			\subsubsection{Keyword Search}
-			
+				We see in \cref{tbl:index-growth-entity-groups} the indexing time increases minimally between 0 and 1 group.  The number of entity groups added by the first entity schema is relatively small.  Contrast this to the indexing time between 1 and 2 groups, which increases considerably.  The number of entity groups also grew considerably, explaining the time increase.
 			
 			\subsubsection{Graph Search}
 				The worst-case performance of \gls{bfs} is \(\mathcal{O}(n^2)\).  This is reflected in \cref{fig:method-runtime-tkes-25} which follows an exponential growth curve.  In an attempt to mitigate the rapid increase in search time, concurrent variants of \gls{bfs} were also implemented and benchmarked.
 				
-				We see in \cref{fig:method-runtime-tkes-25} the decrease in rate of growth is not as high as expected.  \gls{bfs} is the slowest, closely followed by \gls{bfs} with references and \gls{bfs} with atoms.
-				
 				\begin{figure}[H]
 					\centering
-					\input{figures/charts/lineplot-tkv-50-tkes-25-tke-5-stopsat4.pgf}
-					
-					\caption{Comparison of time taken per hop between all methods (top-\(k\) entities:  25), target found}
-					\label{fig:method-runtime-tkes-25-stopsat4}
+					\includegraphics[scale=0.9]{figures/charts/growth.pdf}
+					\caption{Growth of each graph search algorithm implementation by number of hops}
+					\label{fig:growth}
 				\end{figure}
 				
-				The most likely cause for the similarity is how the concurrency is implemented.  In our implementation, we concurrently search for neighbours.  These neighbours must be added to the frontier before proceeding.  Therefore the algorithm must synchronize upon completion of the neighbour search in order to populate the new frontier.
-				
-				Atoms are less expensive to use than references as they are handled in an uncoordinated manner in Clojure, reducing the amount of overhead \cite{narkis-12}.  This explains the difference between the two concurrent implementations of \gls{bfs}.
-				
-				%\begin{table}[H]
-				%	\centering
-				%	\begin{tabular}{lll}
-				%		\toprule
-				%		Hops & Elapsed Time (s) & Factor \\
-				%		\midrule
-				%		1 & 0.00092 & N/A \\
-				%		2 & 0.00342 & 3.72x \\
-				%		3 & 0.02015 & 5.89x \\
-				%		4 & 0.05267 & 2.61x \\
-				%		\bottomrule
-				%	\end{tabular}
-				%	
-				%	\caption{}
-				%\end{table}
-				
-				Also of note is the growth of \cref{fig:method-runtime-tkes-25-stopsat4} compared to that of \cref{fig:method-runtime-tkes-25}.  In the former figure, the target is located by the fourth hop.  In the latter, the target is not found.  This leads to hops 4 through 8 having approximately the same runtime as one another.
+				We see in \cref{fig:growth} the rate of growth of \gls{bfs} is as expected.  The rate of growth of \gls{bfs} with references and \gls{bfs} with atoms is nearly linear.  The atom implementation is slightly more performant as it lacks some of the overhead associated with references.
 				
 				\begin{figure}[H]
-					\centering
-					\input{figures/charts/lineplot-tkv-50-tkes-25-tke-5.pgf}
-					% Result from running on Leda.  Shows irregular results.
-					%\input{figures/charts/lineplot-tkv-50-tkes-10-tke-5.pgf}
-					
-					\caption{Comparison of time taken per hop between all methods (top-\(k\) entities:  25), target not found}
-					\label{fig:method-runtime-tkes-25}
+					\begin{subfigure}[b]{.5\linewidth}
+						\includegraphics[scale=0.45]{figures/charts/1_hops.pdf}
+						\caption{1 Hop}
+						\label{subfig:1-hop}
+					\end{subfigure}
+					\begin{subfigure}[b]{.5\linewidth}
+						\includegraphics[scale=0.45]{figures/charts/2_hops.pdf}
+						\caption{2 Hops}
+						\label{subfig:2-hops}
+					\end{subfigure}
+				\end{figure}
+				\begin{figure}[H]
+					\ContinuedFloat
+					\begin{subfigure}[b]{.5\linewidth}
+						\includegraphics[scale=0.45]{figures/charts/3_hops.pdf}
+						\caption{3 Hops}
+						\label{subfig:3-hops}
+					\end{subfigure}
+					\begin{subfigure}[b]{.5\linewidth}
+						\includegraphics[scale=0.45]{figures/charts/4_hops.pdf}
+						\caption{4 Hops}
+						\label{subfig:4-hops}
+					\end{subfigure}
 				\end{figure}
 				
 				\begin{figure}[H]
-					\centering
-					\input{figures/charts/lineplot-wat.pgf}
-					% Result from running on Leda.  Shows irregular results.
-					%\input{figures/charts/lineplot-tkv-50-tkes-10-tke-5.pgf}
-					
-					\caption{Comparison of time taken per hop between all methods (top-\(k\) entities:  10), target not found}
-					\label{fig:method-runtime-tkes-10}
+					\ContinuedFloat
+					\begin{subfigure}[b]{.5\linewidth}
+						\includegraphics[scale=0.45]{figures/charts/5_hops.pdf}
+						\caption{5 Hops}
+						\label{subfig:5-hops}
+					\end{subfigure}
+					\begin{subfigure}[b]{.5\linewidth}
+						\includegraphics[scale=0.45]{figures/charts/6_hops.pdf}
+						\caption{6 Hops}
+						\label{subfig:6-hops}
+					\end{subfigure}
 				\end{figure}
+				\begin{figure}[H]
+					\ContinuedFloat
+					\begin{subfigure}[b]{.5\linewidth}
+						\includegraphics[scale=0.45]{figures/charts/7_hops.pdf}
+						\caption{7 Hops}
+						\label{subfig:7-hops}
+					\end{subfigure}
+					\begin{subfigure}[b]{.5\linewidth}
+						\includegraphics[scale=0.45]{figures/charts/8_hops.pdf}
+						\caption{8 Hops}
+						\label{subfig:8-hops}
+					\end{subfigure}
+					
+					\caption{Distribution of samples per method, broken down by hops}
+					\label{fig:distribution-hops}
+				\end{figure}
+				
+				\todo{All captions must be at least 10pt}
+				
+				The difference in rate of growth is further illustrated in \cref{fig:distribution-hops}.  As seen previously, \cref{subfig:1-hop} shows little difference in runtime between the three methods.  The difference becomes clearer in \cref{subfig:2-hops}, and by \cref{subfig:8-hops}, the difference is obvious.
+			
+	\section{Conclusion}
+	\label{sec:eval-conclusion}
+		In evaluating the system, we came to several conclusions.
+		
+		Benchmarking any code is difficult.  The process may not have exclusive control over the processor, memory is paged in and out, disk I/O is cached, etc.  The \gls{jvm} complicates matters with \gls{jit} compilation and garbage collection.
+		
+		The growth of \gls{bfs} can be mitigated by the use of concurrency.  Clojure facilitated a natural transition from a classical implementation of \gls{bfs} to a highly concurrent one.

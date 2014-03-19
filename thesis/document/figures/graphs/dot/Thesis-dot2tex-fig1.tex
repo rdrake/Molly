@@ -1,16 +1,14 @@
 
 \begin{tikzpicture}[>=latex,line join=bevel,]
 %%
-\node (Term) at (27bp,140.08bp) [draw,draw=none] {Term};
-  \node (Schedule) at (134.67bp,220.1bp) [draw,draw=none] {Schedule};
-  \node (Section) at (105.63bp,147.88bp) [draw,draw=none] {Section};
-  \node (Course) at (148.3bp,82.763bp) [draw,draw=none] {Course};
-  \node (Instructor) at (156.42bp,290.47bp) [draw,draw=none] {Instructor};
-  \node (Subject) at (183.39bp,18bp) [draw,draw=none] {Subject};
-  \draw [->] (Schedule) ..controls (142.56bp,245.63bp) and (145.27bp,254.38bp)  .. (Instructor);
-  \draw [->] (Section) ..controls (72.387bp,144.58bp) and (68.277bp,144.17bp)  .. (Term);
-  \draw [->] (Schedule) ..controls (124.14bp,193.92bp) and (120.32bp,184.42bp)  .. (Section);
-  \draw [->] (Section) ..controls (121.68bp,123.39bp) and (126.44bp,116.12bp)  .. (Course);
-  \draw [->] (Course) ..controls (161.29bp,58.788bp) and (164.94bp,52.048bp)  .. (Subject);
+\node (Course) at (29.957bp,18bp) [draw,draw=none] {Course};
+  \node (Section) at (50.009bp,87.495bp) [draw,draw=none] {Section};
+  \node (Instructor) at (35.214bp,302.29bp) [draw,draw=none] {Instructor};
+  \node (Teaches) at (51.847bp,231.94bp) [draw,draw=none] {Teaches};
+  \node (Schedule) at (54.044bp,159.69bp) [draw,draw=none] {Schedule};
+  \draw [->] (Teaches) ..controls (45.831bp,257.39bp) and (43.79bp,266.02bp)  .. (Instructor);
+  \draw [->] (Teaches) ..controls (52.638bp,205.92bp) and (52.92bp,196.65bp)  .. (Schedule);
+  \draw [->] (Schedule) ..controls (52.591bp,133.69bp) and (52.073bp,124.43bp)  .. (Section);
+  \draw [->] (Section) ..controls (42.707bp,62.19bp) and (40.334bp,53.966bp)  .. (Course);
 %
 \end{tikzpicture}
