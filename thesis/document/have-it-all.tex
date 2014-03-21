@@ -26,7 +26,7 @@
 			
 			produce the document encoding \(\docs{\tuple}\).
 			
-			\begin{table}
+			\begin{table}[H]
 				\centering
 				
 				\begin{tabular}{ll}
@@ -55,12 +55,6 @@
 		
 		we assert that if \(\tuple\) and \(\tuple'\) are in the entity group \(\egraph\), then there is a foreign key constraint between \(\tuple\) and \(\tuple'\).  We denote the vertices of \(\egraph\) as \(\text{V}(\egraph)\), and the edges of \(\egraph\) as \(\text{E}(\egraph)\).
 		
-		\begin{ex}
-			Using the schema graph...
-		\end{ex}
-		
-		\todo{Finish example}
-		
 		\begin{claim}
 		\label{clm:lossless}
 			Given \(\text{V}(\egraph)\), we are always able to reconstruct \(\egraph\).
@@ -73,8 +67,6 @@
 			
 			Recall our earlier assertion that \(\sgraph{\db}\) is cycle-free and foreign keys must be unique.
 		\end{proof}
-		
-		\todo{Above proof could use some love}
 		
 	\section{Encoding an Entity Group as a Document Group}
 	\label{sec:encoding-entity-group-as-document-group}
@@ -95,7 +87,7 @@
 		\begin{ex}
 			An entity group produced from the schema in \vref{fig:schema-graph} is shown in \vref{fig:entity-group}.
 			
-			\begin{figure}
+			\begin{figure}[H]
 				\centering
 				
 				\begin{dot2tex}[dot]
@@ -113,7 +105,7 @@
 			
 			Transforming the example entity group in \vref{fig:entity-group} would produce documents shown in \vref{tbl:document-encoding}
 			
-			\begin{table}
+			\begin{table}[H]
 				\begin{subtable}[b]{0.33\linewidth}
 					\centering
 					
@@ -170,7 +162,30 @@
 		By \vref{clm:lossless}, this is sufficient to recover \(\egraph\) entirely.
 	
 	\section{Encoding Attribute Values into Searchable Documents}
-		Each value for user selected attributes are converted into \(n\)-grams, and stored in special documents.
+		Each value for user selected attributes are converted into \(n\)-grams, and stored in special documents.  These value documents permit users to perform fuzzy search for attributes, allowing attributes to be located despite character substitutions.  While this is not strictly necessary for the use of the system, it reduces user fatigue.
+		
+		
+		
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{ll}
+				\toprule
+				Field & Terms \\
+				\midrule
+				\_\_class\_\_ & courses|code \\
+				value & \{biol, 1010u\} \\
+				code & \{biol, 1010u\} \\
+				\_\_all\_\_ & \{\$\$b, \$bi, bio, iol, ol\$, l\$\$, \$\$1, \$10, 101, 010, 10u, 0u\$, u\$\$\} \\
+				\bottomrule
+			\end{tabular}
+			
+			\caption{Document representing a value of class ``courses|code''}
+			\label{tbl:value-document}
+		\end{table}
+		
+		As shown in \cref{tbl:value-document}, a value document permits \(n\)-gram search over values while providing the original value.  The system uses the value of found value documents to search for entities based on attributes.
+		
+		These values are unique within the space of all attribute values of a specific class.  They are not guaranteed to be unique within the entire space of documents.  This allows the system to provide additional information to users.  Rather than searching for a value, they are able to search for both a value and entity class.
 	
 	\section{Iterative Search Using Document Encodings}
 		A document database supports fast and flexible keyword search queries.	A search query is characterized by \(\q = (\field, \w)\), where \(\field\) is an optional field name, and \(\w\) is a search phrase.

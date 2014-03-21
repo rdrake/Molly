@@ -32383,34 +32383,22 @@ molly.app.create_widget = function create_widget(data) {
   return molly.app.widget.call(null, function() {
     var pred__5462 = cljs.core._EQ_;
     var expr__5463 = (new cljs.core.Keyword(null, "class", "class", 1108647146)).cljs$core$IFn$_invoke$arity$1((new cljs.core.Keyword(null, "meta", "meta", 1017252215)).cljs$core$IFn$_invoke$arity$1(data));
-    if (cljs.core.truth_(pred__5462.call(null, "course", expr__5463))) {
+    if (cljs.core.truth_(pred__5462.call(null, "courses", expr__5463))) {
       return new cljs.core.Keyword(null, "title", "title", 1124275658);
     } else {
-      if (cljs.core.truth_(pred__5462.call(null, "instructor", expr__5463))) {
+      if (cljs.core.truth_(pred__5462.call(null, "instructors", expr__5463))) {
         return new cljs.core.Keyword(null, "name", "name", 1017277949);
       } else {
-        if (cljs.core.truth_(pred__5462.call(null, "location", expr__5463))) {
-          return new cljs.core.Keyword(null, "name", "name", 1017277949);
+        if (cljs.core.truth_(pred__5462.call(null, "teaches", expr__5463))) {
+          return new cljs.core.Keyword(null, "position", "position", 1761709211);
         } else {
-          if (cljs.core.truth_(pred__5462.call(null, "subject", expr__5463))) {
-            return new cljs.core.Keyword(null, "name", "name", 1017277949);
+          if (cljs.core.truth_(pred__5462.call(null, "sections", expr__5463))) {
+            return new cljs.core.Keyword(null, "id", "id", 1013907597);
           } else {
-            if (cljs.core.truth_(pred__5462.call(null, "campus", expr__5463))) {
-              return new cljs.core.Keyword(null, "name", "name", 1017277949);
+            if (cljs.core.truth_(pred__5462.call(null, "schedules", expr__5463))) {
+              return new cljs.core.Keyword(null, "location", "location", 2914947879);
             } else {
-              if (cljs.core.truth_(pred__5462.call(null, "term", expr__5463))) {
-                return new cljs.core.Keyword(null, "name", "name", 1017277949);
-              } else {
-                if (cljs.core.truth_(pred__5462.call(null, "section", expr__5463))) {
-                  return new cljs.core.Keyword(null, "crn", "crn", 1014003025);
-                } else {
-                  if (cljs.core.truth_(pred__5462.call(null, "schedule", expr__5463))) {
-                    return new cljs.core.Keyword(null, "days", "days", 1016980425);
-                  } else {
-                    throw new Error([cljs.core.str("No matching clause: "), cljs.core.str(expr__5463)].join(""));
-                  }
-                }
-              }
+              throw new Error([cljs.core.str("No matching clause: "), cljs.core.str(expr__5463)].join(""));
             }
           }
         }

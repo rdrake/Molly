@@ -266,47 +266,63 @@ node [shape=plaintext]; "Human-Mutant Relations"; "Community Development & Polic
 			This automated discovery of relations between facts is why graph search is important.
 		
 		\subsubsection{Graph Search Algorithms}
-			Recall we defined a graph as \(G = (V, E)\), where \(V\) is the set of all facts in the database, and \(E\) is the set of relations between facts.
+			Recall we defined a graph as \(\sgraph{} = (\text{V}, \text{E})\), where \(\text{V}\) is the set of all facts in the database, and \(\text{E}(\egraph{})\) is the set of entities in entity group \(T\).  We say that two vertices in \(\egraph{}\) are connected if, and only if.
+			\[
+				\text{E}(\egraph{}) \cap \text{E}(\egraph{}') \not= \emptyset
+			\]
+			
+			We must, given a keyword query \(\q\), find a subgraph, \(H\) of \(\sgraph{}\), such that
+			
+			\begin{itemize}
+				\item The vertices, or hops, in \(H\) are minimized; and
+				\item The satisfaction of keywords in \(\q\) by the vertices in \(H\) are maximized
+			\end{itemize}
+			
+			\todo{Example}
+			
+			In order to accomplish this, we find all vertices by entity group search and call this \(C\).  A graph search algorithm is used to minimally connect the vertices in \(C\).
+			
+			\begin{algorithm}[!ht]
+				\caption{\(\textsc{Graph-Search}(C)\)}
+				\label{alg:graph-search}
+				
+				\begin{singlespaced}
+					\begin{algorithmic}[1]
+						\REQUIRE \(C\) is a list of vertices
+						\ENSURE minimal path between vertices in \(C\)
+						\medskip
+						\STATE \(s \in C\)
+						
+						\FOR{\(t \in C - \{s\}\)}
+							\STATE find path connecting \(s \rightarrow t\) such that \(\textsc{Length}(\text{path}) \le \text{max-hops}\)
+						\ENDFOR
+						
+						\RETURN path
+						\medskip
+						\medskip
+					\end{algorithmic}
+				\end{singlespaced}
+			\end{algorithm}
 		
 		\subsubsection{Graph Search in Document Space}
+			The question becomes:  why do we perform this graph search in document space?  Why not on the original relational space?  There are two main answers to this question:  speed and flexibility.
 			
-		
-		Graph search algorithms
-		=======================
-		
-		%# Definition of the graph
-		
-		G = (V, E)
-		
-		V = all entity-groups in DB
-		Let $Ent(v)$ be the set of entities in entity group $v$.
-		We say that two vertices in $G$ are connected if and only if:
-		
-		$Ent(v)\cap Ent(v')\not=\emptyset$.
-		
-		%# Definition of graph search
-		
-		Given a keyword query q, find a subgraph, $H$, of G to:
-		- minimize the vertices in H
-		- maximize the satisfaction of keywords in $q$ by vertices in $H$.
-		
-		Example (based on UOIT or superhero) should be given here.
-		- just use the canonical example for benchmark testing.
-		
-		%# Logical specification of the graph search algorithm:
-		
-		- find all vertices by entity group search, and call this C.
-		- use any graph search algorithm to minimally connect the vertices in C
-		as follows. 
-		let s\in C be a source.
-		for each t\in C-{s}:
-		find path connecting s->t such that len(path) <= user-defined-bound.
+			Rather than relying on scanning every tuple in every relation in a relational database, the document model represents every tuple as a semi-structured document.  The contents of every field in these documents is indexed by an inverted list index data structure which permits fast lookup of documents based on keywords.  We utilize this property to quickly locate the initial ``source'' vertices.
+			
+			During the indexing process, various analyzers are applied against the text.  These may, for instance, remove the suffix of words; a process called stemming \cite{porter-97}.
+			
+			\begin{ex}{Porter Stemmer}
+				A course may have ``mathematics'' or even ``mathematical'' in the title.  By utilizing a stemmer, we match both.  The Porter stemming algorithm returns ``mathemat'' as the root word for both of the examples.
+			\end{ex}
+			
+			Other analyzers may remove stop words.  Stop words may include ``and'', ``or'', ``not'', etc.  These are functional words that may be removed from the text corpus without adversely affecting the meaning whose presence may otherwise affect the quality of search results \cite{silva-03}.
+			
+			Our implementation uses a document to represent edges in the entity graph.  By using the document model, we are able to quickly locate all other vertices connected to a specific vertex.
+			
+			\
 		
 		%# Why use document space for graph search (THESIS OF YOUR THESIS)
-		
-		- finding the relevant "seed" vertices is really fast.  This is done by
-		using full text search on the documents of an entity graph.  Therefore, it
-		allows fuzzy search for the seeds.
+
 		- finding connected entity groups is really fast - this is done by using the
 		indexing document.  Using a single keyword query, we can find all relevant
 		entity groups in the database.

@@ -34,7 +34,7 @@
 		
 	Relations are typically represented as tables.
 	
-	\begin{table}
+	\begin{table}[H]
 		\centering
 		
 		\begin{tabular}{lll}
@@ -105,26 +105,32 @@
 		\end{defn}
 		
 		\begin{ex}
-			Given the schema in \vref{fig:schema}
+			Given the schema in \vref{tbl:schema}
 			
-			\begin{figure}
+			\begin{table}[H]
 				\centering
 				
-				\(\rel{Course}{\underline{code}, title, subject}\) \\
-				\(\rel{Section}{\underline{id}, actual, campus, capacity, credits, levels, registration\_start, registration\_end, semester, sec\_code, sec\_number, year, course}\) \\
-				\(\rel{Schedule}{\underline{id}, date\_start, date\_end, day, schedtype, hour\_start, hour\_end, min\_start, min\_end, classtype, location, section\_id}\) \\
-				\(\rel{Instructor}{\underline{id}, name}\) \\
-				\(\rel{Teaches}{\underline{id}, schedule\_id, instructor\_id, position}\) \\
+				\begin{tabular}{ll}
+					\toprule
+					Relation & Attributes \\
+					\midrule
+					Course & \underline{code}, title, subject \\
+					Section & \underline{id}, actual, campus, capacity, credits, levels, registration\_start, \\
+					 & registration\_end, semester, sec\_code, sec\_number, year, course \\
+					Schedule & \underline{id}, date\_start, date\_end, day, schedtype, hour\_start, hour\_end, \\
+					 & min\_start, min\_end, classtype, location, section\_id \\
+					Instructor & \underline{id}, name \\
+					Teaches & \underline{id}, schedule\_id, instructor\_id, position \\
+					\bottomrule
+				\end{tabular}
 				
 				\caption{Subset of mycampus dataset schema}
-				\label{fig:schema}
-			\end{figure}
-			
-			\todo{Split over multiple lines}
+				\label{tbl:schema}
+			\end{table}
 			
 			and the \gls{fk} constraints in \vref{eqn:fk-constraints}
 			
-			\begin{figure}
+			\begin{figure}[H]
 				\begin{align*}
 					\rel{Schedule}{section\_id} &\rightarrow \rel{Section}{id} \\
 					\rel{Section}{course} &\rightarrow \rel{Course}{code} \\
@@ -138,7 +144,7 @@
 			
 			we produce the schema graph in \vref{fig:schema-graph}
 			
-			\begin{figure}
+			\begin{figure}[H]
 				\centering
 				
 				\begin{dot2tex}[neato]
@@ -162,7 +168,7 @@
 		\begin{ex}
 			Using \gls{sql}, find all section CRNs for the subject titled ``Community Development \& Policy Studies.''
 			
-			\begin{figure}
+			\begin{figure}[H]
 				\begin{singlespaced}
 					\begin{pygments}{sql}
 SELECT section.crn
@@ -179,11 +185,9 @@ WHERE  subject.name = 'Community Development & Policy Studies';
 				\label{fig:query-section-crns}
 			\end{figure}
 			
-			\todo{Fix SQL to reference ``new'' schema}
-			
 			The \gls{sql} query in \vref{fig:query-section-crns} results in \vref{tbl:query-section-crns-output}.
 			
-			\begin{table}
+			\begin{table}[H]
 				\centering
 				
 				\begin{tabular}{l}

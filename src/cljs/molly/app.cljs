@@ -7,19 +7,6 @@
             [dommy.template :as template]
             [shoreleave.remotes.http-rpc :refer [remote-callback]]
             [clojure.walk :refer [keywordize-keys]]))
-;            [strokes :refer [d3]]))
-
-;(strokes/bootstrap)
-;
-;(def width 960)
-;(def height 500)
-;
-;(def svg (-> d3
-;             (.select "#span-graph")
-;             (.append "svg")
-;             (.attr {:width width :height height})))
-
-; (pr-str obj) is a wonderful debug tool.
 
 (def top-k-values 5)
 (def top-k-entities 5)
@@ -106,14 +93,11 @@
 (defn create-widget [data]
   (widget
     (condp = (:class (:meta data))
-      "course"      :title
-      "instructor"  :name
-      "location"    :name
-      "subject"     :name
-      "campus"      :name
-      "term"        :name
-      "section"     :crn
-      "schedule"    :days)
+      "courses"     :title
+      "instructors" :name
+      "teaches"     :position
+      "sections"    :id
+      "schedules"   :location)
     data))
 
 (defn create-result-widget [data]
