@@ -319,37 +319,39 @@ node [shape=plaintext]; "Human-Mutant Relations"; "Community Development & Polic
 			
 			Our implementation uses a document to represent edges in the entity graph.  By using the document model, we are able to quickly locate all other vertices connected to a specific vertex.
 			
-			\
-		
-		%# Why use document space for graph search (THESIS OF YOUR THESIS)
-
-		- finding connected entity groups is really fast - this is done by using the
-		indexing document.  Using a single keyword query, we can find all relevant
-		entity groups in the database.
-		
-		Example: spell this out:
-		
-		index-doc(v0) = student:ABC, course:XYZ
-		query: (:or (:and (id:ABC) (C:student)) 
-		(:and (id:XYZ) (C:course)))
+			\begin{ex}{Search for Connected Entities}
+				Given the indexing documents \(x_1, x_2, x_3\)
+				
+				\begin{align*}
+					x_1[\text{``entities''}] &= \{\text{course|math\_360}, \text{subject|math}\} \\
+					x_2[\text{``entities''}] &= \{\text{course|math\_101}, \text{subject|math}\} \\
+					x_3[\text{``entities''}] &= \{\text{course|cdps\_101}, \text{subject|cdps}\} \\
+				\end{align*}
+				
+				A query, \(\q\) for entities in the subject ``math''.
+				\[
+					\q = \query(\text{``entities'', ``subject|math''}) \cap \query(\text{``\_\_type\_\_'', ``entity''})
+				\]
+				
+				Would yield the results \(x_1, x_2\).
+			\end{ex}
 		
 		%# Breadth-first search
-		
-		Description: copy this from CLRS
-		<Richard>
-		
-		Functional description of BFS
-		
-		Distributed functional description of BFS
-		
-		Implementation details:
-		- Ref
-		- Atoms
-		- Agent
-		
-		\begin{itemize}
-			\item Why we need graph search
-			\item Search in document graph using graph search algorithms with functional implementations: (Ford Fulkerson, BFS)
-			\item Speed up using concurrency
-			\item Clojure specific optimization: ref + atom
-		\end{itemize}
+		%
+		%Description: copy this from CLRS
+		%<Richard>
+		%
+		%Functional description of BFS
+		%
+		%Distributed functional description of BFS
+		%
+		%Implementation details:
+		%- Ref
+		%- Atoms
+		%- Agent
+		%
+		%\begin{itemize}
+		%	\item Search in document graph using graph search algorithms with functional implementations: (Ford Fulkerson, BFS)
+		%	\item Speed up using concurrency
+		%	\item Clojure specific optimization: ref + atom
+		%\end{itemize}
