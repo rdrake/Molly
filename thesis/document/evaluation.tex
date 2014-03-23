@@ -106,7 +106,7 @@
 				We see in \cref{tbl:index-growth-entity-groups} the indexing time increases minimally between 0 and 1 group.  The number of entity groups added by the first entity schema is relatively small.  Contrast this to the indexing time between 1 and 2 groups, which increases considerably.  The number of entity groups also grew considerably, explaining the time increase.
 			
 			\subsubsection{Graph Search}
-				The worst-case performance of \gls{bfs} is \(\mathcal{O}(n^2)\).  This is reflected in \cref{fig:method-runtime-tkes-25} which follows an exponential growth curve.  In an attempt to mitigate the rapid increase in search time, concurrent variants of \gls{bfs} were also implemented and benchmarked.
+				The worst-case performance of \gls{bfs} is \(\mathcal{O}(n^2)\).  This is reflected in \cref{fig:fig:growth} which follows an exponential growth curve.  In an attempt to mitigate the rapid increase in search time, concurrent variants of \gls{bfs} were also implemented and benchmarked.
 				
 				\begin{figure}[H]
 					\centering
@@ -176,7 +176,49 @@
 				\todo{All captions must be at least 10pt}
 				
 				The difference in rate of growth is further illustrated in \cref{fig:distribution-hops}.  As seen previously, \cref{subfig:1-hop} shows little difference in runtime between the three methods.  The difference becomes clearer in \cref{subfig:2-hops}, and by \cref{subfig:8-hops}, the difference is obvious.
+	
+	\section{Web Interface}
+	\label{sec:web-interface}
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=0.5]{figures/images/step-1}
 			
+			\caption{Step 1}
+			\label{fig:webui-step-1}
+		\end{figure}
+		
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=0.5]{figures/images/step-2}
+			
+			\caption{Step 2}
+			\label{fig:webui-step-2}
+		\end{figure}
+		
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=0.5]{figures/images/step-3}
+			
+			\caption{Step 3}
+			\label{fig:webui-step-3}
+		\end{figure}
+		
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=0.5]{figures/images/step-4}
+			
+			\caption{Step 4}
+			\label{fig:webui-step-4}
+		\end{figure}
+		
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=0.5]{figures/images/step-5}
+			
+			\caption{Step 5}
+			\label{fig:webui-step-5}
+		\end{figure}
+		
 	\section{Conclusion}
 	\label{sec:eval-conclusion}
 		In evaluating the system, we came to several conclusions.

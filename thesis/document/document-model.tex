@@ -231,24 +231,7 @@
 		\begin{ex}[Semi-Structured Document]
 			We see that \(\doc_1\) is about MATH 360.  The document contents are semi-structured, containing both a course code and the subject ID.  By adding fields to the document, we are left with \vref{tbl:course-document}.
 			
-			\begin{table}
-				\centering
-				
-				\begin{tabular}{ll}
-					\toprule
-					Attribute & Value \\
-					\midrule
-					code & CDPS 101 \\
-					title & Human-Mutant Relations \\
-					subject & Community Development \& Policy Studies \\
-					\bottomrule
-				\end{tabular}
-				
-				\caption{Properties of the Course titled Human-Mutant Relations.}
-				\label{tbl:hmr-properties}
-			\end{table}
-			
-			\begin{table}
+			\begin{table}[H]
 				\centering
 				
 				\begin{tabular}{ll}
@@ -265,18 +248,18 @@
 				\label{tbl:course-document}
 			\end{table}
 			
-			which is similar in structure to \vref{tbl:hmr-properties}.
+			which is similar in structure to \vref{tbl:hmr-properties-rel}.
 		\end{ex}
 		
 	\subsection{Approximate String matching}
 	\label{sec:n-gram}
 		\begin{defn}[N-Gram]
-			An \(n\)-gram is a contiguous sequence of substrings of string \(S\) of length \(n\).	 An algorithm for computing the \(n\)-gram of \(S\) is given in \vref{alg:n-gram}. 
+			An \(n\)-gram is a contiguous sequence of substrings of string \(S\) of length \(n\).	 An algorithm for computing the \(n\)-gram of \(S\) is given in \cref{alg:n-gram}. 
 		\end{defn}
 		
 		% \char"24 - DOLLAR	 BILL Y'ALL
 
-		\begin{algorithm}[!ht]
+		\begin{algorithm}[H]
 			\caption{\(\textsc{N-Gram}(S, n, s)\)}
 			\label{alg:n-gram}
 			

@@ -218,9 +218,9 @@ WHERE  subject.name = 'Community Development & Policy Studies';
 		Entity groups define complex, structured objects that include more information than individual tuples in the relations.
 		
 		\begin{ex}
-			The information in \vref{tbl:hmr-properties} all relates to the Course titled Human-Mutant Relations, however no single tuple in the database has all of this information as a result of database normalization.
+			The information in \vref{tbl:hmr-properties-rel} all relates to the Course titled Human-Mutant Relations, however no single tuple in the database has all of this information as a result of database normalization.
 			
-			\begin{table}
+			\begin{table}[H]
 				\centering
 				
 				\begin{tabular}{ll}
@@ -234,12 +234,12 @@ WHERE  subject.name = 'Community Development & Policy Studies';
 				\end{tabular}
 				
 				\caption{Properties of the Course titled Human-Mutant Relations.}
-				\label{tbl:hmr-properties}
+				\label{tbl:hmr-properties-rel}
 			\end{table}
 			
-			We require an entity group (\vref{fig:hmr-entity-group}) to join together all pieces of information related to this course. 
+			We require an entity group to join together all pieces of information related to this course.  An example of this is given in \cref{fig:hmr-entity-group}, where the an example entity group comprised of a Course and Subject is shown.
 			
-			\begin{figure}
+			\begin{figure}[H]
 				\centering
 				
 				\begin{dot2tex}[dot]

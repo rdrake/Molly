@@ -2,7 +2,7 @@
 \usepackage{morewrites}
 \usepackage{fontspec}
 \usepackage{graphicx}
-\usepackage{todo}
+\usepackage{todonotes}
 
 % Nicer math
 \usepackage{amsmath}
@@ -100,8 +100,11 @@
 
 \definecolor{dark-gray}{gray}{0.50}
 
-% Include only items we're currently working on to speed up compilation
-%\includeonly{along-came-clojure}
+\newcommand{\jeremycomm}[1]{\todo[color=green!40]{#1}}
+\newcommand{\markcomm}[1]{\todo[color=red!40]{#1}}
+\newcommand{\kencomm}[1]{\todo[color=blue!40]{#1}}
+\newcommand{\masoudcomm}[1]{\todo[color=yellow!40]{#1}}
+\newcommand{\toreviewers}[1]{\todo[color=purple!40,inline]{#1}}
 
 % Fix quotations so punctuation marks go inside.
 \makeatletter
