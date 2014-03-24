@@ -206,7 +206,37 @@
 		\begin{ex}[Entity Graph Search]
 			Find the shortest path between the two entities with the unique identities of ``subject|math'' and ``instructor|5''.
 			
-			\todo{Finish example}
+			The entity graph is shown in \cref{fig:path-initial}.
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.9]{figures/graphs/path/instructor-to-course-initial}
+				
+				\caption{Initial graph}
+				\label{fig:path-initial}
+			\end{figure}
+			
+			There are two possible paths between ``subject|math'' and ``instructor|5''.  The path in \cref{fig:path-2} is shorter than that in \cref{fig:path-1}, meaning it is likely the most relevant.
+			
+			\begin{figure}[H]
+				\begin{subfigure}[b]{1.0\linewidth}
+					\centering
+					\includegraphics[scale=0.9]{figures/graphs/path/instructor-to-course-path-1}
+					
+					\caption{Valid path between two entities}
+					\label{fig:path-1}
+				\end{subfigure}
+				\begin{subfigure}[b]{1.0\linewidth}
+					\centering
+					\includegraphics[scale=0.9]{figures/graphs/path/instructor-to-course-path-2}
+					
+					\caption{Shortest valid path between two entities}
+					\label{fig:path-2}
+				\end{subfigure}
+				
+				\caption{Two possible paths between ``subject|math'' and ``instructor|5''}
+				\label{fig:paths}
+			\end{figure}
 		\end{ex}
 		
 		

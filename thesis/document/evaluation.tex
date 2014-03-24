@@ -15,7 +15,7 @@
 	\label{sec:data-corpus}
 		The data corpus was derived from the \gls{uoit} mycampus database.  An \gls{html} crawler was written in Python that scraped the information from the \gls{uoit} class schedule search page.  This data was parsed, normalized, then placed in a SQLite database.
 		
-		The data corpus consists of numerous classes of objects.  These are:  courses (\cref{tbl:corpus-course}), instructors (\cref{tbl:corpus-instructor}), schedules (\cref{tbl:corpus-schedule}), sections (\cref{tbl:corpus-section}), and teaches (\cref{tbl:corpus-teach}).  A graph representation of how these classes of objects are related can be found in \cref{fig:schema-graph}.  The data corpus is defined in \cref{chap:data-corpus-def}
+		The data corpus consists of numerous classes of objects.  These are:  courses (\cref{tbl:corpus-course}), instructors (\cref{tbl:corpus-instructor}), schedules (\cref{tbl:corpus-schedule}), sections (\cref{tbl:corpus-section}), and teaches (\cref{tbl:corpus-teaches}).  A graph representation of how these classes of objects are related can be found in \cref{fig:schema-graph}.  The data corpus is defined in \cref{chap:data-corpus-def}
 		
 		The number of objects, as of the publication of this thesis, can be found in \cref{tbl:data-corpus-count}.
 		
@@ -106,7 +106,7 @@
 				We see in \cref{tbl:index-growth-entity-groups} the indexing time increases minimally between 0 and 1 group.  The number of entity groups added by the first entity schema is relatively small.  Contrast this to the indexing time between 1 and 2 groups, which increases considerably.  The number of entity groups also grew considerably, explaining the time increase.
 			
 			\subsubsection{Graph Search}
-				The worst-case performance of \gls{bfs} is \(\mathcal{O}(n^2)\).  This is reflected in \cref{fig:fig:growth} which follows an exponential growth curve.  In an attempt to mitigate the rapid increase in search time, concurrent variants of \gls{bfs} were also implemented and benchmarked.
+				The worst-case performance of \gls{bfs} is \(\mathcal{O}(n^2)\).  This is reflected in \cref{fig:growth} which follows an exponential growth curve.  In an attempt to mitigate the rapid increase in search time, concurrent variants of \gls{bfs} were also implemented and benchmarked.
 				
 				\begin{figure}[H]
 					\centering
@@ -179,45 +179,59 @@
 	
 	\section{Web Interface}
 	\label{sec:web-interface}
+		In order to make the system more accessible to novice users, a web-based interface was created.
+		
+		The first step involves searching for entities by a value.  We use approximate (\(n\)-gram) string matching to find relevant values despite potential character substitutions, deletions, or additions.
+		
 		\begin{figure}[H]
 			\centering
 			\includegraphics[scale=0.5]{figures/images/step-1}
 			
-			\caption{Step 1}
+			\caption{Approximate string matching of values}
 			\label{fig:webui-step-1}
 		\end{figure}
+		
+		Entities that match the desired values are displayed to the user.  They have the option of specifying the entity as either the source, or the target.
 		
 		\begin{figure}[H]
 			\centering
 			\includegraphics[scale=0.5]{figures/images/step-2}
 			
-			\caption{Step 2}
+			\caption{Tabular display of entities}
 			\label{fig:webui-step-2}
 		\end{figure}
+		
+		When an entity is chosen, the navigation bar at the top of the page is updated to reflect the new selection.  This allows the user to hover their cursor over the respective element in order to remind themselves of their selection.
 		
 		\begin{figure}[H]
 			\centering
 			\includegraphics[scale=0.5]{figures/images/step-3}
 			
-			\caption{Step 3}
+			\caption{Chosen entities are displayed at the top}
 			\label{fig:webui-step-3}
 		\end{figure}
+		
+		When both a source and target entity are selected, the user is able to search for the shortest path between them.  They are given the option of which graph search algorithm implementation to use.
 		
 		\begin{figure}[H]
 			\centering
 			\includegraphics[scale=0.5]{figures/images/step-4}
 			
-			\caption{Step 4}
+			\caption{The algorithm implementation may be selected}
 			\label{fig:webui-step-4}
 		\end{figure}
+		
+		A short message displaying the search duration as well as memory consumption is followed by a series of tables representing the intermediate entities between the source and target entities.
 		
 		\begin{figure}[H]
 			\centering
 			\includegraphics[scale=0.5]{figures/images/step-5}
 			
-			\caption{Step 5}
+			\caption{Result of a search between entities}
 			\label{fig:webui-step-5}
 		\end{figure}
+		
+		This interface allows users to query the database for information in a familiar manner.
 		
 	\section{Conclusion}
 	\label{sec:eval-conclusion}
