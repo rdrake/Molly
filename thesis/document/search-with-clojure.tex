@@ -12,9 +12,9 @@
 		
 		\subsubsection{Schema Graph Definition}
 		\label{sec:entity-schema}
-			The schema graph is defined using Korma, which \textcquote{clj-korma}{is a \gls{dsl} for Clojure}.  Each schema component, whether an entity or entity group, is defined by \texttt{EntitySchema} records.  Each record accepts a map which specifies how each class of document should be indexed and identified.  The keys of this map are given in \vref{tbl:entity-schema-keys}.
+			The schema graph is defined using a list.  Each schema component, whether an entity or entity group, is defined by \texttt{EntitySchema} records.  Each record accepts a map which specifies how each class of document should be indexed and identified.  The keys of this map are given in \vref{tbl:entity-schema-keys}.
 			
-			\begin{table}
+			\begin{table}[H]
 				\centering
 				
 				\begin{tabular}{lp{9cm}l}
@@ -37,7 +37,7 @@
 		\subsubsection{Crawling the Relational Database}
 			With the schema graph defined, the system is able to crawl the relational database, yielding a sequence of named tuples.  It iterates through every \texttt{EntitySchema} record, instructing every record to crawl itself given a database connection and index writer (\vref{clj:building-the-index}).
 			
-			\begin{figure}
+			\begin{figure}[H]
 				\begin{singlespaced}
 					\begin{pygments}{clj}
 (doseq [ent-def schemas]
@@ -62,7 +62,7 @@
 			
 			The map of attributes and values of a named tuple is annotated with the function \texttt{(with-meta obj map)}.  The \texttt{obj} parameter is the named tuple, while \texttt{map} is a map of metadata as defined by the system.  The keys of \texttt{map} for each type (value, entity, or entity group) are defined in \vref{tbl:type-metadata}.
 			
-			\begin{table}
+			\begin{table}[H]
 				\begin{subtable}[b]{0.33\linewidth}
 					\centering
 					
@@ -112,9 +112,9 @@
 				\label{tbl:type-metadata}
 			\end{table}
 			
-			The internal representation of the named tuple given in \vref{tbl:hmr-properties} is given in \vref{clj:with-meta-internal-rep}.
+			The internal representation of the named tuple given in \vref{tbl:hmr-properties-rel} is given in \vref{clj:with-meta-internal-rep}.
 			
-			\begin{figure}
+			\begin{figure}[H]
 				\begin{singlespaced}
 					\begin{pygments}{clj}
 (with-meta
@@ -127,7 +127,7 @@
 					\end{pygments}
 				\end{singlespaced}
 				
-				\caption{Internal representation of named tuple from \vref{tbl:hmr-properties}}
+				\caption{Internal representation of named tuple from \vref{tbl:hmr-properties-rel}}
 				\label{clj:with-meta-internal-rep}
 			\end{figure}
 			
@@ -135,7 +135,7 @@
 			
 			The system modifies each key of the metadata; two underscores are prepended and appended to the key name.  This allows the system to differentiate between metadata and attributes.  The transformation from internal representation to document is given in \vref{tbl:internal-rep-to-document}.
 			
-			\begin{table}
+			\begin{table}[H]
 				\centering
 				
 				\begin{tabular}{ll}
@@ -185,7 +185,7 @@
 			\begin{ex}[\texttt{boolean-query}]
 				For example, the query in \cref{ex:extended-query} is given in \vref{clj:boolean-query}.
 				
-				\begin{figure}
+				\begin{figure}[H]
 					\begin{singlespaced}
 						\begin{pygments}{clj}
 (boolean-query
@@ -198,142 +198,141 @@
 					\label{clj:boolean-query}
 				\end{figure}
 			\end{ex}
-		
-		\subsubsection{Translation of Search Results to Relational Space}
 
 	\subsection{Graph Search in Document Space}
 		With the ability for users to find relevant entities using fuzzy value search and the flexible keyword search \gls{api} (\cref{sec:keyword-search-document-space}), they must be able to find connections between two entities.  As stated previously (\cref{clm:lossless}), the document encoding of relational data is a graph.  This allows the system to search for links between entities by utilizing one or more graph search algorithms, such as \gls{bfs}.
 		
-		\begin{figure}
-			\centering
-			
-			\begin{dot2tex}[dot]
-digraph G {
-node [shape=plaintext]; "Human-Mutant Relations"; "Community Development & Policy Studies";
-
-"Human-Mutant Relations" -> "Community Development & Policy Studies";
-}
-			\end{dot2tex}
-			
-			\caption{Human-Mutant Relations entity group}
-			\label{fig:hmr-entity-group}
-		\end{figure}
-		
 		\subsubsection{Why We Need Graph Search}
 			Tuples are fragments, or facts, of larger pieces of knowledge.  By utilizing graph search, we amalgamate these facts to provide a user with a broader view.
 			
-			\begin{ex}
 				By utilizing graph search, we can take the facts in \cref{tbl:facts} and compose new facts.  For example, we could learn who teaches Complex Analysis.  It also allows us to ask questions, such as ``who taught Complex Analysis with Instructor X?''
-				
-				\begin{table}
-					\begin{subtable}[b]{0.5\linewidth}
-						\centering
-						
-						\begin{tabular}{ll}
-							\toprule
-							Field & Terms \\
-							\midrule
-							code & \(\{\text{math}, \text{360}\}\) \\
-							title & \(\{\text{complex}, \text{analysis}\}\) \\
-							subject & \(\{\text{math}\}\) \\
-							\bottomrule
-						\end{tabular}
-						
-						\caption{Fact representing a Course}
-						\label{subtbl:fact-course}
-					\end{subtable}
-					\begin{subtable}[b]{0.5\linewidth}
-						\centering
-						
-						\begin{tabular}{ll}
-							\toprule
-							Field & Terms \\
-							\midrule
-							id & \(\{\text{math}\}\) \\
-							name & \(\{\text{mathematics}\}\) \\
-							\bottomrule
-						\end{tabular}
-						
-						\caption{Fact representing a Subject}
-						\label{subtbl:fact-subject}
-					\end{subtable}
+			
+			\begin{table}[H]
+				\begin{subtable}[b]{0.5\linewidth}
+					\centering
 					
-					\caption{Fragments, or facts, of information in a dataset}
-					\label{tbl:facts}
-				\end{table}
-			\end{ex}
+					\begin{tabular}{ll}
+						\toprule
+						Field & Terms \\
+						\midrule
+						code & \(\{\text{math}, \text{360}\}\) \\
+						title & \(\{\text{complex}, \text{analysis}\}\) \\
+						subject & \(\{\text{math}\}\) \\
+						\bottomrule
+					\end{tabular}
+					
+					\caption{Fact representing a Course}
+					\label{subtbl:fact-course}
+				\end{subtable}
+				\begin{subtable}[b]{0.5\linewidth}
+					\centering
+					
+					\begin{tabular}{ll}
+						\toprule
+						Field & Terms \\
+						\midrule
+						id & \(\{\text{math}\}\) \\
+						name & \(\{\text{mathematics}\}\) \\
+						\bottomrule
+					\end{tabular}
+					
+					\caption{Fact representing a Subject}
+					\label{subtbl:fact-subject}
+				\end{subtable}
+				
+				\caption{Fragments, or facts, of information in a dataset}
+				\label{tbl:facts}
+			\end{table}
 			
 			This automated discovery of relations between facts is why graph search is important.
 		
 		\subsubsection{Graph Search Algorithms}
-			Recall we defined a graph as \(G = (V, E)\), where \(V\) is the set of all facts in the database, and \(E\) is the set of relations between facts.
+			Recall we defined a graph as \(\sgraph{} = (\text{V}, \text{E})\), where \(\text{V}\) is the set of all facts in the database, and \(\text{E}(\egraph{})\) is the set of entities in entity group \(T\).  We say that two vertices in \(\egraph{}\) are connected if, and only if.
+			\[
+				\text{E}(\egraph{}) \cap \text{E}(\egraph{}') \not= \emptyset
+			\]
+			
+			We must, given a keyword query \(\q\), find a subgraph, \(H\) of \(\sgraph{}\), such that
+			
+			\begin{itemize}
+				\item The vertices, or hops, in \(H\) are minimized; and
+				\item The satisfaction of keywords in \(\q\) by the vertices in \(H\) are maximized
+			\end{itemize}
+			
+			In order to accomplish this, we find all vertices by entity group search and call this \(C\).  A graph search algorithm is used to minimally connect the vertices in \(C\).
+			
+			\begin{algorithm}[!ht]
+				\caption{\(\textsc{Graph-Search}(C)\)}
+				\label{alg:graph-search}
+				
+				\begin{singlespaced}
+					\begin{algorithmic}[1]
+						\REQUIRE \(C\) is a list of vertices
+						\ENSURE minimal path between vertices in \(C\)
+						\medskip
+						\STATE \(s \in C\)
+						
+						\FOR{\(t \in C - \{s\}\)}
+							\STATE find path connecting \(s \rightarrow t\) such that \(\textsc{Length}(\text{path}) \le \text{max-hops}\)
+						\ENDFOR
+						
+						\RETURN path
+						\medskip
+						\medskip
+					\end{algorithmic}
+				\end{singlespaced}
+			\end{algorithm}
 		
 		\subsubsection{Graph Search in Document Space}
+			The question becomes:  why do we perform this graph search in document space?  Why not on the original relational space?  There are two main answers to this question:  speed and flexibility.
 			
-		
-		Graph search algorithms
-		=======================
-		
-		%# Definition of the graph
-		
-		G = (V, E)
-		
-		V = all entity-groups in DB
-		Let $Ent(v)$ be the set of entities in entity group $v$.
-		We say that two vertices in $G$ are connected if and only if:
-		
-		$Ent(v)\cap Ent(v')\not=\emptyset$.
-		
-		%# Definition of graph search
-		
-		Given a keyword query q, find a subgraph, $H$, of G to:
-		- minimize the vertices in H
-		- maximize the satisfaction of keywords in $q$ by vertices in $H$.
-		
-		Example (based on UOIT or superhero) should be given here.
-		- just use the canonical example for benchmark testing.
-		
-		%# Logical specification of the graph search algorithm:
-		
-		- find all vertices by entity group search, and call this C.
-		- use any graph search algorithm to minimally connect the vertices in C
-		as follows. 
-		let s\in C be a source.
-		for each t\in C-{s}:
-		find path connecting s->t such that len(path) <= user-defined-bound.
-		
-		%# Why use document space for graph search (THESIS OF YOUR THESIS)
-		
-		- finding the relevant "seed" vertices is really fast.  This is done by
-		using full text search on the documents of an entity graph.  Therefore, it
-		allows fuzzy search for the seeds.
-		- finding connected entity groups is really fast - this is done by using the
-		indexing document.  Using a single keyword query, we can find all relevant
-		entity groups in the database.
-		
-		Example: spell this out:
-		
-		index-doc(v0) = student:ABC, course:XYZ
-		query: (:or (:and (id:ABC) (C:student)) 
-		(:and (id:XYZ) (C:course)))
+			Rather than relying on scanning every tuple in every relation in a relational database, the document model represents every tuple as a semi-structured document.  The contents of every field in these documents is indexed by an inverted list index data structure which permits fast lookup of documents based on keywords.  We utilize this property to quickly locate the initial ``source'' vertices.
+			
+			During the indexing process, various analyzers are applied against the text.  These may, for instance, remove the suffix of words; a process called stemming \cite{porter-97}.
+			
+			\begin{ex}[Porter Stemmer]
+				A course may have ``mathematics'' or even ``mathematical'' in the title.  By utilizing a stemmer, we match both.  The Porter stemming algorithm returns ``mathemat'' as the root word for both of the examples.
+			\end{ex}
+			
+			Other analyzers may remove stop words.  Stop words may include ``and'', ``or'', ``not'', etc.  These are functional words that may be removed from the text corpus without adversely affecting the meaning whose presence may otherwise affect the quality of search results \cite{silva-03}.
+			
+			Our implementation uses a document to represent edges in the entity graph.  By using the document model, we are able to quickly locate all other vertices connected to a specific vertex.
+			
+			\begin{ex}[Search for Connected Entities]
+				Given the indexing documents \(x_1, x_2, x_3\)
+				
+				\begin{align*}
+					x_1[\text{``entities''}] &= \{\text{course|math\_360}, \text{subject|math}\} \\
+					x_2[\text{``entities''}] &= \{\text{course|math\_101}, \text{subject|math}\} \\
+					x_3[\text{``entities''}] &= \{\text{course|cdps\_101}, \text{subject|cdps}\} \\
+				\end{align*}
+				
+				A query, \(\q\) for entities in the subject ``math''.
+				\[
+					\q = \query(\text{``entities'', ``subject|math''}) \cap \query(\text{``\_\_type\_\_'', ``entity''})
+				\]
+				
+				Would yield the results \(x_1, x_2\).
+			\end{ex}
+			
+			\toreviewers{I still need to add a few more implementation details here.}
 		
 		%# Breadth-first search
-		
-		Description: copy this from CLRS
-		<Richard>
-		
-		Functional description of BFS
-		
-		Distributed functional description of BFS
-		
-		Implementation details:
-		- Ref
-		- Atoms
-		- Agent
-		
-		\begin{itemize}
-			\item Why we need graph search
-			\item Search in document graph using graph search algorithms with functional implementations: (Ford Fulkerson, BFS)
-			\item Speed up using concurrency
-			\item Clojure specific optimization: ref + atom
-		\end{itemize}
+		%
+		%Description: copy this from CLRS
+		%<Richard>
+		%
+		%Functional description of BFS
+		%
+		%Distributed functional description of BFS
+		%
+		%Implementation details:
+		%- Ref
+		%- Atoms
+		%- Agent
+		%
+		%\begin{itemize}
+		%	\item Search in document graph using graph search algorithms with functional implementations: (Ford Fulkerson, BFS)
+		%	\item Speed up using concurrency
+		%	\item Clojure specific optimization: ref + atom
+		%\end{itemize}

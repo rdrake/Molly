@@ -1,0 +1,5 @@
+digraph G {
+node [shape=plaintext]; "Human-Mutant Relations"; "Community Development & Policy Studies";
+
+"Human-Mutant Relations" -> "Community Development & Policy Studies";
+}

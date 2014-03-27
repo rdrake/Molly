@@ -30,27 +30,6 @@
    :dist    {s 0}
    :prev    {s nil}})
 
-;(defn update-state
-;  [state u v max-hops]
-;  (let [Q       (state :Q)
-;        marked  (state :marked)
-;        dist    (state :dist)
-;        prev    (state :prev)
-;        target  (state :target)
-;        done    (or (>= (dist u) max-hops)
-;                    (= v target))]
-;    (if done
-;      (assoc state
-;             :marked  (conj marked v)
-;             :dist    (assoc dist v (inc (dist u)))
-;             :prev    (assoc prev v u)
-;             :done    done)
-;      (assoc state
-;             :Q       (conj Q v)
-;             :marked  (conj marked v)
-;             :dist    (assoc dist v (inc (dist u)))
-;             :prev    (assoc prev v u)))))
-;
 (defn deref-future
   [dfd]
   (if (future? dfd)
