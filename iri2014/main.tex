@@ -1,0 +1,65 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage{amsmath,amssymb}
+\usepackage[all]{xy}
+
+\newcommand{\op}[1]{{\textsc{#1}}}
+\newcommand{\DB}{\mathbf{DB}}
+\newcommand{\DOC}{\mathbf{DOC}}
+
+\begin{document}
+\title{Using Document Space For Relational Search}
+\author{
+    \IEEEauthorblockN{Richard Drake}
+    \IEEEauthorblockA{
+        Faculty of Science\\
+        University of Ontario Inst of Technology
+    }
+    \and
+    \IEEEauthorblockN{Ken Pu}
+    \IEEEauthorblockA{
+        Faculty of Science\\
+        University of Ontario Inst of Technology
+    }
+}
+\maketitle
+
+\begin{abstract}
+In this paper, we present a family of methods and algorithms to efficiently integrate text indexing and keyword search from information retrieval to support search in relational databases.  We propose a bi-directional transformation that maps relational database instances to document collections.  The transformation is shown to be a homomorphism of keyword search.  Thus, any search of tuple networks by a keyword query can be efficiently executed as a search for documents, and vice versa.  By this construction, we demonstrate that indexing and search technologies developed for documents can be naturally be reduced and integrated into relational database systems.
+\end{abstract}
+
+\section{Motivation}
+
+Information retrieval (IR) have been an active and fruitful field of research since 1960's.  With seminal work by Sparck Jones \cite{jones72} and Salton \cite{salton75}, the IR community has layed the foundation of automatic text indexing and keyword query processing of text documents.  The technology for document indexing continues to gain momentum with the growing presence of text data found on the Web and in social media.  For instance, new techniques by Janusz et al \cite{janu12} and Goyal \cite{goyal13} improve on the traditional similarity measures by incorporating further natural language processing (NLP) on the context of phrases and words.
+
+In the last decade, there has been a tremendous interest from the database community to support keyword search queries for structured relational databases.  Systems such as {\em Discover} \cite{hris02}, {\em DBxplorer} \cite{agrawal2002dbxplorer} and {\em BANKS} \cite{bhalotia2002keyword} and many others \cite{hristidis2003efficient,liu2006effective} model relational tuples as documents, and foreign key joins as links.  Thus, it's possible to derive IR-style scoring function for document similarity.  More recently, semantic information \cite{zeng2013semantic}, schema and meta data \cite{bergamaschi2011keyword} have been incorporated into the search algorithm.
+
+We are motivated to explore the possibility of a unified framework to integrate and reuse indexing and search algorithms from IR system and databases.  In particular, our interest is to construct a pair of transformations:
+
+\begin{eqnarray*}
+h &:& \mathbf{DB} \to \mathbf{DOC} \\
+g &:& \mathbf{DOC} \to \mathbf{DB}
+\end{eqnarray*}
+where $\mathbf{DB}$ is the domain of databases and $\mathbf{DOC}$ is the domain of collections of documents.
+
+We want to design $h$ and $g$ satisfying the following:
+
+\begin{displaymath}
+\xymatrix {
+    \mathbf{DB} \ar[r]^h\ar[d]_{\op{search}_\mathbf{DB}} 
+        & \mathbf{DOC}\ar[d]^{\op{search}_\mathbf{DOC}} \\
+    \mathbf{DB} & \mathbf{DOC}\ar[l]^g
+}
+\end{displaymath}
+
+where $\op{search}_\DB$ and $\op{search}_\DOC$ are the search functions for relational databases and documents respectively.
+
+Practical experiences have demonstrated that the state-of-the-art $\op{search}_\DOC$ has more performant implementations (\cite{xapian,lucene}) compared to its relational database counter part.  Our interest is to construct efficient transformations $h$ and $g$ such that relational search $\op{search}_\DB$ can be efficiently implemented as a composition of $g\circ \op{search}_\DOC\circ h$, effectively taking advantage of the document search technology.
+
+\section{Problem definition}
+
+In this section, we present the formal definiton of relational databases and collections of documents.  We also formalize the notion of keyword search entity graphs and join networks of entity graphs in relational databases.
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+\end{document}
