@@ -176,6 +176,19 @@
 				\todo{All captions must be at least 10pt}
 				
 				The difference in rate of growth is further illustrated in \cref{fig:distribution-hops}.  As seen previously, \cref{subfig:1-hop} shows little difference in runtime between the three methods.  The difference becomes clearer in \cref{subfig:2-hops}, and by \cref{subfig:8-hops}, the difference is obvious.
+				
+				By using a profiling tool\footnote{\url{http://yourkit.com/}}, we see the behaviour of Clojure's concurrency implementation.
+				
+				\begin{figure}[H]
+					\centering
+					
+					\includegraphics{figures/images/threads}
+					
+					\caption{Thread count while running \gls{bfs} atom benchmark}
+					\label{fig:runtime-threads}
+				\end{figure}
+				
+				In \cref{fig:runtime-threads} we see that a number of threads are created and destroyed.  Recall a new thread is created every time the frontier is populated.
 	
 	\section{Web Interface}
 	\label{sec:web-interface}

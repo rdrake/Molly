@@ -314,15 +314,48 @@
 				
 				Would yield the results \(x_1, x_2\).
 			\end{ex}
-			
-			\toreviewers{I still need to add a few more implementation details here.}
 		
-		%# Breadth-first search
-		%
-		%Description: copy this from CLRS
-		%<Richard>
-		%
-		%Functional description of BFS
+		\subsubsection{Breadth-First Search}
+			\citeauthor*{cormen-09} define \gls{bfs} as follows
+			
+			\begin{displayquote}[\cite{cormen-09}]
+				Given a graph \(G = (V, E)\) and a distinguished source vertex \(s\), breadth-first search systematically explores the edges of \(G\) to ``discover'' every vertex that is reachable from \(s\). It computes the distance (smallest number of edges) from \(s\) to each reachable vertex. It also produces a ``breadth-first tree'' with root \(s\) that contains all reachable vertices. For any vertex \(v\) reachable from \(s\), the path in the breadth-first tree from \(s\) to \(v\) corresponds to a ``shortest path'' from \(s\) to \(v\) in \(G\), that is, a path containing the smallest number of edges. The algorithm works on both directed and undirected graphs.
+			\end{displayquote}
+			
+			Essentially \gls{bfs} populates the frontier before exploring the next hop.  Thus \gls{bfs} is able to explore a large, sparsely connected graph quickly.  However, if the graph is dense, \gls{bfs} would consume a substantial amount of memory, making an algorithm such as \gls{dfs} more suitable.
+			
+		\subsubsection{Functional \gls{bfs}}
+			The simple nature of \gls{bfs} makes it ideal to implement in a functional manner.  Rather than modifying objects, the search is conducted recursively.  Newly discovered vertices are conjoined with the existing queue to form a new queue.  Due to Clojure's persistent data structures, this operation is more efficient than intuition would dictate.
+			
+			The functional implementation of \gls{bfs} combines state changes into larger units.  This leaves large segments of the implementation free of side effects.  We exploit this fact to implement \gls{bfs} concurrently in Clojure.
+		
+		\subsubsection{Concurrent \gls{bfs}}
+			In our implementation, the exploration of adjacent nodes is performed concurrently.  Rather than exploring each node sequentially, as show in \cref{fig:concurrent-initial}, \cref{fig:concurrent-sequential}, and finally \cref{fig:concurrent-concurrent}, nodes ``course|math\_101'' and ``course|math\_360'' are explored simultaneously.
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.9]{figures/graphs/concurrent/initial}
+				
+				\caption{Initial graph}
+				\label{fig:concurrent-initial}
+			\end{figure}
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.9]{figures/graphs/concurrent/sequential}
+				
+				\caption{Exploring the first adjacent node sequentially}
+				\label{fig:concurrent-sequential}
+			\end{figure}
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.9]{figures/graphs/concurrent/concurrent}
+				
+				\caption{Both adjacent nodes explored}
+				\label{fig:concurrent-concurrent}
+			\end{figure}
+		
 		%
 		%Distributed functional description of BFS
 		%
