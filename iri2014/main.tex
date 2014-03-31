@@ -1,12 +1,17 @@
 \documentclass[conference]{IEEEtran}
 
+\usepackage[style=ieee,backend=biber]{biblatex}
 \usepackage{amsmath,amssymb}
 \usepackage[all]{xy}
 \usepackage{glossaries}
 
+\bibliography{references}
+
 \newcommand{\op}[1]{{\textsc{#1}}}
 \newcommand{\DB}{\mathbf{DB}}
 \newcommand{\DOC}{\mathbf{DOC}}
+
+\newcommand{\citeauthornum}[1]{\citeauthor*{#1} \cite{#1}}
 
 \newacronym{ir}{IR}{information retrieval}
 \newacronym{nlp}{NLP}{natural language processing}
@@ -34,7 +39,7 @@ In this paper, we present a family of methods and algorithms to efficiently inte
 
 \section{Motivation}
 
-\Gls{ir} has been an active and fruitful field of research since 1960's.  With seminal work by Sparck Jones \cite{jones72} and Salton \cite{salton75}, the \gls{ir} community has laid the foundation of automatic text indexing and keyword query processing of text documents.  The technology for document indexing continues to gain momentum with the growing presence of text data found on the Web and in social media.  For instance, new techniques by Janusz et al \cite{janu12} and Goyal \cite{goyal13} improve on the traditional similarity measures by incorporating further \gls{nlp} on the context of phrases and words.
+\Gls{ir} has been an active and fruitful field of research since 1960's.  With seminal work by \citeauthornum{jones72} and \citeauthornum{salton75}, the \gls{ir} community has laid the foundation of automatic text indexing and keyword query processing of text documents.  The technology for document indexing continues to gain momentum with the growing presence of text data found on the Web and in social media.  For instance, new techniques by \citeauthornum{janu12} and \citeauthornum{goyal13} improve on the traditional similarity measures by incorporating further \gls{nlp} on the context of phrases and words.
 
 In the last decade, there has been a tremendous interest from the database community to support keyword search queries for structured relational databases.  Systems such as {\em Discover} \cite{hris02}, {\em DBxplorer} \cite{agrawal2002dbxplorer} and {\em BANKS} \cite{bhalotia2002keyword} and many others \cite{hristidis2003efficient,liu2006effective} model relational tuples as documents, and foreign key joins as links.  Thus, it's possible to derive \gls{ir}-style scoring function for document similarity.  More recently, semantic information \cite{zeng2013semantic}, schema and meta data \cite{bergamaschi2011keyword} have been incorporated into the search algorithm.
 
@@ -64,6 +69,5 @@ Practical experiences have demonstrated that the state-of-the-art $\op{search}_\
 
 In this section, we present the formal definition of relational databases and collections of documents.  We also formalize the notion of keyword search entity graphs and join networks of entity graphs in relational databases.
 
-\bibliographystyle{IEEEtran}
-\bibliography{references}
+\printbibliography
 \end{document}
