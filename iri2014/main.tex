@@ -1,20 +1,19 @@
 \documentclass[conference]{IEEEtran}
 
-\usepackage[style=ieee,backend=biber]{biblatex}
 \usepackage{amsmath,amssymb}
 \usepackage[all]{xy}
-\usepackage{glossaries}
-
-\bibliography{references}
 
 \newcommand{\op}[1]{{\textsc{#1}}}
 \newcommand{\DB}{\mathbf{DB}}
 \newcommand{\DOC}{\mathbf{DOC}}
+\newcommand{\attr}{\mathrm{attr}}
+\newcommand{\textattr}{\mathrm{attr}_\mathrm{text}}
+\newcommand{\Val}{\mathcal{V}}
+\newcommand{\dom}{\mathrm{dom}}
+\newcommand{\Tables}{\mathrm{tables}}
+\newcommand{\Words}{\textsc{Words}}
+\newcommand{\todo}[1]{{\em TODO: #1}}
 
-\newcommand{\citeauthornum}[1]{\citeauthor*{#1} \cite{#1}}
-
-\newacronym{ir}{IR}{information retrieval}
-\newacronym{nlp}{NLP}{natural language processing}
 
 \begin{document}
 \title{Using Document Space For Relational Search}
@@ -39,11 +38,18 @@ In this paper, we present a family of methods and algorithms to efficiently inte
 
 \section{Motivation}
 
-\Gls{ir} has been an active and fruitful field of research since 1960's.  With seminal work by \citeauthornum{jones72} and \citeauthornum{salton75}, the \gls{ir} community has laid the foundation of automatic text indexing and keyword query processing of text documents.  The technology for document indexing continues to gain momentum with the growing presence of text data found on the Web and in social media.  For instance, new techniques by \citeauthornum{janu12} and \citeauthornum{goyal13} improve on the traditional similarity measures by incorporating further \gls{nlp} on the context of phrases and words.
+Information retrieval has been an active and fruitful field of research since 1960's.  With
+seminal work by \cite{jones72} and \cite{salton75}, the
+IR community has laid the foundation of automatic text indexing and
+keyword query processing of text documents.  The technology for document
+indexing continues to gain momentum with the growing presence of text data found
+on the Web and in social media.  For instance, new techniques by
+\cite{janu12} and \cite{goyal13} improve on the traditional
+similarity measures by incorporating further (NLP) on the context of phrases and words.
 
-In the last decade, there has been a tremendous interest from the database community to support keyword search queries for structured relational databases.  Systems such as {\em Discover} \cite{hris02}, {\em DBxplorer} \cite{agrawal2002dbxplorer} and {\em BANKS} \cite{bhalotia2002keyword} and many others \cite{hristidis2003efficient,liu2006effective} model relational tuples as documents, and foreign key joins as links.  Thus, it's possible to derive \gls{ir}-style scoring function for document similarity.  More recently, semantic information \cite{zeng2013semantic}, schema and meta data \cite{bergamaschi2011keyword} have been incorporated into the search algorithm.
+In the last decade, there has been a tremendous interest from the database community to support keyword search queries for structured relational databases.  Systems such as {\em Discover} \cite{hris02}, {\em DBxplorer} \cite{agrawal2002dbxplorer} and {\em BANKS} \cite{bhalotia2002keyword} and many others \cite{hristidis2003efficient,liu2006effective} model relational tuples as documents, and foreign key joins as links.  Thus, it's possible to derive IR-style scoring function for document similarity.  More recently, semantic information \cite{zeng2013semantic}, schema and meta data \cite{bergamaschi2011keyword} have been incorporated into the search algorithm.
 
-We are motivated to explore the possibility of a unified framework to integrate and reuse indexing and search algorithms from \gls{ir} system and databases.  In particular, our interest is to construct a pair of transformations:
+We are motivated to explore the possibility of a unified framework to integrate and reuse indexing and search algorithms from IR system and databases.  In particular, our interest is to construct a pair of transformations:
 
 \begin{eqnarray*}
 h &:& \mathbf{DB} \to \mathbf{DOC} \\
@@ -69,5 +75,93 @@ Practical experiences have demonstrated that the state-of-the-art $\op{search}_\
 
 In this section, we present the formal definition of relational databases and collections of documents.  We also formalize the notion of keyword search entity graphs and join networks of entity graphs in relational databases.
 
-\printbibliography
+\subsection{Relational entities}
+
+A relational database consists of a collection of tables which are interconnected via joinable linkages.
+
+A table, $T$, has a number of attributes:
+
+$$ \attr(T) $$
+
+A tuple in a table $r\in T$ is defined as a mapping from attributes to values:
+
+$$ r:\attr(T)\to\Val\quad \mbox{such that } r(\alpha)\in\dom(\alpha) $$
+
+Given two tables $T$ and $T'$, a joinable linkage $L=\left<A,B\right>$, is defined as two lists of attributes of equal length.
+
+$$A = \left<\alpha_1, \alpha_2, \dots, \alpha_n\right>$$
+$$B = \left<\beta_1, \beta_2, \dots, \beta_n\right>$$
+
+such that $\alpha_i\in\attr(T)$ and $\beta_j\in\attr(T')$.  Furthermore,
+
+$$ \forall\ i\leq n,\quad \dom(\alpha_i) = \dom(\beta_i)$$
+
+The set of all linkages are denoted as $\mathcal{L}$.
+
+Two tables $T$ and $T'$ are joinable, written $T\sim T'$ if
+
+$$\exists\left<A, B\right>\in\mathcal{L},\quad A\subseteq\attr(T)\mbox{ and } B\subseteq\attr(T')$$
+
+\textbf{Entity groups: schema and instances}
+
+An {entity group}, $G$, is characterized by a {\em forest} of tables connected by joinable links.
+
+$$G = (V_G, E_G)$$
+
+where $V_G \subseteq \Tables(\DB)$, and $E_G\subseteq\mathcal{L}$.
+
+A $G$-entity is a forest of tuples 
+
+$$\{r_T : T\in V_G\} \mbox{ where } r_T\in T$$
+
+connected by edges:
+
+$$\left<r_T, r_{T'}\right> \mbox{ where } T\sim T' \mbox{ wrt } E_G$$
+
+{\bf Example:}
+
+Consider the following relational database.
+
+\begin{verbatim}
+Student(id, name, address)
+Course(id, title, description)
+Enroll(cid, sid, semester, finalgrade, comment)
+Faculty(id, name, office)
+Teach(fid, cid, semester)
+\end{verbatim}
+
+The linkages are:
+
+\begin{verbatim}
+<(Student.id), (Enroll.sid)>
+<(Course.id) , (Enroll.cid)>
+<(Faculty.id), (Teach.fid)>
+<(Course.id) , (Teach.cid)>
+\end{verbatim}
+
+\todo{insert diagram here.}
+
+
+We can define a number of meaningful entity group schemas.
+
+{\bf Networks of entity groups}
+
+Two entity groups, $g$ and $g'$, are {\em connected} if 
+$$\Tables(g)\cap\Tables(g')\not=\emptyset$$
+and for some $T\in\Tables(g)\cap\Tables(g')$, we have:
+
+$$\exists\alpha\in\attr(T), g_T(\alpha) = g'_T(\alpha)$$
+
+\subsection{Keyword search queries}
+
+A {\em keyword query} is a bag of words.
+
+$$ Q = \{w_1, w_2, \dots, w_n\} $$
+
+A tuple $r\in T$ in some table $T$ satisfies the keyword query if
+
+$$\exists \alpha\in\textattr(T),\ \Words(r(\alpha))\cap Q\not=\empty$$
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
 \end{document}
