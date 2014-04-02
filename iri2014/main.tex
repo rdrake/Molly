@@ -98,19 +98,24 @@ $$ \forall\ i\leq n,\quad \dom(\alpha_i) = \dom(\beta_i)$$
 
 The set of all linkages are denoted as $\mathcal{L}$.
 
-Two tables $T$ and $T'$ are joinable, written $T\sim T'$ if
+Two tables $T$ and $T'$ are joinable by some link $L=\left<A,B\right>$, written $T\sim_L T'$ if
 
-$$\exists\left<A, B\right>\in\mathcal{L},\quad A\subseteq\attr(T)\mbox{ and } B\subseteq\attr(T')$$
+$$A\subseteq\attr(T)\mbox{ and } B\subseteq\attr(T')$$
+
+Two tuples $r\in T$ and $r'\in T'$ are joinable by some link $L=\left<A,B\right>$,
+written $r\sim_L r'$ if
+
+$$ T\sim_L T'\quad\mbox{and}\quad r[A] = r[B] $$
 
 \textbf{Entity groups: schema and instances}
 
-An {entity group}, $G$, is characterized by a {\em forest} of tables connected by joinable links.
+An {entity group schema}, $G$, is characterized by a {\em forest} of tables connected by joinable links.
 
 $$G = (V_G, E_G)$$
 
 where $V_G \subseteq \Tables(\DB)$, and $E_G\subseteq\mathcal{L}$.
 
-A $G$-entity is a forest of tuples 
+A $G$-entity instance, $g$, is a forest of tuples 
 
 $$\{r_T : T\in V_G\} \mbox{ where } r_T\in T$$
 
@@ -118,35 +123,9 @@ connected by edges:
 
 $$\left<r_T, r_{T'}\right> \mbox{ where } T\sim T' \mbox{ wrt } E_G$$
 
-{\bf Example:}
+{\bf Networks of entity group instances}
 
-Consider the following relational database.
-
-\begin{verbatim}
-Student(id, name, address)
-Course(id, title, description)
-Enroll(cid, sid, semester, finalgrade, comment)
-Faculty(id, name, office)
-Teach(fid, cid, semester)
-\end{verbatim}
-
-The linkages are:
-
-\begin{verbatim}
-<(Student.id), (Enroll.sid)>
-<(Course.id) , (Enroll.cid)>
-<(Faculty.id), (Teach.fid)>
-<(Course.id) , (Teach.cid)>
-\end{verbatim}
-
-\todo{insert diagram here.}
-
-
-We can define a number of meaningful entity group schemas.
-
-{\bf Networks of entity groups}
-
-Two entity groups, $g$ and $g'$, are {\em connected} if 
+Two entity group instances, $g$ and $g'$, are {\em connected} if 
 $$\Tables(g)\cap\Tables(g')\not=\emptyset$$
 and for some $T\in\Tables(g)\cap\Tables(g')$, we have:
 
