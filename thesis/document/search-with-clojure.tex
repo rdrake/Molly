@@ -14,7 +14,7 @@
 		\label{sec:entity-schema}
 			The schema graph is defined using a list.  Each schema component, whether an entity or entity group, is defined by \texttt{EntitySchema} records.  Each record accepts a map which specifies how each class of document should be indexed and identified.  The keys of this map are given in \vref{tbl:entity-schema-keys}.
 			
-			\begin{table}[H]
+			\begin{table}
 				\centering
 				
 				\begin{tabular}{lp{9cm}l}
@@ -37,7 +37,7 @@
 		\subsubsection{Crawling the Relational Database}
 			With the schema graph defined, the system is able to crawl the relational database, yielding a sequence of named tuples.  It iterates through every \texttt{EntitySchema} record, instructing every record to crawl itself given a database connection and index writer (\vref{clj:building-the-index}).
 			
-			\begin{figure}[H]
+			\begin{figure}
 				\begin{singlespaced}
 					\begin{pygments}{clj}
 (doseq [ent-def schemas]
@@ -62,7 +62,7 @@
 			
 			The map of attributes and values of a named tuple is annotated with the function \texttt{(with-meta obj map)}.  The \texttt{obj} parameter is the named tuple, while \texttt{map} is a map of metadata as defined by the system.  The keys of \texttt{map} for each type (value, entity, or entity group) are defined in \vref{tbl:type-metadata}.
 			
-			\begin{table}[H]
+			\begin{table}
 				\begin{subtable}[b]{0.33\linewidth}
 					\centering
 					
@@ -114,7 +114,7 @@
 			
 			The internal representation of the named tuple given in \vref{tbl:hmr-properties-rel} is given in \vref{clj:with-meta-internal-rep}.
 			
-			\begin{figure}[H]
+			\begin{figure}
 				\begin{singlespaced}
 					\begin{pygments}{clj}
 (with-meta
@@ -135,7 +135,7 @@
 			
 			The system modifies each key of the metadata; two underscores are prepended and appended to the key name.  This allows the system to differentiate between metadata and attributes.  The transformation from internal representation to document is given in \vref{tbl:internal-rep-to-document}.
 			
-			\begin{table}[H]
+			\begin{table}
 				\centering
 				
 				\begin{tabular}{ll}
@@ -185,7 +185,7 @@
 			\begin{ex}[\texttt{boolean-query}]
 				For example, the query in \cref{ex:extended-query} is given in \vref{clj:boolean-query}.
 				
-				\begin{figure}[H]
+				\begin{figure}
 					\begin{singlespaced}
 						\begin{pygments}{clj}
 (boolean-query
@@ -207,7 +207,7 @@
 			
 				By utilizing graph search, we can take the facts in \cref{tbl:facts} and compose new facts.  For example, we could learn who teaches Complex Analysis.  It also allows us to ask questions, such as ``who taught Complex Analysis with Instructor X?''
 			
-			\begin{table}[H]
+			\begin{table}
 				\begin{subtable}[b]{0.5\linewidth}
 					\centering
 					
@@ -332,7 +332,7 @@
 		\subsubsection{Concurrent \gls{bfs}}
 			In our implementation, the exploration of adjacent nodes is performed concurrently.  Rather than exploring each node sequentially, as show in \cref{fig:concurrent-initial}, \cref{fig:concurrent-sequential}, and finally \cref{fig:concurrent-concurrent}, nodes ``course|math\_101'' and ``course|math\_360'' are explored simultaneously.
 			
-			\begin{figure}[H]
+			\begin{figure}
 				\centering
 				\includegraphics[scale=0.9]{figures/graphs/concurrent/initial}
 				
@@ -340,7 +340,7 @@
 				\label{fig:concurrent-initial}
 			\end{figure}
 			
-			\begin{figure}[H]
+			\begin{figure}
 				\centering
 				\includegraphics[scale=0.9]{figures/graphs/concurrent/sequential}
 				
@@ -348,7 +348,7 @@
 				\label{fig:concurrent-sequential}
 			\end{figure}
 			
-			\begin{figure}[H]
+			\begin{figure}
 				\centering
 				\includegraphics[scale=0.9]{figures/graphs/concurrent/concurrent}
 				

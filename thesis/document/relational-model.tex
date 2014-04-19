@@ -34,7 +34,7 @@
 		
 	Relations are typically represented as tables.
 	
-	\begin{table}[H]
+	\begin{table}
 		\centering
 		
 		\begin{tabular}{lll}
@@ -107,7 +107,7 @@
 		\begin{ex}
 			Given the schema in \vref{tbl:schema}
 			
-			\begin{table}[H]
+			\begin{table}
 				\centering
 				
 				\begin{tabular}{ll}
@@ -130,7 +130,7 @@
 			
 			and the \gls{fk} constraints in \vref{eqn:fk-constraints}
 			
-			\begin{figure}[H]
+			\begin{figure}
 				\begin{align*}
 					\rel{Schedule}{section\_id} &\rightarrow \rel{Section}{id} \\
 					\rel{Section}{course} &\rightarrow \rel{Course}{code} \\
@@ -144,7 +144,7 @@
 			
 			we produce the schema graph in \vref{fig:schema-graph}
 			
-			\begin{figure}[H]
+			\begin{figure}
 				\centering
 				
 				\begin{dot2tex}[neato]
@@ -168,7 +168,7 @@
 		\begin{ex}
 			Using \gls{sql}, find all section CRNs for the subject titled ``Community Development \& Policy Studies.''
 			
-			\begin{figure}[H]
+			\begin{figure}
 				\begin{singlespaced}
 					\begin{pygments}{sql}
 SELECT section.crn
@@ -187,7 +187,7 @@ WHERE  subject.name = 'Community Development & Policy Studies';
 			
 			The \gls{sql} query in \vref{fig:query-section-crns} results in \vref{tbl:query-section-crns-output}.
 			
-			\begin{table}[H]
+			\begin{table}
 				\centering
 				
 				\begin{tabular}{l}
@@ -220,7 +220,7 @@ WHERE  subject.name = 'Community Development & Policy Studies';
 		\begin{ex}
 			The information in \vref{tbl:hmr-properties-rel} all relates to the Course titled Human-Mutant Relations, however no single tuple in the database has all of this information as a result of database normalization.
 			
-			\begin{table}[H]
+			\begin{table}
 				\centering
 				
 				\begin{tabular}{ll}
@@ -239,7 +239,7 @@ WHERE  subject.name = 'Community Development & Policy Studies';
 			
 			We require an entity group to join together all pieces of information related to this course.  An example of this is given in \cref{fig:hmr-entity-group}, where the an example entity group comprised of a Course and Subject is shown.
 			
-			\begin{figure}[H]
+			\begin{figure}
 				\centering
 				
 				\begin{dot2tex}[dot]

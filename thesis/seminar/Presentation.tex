@@ -2,65 +2,42 @@
 % Change "draft" to "final" when you're done.
 \documentclass[compress]{beamer}
 
-\usepackage{fontspec,lipsum}
-\usepackage{mathpazo}
-\defaultfontfeatures{Ligatures=TeX}
-
-\usepackage{graphicx}
-\usepackage{rotating}
-
-\usepackage{todo}
-
-\graphicspath{{images/}}
-
-\usepackage{unicode-math}
-\usepackage{amsmath}
-\usepackage{amsthm}
-
-\usepackage{algorithm}
-\usepackage{algorithmic}
-
-\usepackage{minted}
-
-\usepackage{booktabs}
-
-\usepackage{nag}
-
-\usepackage{upquote}
-
-\usepackage[backend=biber]{biblatex}
-\addbibresource{Thesis.bib}
-
-\setmainfont[
-	Numbers=OldStyle,
-	Kerning=Uppercase,
-	]{Garamond Premier Pro}
-\setsansfont{Futura Std}
-\setmathfont{STIXGeneral}
-\setmonofont{Consolas}
-
-\newmintedfile[cljcode]{clj}{linenos,frame=topline,frame=lines,framesep=2mm}
-
-\renewcommand{\theFancyVerbLine}{\ttfamily{\scriptsize {\arabic{FancyVerbLine}}}}
+\input{preamble.tex}
 
 \usetheme{Frankfurt}
 \usecolortheme{lily}
 
-\title[M.Sc. Thesis -- \insertframenumber/\inserttotalframenumber]{The Chronicles of Molly}
+\title[M.Sc. Thesis -- \insertframenumber/\inserttotalframenumber]{Towards a Concurrent Implementation of Keyword Search Over Relational Databases}
 \subtitle{M.Sc. Thesis}
-\author[\copyright 2013 Richard Drake]{\textbf{Richard Drake} \\ \vspace{0.3em} \scriptsize{\texttt{richard.drake@uoit.ca}} \\ \vspace{1em} \tiny Supervisor:  Dr. Ken Q. Pu}
-\institute[UOIT]{Database \& Information Research Group \\ University of Ontario Institute of Technology \\ Oshawa, Ontario, Canada}
-\date{\tiny Soon, Please\ldots}
-
-\theoremstyle{definition}
-\newtheorem{defn}{Definition}
+\author[\copyright 2014 Richard Drake]{Richard Drake \\ \vspace{0.3em} \scriptsize{\texttt{richard.drake@uoit.ca}} \\ \vspace{1em} \tiny Supervisor:  Dr. Ken Q. Pu}
+\institute[UOIT]{University of Ontario Institute of Technology \\ Oshawa, Ontario, Canada}
+\date{\tiny May 2014}
 
 \begin{document}
+	\input{../document/acronyms.tex}
+	\input{../document/symbols.tex}
+	
 	\frame{\maketitle}
+	
+	%- transformation from relational to document model
+	%- reversibility of the transformation
+	%- the flexibility of the document model (spelling correction + entity group search)
+	%- using document model to perform graph based search
+	
+	\section{Introduction}
+		\begin{frame}{wat}
+			\[E = mc^2\]
+		\end{frame}
+	
+	\section{Background}
+	
+	\section{Implementation}
+	
+	\section{Evaluation}
+	
+	\section{Conclusion}
 	
 	\section*{}
 	
 	\frame{\titlepage}
-		
-	\todos
 \end{document}

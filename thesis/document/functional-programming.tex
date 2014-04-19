@@ -41,7 +41,7 @@
 		\subsubsection{Concurrency}
 			Clojure supports four systems for concurrency:  \gls{stm}, agents, atoms, and dynamic vars.  The differences between these systems -- including whether or not they are synchronous, coordinated, and what scope they encompass -- are summarized in \vref{tbl:concurrency-system-comparison}.
 			
-			\begin{table}[H]
+			\begin{table}
 				\centering
 				
 				\begin{tabular}{llll}
@@ -61,7 +61,7 @@
 			
 			In this system we use references and atoms.  Changes made to an atom are, as the name suggests, atomic.  While a change is occurring, any threads dereferencing the value of an atom will see its old version.  Only upon completion of the change will the new value be visible.  In Clojure this isolation is accomplished via persistent data structures (\cref{fig:persistent-data-structure}).  For a demonstration using the canonical bank account transfer problem, see \cref{tbl:updating-an-atom} \cite{bank-problem}.
 			
-			\begin{table}[H]
+			\begin{table}
 				\centering
 				
 				\begin{tabular}{llll}
@@ -115,7 +115,7 @@
 			
 			We utilize Clojure's \gls{jvm} interoperability to make use of Apache Lucene and \gls{jdbc}.
 			
-			\begin{figure}[H]
+			\begin{figure}
 				\begin{singlespaced}
 					\begin{pygments}{clj}
 (defn ^Directory idx-path
