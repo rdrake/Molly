@@ -24,6 +24,12 @@
 
 		% Title page is i, certificate of approval is ii, TOC is page...
 		\setcounter{page}{3}
+		
+		\addcontentsline{toc}{chapter}{Abstract}
+		\chapter*{Abstract}
+			\todo[inline]{Write me}
+		%\\ \\
+		\textbf{Keywords}:  relational database, full-text search, graph search, algorithms
 
 		\tableofcontents
 
@@ -32,8 +38,6 @@
 		\listofalgorithms
 		\printglossaries
 	\end{preliminary}
-	
-	\include{background}
 	
 	\include{data-model}
 	

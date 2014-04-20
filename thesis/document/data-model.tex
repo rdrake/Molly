@@ -3,7 +3,15 @@
 \label{chap:tale-of-two-data-models}
 	The term ``data model'' refers to a notation for describing data and/or information.  It consists of the data structure, operations that may be performed on the data, as well as constraints placed on the data \cite{dbsys-06}.
 	
-	In this chapter we provide a formal definition of the relational data model, discuss its merits, its shortcomings, and contrast it to the document data model.  Contrary to the relational model, the document model permits fast and flexible keyword search without requiring explicit domain knowledge of the data.  In addition, we demonstrate the feasibility of encoding a relational model into a document model in a lossless manner.
-
+	In this chapter we provide background and motivation for this thesis.  We will discuss the evolution of data sets, their logical models, and their corresponding query languages.  We feel that modern day data sets call for a new data model with a new query languages.
+	
+	We also provide a formal definition of the relational data model, discuss its merits, its shortcomings, and contrast it to the document data model.  Contrary to the relational model, the document model permits fast and flexible keyword search without requiring explicit domain knowledge of the data.  In addition, we demonstrate the feasibility of encoding a relational model into a document model in a lossless manner.
+	
+	\input{background}
 	\input{relational-model}
 	\input{document-model}
+	
+	\section{Outline of Thesis}
+		\cref{chap:along-came-clojure} describes the details of our implementation the data transformation and query operators for graph search in the linked document space.  Our choice of utilizing a modern functional programming language for our implementation makes high degree of concurrency possible.
+		
+		\cref{chap:experimental-evaluation} provides further justification to our choice of data model mapping and the choice of programming language used.  Through a series of experiments, we see that our proposal allows a tight integration of the relational database engines and keyword search libraries.  Furthermore, the implementation enjoys a linear speed up with respect to the number of processors available.

@@ -1,8 +1,6 @@
 % Hypothesis, motivation
 % Needs a clear outline of contributions
 
-% Chapter 2 is a bit more background than anything
-% Move chapter 1 to under chapter 2, make chapter 2 chapter 1.
 % Motivation -> Hypothesis -> Contributions -> 
 % Why concurrent?  Why is keyword search important?
 
@@ -10,15 +8,12 @@
 
 % Why dataset chosen
 
-% Consider putting web interface at end of (current) chapter 4
-
 % 5.5 -> threats to validity (external mostly)
 % 6.2 -> limitations & future work (not just about tool, also about research questions left unanswered)
-
-\chapter{Background \& Introduction}
-	In this chapter, we provide a background to the motivation of this thesis.  We will discuss the evolution of data sets, their logical models, and the corresponding query languages.  We feel that  modern day data sets call for a new data model with a new query language.  This thesis is an attempt to make an incremental advance toward a new data model and new way of querying data.
-
-	\section{Structured Data and Structured Language:  1970 -- 2000}
+\section{The Evolution of Data Models}
+	It is important to understand the evolution of modern data models.  By understanding 
+	
+	\subsection{Structured Data and Structured Language:  1970 -- 2000}
 		The proliferation of database system research and development started with the disruptive invention of the relational data model by Edgar F.~Codd \cite{codd-79}.
 		
 		The invention of the relational data model was a significant achievement as it decoupled the task of data analytics from any one language, precisely and accurately described data sets across a variety of storage and analytical systems, and lead to the creation of the structured data analytics language known as \gls{sql}.
@@ -31,19 +26,19 @@
 		
 		Both \gls{sql} and \gls{mdx} are highly structured query languages: they are completely described by their respective grammar and operational semantics.  Users who wish to harness the power of \gls{sql} and \gls{mdx} must be well versed in the languages themselves, and understand precisely the semantics of each syntactic constructs.
 		
-	\section{Text data and keyword search:  1970 -- 2014}
+	\subsection{Text data and keyword search:  1970 -- 2014}
 		Parallel to the development of the relational data base technology, research in the information retrieval has been focusing on text data \cite{salton-88, jones-72}.  Unlike the relational data, text data does not have much complex structure to its schema.  Thus, it's not immediately possible to design a rich set of data operators (as was the case for relational algebra).  Consequently, for text data, there is no structured query language like \gls{sql}.
 		
 		The research, thus, has been focusing on pattern matching queries using keyword search.  Though the semantics of keyword search is very simple, the statistical methods developed by the information retrieval community \cite{salton-88, robertson-09, dumais-88} have been extremely effective.  In fact, one can argue that the modern World Wide Web and its related commercial successes founded on the ideas of text databases and keyword search over Internet scale data sets.
 		
-	\section{Semi-structured Data and Query Languages:  1990 -- 2010}
+	\subsection{Semi-structured Data and Query Languages:  1990 -- 2010}
 		The growth of the World Wide Web popularized the usage of markup languages (such as \gls{html} and \gls{xml}) as the underlying Web content description.  Thus, researchers have designed data models \cite{suciu-98} to formalize the semantics of \gls{xml} and related data formats.  Subsequently, the logical characterization of \gls{xml} led the to design and implementation of XQuery \cite{xquery-10}, a navigational based query language for analysis of \gls{xml} data sets.
 		
 		Interestingly enough, \gls{xml} has proven to be inefficient as a data description format.  Nonetheless, a semi-structured data description language is highly sought after for message passing in Internet scale software systems.  Modern Web services are built on the concept of RESTful \gls{api} \cite{restful-11}, with semi-structured data message passing.  In order to minimize network overhead, \gls{xml} based message passing has been replaced by the more efficient data encoding standard of \gls{json} \cite{json}.
 		
 		The query language community responded to the popularization of \gls{json} encoded data sets with several query languages \cite{simeon-13} (for example Jaql \cite{ibm-jaql}) for \gls{json} data sets.
 	
-	\section{Hybrid data models and query languages: 2010 -- Present}
+	\subsection{Hybrid data models and query languages: 2010 -- Present}
 		With the explosive growth of social networks, we are witnessing the emergence of a new type of data sets.  These data sets exhibit the following properties:
 		
 		\begin{itemize}
@@ -61,10 +56,3 @@
 			\item Design a collection of expressive query operators for analyzing text relational data sets.
 			\item Investigate implementation techniques to make the query operators performant for modern multi-core computers.
 		\end{itemize}
-		
-	\section{Outline of Thesis}
-		\cref{chap:tale-of-two-data-models} provides a formal definition of the relational data model and the document data model.  Rather than introducing a new hybrid model, our thesis is to provide efficient mappings between the two models, and thus allow the data to freely be exchanged between query operators of the domains.  We demonstrate that complex relational data can be encoded into a linked document space.
-				
-		\cref{chap:along-came-clojure} describes the details of our implementation the data transformation and query operators for graph search in the linked document space.  Our choice of utilizing a modern functional programming language for our implementation makes high degree of concurrency possible.
-		
-		\cref{chap:experimental-evaluation} provides further justification to our choice of data model mapping and the choice of programming language used.  Through a series of experiments, we see that our proposal allows a tight integration of the relational database engines and keyword search libraries.  Furthermore, the implementation enjoys a linear speed up with respect to the number of processors available.
