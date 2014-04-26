@@ -9,11 +9,13 @@
 		\subsection{Code Base Statistics}
 			The system consists of over 800 lines of Clojure, along with approximately 550 lines of Python.  The Python code is used to construct the data set by crawling the course information site, as well as to aggregate the benchmark data produced by the system, producing graphs.
 			
-			All development has occurred on GitHub \cite{molly-repo}.  The use of Git and GitHub permits collaboration between researchers.  With the code publicly available, future researchers may study and run it.
+			All development has occurred on GitHub \cite{molly-repo}.  The use of Git and GitHub permits collaboration between researchers.  With the code publicly available, future researchers may study, run, and/or build upon it.
 	
 	\section{The Data Corpus}
 	\label{sec:data-corpus}
-		The data corpus was derived from the \gls{uoit} mycampus database.  An \gls{html} crawler was written in Python that scraped the information from the \gls{uoit} class schedule search page.  This data was parsed, normalized, then placed in a SQLite database.
+		The data corpus was derived from the \gls{uoit} mycampus database.  It is not a standard dataset used in the literature, but a dataset unique to \gls{uoit}.
+		
+		An \gls{html} crawler was written in Python that scraped the information from the \gls{uoit} class schedule search page.  This data was parsed, normalized, then placed in a SQLite database.
 		
 		The data corpus consists of numerous classes of objects.  These are:  courses (\cref{tbl:corpus-course}), instructors (\cref{tbl:corpus-instructor}), schedules (\cref{tbl:corpus-schedule}), sections (\cref{tbl:corpus-section}), and teaches (\cref{tbl:corpus-teaches}).  A graph representation of how these classes of objects are related can be found in \cref{fig:schema-graph}.  The data corpus is defined in \cref{chap:data-corpus-def}
 		

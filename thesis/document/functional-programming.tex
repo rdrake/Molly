@@ -1,18 +1,18 @@
 \section{Basic Principles of Functional Programming}
 \label{sec:basic-principles-fp}
-	The functional programming paradigm follows a handful of basic tenets; values are immutable, and functions must be free of side-effects \cite{fp-89}.
+	The functional programming paradigm follows two basic tenets; values are immutable, and functions must be free of side-effects \cite{fp-89}.
 	
 	The first tenet, that values are immutable, refers to the fact that once a value is bound, this value may not change.  In procedural programming there is the concept of assignment, whereas in functional programming, a value is bound.  Assignment allows a value to change, binding does not.
 	
-	Immutable values are advantageous as they remove a common source of bugs; state must explicitly be changed.  This removes the ability for different areas of a program to modify the state (i.e.~global variables).
+	Immutable values are advantageous as they remove a common source of bugs; state must explicitly be changed.  This removes the ability for different areas of a program to modify the state, e.g., global variables.
 	
 	Unfortunately immutable values can also lead to inefficiency.  For example, in order to add a key-value pair to a map, an entirely new map must be created with the existing key-value pairs copied to it.  In practice this is avoided through the use of persistent data structures with multi-versioning.
 	
-	The second tenet, that functions must be free of side-effects, means that the output of a function must be predictable for any given input.  This purity reduces a large source of bugs, and allows out-of-order execution. \cite{fp-89}.
+	The second tenet, that functions must be free of side-effects, means that the output of a function must be predictable for any given input.  This purity reduces a large source of bugs, and permits out-of-order execution \cite{fp-89}.
 
 	\subsection{Features of Clojure}
 	\label{sec:features-of-clojure}
-		The creator of Clojure, Rich Hickey, describes his language as follows:
+		The creator of Clojure, Rich Hickey, describes his language as follows.
 		
 		\begin{displayquote}[\cite{clj-home}]
 			Clojure is a dialect of Lisp, and shares with Lisp the code-as-data philosophy and a powerful macro system.  Clojure is predominantly a functional programming language, and features a rich set of immutable, persistent data structures.  When mutable state is needed, Clojure offers a software transactional memory system and reactive Agent system that ensure clean, correct, multithreaded designs.
@@ -23,9 +23,9 @@
 		\subsubsection{Immutable, Persistent Data Structures}
 			Clojure supports a rich set of data structures.  These are immutable, satisfying the first tenet, as well as persistent, in order to overcome the inefficiency described previously.
 			
-			The provided data structures range from scalars (numbers, strings, characters, keywords, symbols), to collections (lists, vectors, maps, array maps, sets) \cite{clj-data-structures}.  These data structures are sufficient enough to allow us to use the universal design pattern \cite{udp-08}.
+			The provided data structures range from scalars (numbers, strings, characters, keywords, symbols), to collections (lists, vectors, maps, array maps, sets) \cite{clj-data-structures}.
 			
-			Clojure also has the concept of persistent data structures.  These are used in order to avoid the inefficiency of creating a new data structure and copying over the contents of the old data structure simply to make a change.  Clojure creates a skeleton of the existing data structure, inserts the value into the data structure, then retains a pointer to the old data structure.  If an old property is accessed on the new data structure, Clojure follows the pointers until the property is found on a previous data structure.
+			Clojure also has the concept of persistent data structures.  These are used in order to avoid the inefficiency of creating a new data structure and copying over the contents of the old data structure simply to make a change.  Clojure creates a skeleton of the existing data structure, inserts the value into the data structure, then retains a pointer to the old data structure.  If an old property is accessed on the new data structure, Clojure follows the pointers until the property is found on a previous data structure.  The use of persistent data structures negatively affects memory consumption, however.
 			
 			\begin{figure}
 				\centering
@@ -86,12 +86,12 @@
 			
 			In the context of the bank account transfer problem, one would use \texttt{alter} when order does matter, such as performing a deposit and then a withdrawal.  If the money is withdrawn before the deposit, there may not be enough left in the account and the operation may fail when it should have succeeded.  Contrast this to two deposits or two withdrawals where the order would not matter, and thus \texttt{commute} would be suitable.
 			
-			In this context, synchronous refers to the fact that each operation waits for the proceeding operation to complete before continuing.  When a system is coordinated, operations occur in a transaction.  If one operation fails, the entire transaction fails and is rolled back.  This results in additional overhead, but is considered safer as the system shall not be left in an inconsistent state as a result of a failed transaction.
+			In this context, synchronous refers to the fact that each operation waits for the proceeding operation to complete before continuing.  When a system is coordinated, operations occur in a transaction.  If one operation fails, the entire transaction fails and is rolled back.  This results in additional overhead, but is beneficial as the system shall not be left in an inconsistent state as a result of a failed transaction.
 			
 		\subsubsection{Interoperability With the \gls{jvm}}
-			Traditionally, functional programming languages have been undesirable for numerous reasons:  compatibility, libraries, portability, availability, packagability, and tools \cite{no-fp-98}.  Clojure attempts to avoid many of these reasons by running on the \gls{jvm}.  The \gls{jvm} allows Clojure to both call and be called by Java and other languages.  It includes syntactic sugar -- features of a language added in order to simplify the language from a human perspective -- to transparently call Java code, as well as make itself available to Java.  This avoids the above issues.
+			Traditionally, functional programming languages have been undesirable for numerous reasons:  compatibility, libraries, portability, availability, packagability, and tools \cite{no-fp-98}.  Clojure attempts to avoid many of these reasons by running on the \gls{jvm}.  The \gls{jvm} allows Clojure to both call and be called by Java and other languages.  It includes syntax capable of transparently calling Java code, as well as make itself available to Java.  By leveraging the vast \gls{jvm} ecosystem, Clojure mitigates the above issues.
 			
-			The syntax of Clojure allows for the accessing of object members, the creation of objects, the calling of methods on an instance or class, etc.  Clojure also includes shortcuts to perform multiple operations on the same object.  The syntax is given in \vref{tbl:jvm-interop-syntax}.
+			The syntax of Clojure allows for the accessing of object members, the creation of objects, the calling of methods on an instance or class, etc.  Clojure also includes shortcuts to perform multiple operations on the same object.  The syntax is given in \cref{tbl:jvm-interop-syntax}.
 			
 			\begin{table}
 				\centering
@@ -113,7 +113,7 @@
 				\label{tbl:jvm-interop-syntax}
 			\end{table}
 			
-			We utilize Clojure's \gls{jvm} interoperability to make use of Apache Lucene and \gls{jdbc}.
+			We utilize Clojure's \gls{jvm} interoperability to make use of Apache Lucene and \gls{jdbc}.  An example of this interoperability is given in \cref{fig:clojure-directory-object}, where we use Clojure to create a \texttt{Directory} object from Apache Lucene.
 			
 			\begin{figure}
 				\begin{singlespaced}
@@ -125,4 +125,5 @@
 				\end{singlespaced}
 				
 				\caption{Clojure code that, given a path, returns a \texttt{Directory} object}
+				\label{fig:clojure-directory-object}
 			\end{figure}

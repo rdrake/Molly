@@ -32,7 +32,7 @@
 		\]
 	\end{ex}
 		
-	Relations are typically represented as tables.
+	Relations are typically represented as tables, as shown in \cref{tbl:course-relation}.
 	
 	\begin{table}
 		\centering
@@ -47,7 +47,7 @@
 			\bottomrule
 		\end{tabular}
 		
-		\caption{Course relation}
+		\caption{Tabular representation of the Course relation}
 		\label{tbl:course-relation}
 	\end{table}
 	
@@ -65,10 +65,10 @@
 	\label{def:foreign-keys}
 		A \gls{fk} constraint applies to two relations, \(\relation_1, \relation_2\).  It asserts that values of certain attributes of \(\relation_1\) must appear as values of some corresponding attributes of \(\relation_2\).  A \gls{fk} constraint is written as
 		\[
-			\theta = \relation_1(\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}) \rightarrow \relation_2(\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k})
+			\theta = \relation_1(\attribute_{1,1}, \attribute_{1,2}, \dotsc, \attribute_{1,k}) \rightarrow \relation_2(\attribute_{2,1}, \attribute_{2,2}, \dotsc, \attribute_{2,k})
 		\]
 		
-		where \(\attribute_{1i} \subseteq \attributes{\relation_1}\) and \(\attribute_{2i} \subseteq \attributes{\relation_2}\).  We say \((\relation_1, \relation_2)\) satisfies \(\theta\), denoted as \((\relation_1, \relation_2) \models \theta\), if for every tuple \(\tuple \in \relation_1\), there exists a tuple \(\tuple' \in \relation_2\) such that \(\tuple\lbrack\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}\rbrack = \tuple'\lbrack\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k}\rbrack\).
+		where \(\attribute_{1,i} \subseteq \attributes{\relation_1}\) and \(\attribute_{2,i} \subseteq \attributes{\relation_2}\).  We say \((\relation_1, \relation_2)\) satisfies \(\theta\), denoted as \((\relation_1, \relation_2) \models \theta\), if for every tuple \(\tuple \in \relation_1\), there exists a tuple \(\tuple' \in \relation_2\) such that \(\tuple\lbrack\attribute_{1,1}, \attribute_{1,2}, \dotsc, \attribute_{1,k}\rbrack = \tuple'\lbrack\attribute_{2,1}, \attribute_{2,2}, \dotsc, \attribute_{2,k}\rbrack\).
 		
 		We say \(\relation_1\) is the source, while \(\relation_2\) is the target.
 				
@@ -89,7 +89,7 @@
 	
 	\begin{defn}[Relational Database]
 	\label{def:relational-database}
-		A relational database, \(\db\), is a named collection of relations (as defined by \vref{def:relation}), keys (as defined by \vref{def:keys}), and foreign key constraints (as defined by \vref{def:foreign-keys}).
+		A relational database, \(\db\), is a named collection of relations (\cref{def:relation}), keys (\cref{def:keys}), and foreign key constraints (\cref{def:foreign-keys}).
 		
 		We use \(\name{\db}\) to denote the name of \(\db\), \(\relations{\db}\) the list of relations in \(\db\), \(\keys{\db}\) the list of key constraints of \(\db\), and \(\fks{\db}\) the list of foreign key constraints of \(\db\).
 	\end{defn}
@@ -97,7 +97,7 @@
 	\subsection{Schema Group}
 		\begin{defn}[Schema Graph]
 		\label{def:schema-graph}
-			If we view relations as vertices, and foreign key constraints as edges, a database \(\db\) can be viewed as a \emph{schema graph} \(\sgraph{}\), formally defined as
+			If we view relations as vertices, and foreign key constraints as edges, a database \(\db\) can be viewed as a schema graph, \(\sgraph{}\), formally defined as
 			\begin{align}
 				\text{vertices} &: \text{V}(\sgraph) = \relations{\db} \\
 				\text{edges} &: \text{E}(\sgraph) = \fks{\db}
@@ -105,7 +105,7 @@
 		\end{defn}
 		
 		\begin{ex}
-			Given the schema in \vref{tbl:schema}
+			Given the schema in \cref{tbl:schema} and the \gls{fk} constraints in \cref{eqn:fk-constraints}, we produce the schema graph in \cref{fig:schema-graph}.
 			
 			\begin{table}
 				\centering
@@ -128,8 +128,6 @@
 				\label{tbl:schema}
 			\end{table}
 			
-			and the \gls{fk} constraints in \vref{eqn:fk-constraints}
-			
 			\begin{figure}
 				\begin{align*}
 					\rel{Schedule}{section\_id} &\rightarrow \rel{Section}{id} \\
@@ -141,8 +139,6 @@
 				\caption{\gls{fk} constraints on schema in \vref{tbl:schema}}
 				\label{eqn:fk-constraints}
 			\end{figure}
-			
-			we produce the schema graph in \vref{fig:schema-graph}
 			
 			\begin{figure}
 				\centering
@@ -163,10 +159,10 @@
 			\end{figure}
 		\end{ex}
 		
-		The relational data model is particularly powerful for analytic queries.  Given the schema graph in \vref{fig:schema-graph}, one can formulate the following analytic queries in a query language known as \gls{sql}.
+		The relational data model is particularly powerful for analytic queries.  One can formulate the following analytic queries in a query language known as \gls{sql}.
 			
 		\begin{ex}
-			Using \gls{sql}, find all section CRNs for the subject titled ``Community Development \& Policy Studies.''
+			Given the schema graph in \cref{fig:schema-graph}, use \gls{sql} to find all section CRNs for the subject titled ``Community Development \& Policy Studies.''  The \gls{sql} query in \cref{fig:query-section-crns} results in \cref{tbl:query-section-crns-output}.
 			
 			\begin{figure}
 				\begin{singlespaced}
@@ -177,15 +173,13 @@ FROM   section
          ON section.course_code = course.code 
        JOIN subject 
          ON subject.id = course.subject_id 
-WHERE  subject.name = 'Community Development & Policy Studies'; 
+WHERE  subject.name = 'Community Development & Policy Studies';
 					\end{pygments}
 				\end{singlespaced}
 				
-				\caption{Query to find section CRNs for a subject name.}
+				\caption{Query to find section CRNs for a subject name}
 				\label{fig:query-section-crns}
 			\end{figure}
-			
-			The \gls{sql} query in \vref{fig:query-section-crns} results in \vref{tbl:query-section-crns-output}.
 			
 			\begin{table}
 				\centering
@@ -200,7 +194,7 @@ WHERE  subject.name = 'Community Development & Policy Studies';
 					\bottomrule
 				\end{tabular}
 				
-				\caption{Results of the query in \vref{fig:query-section-crns}.}
+				\caption{Results of the query in \vref{fig:query-section-crns}}
 				\label{tbl:query-section-crns-output}
 			\end{table}
 		\end{ex}
@@ -210,10 +204,12 @@ WHERE  subject.name = 'Community Development & Policy Studies';
 		\label{def:entity-group}
 			An entity group is a forest, \(\egraph\), of tuples interconnected by join conditions defined by the \gls{fk} constraints in the schema graph \(\sgraph\).
 			
-			Given two vertices \(\tuple, \tuple' \in \text{V}(\egraph)\), \(\exists \relation_1, \relation_2 \in \relations{\db}\) such that \(\tuple \in \relation_1\), \(\tuple'\in \relation_2\), and \((\relation_1, \relation_2)\in \sgraph\).  That is, \(\tuple\) and \(\tuple'\) belong to two relations that are connected by the schema graph.
-
-			Let \(\relation_1(\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}) \to \relation_2(\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k})\) be the \gls{fk} that connects \(\relation_1, \relation_2\).  We further assert that \(\tuple\lbrack\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}\rbrack = \tuple'\lbrack\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k}\rbrack\).
+			Given two vertices \((\tuple, \tuple') \in \text{V}(\egraph)\), \(\exists (\relation_1, \relation_2) \in \relations{\db}\) such that \(\tuple \in \relation_1\), \(\tuple'\in \relation_2\), and \((\relation_1, \relation_2)\in \sgraph\).  That is, \(\tuple\) and \(\tuple'\) belong to two relations that are directly connected by the schema graph.
 		\end{defn}
+		
+		\begin{ex}
+			Let \(\relation_1(\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}) \to \relation_2(\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k})\) be the \gls{fk} that connects \((\relation_1, \relation_2)\).  We assert that \(\tuple\lbrack\attribute_{11}, \attribute_{12}, \dotsc, \attribute_{1k}\rbrack = \tuple'\lbrack\attribute_{21}, \attribute_{22}, \dotsc, \attribute_{2k}\rbrack\).
+		\end{ex}
 		
 		Entity groups define complex, structured objects that include more information than individual tuples in the relations.
 		
@@ -237,7 +233,7 @@ WHERE  subject.name = 'Community Development & Policy Studies';
 				\label{tbl:hmr-properties-rel}
 			\end{table}
 			
-			We require an entity group to join together all pieces of information related to this course.  An example of this is given in \cref{fig:hmr-entity-group}, where the an example entity group comprised of a Course and Subject is shown.
+			We require an entity group to join together all pieces of information related to this course.  An example of this is given in \cref{fig:hmr-entity-group}, where an example entity group comprised of a Course and Subject is shown.
 			
 			\begin{figure}
 				\centering
@@ -339,11 +335,9 @@ WHERE  id = 'CDPS';
 			The above examples are some of the most important reasons for choosing the relational model over others.	Unfortunately, the relational model is not without its downsides.
 		
 		\subsubsection{Cons}
-			While the relational model excels at ensuring data consistency, aggregation, and reporting; it is not suitable for every task.	In order to issue queries, a user must be familiar with the schema.	 This requires specific domain knowledge of the data.
+			While the relational model excels at ensuring data consistency, aggregation, and reporting; it is not suitable for every task.	In order to issue queries, a user must be familiar with the schema.	 This requires specific domain knowledge of the data.  An example of a complicated query involving two joins is given in \cref{fig:query-section-crns}.
 			
-			An example of a complicated query involving two joins is give in \vref{fig:query-section-crns}.
-			
-			A casual user is unlikely to determine the correct join path, name of the tables, name of the attributes, etc.	This is in contrast to the document model, where the data is semi-structured or unstructured, requiring minimal domain knowledge.
+			A casual user is unlikely to determine the correct join path, know the exact name of the tables and attributes, etc.  This is in contrast to the document model where the data is semi-structured or unstructured, requiring minimal domain knowledge.
 
 			The relational model is also rigid in structure.  If a relation is modified, every query referencing said relation may require a rewrite.  Even a simple attribute being renamed (e.g.~\(\rho_{\text{name/alias}}(\text{Person})\)) is capable of modifying the join paths.  This rigidity places additional cognitive burden on users.
 			

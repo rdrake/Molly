@@ -1,15 +1,52 @@
 % !TEX root = Thesis.tex
 \chapter{A Tale of Two Data Models}
 \label{chap:tale-of-two-data-models}
-	The term ``data model'' refers to a notation for describing data and/or information.  It consists of the data structure, operations that may be performed on the data, as well as constraints placed on the data \cite{dbsys-06}.
+	The term ``data model'' refers to a notation for describing data and/or information.  It consists of the data structure, operations that may be performed on the data, as well as a set of constraints placed on the data \cite{dbsys-06}.
 	
-	In this chapter we provide background and motivation for this thesis.  We will discuss the evolution of data sets, their logical models, and their corresponding query languages.  We feel that modern day data sets call for a new data model with a new query languages.
+	In this chapter we provide background and motivation for this thesis.  We will discuss the evolution of data models and their corresponding query languages.  We feel that modern day data sets call for a new data model with a new query language.
 	
-	We also provide a formal definition of the relational data model, discuss its merits, its shortcomings, and contrast it to the document data model.  Contrary to the relational model, the document model permits fast and flexible keyword search without requiring explicit domain knowledge of the data.  In addition, we demonstrate the feasibility of encoding a relational model into a document model in a lossless manner.
+	We provide a formal definition of the relational data model, discuss its merits, its shortcomings, and contrast it to the document data model.  Contrary to the relational model, the document model permits fast and flexible keyword search without requiring explicit domain knowledge of the data.
 	
-	%\input{background}
+	\input{background}
 	\input{relational-model}
 	\input{document-model}
+	
+	\section{Problem}
+		Each of these data models has its own pros and cons.  One must choose between highly normalized, structured data and fast, flexible keyword search.
+		
+		What is needed is a hybrid model, combining the pros of both the relational and document models together.  Relational data would automatically be transformed into the document model.  Such a system would require some initial configuration, but would require little user intervention afterwards.
+	
+	\section{Thesis Statement \& Scope of Research}
+		\begin{displayquote}
+			\textbf{Thesis Statement:}  A system could be built that is capable of transforming data from the relational model to the document model.  The transformation is reversible, allowing the original data model to be recovered.
+			
+			Such a system could use the fast search capabilities of the document model, combined with the relational information of the relational model, to quickly discover related fragments of information.  This process could further be sped up by conducting this search in a concurrent manner.
+		\end{displayquote}
+		
+		In order to achieve the goals of our thesis statement, we
+		
+		\begin{itemize}
+			\item define a formal framework to describe data sets with relational structures and text components
+			\item design a collection of expressive query operators for analyzing text relational data sets; and
+			\item investigate implementation techniques to make the query operators performant on modern, multicore computers.
+		\end{itemize}
+		
+	 \section{Contributions}
+	 	We provide a formal definition for a system that is capable of transforming data from the relational model to the document model.  By performing this transformation, we gain the flexible search characteristics of the document model.
+	 	
+	 	This transformation is done in such a way that it is reversible.  In order to be reversible, the relational information is encoded in a document form.  This allows us to perform graph search over documents.
+	 	
+	 	In addition, we investigate the effect a concurrent graph search implementation has on the performance.\todo{reword?}
+
+% Motivation -> Hypothesis -> Contributions -> 
+% Why concurrent?  Why is keyword search important?
+
+% Improve performance and allow more flexibility
+
+% Why dataset chosen
+
+% 5.5 -> threats to validity (external mostly)
+% 6.2 -> limitations & future work (not just about tool, also about research questions left unanswered)
 	
 	\section{Outline of Thesis}
 		\cref{chap:along-came-clojure} describes the details of our implementation the data transformation and query operators for graph search in the linked document space.  Our choice of utilizing a modern functional programming language for our implementation makes high degree of concurrency possible.

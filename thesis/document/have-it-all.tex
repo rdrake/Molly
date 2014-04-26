@@ -1,12 +1,12 @@
 \chapter{Best of Both Worlds}
 \label{chap:best-of-both-worlds}
-	In this chapter we present a framework for the transformation between the relational and document models.  The first component of this framework, detailed in \cref{sec:named-tuples-documents}, involves the encoding of named tuples into documents.  In \cref{sec:encoding-entity-group-as-document-group} we demonstrate the mapping of entity groups to documents.  In \cref{sec:encoding-entity-group-as-document-group} we show how to construct documents that encode the relations between tuples in the document model.
+	In this chapter we present a framework for the transformation between the relational and document models.  The first component of this framework, detailed in \cref{sec:named-tuples-documents}, involves the encoding of named tuples into documents.  In \cref{sec:mapping-entity-groups-to-documents} we demonstrate the mapping of entity groups to documents.  In \cref{sec:encoding-entity-group-as-document-group} we show how to construct documents that encode the relations between tuples in the document model, preserving information that would otherwise be lost during the transformation.
 	
 	We further demonstrate how to perform iterative search using these document encodings.
 	
 	\section{Encoding Named Tuples into Documents}
 	\label{sec:named-tuples-documents}
-		Recall in the extended document model (\vref{sec:extending-the-document-model}), a document \(\doc\) consists of fields \(\field_1, \field_2, \dotsc, \field_n\).  Using the extended document model, we are left with a straight forward mapping of a tuple \(\tuple\) to document \(\doc\).
+		Recall in the extended document model (\cref{sec:extending-the-document-model}), a document \(\doc\) consists of fields \(\field_1, \field_2, \dotsc, \field_n\).  Using the extended document model, we are left with a straight forward mapping of a tuple \(\tuple\) to document \(\doc\).
 		
 		For tuple \(\tuple\), every attribute \(\attribute \in \attributes{\tuple}\) maps to a field \(\field\) in document \(\doc\).	Every attribute value must be analyzed into an indexable form in order to store it in a field.
 		\begin{align}
@@ -22,7 +22,7 @@
 				\tuple = \{\text{code}: \text{``CDPS 101''}, \text{title}: \text{``Human-Mutant Relations''}, \text{subject}: \text{``CDPS''}\}
 			\]
 			
-			produce the document encoding \(\docs{\tuple}\).
+			we produce the document encoding \(\docs{\tuple}\) in \cref{tbl:docs-tuple}.
 			
 			\begin{table}
 				\centering
@@ -38,13 +38,14 @@
 				\end{tabular}
 				
 				\caption{\(\docs{\tuple}\)}
+				\label{tbl:docs-tuple}
 			\end{table}
 		\end{ex}
 
 	
 	\section{Mapping of Entity Groups to Documents}
 	\label{sec:mapping-entity-groups-to-documents}
-		Recall that an entity group (\vref{def:entity-group}) is a forest \(\egraph\) of tuples \(\tuple\) such that for every \((\tuple, \tuple') \in \egraph\), where \(\tuple \nequal \tuple'\), implies \(\relations{\tuple} \nequal \relations{\tuple'}\).  That is, every distinct tuple is from a distinct relation.
+		Recall that an entity group (\cref{def:entity-group}) is a forest \(\egraph\) of tuples \(\tuple\) such that for every \((\tuple, \tuple') \in \egraph\), where \(\tuple \nequal \tuple'\), implies \(\relations{\tuple} \nequal \relations{\tuple'}\).  That is, every distinct tuple is from a distinct relation.
 		
 		Given the restriction
 		\[
@@ -70,20 +71,20 @@
 	\label{sec:encoding-entity-group-as-document-group}
 		Given a entity group \(\egraph\), we construct two or more documents in order to represent the entity group in the document model.
 		
-		For every \(\tuple \in \text{V}(\egraph)\), we construct a document \(\docs{\tuple}\) (\vref{sec:named-tuples-documents}).  With each tuple \(\tuple\) stored in the document collection \(\dc\), we construct an additional document which stores the association information.
+		For every \(\tuple \in \text{V}(\egraph)\), we construct a document \(\docs{\tuple}\).  We construct an additional document, called the indexing document, which is the concatenation of all unique identifiers for every tuple in \(\text{V}(\egraph)\).
 		
 		Let \(x\) be the indexing document of \(\egraph\).
 		\begin{align}
 			x[\text{``entities''}] = \bigcup_{\tuple \in \text{V}\left(\egraph\right)} \uid{\tuple}
 		\end{align}
 		
-		Thus, the encoding of \(\egraph\) is defined as
+		Thus, the encoding of \(\egraph\) is defined as the union of the set of documents for each tuple in \(\egraph\) and the indexing document, \(x\).
 		\begin{align}
 			\egraph \xrightarrow{\text{encode}} \{\docs{\tuple} : \tuple \in \text{V}(\egraph)\} \cup \{x\}
 		\end{align}
 		
 		\begin{ex}
-			An entity group produced from the schema in \vref{fig:schema-graph} is shown in \vref{fig:entity-group}.
+			An entity group produced from the schema in \cref{fig:schema-graph} is shown in \cref{fig:entity-group}.  Further transforming this entity group would produce documents in \cref{tbl:document-encoding}.
 			
 			\begin{figure}
 				\centering
@@ -100,8 +101,6 @@
 				\caption{Example entity group}
 				\label{fig:entity-group}
 			\end{figure}
-			
-			Transforming the example entity group in \vref{fig:entity-group} would produce documents shown in \vref{tbl:document-encoding}
 			
 			\begin{table}
 				\begin{subtable}[b]{0.33\linewidth}
@@ -150,19 +149,15 @@
 					\caption{Indexing document}
 				\end{subtable}
 				
-				\caption{Document encoding of \vref{fig:entity-group}}
+				\caption{Document encoding of \cref{fig:entity-group}}
 				\label{tbl:document-encoding}
 			\end{table}
 		\end{ex}
 		
-		It's easy to see that from \(\text{encode}(\egraph)\) we can recover \(\text{V}(\egraph)\), the tuples in \(\egraph\).
-		
-		By \vref{clm:lossless}, this is sufficient to recover \(\egraph\) entirely.
+		By \vref{clm:lossless}, we see that from \(\text{encode}(\egraph)\) we can recover \(\text{V}(\egraph)\), the tuples in \(\egraph\).
 	
 	\section{Encoding Attribute Values into Searchable Documents}
-		Each value for user selected attributes are converted into \(n\)-grams, and stored in special documents.  These value documents permit users to perform fuzzy search for attributes, allowing attributes to be located despite character substitutions.  While this is not strictly necessary for the use of the system, it reduces user fatigue.
-		
-		
+		Each value for user selected attributes are converted into \(n\)-grams, and stored in special documents.  These value documents permit users to perform fuzzy search for attributes, allowing attributes to be located despite character substitutions.  While this is not strictly necessary for the use of the system, it may reduce user fatigue.
 		
 		\begin{table}
 			\centering
@@ -206,7 +201,7 @@
 		\begin{ex}[Entity Graph Search]
 			Find the shortest path between the two entities with the unique identities of ``subject|math'' and ``instructor|5''.
 			
-			The entity graph is shown in \cref{fig:path-initial}.
+			The entity graph is shown in \cref{fig:path-initial}.  There are two possible paths between ``subject|math'' and ``instructor|5''.  The path in \cref{fig:path-2} is shorter than that in \cref{fig:path-1}, meaning it is likely the most relevant.
 			
 			\begin{figure}
 				\centering
@@ -215,8 +210,6 @@
 				\caption{Initial graph}
 				\label{fig:path-initial}
 			\end{figure}
-			
-			There are two possible paths between ``subject|math'' and ``instructor|5''.  The path in \cref{fig:path-2} is shorter than that in \cref{fig:path-1}, meaning it is likely the most relevant.
 			
 			\begin{figure}
 				\begin{subfigure}[b]{1.0\linewidth}

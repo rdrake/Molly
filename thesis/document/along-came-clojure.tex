@@ -1,64 +1,11 @@
 \chapter{Along Came Clojure}
 \label{chap:along-came-clojure}
-	In this chapter we further discuss our implementation.  In \cref{sec:basic-principles-fp} we discuss the basic tenets of functional programming with an emphasis on how Clojure implements these tenets.  Further attention is paid to how Clojure uses these tenets to implement its concurrency model.
+	In this chapter we discuss the implementation details of our system.  In \cref{sec:basic-principles-fp} we discuss the basic tenets of functional programming with an emphasis on how Clojure implements these tenets.  Further attention is paid to how Clojure uses these tenets to implement its concurrency model.
 	
 	In \cref{sec:search-with-clojure} we illustrate how Clojure's \gls{jvm} interoperability is used to interface with Lucene and \gls{jdbc} drivers in order to perform indexing and search on data.  This section also covers keyword as well as graph search in document space.
 	
+	In \cref{sec:web-interface} we present a simple web-based interface to the system.  It functions as a demonstration of the system's capabilities.
+	
 	\input{functional-programming}
 	\input{search-with-clojure}
-	
-	\section{Web Interface}
-	\label{sec:web-interface}
-		In order to make the system more accessible to novice users, a web-based interface was created.
-		
-		The first step involves searching for entities by a value.  We use approximate (\(n\)-gram) string matching to find relevant values despite potential character substitutions, deletions, or additions.
-		
-		\begin{figure}[H]
-			\centering
-			\includegraphics[scale=0.5]{figures/images/step-1}
-			
-			\caption{Approximate string matching of values}
-			\label{fig:webui-step-1}
-		\end{figure}
-		
-		Entities that match the desired values are displayed to the user.  They have the option of specifying the entity as either the source, or the target.
-		
-		\begin{figure}[H]
-			\centering
-			\includegraphics[scale=0.5]{figures/images/step-2}
-			
-			\caption{Tabular display of entities}
-			\label{fig:webui-step-2}
-		\end{figure}
-		
-		When an entity is chosen, the navigation bar at the top of the page is updated to reflect the new selection.  This allows the user to hover their cursor over the respective element in order to remind themselves of their selection.
-		
-		\begin{figure}[H]
-			\centering
-			\includegraphics[scale=0.5]{figures/images/step-3}
-			
-			\caption{Chosen entities are displayed at the top}
-			\label{fig:webui-step-3}
-		\end{figure}
-		
-		When both a source and target entity are selected, the user is able to search for the shortest path between them.  They are given the option of which graph search algorithm implementation to use.
-		
-		\begin{figure}[H]
-			\centering
-			\includegraphics[scale=0.5]{figures/images/step-4}
-			
-			\caption{The algorithm implementation may be selected}
-			\label{fig:webui-step-4}
-		\end{figure}
-		
-		A short message displaying the search duration as well as memory consumption is followed by a series of tables representing the intermediate entities between the source and target entities.
-		
-		\begin{figure}[H]
-			\centering
-			\includegraphics[scale=0.5]{figures/images/step-5}
-			
-			\caption{Result of a search between entities}
-			\label{fig:webui-step-5}
-		\end{figure}
-		
-		This interface allows users to query the database for information in a familiar manner.
+	\input{web-interface}

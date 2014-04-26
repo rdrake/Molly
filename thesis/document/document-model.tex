@@ -3,11 +3,11 @@
 \label{sec:document-model}
 	In contrast to the relational model, the document model represents semi-structured as well as unstructured data.  Examples of information suitable to the document model includes emails, memos, book chapters, etc.
 	
-	These pieces, or units, of information are broken into documents.  Groups of related documents (for example, a library catalogue) are referred to as a document collection.
+	These pieces, or units, of information are broken into documents.  Groups of related documents, e.g., a library catalogue, are referred to as a document collection.
 
-	\begin{defn}[Terms and Document]
+	\begin{defn}[Terms and Documents]
 	\label{def:document}
-		A term, \(\term\), is an indivisible string (e.g.~a proper noun, word, or a phrase).	A document, \(\doc\), is a bag of words; order is irrelevant.
+		A term, \(\term\), is an indivisible string, e.g., a proper noun, word, or a phrase.	A document, \(\doc\), is a bag of words; order is irrelevant.
 		
 		Let \(\freq(\term, \doc)\) be the frequency of term \(\term\) in \(\doc\), \(\terms\) denote all possible terms, and \(\bag{\terms}\) be all possible bag of terms.
 	\end{defn}
@@ -31,12 +31,14 @@
 			\item mathematics lecture was great
 		\end{enumerate}
 		
-		Each sentence phrase produces a document, giving us the following
+		Each sentence phrase produces a document, giving us the following documents
 		\begin{align}
 			\doc_1 &= \{\text{``math''}: 2, \text{``a''}: 1, \text{``is''}: 1, \text{``360''}: 1, \text{``class''}: 1\} \\
 			\doc_2 &= \{\text{``a''}: 1, \text{``boring''}: 1, \text{``is''}: 1, \text{``cdps''}: 1, \text{``lecture''}: 1, \text{``101''}: 1\} \\
 			\doc_3 &= \{\text{``mathematics''}: 1, \text{``great''}: 1, \text{``was''}: 1, \text{``lecture''}: 1\}
 		\end{align}
+		
+		with \(\dc = \{\doc_1, \doc_2, \doc_3\}\) and \(\gls{ndocs} = 3\).
 	\end{ex}
 	
 	\subsection{Vectorization of Documents}
@@ -171,10 +173,11 @@
 		
 		\begin{defn}[Search Query]
 		\label{def:search-query}
-			A search query \(\q\) is simply a document (as defined by \vref{def:document}).  The top-\(k\) answers to \(\q\) with respect to a collection \(\dc\) is defined as the \(k\) documents, \(\{\doc_1, \doc_2, \dotsc, d_k\}\) in \(\dc\), such that \(\{\vec{\doc_1}, \vec{\doc_2}, \dotsc, \vec{d_k}\}\) are the closest vectors to \(\vec{\q}\) using a Euclidean distance measure in \(\mathbb{R}^N\).
+			A search query \(\q\) is simply a document (\cref{def:document}).  The top-\(k\) answers to \(\q\) with respect to a collection \(\dc\) is defined as the \(k\) documents, \(\{\doc_1, \doc_2, \dotsc, d_k\}\) in \(\dc\), such that \(\{\vec{\doc_1}, \vec{\doc_2}, \dotsc, \vec{d_k}\}\) are the closest vectors to \(\vec{\q}\) using a Euclidean distance measure in \(\mathbb{R}^N\).
 		\end{defn}
 		
 		\begin{ex}
+			\label{ex:query}
 			Given the search query \(\q = \{\text{math}, \text{lecture}, \text{was}, \text{great}\}\), compute the vector \(\vec{\q}\) within the document collection \(\dc\) (as defined in \vref{ex:documents}).
 			\[
 				\vec{\q} = 
@@ -200,20 +203,20 @@
 		In order to determine the top-\(k\) documents for search query \(\q\), we need a way of measuring the similarity between documents.
 		
 		\begin{defn}[Cosine Similarity]
-			Given two document vectors, \(\vec{\doc}_1\) and \(\vec{\doc}_2\), the cosine similarity is the dot product \(\vec{\doc}_1 \cdot \vec{\doc}_2\), normalized by the product of the Euclidean distance of \(\vec{\doc}_1\) and \(\vec{\doc}_2\) in \(\mathbb{R}^N\).	It is denoted as \(\similarity(\vec{\doc}_1, \vec{\doc}_2)\).
+			Given two document vectors, \(\vec{\doc}_1\) and \(\vec{\doc}_2\), the cosine similarity is the dot product \(\vec{\doc}_1 \cdot \vec{\doc}_2\) normalized by the product of the Euclidean distance of \(\vec{\doc}_1\) and \(\vec{\doc}_2\) in \(\mathbb{R}^N\).	It is denoted as \(\similarity(\vec{\doc}_1, \vec{\doc}_2)\).
 			\begin{align}
 				\similarity(\vec{\doc}_1, \vec{\doc}_2) &= \frac{\vec{\doc}_1 \cdot \vec{\doc}_2}{\norm{\vec{\doc}_1} \cdot \norm{\vec{\doc}_2}} \\
 				 &= \frac{\sum\limits_{i=1}^{N} \vec{\doc}_{1, i} \times \vec{\doc}_{2, i}}{\sqrt{\sum\limits_{i=1}^{N} (\vec{\doc}_{1, i})^2} \times \sqrt{\sum\limits_{i=1}^{N} (\vec{\doc}_{2, i})^2}}
 			\end{align}
 		\end{defn}
 		
-		Recall we may represent search queries as documents and thus document vectors.	Therefore we may compute the score of a document \(\doc\) for a search query \(\q\) as
+		Recall we may represent search queries as documents and thus document vectors.  Therefore we may compute the score of a document \(\doc\) for a search query \(\q\) as
 		\[
 			\similarity(\vec{\doc}, \vec{\q})
 		\]
 		
 		\begin{ex}
-			Given the document collection \(\dc\) (from \vref{ex:documents}) and search query \(q\), compute the similarity between \(\q\) and every document \(\doc \in \dc\).
+			Given the document collection \(\dc\) (\cref{ex:documents}) and search query \(q\) (\cref{ex:query}), compute the similarity between \(\q\) and every document \(\doc \in \dc\).
 			\begin{align}
 				\similarity(\vec{\doc_1}, \vec{\q}) = 0.390890 \\
 				\similarity(\vec{\doc_2}, \vec{\q}) = 0.061592 \\
@@ -223,13 +226,13 @@
 		
 	\subsection{Extending the Document Model}
 	\label{sec:extending-the-document-model}
-		In the extended document model, documents have fields, denoted as \(\fields{\doc}\), and each field has a value.  Thus
+		In the extended document model, documents have fields, denoted as \(\fields{\doc}\).  Each field has a value.
 		\[
 			\doc : \fields{\doc} \to \bag{\terms}
 		\]
 		
 		\begin{ex}[Semi-Structured Document]
-			We see that \(\doc_1\) is about MATH 360.  The document contents are semi-structured, containing both a course code and the subject ID.  By adding fields to the document, we are left with \vref{tbl:course-document}.
+			We see that \(\doc_1\) is about MATH 360.  The document contents are semi-structured, containing both a course code and the subject ID.  By adding fields to the document, we are left with \cref{tbl:course-document}, which is similar in structure to \cref{tbl:hmr-properties-rel}.
 			
 			\begin{table}
 				\centering
@@ -247,8 +250,6 @@
 				\caption{Course document for MATH 360.}
 				\label{tbl:course-document}
 			\end{table}
-			
-			which is similar in structure to \vref{tbl:hmr-properties-rel}.
 		\end{ex}
 		
 	\subsection{Approximate String matching}
@@ -259,7 +260,7 @@
 		
 		% \char"24 - DOLLAR	 BILL Y'ALL
 
-		\begin{algorithm}
+		\begin{algorithm}[H]
 			\caption{\(\textsc{N-Gram}(S, n, s)\)}
 			\label{alg:n-gram}
 			
@@ -286,11 +287,11 @@
 		
 		%\todo{The medskips above should not be required, but are in single spaced mode.}
 		
-		Where \(l\) is the length of \(S\), \(\textsc{Repeat}(S, n)\) repeats \(s\) character \(n\) times, \(\textsc{Pad}(S, p)\) prefixes and postfixes \(S\) with \(p\), and \(\textsc{Replace}(S, s, p)\) replaces character \(s\) with \(p\) in string \(S\).
+		Where \(l\) is the length of \(S\), \(\textsc{Repeat}(S, m)\) repeats the character \(s\) a total of \(m\) times, \(\textsc{Pad}(S, p)\) prefixes and postfixes \(S\) with \(p\), and \(\textsc{Replace}(S, s, p)\) replaces character \(s\) with \(p\) in string \(S\).
 		
 		\begin{ex}
 		\label{ex:ngram}
-			Given a string \(S = \text{``human''}\), compute the trigram of \(S\) using \vref{alg:n-gram}.
+			Given a string \(S = \text{``human''}\), compute the trigram of \(S\) using \cref{alg:n-gram}.
 			\[
 				G = \{
 					\text{``\char"24\char"24h''},
@@ -322,7 +323,7 @@
 				\}
 			\]
 			
-			Comparing \(G\) to \(G'\) results in the following matrix
+			Comparing \(G\) to \(G'\) results in the matrix in \cref{fig:n-gram-misspelling-comparison}.  By using \(n\)-grams, we yield a similarity score of \(\sfrac{5}{10}\).
 			
 			\begin{figure}
 				\[
@@ -344,8 +345,6 @@
 				\caption{Comparison between \(n\)-grams of \(G\) and \(G'\).}
 				\label{fig:n-gram-misspelling-comparison}
 			\end{figure}
-			
-			As \vref{fig:n-gram-misspelling-comparison} shows, using \(n\)-grams yield a similarity of \(\frac{5}{10}\).
 		\end{ex}
 			
 	\subsection{Pros and Cons of the Document Model}
@@ -368,7 +367,7 @@
 				\query(\text{``mathematics''}) \cap \query(\text{``lecture''}) \rightarrow \{\doc_3\}
 			\]
 			
-			as only \(\doc_1\) contains both terms.
+			as only \(\doc_3\) contains both terms.
 		\end{ex}
 		
 		\begin{ex}[\texttt{NOT} Query]
@@ -378,7 +377,7 @@
 			\]
 		\end{ex}
 		
-		While none of the above queries required domain knowledge, it is possible to use the extended document model (\vref{sec:extending-the-document-model}) to search specific fields.  Doing so permits users to leverage their existing domain knowledge in order to achieve finer control over what documents are retrieved.
+		While none of the above queries required domain knowledge, it is possible to use the extended document model (\cref{sec:extending-the-document-model}) to search specific fields.  Doing so permits users to leverage their existing domain knowledge in order to achieve finer control over what documents are retrieved.
 		
 		\begin{ex}[Extended Query]
 		\label{ex:extended-query}
@@ -388,10 +387,10 @@
 			\]
 		\end{ex}
 		
-		Not only does the document model provide a familiar interface to search for information with, it also ranks the results.  In the relational model a search for ``mathematics'' would return all named tuples that contained that term.  In the document model, documents are ranked against the query \(\q\) and the top-\(k\) documents are returned.
+		Not only does the document model provide a familiar interface to search for information with, it also ranks the results.  In the relational model a search for ``mathematics'' would return all named tuples that contained that term.  In the document model, documents are ranked against the query \(\q\) and the top-\(k\) documents are returned in descending order by score.
 		
 		The advantage is that users have the result of \(\q\) already ranked so only the most relevant documents may be explored.	 As the number of documents matching \(\q\) for a large corpus can be high, showing only the top-\(k\) relevant documents may save the user a substantial amount of time.
 		
-		The relational model does not permit approximate string matching.  By utilizing the document model with \(n\)-grams (\vref{sec:n-gram}), users who substitute, delete, or insert characters from the desired term may still receive results for their intended term (see \vref{ex:n-gram-comparison} for a demonstration of how \(n\)-grams overcome character insertion).
+		The relational model does not permit approximate string matching.  By utilizing the document model with \(n\)-grams (\cref{sec:n-gram}), users who substitute, delete, or insert characters from the desired term may still receive results for their intended term (see \cref{ex:n-gram-comparison} for a demonstration of how \(n\)-grams overcome character insertion).
 		
-		Unfortunately the document model does not support the concept of foreign keys (\vref{def:foreign-keys}).  While information is easily accessible due to flexible search, each document is a discrete unit of information.  Aggregate queries are unsupported, as these units are not linked amongst one another.
+		Unfortunately the document model does not support the concept of foreign keys (\cref{def:foreign-keys}).  While information is easily accessible due to flexible search, each document is a discrete unit of information.  Aggregate queries are unsupported, as these units are not linked amongst one another.

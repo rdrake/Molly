@@ -3,10 +3,10 @@
 	Clojure's excellent \gls{jvm} interoperability permits the use of countless third-party libraries.  The most extensively used was Lucene.
 	
 	\subsection{Full-Text Search Using Lucene}
-		\textcquote{luc-home}{Apache Lucene\texttrademark\ is a high-performance, full-featured text search engine library written entirely in Java.}  Lucene implements the Document Model (\cref{sec:document-model}), providing a simple yet powerful \gls{api} to perform full-text search.  Among these features is the ability to vectorize documents according to the Vector Space Model (\cref{sec:vectorization-of-documents}), utilize the extended document model to provide semi-structured documents (\cref{sec:extending-the-document-model}), and issue search queries against the index (\cref{def:search-query}).
+		\textcquote{luc-home}{Apache Lucene\texttrademark\ is a high-performance, full-featured text search engine library written entirely in Java.}  Lucene implements the document model, and provides a simple yet powerful and feature-rich \gls{api} to perform full-text search.  Among these features is the ability to vectorize documents according to the vector space model, utilize the extended document model to provide search of semi-structured documents, and issue search queries against the index.
 	
 	\subsection{Indexing Relational Database}
-		The indexing of relational objects is a complicated process.  The objects must be retrieved from the relational database, transformed from named tuples into documents, then placed in the index.  Additionally, all foreign keys (\cref{def:foreign-keys}) must be encoded as documents (\cref{sec:encoding-entity-group-as-document-group}) in order to satisfy \cref{sec:mapping-entity-groups-to-documents}.
+		The indexing of relational objects is a complicated process.  The objects must be retrieved from the relational database, transformed into documents from named tuples, then placed in the index.  Additionally, all foreign keys (\cref{def:foreign-keys}) must be encoded as documents (\cref{sec:encoding-entity-group-as-document-group}) in order to satisfy \cref{sec:mapping-entity-groups-to-documents}.
 		
 		The schema graph (\cref{def:schema-graph}) must be defined before the relational database may be crawled.
 		
@@ -54,13 +54,13 @@
 			Each record issues a \gls{sql} query against the database that retrieves all named tuples that it represents.  This query is given by the \texttt{:sql} key of the record.  For every symbol defined by the \texttt{:values} key, an additional query is issued.  These queries retrieve all distinct (within the context of that relation and attribute) values.
 		
 		\subsubsection{Transformation}
-			For every named tuple, a document is constructed (see \cref{sec:named-tuples-documents}).  In addition to the attributes, several other fields may be added to the document.  These special fields contain additional meta information about the document.  For example, the class, type, and unique identifier are added to an entity, while an entity group has a space-delimited list of unique identifiers that comprise the group.
+			For every named tuple, a document is constructed.  In addition to the attributes, several other fields may be added to the document.  These special fields contain additional meta information about the document.  For example, the class, type, and unique identifier are added to an entity, while an entity group has a space-delimited list of unique identifiers that comprise the group.
 			
-			Before becoming a document, named tuples are transformed into an internal representation.  The internal representation adds flexibility to the system; so long as functions exist to convert between the internal representation and other forms, the system does not care about the source.
+			Before becoming a document, named tuples are transformed into an internal representation.  The internal representation adds flexibility to the system; so long as functions exist to convert between the internal representation and other forms, the source of the data is irrelevant.
 			
-			Clojure permits the annotation of data with metadata.  Named tuples are returned as maps, with key-value pairs representing attributes and values for each tuple.  Metadata may be associated with a named tuple that does not affect its key-value pairs.
+			Clojure permits the annotation of data with metadata.  Named tuples are returned as maps, with key-value pairs representing attributes and values for the tuple.  Metadata may be associated with a named tuple.  The metadata does not affect its key-value pairs.
 			
-			The map of attributes and values of a named tuple is annotated with the function \texttt{(with-meta obj map)}.  The \texttt{obj} parameter is the named tuple, while \texttt{map} is a map of metadata as defined by the system.  The keys of \texttt{map} for each type (value, entity, or entity group) are defined in \vref{tbl:type-metadata}.
+			The map of attributes and values of a named tuple is annotated with the function \texttt{(with-meta obj map)}.  The \texttt{obj} parameter is the named tuple, while \texttt{map} is a map of metadata as defined by the system.  The keys of \texttt{map} for each type (value, entity, or entity group) are defined in \cref{tbl:type-metadata}.  The internal representation of the named tuple given in \cref{tbl:hmr-properties-rel} is given in \cref{clj:with-meta-internal-rep}.
 			
 			\begin{table}
 				\begin{subtable}[b]{0.33\linewidth}
@@ -112,8 +112,6 @@
 				\label{tbl:type-metadata}
 			\end{table}
 			
-			The internal representation of the named tuple given in \vref{tbl:hmr-properties-rel} is given in \vref{clj:with-meta-internal-rep}.
-			
 			\begin{figure}
 				\begin{singlespaced}
 					\begin{pygments}{clj}
@@ -127,7 +125,7 @@
 					\end{pygments}
 				\end{singlespaced}
 				
-				\caption{Internal representation of named tuple from \vref{tbl:hmr-properties-rel}}
+				\caption{Internal representation of named tuple from \cref{tbl:hmr-properties-rel}}
 				\label{clj:with-meta-internal-rep}
 			\end{figure}
 			
@@ -156,16 +154,16 @@
 			\end{table}
 		
 		\subsubsection{Indexing}
-			With the named tuples transformed into documents, the index may be constructed.  The first step is to open the index for writing.  In Lucene, this is accomplished by creating an \texttt{IndexWriter} object on a \texttt{Directory} object that points to the index location.  The \texttt{IndexWriter} object also expects an analyzer to be used by default on documents it indexes.  The system uses a \texttt{WhitespaceAnalyzer} by default.
+			With the named tuples transformed into documents, the index may be constructed.  The first step is to open the index for writing.  In Lucene, this is accomplished by creating an \texttt{IndexWriter} object on a \texttt{Directory} object that points to the index location.  The \texttt{IndexWriter} object also expects an analyzer to be used by default on documents it indexes.  The system uses a \texttt{WhitespaceAnalyzer} by default, but offers the ability to choose a different analyzer for specific fields.
 			
-			For every named tuple, the transformed document is written to the index by the index writer object.  In addition, the indexing document (\cref{sec:encoding-entity-group-as-document-group}) of every entity group is added.
+			For every named tuple, the transformed document is written to the index by the index writer object.  In addition, the indexing document of every entity group is added.
 		
 	\subsection{Keyword Search in Document Space}
 	\label{sec:keyword-search-document-space}
-		With the entity graph encoded into the document model, users may begin issuing search queries.  Every query follows the following pattern:  users look up values (optionally using fuzzy search), these values are used to locate entities, and once two entities are selected, the system attempts to locate connections between the two.
+		With the entity graph encoded into the document model, users may begin issuing search queries.  Every query follows the following pattern:  users look up values (optionally using fuzzy search), these values are used to locate entities, and once two entities are selected, the system attempts to connect the two.
 		
 		\subsubsection{Fuzzy Value Search}
-			Recall that entity values are stored as their \(n\)-gram (\cref{sec:n-gram}).  This allows users to make character substitutions, deletions, or additions, and still return values they may have intended on finding.  Without the use of \(n\)-grams, a misspelling on the user's part would result in either no or irrelevant values being returned.  Values that are approximately matched would be assigned a lower score than those which are fully matched, but they would at least appear in the results.
+			Recall that entity values are stored as their \(n\)-gram (\cref{sec:n-gram}).  This allows users to make character substitutions, deletions, or additions, and still return values they may have intended on finding.  Without the use of \(n\)-grams, a misspelling on the user's part may result in an empty set of values being returned.  Values that are approximately matched would be assigned a lower score than those which are fully matched, but they would at least appear in the results.
 			
 			Rather than guessing the user's intention, the system presents the user with a list of values in order to give them the option of substituting their entry for an approximate match.  This autosuggest feature is intended to improve the user experience by eliminating a source of frustration -- irrelevant results as a result of a simple spelling error.
 		
@@ -175,7 +173,7 @@
 				\query(\field, \w)
 			\]
 			
-			The search \gls{api} provides a function that accepts a symbol defining the field to search in, as well one or more words to search for.  A phrase query comprised of every word is constructed.
+			The search \gls{api} provides a function that accepts a field to search in, as well one or more words to search for.  A phrase query comprised of every word is constructed.
 			\[
 				\query(\field, \w_1, \w_2, \dotsc, \w_n) = \bigcap_{\w \in \{\w_1, \w_2, \dotsc, \w_n\}} \query(\field, \w)
 			\]
@@ -183,7 +181,7 @@
 			Another function, \texttt{boolean-query}, accepts one or more \(\query\) functions as well as a boolean operator for each and returns the result.  The symbols \texttt{:and}, \texttt{:or}, and \texttt{:not} provide \(\cap\), \(\cup\), and \(\neg\), respectively.
 			
 			\begin{ex}[\texttt{boolean-query}]
-				For example, the query in \cref{ex:extended-query} is given in \vref{clj:boolean-query}.
+				For example, the query in \cref{ex:extended-query} is given in \cref{clj:boolean-query}.
 				
 				\begin{figure}
 					\begin{singlespaced}
@@ -200,9 +198,9 @@
 			\end{ex}
 
 	\subsection{Graph Search in Document Space}
-		With the ability for users to find relevant entities using fuzzy value search and the flexible keyword search \gls{api} (\cref{sec:keyword-search-document-space}), they must be able to find connections between two entities.  As stated previously (\cref{clm:lossless}), the document encoding of relational data is a graph.  This allows the system to search for links between entities by utilizing one or more graph search algorithms, such as \gls{bfs}.
+		With the ability for users to find relevant entities using fuzzy value search and the flexible keyword search \gls{api} (\cref{sec:keyword-search-document-space}), they must be able to find connections between two entities.  As previously stated, the document encoding of relational data is a graph.  This allows the system to search for links between entities by utilizing one or more graph search algorithms, such as \gls{bfs}.
 		
-		\subsubsection{Why We Need Graph Search}
+		\subsubsection{A Case For Graph Search}
 			Tuples are fragments, or facts, of larger pieces of knowledge.  By utilizing graph search, we amalgamate these facts to provide a user with a broader view.
 			
 				By utilizing graph search, we can take the facts in \cref{tbl:facts} and compose new facts.  For example, we could learn who teaches Complex Analysis.  It also allows us to ask questions, such as ``who taught Complex Analysis with Instructor X?''
@@ -325,7 +323,7 @@
 			Essentially \gls{bfs} populates the frontier before exploring the next hop.  Thus \gls{bfs} is able to explore a large, sparsely connected graph quickly.  However, if the graph is dense, \gls{bfs} would consume a substantial amount of memory, making an algorithm such as \gls{dfs} more suitable.
 			
 		\subsubsection{Functional \gls{bfs}}
-			The simple nature of \gls{bfs} makes it ideal to implement in a functional manner.  Rather than modifying objects, the search is conducted recursively.  Newly discovered vertices are conjoined with the existing queue to form a new queue.  Due to Clojure's persistent data structures, this operation is more efficient than intuition would dictate.
+			The simple nature of \gls{bfs} makes it ideal to implement in a functional manner.  There is minimal shared state or side effects, allowing the search to be conducted recursively.  Newly discovered vertices are conjoined with the existing queue to form a new queue.  Due to Clojure's persistent data structures, this operation is more efficient than intuition would dictate.
 			
 			The functional implementation of \gls{bfs} combines state changes into larger units.  This leaves large segments of the implementation free of side effects.  We exploit this fact to implement \gls{bfs} concurrently in Clojure.
 		
