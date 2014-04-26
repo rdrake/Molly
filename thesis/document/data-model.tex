@@ -36,19 +36,14 @@
 	 	
 	 	This transformation is done in such a way that it is reversible.  In order to be reversible, the relational information is encoded in a document form.  This allows us to perform graph search over documents.
 	 	
-	 	In addition, we investigate the effect a concurrent graph search implementation has on the performance.\todo{reword?}
-
-% Motivation -> Hypothesis -> Contributions -> 
-% Why concurrent?  Why is keyword search important?
-
-% Improve performance and allow more flexibility
-
-% Why dataset chosen
+	 	In addition, we investigate the effect a concurrent graph search implementation has on the performance.  We believe that the rate of growth of the search time will be reduced by performing the graph search concurrently.
 
 % 5.5 -> threats to validity (external mostly)
 % 6.2 -> limitations & future work (not just about tool, also about research questions left unanswered)
 	
 	\section{Outline of Thesis}
+		\cref{chap:best-of-both-worlds} presents a framework for the transformation between the two document models.  It demonstrates how to encode named tuples as documents.  It further describes a method of encoding relational data in the document data model, permitting iterative graph search.
+		
 		\cref{chap:along-came-clojure} describes the details of our implementation the data transformation and query operators for graph search in the linked document space.  Our choice of utilizing a modern functional programming language for our implementation makes high degree of concurrency possible.
 		
 		\cref{chap:experimental-evaluation} provides further justification to our choice of data model mapping and the choice of programming language used.  Through a series of experiments, we see that our proposal allows a tight integration of the relational database engines and keyword search libraries.  Furthermore, the implementation enjoys a linear speed up with respect to the number of processors available.

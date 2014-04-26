@@ -1,11 +1,47 @@
 \chapter{Conclusion}
 \label{chap:conclusion}
+
+% We provide a formal definition for a system that is capable of transforming data from the relational model to the document model.  By performing this transformation, we gain the flexible search characteristics of the document model.
+% 	 	
+% This transformation is done in such a way that it is reversible.  In order to be reversible, the relational information is encoded in a document form.  This allows us to perform graph search over documents.
+% 	 	
+% In addition, we investigate the effect a concurrent graph search implementation has on the performance.  We believe that the rate of growth of the search time will be reduced by performing the graph search concurrently.
+
 	\section{Summary}
 		While the relational model is a powerful and well understood method of storing data, it is not without its shortcomings.  The rigidity of the relational model comes at the cost of usability.  A change to the data model may require a rewrite of queries to account for the different join paths, increasing the cognitive burden on users.
 		
 		In contrast, the document model represents semi-structured and unstructured data.  The queries issued against the document model are unstructured and flexible.  This allows users with little or no prior domain knowledge to issue queries.  Unfortunately this flexibility comes at the cost of foreign keys, data consistency, and aggregate queries.
 		
-		In \cref{chap:tale-of-two-data-models} we introduced the relational and document data models.  We compared and contrasted the two data models, paving the way for our contribution.  We introduced our contribution in \cref{chap:best-of-both-worlds}, providing a formal definition of a framework for the translation between the relational and document data models.  Our implementation was introduced in \cref{chap:along-came-clojure}, which also covered Clojure.  In \cref{chap:experimental-evaluation}, we evaluated our implementation, identifying performance characteristics.
+		In \cref{chap:tale-of-two-data-models} we introduced the relational and document data models.  We compared and contrasted the two data models, demonstrating a need for a hybrid data model that provides users with a fast, flexible search interface while maintaining the relational information between entities.  Such a hybrid model provided the motivation behind this thesis.
+		
+		We introduced our first contributions in \cref{chap:best-of-both-worlds}, providing a formal definition of a framework for the translation between the relational and document data models.  We describe how this transformation preserves relational information, making the process reversible.  In addition, we demonstrate how this relational information may be utilized to perform graph search over documents.
+		
+		Our implementation, written in Clojure, was introduced in \cref{chap:along-came-clojure}.  We demonstrated the benefit of implementing the system in a functional language.  We utilized the core concepts functional programming paradigm to provide a concurrent implementation of graph search algorithms.
+		
+		We evaluated our implementation in \cref{chap:experimental-evaluation}.  The data corpus was introduced and the methodology explained.  We presented our findings which confirmed our hypothesis that a concurrent graph search implementation would produce a noticeable reduction in graph search time.  Finally, we discussed several potential threats to validity of the results.
+	
+	\section{Limitations}
+	\label{sec:limitations}
+		The system, as implemented, has several limitations.
+		
+		\begin{itemize}
+			\item The document database must be re-constructed every time the relational database is updated, it is currently not possible to partially update the document database if a change occurs in the relational database.
+			\item The initial configuration is daunting, requiring the manual specification of all entities, attributes, values, and entity groups.
+		\end{itemize}
+		
+		There were also several threats to validity identified in \cref{sec:threats-to-validity}.  These are not necessarily limitations of the system, but of the work itself.
+		
+		\begin{itemize}
+			\item The data corpus used for evaluation is a non-standard dataset, making comparison to other systems difficult.
+			\item Only one dataset was used for the evaluation, making it difficult to generalize the results.
+		\end{itemize}
+	
+	\section{Future Work}
+		Several limitations of the tool were identified in \cref{sec:limitations}.  These limitations are ideal candidates for future work.
+		
+		In our work, we re-constructed the document database every time a change occurred to the relational database.  A future system could listen for changes to the relational database and mirror those on the document database.  With currently full-text search databases, this would require the deletion and possibly re-insertion of documents.  As no foreign key constraints are enforced on documents by the document database, it would be difficult to ensure correctness.
+		
+		Automatically generating a configuration for a user to start from would be a far simpler task.  The system would require knowledge of the particular \gls{rdbms}.  With this, it would be possible to locate relations, their attributes, and any key constraints.
 		
 	\section{Lessons Learned}
 		The system evaluation in \cref{chap:experimental-evaluation} yielded several important insights.
