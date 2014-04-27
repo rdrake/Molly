@@ -36,10 +36,10 @@
 				\label{fig:persistent-data-structure}
 			\end{figure}
 			
-			In \vref{fig:persistent-data-structure}, we see what happens when a persistent data structure is ``changed'' in Clojure.  The root of the left tree is the data structure before, and the root of the right tree is the data structure after.  Note how the changed map retains pointers to all but the updated value; the newly created value is pointed to instead of the previous one.
+			In \cref{fig:persistent-data-structure}, we see what happens when a persistent data structure is ``changed'' in Clojure.  The root of the left tree is the data structure before, and the root of the right tree is the data structure after.  Note how the changed map retains pointers to all but the updated value; the newly created value is pointed to instead of the previous one.
 		
 		\subsubsection{Concurrency}
-			Clojure supports four systems for concurrency:  \gls{stm}, agents, atoms, and dynamic vars.  The differences between these systems -- including whether or not they are synchronous, coordinated, and what scope they encompass -- are summarized in \vref{tbl:concurrency-system-comparison}.
+			Clojure supports four systems for concurrency:  \gls{stm}, agents, atoms, and dynamic vars.  The differences between these systems -- including whether or not they are synchronous, coordinated, and what scope they encompass -- are summarized in \cref{tbl:concurrency-system-comparison}.
 			
 			\begin{table}
 				\centering

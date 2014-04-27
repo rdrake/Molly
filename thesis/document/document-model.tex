@@ -62,7 +62,7 @@
 		The first component, \(\frac{\freq\left(\term, \doc\right)}{\abs{\doc}}\), measures the importance of a term within a document.  It is normalized to account for document length.	 The second component, \(\log{\frac{N}{\df\left(\term\right)}}\), is a measure of the rarity of the term within the document collection \(\dc\).
 		
 		\begin{ex}
-			Using the documents from \vref{ex:documents}, the \gls{tfidf} scores are as follows.
+			Using the documents from \cref{ex:documents}, the \gls{tfidf} scores are as follows.
 			\[
 				\bordermatrix{
 					~ & d_1 & d_2 & d_3 \cr
@@ -98,7 +98,7 @@
 		\end{defn}
 		
 		\begin{ex}
-			The documents in \vref{ex:documents} would produce the following vectors.
+			The documents in \cref{ex:documents} would produce the following vectors.
 			\[
 				\vec{\doc_n} = 
 					\left[
@@ -178,7 +178,7 @@
 		
 		\begin{ex}
 			\label{ex:query}
-			Given the search query \(\q = \{\text{math}, \text{lecture}, \text{was}, \text{great}\}\), compute the vector \(\vec{\q}\) within the document collection \(\dc\) (as defined in \vref{ex:documents}).
+			Given the search query \(\q = \{\text{math}, \text{lecture}, \text{was}, \text{great}\}\), compute the vector \(\vec{\q}\) within the document collection \(\dc\) (as defined in \cref{ex:documents}).
 			\[
 				\vec{\q} = 
 					\left[
@@ -309,7 +309,7 @@
 		
 		\begin{ex}
 		\label{ex:n-gram-comparison}
-			Given a string \(S\) (\vref{ex:ngram}), let \(S' = \text{``humans''}\).  Compute the trigram of \(S'\) and compare it to \(S\).
+			Given a string \(S\) (\cref{ex:ngram}), let \(S' = \text{``humans''}\).  Compute the trigram of \(S'\) and compare it to \(S\).
 			\[
 				G' = \{
 					\text{``\char"24\char"24h''},
@@ -371,7 +371,7 @@
 		\end{ex}
 		
 		\begin{ex}[\texttt{NOT} Query]
-			Find all documents containing ``mathematics'' but not ``lecture''.  This query would return different results than \vref{ex:and-query}.
+			Find all documents containing ``mathematics'' but not ``lecture''.  This query would return different results than \cref{ex:and-query}.
 			\[
 				\query(\text{``mathematics''})\neg\query(\text{``lecture''}) \rightarrow \emptyset
 			\]

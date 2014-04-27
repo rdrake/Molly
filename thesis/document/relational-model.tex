@@ -59,7 +59,7 @@
 			\forall \tuple, \tuple' \in \relation, \tuple \not= \tuple' \implies \tuple\lbrack\key\rbrack \not= \tuple'\lbrack\key\rbrack
 		\]
 		
-		For example, in \vref{tbl:course-relation}, the relation satisfies the key constraint \(\{\text{code}\}\) or \(\{\text{title}\}\), but not \(\{\text{subject}\}\).
+		For example, in \cref{tbl:course-relation}, the relation satisfies the key constraint \(\{\text{code}\}\) or \(\{\text{title}\}\), but not \(\{\text{subject}\}\).
 	\end{defn}
 	
 	\begin{defn}[Foreign Keys]
@@ -138,7 +138,7 @@
 					\rel{Teaches}{instructor\_id} &\rightarrow \rel{Instructor}{id} \\
 				\end{align*}
 				
-				\caption{\gls{fk} constraints on schema in \vref{tbl:schema}}
+				\caption{\gls{fk} constraints on schema in \cref{tbl:schema}}
 				\label{eqn:fk-constraints}
 			\end{figure}
 			
@@ -161,45 +161,7 @@
 			\end{figure}
 		\end{ex}
 		
-		The relational data model is particularly powerful for analytic queries.  One can formulate the following analytic queries in a query language known as \gls{sql}.
-			
-		\begin{ex}
-			Given the schema graph in \cref{fig:schema-graph}, use \gls{sql} to find all section CRNs for the subject titled ``Community Development \& Policy Studies.''  The \gls{sql} query in \cref{fig:query-section-crns} results in \cref{tbl:query-section-crns-output}.
-			
-			\begin{figure}
-				\begin{singlespaced}
-					\begin{pygments}{sql}
-SELECT section.crn
-FROM   section 
-       JOIN course 
-         ON section.course_code = course.code 
-       JOIN subject 
-         ON subject.id = course.subject_id 
-WHERE  subject.name = 'Community Development & Policy Studies';
-					\end{pygments}
-				\end{singlespaced}
-				
-				\caption{\gls{sql} query to find section CRNs for a subject name}
-				\label{fig:query-section-crns}
-			\end{figure}
-			
-			\begin{table}
-				\centering
-				
-				\begin{tabular}{l}
-					\toprule
-					crn \\
-					\midrule
-					10000 \\
-					10001 \\
-					10002 \\
-					\bottomrule
-				\end{tabular}
-				
-				\caption{Results of the query in \vref{fig:query-section-crns}}
-				\label{tbl:query-section-crns-output}
-			\end{table}
-		\end{ex}
+		The relational data model is particularly powerful for analytic queries.
 		
 	\subsection{Entity Group}
 		\begin{defn}[Entity Group]
@@ -216,7 +178,7 @@ WHERE  subject.name = 'Community Development & Policy Studies';
 		Entity groups define complex, structured objects that include more information than individual tuples in the relations.
 		
 		\begin{ex}
-			The information in \vref{tbl:hmr-properties-rel} all relates to the Course titled Human-Mutant Relations, however no single tuple in the database has all of this information as a result of database normalization.
+			The information in \cref{tbl:hmr-properties-rel} all relates to the Course titled Human-Mutant Relations, however no single tuple in the database has all of this information as a result of database normalization.
 			
 			\begin{table}
 				\centering
@@ -259,7 +221,7 @@ digraph G {
 		\subsubsection{Pros}
 			The enforcement of constraints is essential to the relational model.  There are several types of constraints, including uniqueness and \glspl{fk}.  The first constraint maintains uniqueness.
 			
-			The Course relation (\vref{tbl:course-relation}) has the attribute \texttt{code} as its primary key.	In order for other relations to reference a specific named tuple, the \texttt{code} attribute must be unique.
+			The Course relation (\cref{tbl:course-relation}) has the attribute \texttt{code} as its primary key.	In order for other relations to reference a specific named tuple, the \texttt{code} attribute must be unique.
 			
 			\begin{ex}[Unique Constraint]
 			\label{ex:unique-constraint}
@@ -281,7 +243,7 @@ Error: column code is not unique
 				\end{verbatim}
 			\end{ex}
 			
-			With the uniqueness of named tuples guaranteed (as demonstrated in \vref{ex:unique-constraint}), we must ensure that any named tuples that are referenced actually exist.  If they do not, the database must not permit the operation to continue.  Doing so would lead to dangling references.
+			With the uniqueness of named tuples guaranteed (as demonstrated in \cref{ex:unique-constraint}), we must ensure that any named tuples that are referenced actually exist.  If they do not, the database must not permit the operation to continue.  Doing so would lead to dangling references.
 			
 			\begin{ex}[Referential Integrity]
 				Attempt to insert the tuple (``CHEM 101'', ``Introductory Chemistry'', ``'CHEM'') in the Course relation.

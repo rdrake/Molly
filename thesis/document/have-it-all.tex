@@ -154,7 +154,7 @@
 			\end{table}
 		\end{ex}
 		
-		By \vref{clm:lossless}, we see that from \(\text{encode}(\egraph)\) we can recover \(\text{V}(\egraph)\), the tuples in \(\egraph\).
+		By \cref{clm:lossless}, we see that from \(\text{encode}(\egraph)\) we can recover \(\text{V}(\egraph)\), the tuples in \(\egraph\).
 	
 	\section{Encoding Attribute Values into Searchable Documents}
 		Each value for user selected attributes are converted into \(n\)-grams, and stored in special documents.  These value documents permit users to perform fuzzy search for attributes, allowing attributes to be located despite character substitutions.  While this is not strictly necessary for the use of the system, it may reduce user fatigue.
@@ -183,7 +183,7 @@
 	\section{Iterative Search Using Document Encodings}
 		A document database supports fast and flexible keyword search queries.	A search query is characterized by \(\q = (\field, \w)\), where \(\field\) is an optional field name, and \(\w\) is a search phrase.
 		
-		\(\query(\q)\) is the set of documents returned by the text index.  The query function, combined with the extended document model, permits powerful search queries to be issued.  Our implementation supports approximate string matching using \(n\)-grams (\cref{sec:n-gram}) for values, searching for entities containing keywords (see \vref{ex:entity-search}), and the discovery of intermediate entities given two known entities.
+		\(\query(\q)\) is the set of documents returned by the text index.  The query function, combined with the extended document model, permits powerful search queries to be issued.  Our implementation supports approximate string matching using \(n\)-grams (\cref{sec:n-gram}) for values, searching for entities containing keywords (see \cref{ex:entity-search}), and the discovery of intermediate entities given two known entities.
 		
 		\begin{ex}[Entity Search]
 		\label{ex:entity-search}

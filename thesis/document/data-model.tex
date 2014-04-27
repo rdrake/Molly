@@ -12,23 +12,29 @@
 	\input{document-model}
 	
 	\section{Problem}
-		Each of these data models has its own pros and cons.  One must choose between highly normalized, structured data and fast, flexible keyword search.
+		Each of these data models has its own pros and cons.
 		
-		What is needed is a hybrid model, combining the pros of both the relational and document models together.  Relational data would automatically be transformed into the document model.  Such a system would require some initial configuration, but would require little user intervention afterwards.
+		\begin{itemize}
+			\item The relational model is built upon the enforcement of constraints.  These constraints exist to protect the integrity of the data.
+			\item The document model allows users to use simple keyword queries and a small set of operators to quickly locate data with minimal knowledge of its structure.
+			\item The relational model is rigid and data is highly normalized, while the document model is flexible and de-normalized.
+		\end{itemize}
+		
+		One must choose between highly normalized, structured data and fast, flexible keyword search.
+		
+		What is needed is a system that is capable of automatically transforming data from the relational model to the document model.  This would provide the benefits of both models.  Such a system would require some initial configuration, but would require little user intervention afterwards.
 	
 	\section{Thesis Statement \& Scope of Research}
 		\begin{displayquote}
-			\textbf{Thesis Statement:}  A system could be built that is capable of transforming data from the relational model to the document model.  The transformation is reversible, allowing the original data model to be recovered.
-			
-			Such a system could use the fast search capabilities of the document model, combined with the relational information of the relational model, to quickly discover related fragments of information.  This process could further be sped up by conducting this search in a concurrent manner.
+			\textbf{Thesis Statement:}  A system could be built that is capable of transforming data from the relational model to the document model.  The transformation is reversible, allowing the original data model to be recovered.  This system would use the keyword search capabilities, along with the relational information, to quickly discover related fragments of information.
 		\end{displayquote}
 		
-		In order to achieve the goals of our thesis statement, we
+		In order to achieve the goal of our thesis statement, we must
 		
 		\begin{itemize}
-			\item define a formal framework to describe data sets with relational structures and text components
-			\item design a collection of expressive query operators for analyzing text relational data sets; and
-			\item investigate implementation techniques to make the query operators performant on modern, multicore computers.
+			\item Define a formal framework to describe data sets with relational structures and text components,
+			\item Design a collection of expressive query operators for analyzing text relational data sets; and
+			\item Investigate implementation techniques to make the query operators performant on modern, multicore computers.
 		\end{itemize}
 		
 	 \section{Contributions}
@@ -44,3 +50,5 @@
 		\cref{chap:along-came-clojure} describes the details of our implementation the data transformation and query operators for graph search in the linked document space.  Our choice of utilizing a modern functional programming language for our implementation makes high degree of concurrency possible.
 		
 		\cref{chap:experimental-evaluation} provides further justification to our choice of data model mapping and the choice of programming language used.  Through a series of experiments, we see that our proposal allows a tight integration of the relational database engines and keyword search libraries.  Furthermore, the implementation enjoys a linear speed up with respect to the number of processors available.
+		
+		Finally, in \cref{chap:conclusion} we present a summary of our findings.  We highlight limitations of the work and suggest topics for future research.  We provide an account of the various lessons learned while performing this research and building the system.

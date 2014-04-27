@@ -12,7 +12,7 @@
 		
 		\subsubsection{Schema Graph Definition}
 		\label{sec:entity-schema}
-			The schema graph is defined using a list.  Each schema component, whether an entity or entity group, is defined by \texttt{EntitySchema} records.  Each record accepts a map which specifies how each class of document should be indexed and identified.  The keys of this map are given in \vref{tbl:entity-schema-keys}.
+			The schema graph is defined using a list.  Each schema component, whether an entity or entity group, is defined by \texttt{EntitySchema} records.  Each record accepts a map which specifies how each class of document should be indexed and identified.  The keys of this map are given in \cref{tbl:entity-schema-keys}.
 			
 			\begin{table}
 				\centering
@@ -24,7 +24,7 @@
 					\texttt{:T} & Entity (\texttt{:entity}) or entity group (\texttt{:entity}) & Symbol \\
 					\texttt{:C} & Table name for entities, brief description for entity groups & Symbol or String \\
 					\texttt{:sql} & \Gls{sql} query used to construct the entity or entity schema & Expression \\
-					\texttt{:ID} & Attribute or attributes that comprise the key (\vref{def:keys}) & Symbol or list of symbols \\
+					\texttt{:ID} & Attribute or attributes that comprise the key (\cref{def:keys}) & Symbol or list of symbols \\
 					\texttt{:attrs} & List of attributes to analyze to fields & List of symbols \\
 					\texttt{:values} & List of attributes to index as values, must be subset of \texttt{:attrs} & List of symbols \\
 					\bottomrule
@@ -35,7 +35,7 @@
 			\end{table}
 		
 		\subsubsection{Crawling the Relational Database}
-			With the schema graph defined, the system is able to crawl the relational database, yielding a sequence of named tuples.  It iterates through every \texttt{EntitySchema} record, instructing every record to crawl itself given a database connection and index writer (\vref{clj:building-the-index}).
+			With the schema graph defined, the system is able to crawl the relational database, yielding a sequence of named tuples.  It iterates through every \texttt{EntitySchema} record, instructing every record to crawl itself given a database connection and index writer (\cref{clj:building-the-index}).
 			
 			\begin{figure}
 				\begin{singlespaced}
@@ -131,7 +131,7 @@
 			
 			Once the internal representation is constructed, it may be transformed into a document.  The mapping of a map to document is trivial; a field is created for every key in the map and the value corresponding to the key is the value of the field.  Unfortunately Lucene does not facilitate the storage of metadata.  Therefore the system must deal with metadata in a different way.
 			
-			The system modifies each key of the metadata; two underscores are prepended and appended to the key name.  This allows the system to differentiate between metadata and attributes.  The transformation from internal representation to document is given in \vref{tbl:internal-rep-to-document}.
+			The system modifies each key of the metadata; two underscores are prepended and appended to the key name.  This allows the system to differentiate between metadata and attributes.  The transformation from internal representation to document is given in \cref{tbl:internal-rep-to-document}.
 			
 			\begin{table}
 				\centering
@@ -149,7 +149,7 @@
 					\bottomrule
 				\end{tabular}
 				
-				\caption{Document of internal representation from \vref{clj:with-meta-internal-rep}}
+				\caption{Document of internal representation from \cref{clj:with-meta-internal-rep}}
 				\label{tbl:internal-rep-to-document}
 			\end{table}
 		
