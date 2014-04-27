@@ -299,7 +299,7 @@ WHERE  id = 'CDPS';
 			The above examples are some of the most important reasons for choosing the relational model over others.	Unfortunately, the relational model is not without its downsides.
 		
 		\subsubsection{Cons}
-			While the relational model excels at ensuring data consistency, aggregation, and reporting; it is not suitable for every task.	In order to issue queries, a user must be familiar with the schema.	 This requires specific domain knowledge of the data.  An example of a complicated query involving two joins is given in \cref{fig:query-section-crns}.
+			While the relational model excels at ensuring data consistency, aggregation, and reporting; it is not suitable for every task.	A user must be familiar with the schema to issue queries.	 This requires specific domain knowledge of the data.  An example of a complicated query involving two joins is given in \cref{fig:query-section-crns}.
 			
 			A casual user is unlikely to determine the correct join path, know the exact name of the tables and attributes, etc.  This is in contrast to the document model where the data is semi-structured or unstructured, requiring minimal domain knowledge.
 
@@ -321,4 +321,4 @@ WHERE  title LIKE '%man%';
 			
 			A couple of limitations to the \texttt{LIKE} predicate exist.  First, it only supports basic substring matching.  If a user accidentally searches for all courses with a title containing ``men,'' nothing would be found.
 			
-			Second, unless the predicate is applied to the end of the string and the column is indexed, performance will be poor.  The \gls{rdbms} must scan the entire relation in order to answer the query, resulting in performance of \(\mathcal{O}(n)\), where \(n\) is the number of named tuples in the relation.
+			Second, unless the predicate is applied to the end of the string and the column is indexed, performance will be poor.  The \gls{rdbms} must scan the entire relation to answer the query, resulting in performance of \(\mathcal{O}(n)\), where \(n\) is the number of named tuples in the relation.

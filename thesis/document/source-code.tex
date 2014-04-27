@@ -40,7 +40,7 @@
 		\subsection{molly.datatypes.schema}
 			The final datatype represents a schema.  These schemas contain a function that is used to execute the necessary \gls{sql} statements to retrieve all data from the relational database and place it in the full-text search index.
 			
-			Several of these schema datatypes are joined together in a configuration in order to produce a schema graph.
+			Several of these schema datatypes are joined together in a configuration to produce a schema graph.
 			
 			\inputpygments{clj}{../../src/clj/molly/datatypes/schema.clj}
 	
@@ -61,7 +61,7 @@
 	\clearpage
 	\section{molly.search}
 		\subsection{molly.search.lucene}
-			This namespace contains various functions for interfacing with the Lucene library.  These functions include opening, adding documents, searching, and closing indices.
+			This namespace contains functions for interfacing with the Lucene library.  These functions include opening, adding documents, searching, and closing indices.
 			
 			\inputpygments{clj}{../../src/clj/molly/search/lucene.clj}
 		

@@ -200,7 +200,7 @@
 			\]
 		\end{ex}
 		
-		In order to determine the top-\(k\) documents for search query \(\q\), we need a way of measuring the similarity between documents.
+		We need a way of measuring the similarity between documents to determine the top-\(k\) documents for search query \(\q\).
 		
 		\begin{defn}[Cosine Similarity]
 			Given two document vectors, \(\vec{\doc}_1\) and \(\vec{\doc}_2\), the cosine similarity is the dot product \(\vec{\doc}_1 \cdot \vec{\doc}_2\) normalized by the product of the Euclidean distance of \(\vec{\doc}_1\) and \(\vec{\doc}_2\) in \(\mathbb{R}^N\).	It is denoted as \(\similarity(\vec{\doc}_1, \vec{\doc}_2)\).
@@ -377,7 +377,7 @@
 			\]
 		\end{ex}
 		
-		While none of the above queries required domain knowledge, it is possible to use the extended document model (\cref{sec:extending-the-document-model}) to search specific fields.  Doing so permits users to leverage their existing domain knowledge in order to achieve finer control over what documents are retrieved.
+		While none of the above queries required domain knowledge, it is possible to use the extended document model (\cref{sec:extending-the-document-model}) to search specific fields.  Doing so permits users to leverage their existing domain knowledge to achieve finer control over what documents are retrieved.
 		
 		\begin{ex}[Extended Query]
 		\label{ex:extended-query}

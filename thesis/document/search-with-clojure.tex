@@ -1,12 +1,12 @@
 \section{Search With Clojure}
 \label{sec:search-with-clojure}
-	Clojure's excellent \gls{jvm} interoperability permits the use of countless third-party libraries.  The most extensively used was Lucene.
+	Clojure's first-class \gls{jvm} interoperability permits the use of countless third-party libraries.  The most extensively used was Lucene.
 	
 	\subsection{Full-Text Search Using Lucene}
 		\textcquote{luc-home}{Apache Lucene\texttrademark\ is a high-performance, full-featured text search engine library written entirely in Java.}  Lucene implements the document model, and provides a simple yet powerful and feature-rich \gls{api} to perform full-text search.  Among these features is the ability to vectorize documents according to the vector space model, utilize the extended document model to provide search of semi-structured documents, and issue search queries against the index.
 	
 	\subsection{Indexing Relational Database}
-		The indexing of relational objects is a complicated process.  The objects must be retrieved from the relational database, transformed into documents from named tuples, then placed in the index.  Additionally, all foreign keys (\cref{def:foreign-keys}) must be encoded as documents (\cref{sec:encoding-entity-group-as-document-group}) in order to satisfy \cref{sec:mapping-entity-groups-to-documents}.
+		The indexing of relational objects is a complicated process.  The objects must be retrieved from the relational database, transformed into documents from named tuples, then placed in the index.  Additionally, all foreign keys (\cref{def:foreign-keys}) must be encoded as documents (\cref{sec:encoding-entity-group-as-document-group}) to satisfy \cref{sec:mapping-entity-groups-to-documents}.
 		
 		The schema graph (\cref{def:schema-graph}) must be defined before the relational database may be crawled.
 		
@@ -165,7 +165,7 @@
 		\subsubsection{Fuzzy Value Search}
 			Recall that entity values are stored as their \(n\)-gram (\cref{sec:n-gram}).  This allows users to make character substitutions, deletions, or additions, and still return values they may have intended on finding.  Without the use of \(n\)-grams, a misspelling on the user's part may result in an empty set of values being returned.  Values that are approximately matched would be assigned a lower score than those which are fully matched, but they would at least appear in the results.
 			
-			Rather than guessing the user's intention, the system presents the user with a list of values in order to give them the option of substituting their entry for an approximate match.  This autosuggest feature is intended to improve the user experience by eliminating a source of frustration -- irrelevant results as a result of a simple spelling error.
+			Rather than guessing the user's intention, the system presents the user with a list of values to give them the option of substituting their entry for an approximate match.  This autosuggest feature is intended to improve the user experience by eliminating a source of frustration -- irrelevant results as a result of a simple spelling error.
 		
 		\subsubsection{Flexible Keyword Search \gls{api}}
 			The system provides a simple -- yet flexible -- keyword search \gls{api}.  Recall the extended query (\cref{ex:extended-query}) is in the form
@@ -257,7 +257,7 @@
 				\item The satisfaction of keywords in \(\q\) by the vertices in \(H\) are maximized
 			\end{itemize}
 			
-			In order to accomplish this, we find all vertices by entity group search and call this \(C\).  A graph search algorithm is used to minimally connect the vertices in \(C\).
+			To accomplish this, we find all vertices by entity group search and call this \(C\).  A graph search algorithm is used to minimally connect the vertices in \(C\).
 			
 			\begin{algorithm}[!ht]
 				\caption{\(\textsc{Graph-Search}(C)\)}
@@ -286,7 +286,7 @@
 			
 			Rather than relying on scanning every tuple in every relation in a relational database, the document model represents every tuple as a semi-structured document.  The contents of every field in these documents is indexed by an inverted list index data structure which permits fast lookup of documents based on keywords.  We utilize this property to quickly locate the initial ``source'' vertices.
 			
-			During the indexing process, various analyzers are applied against the text.  These may, for instance, remove the suffix of words; a process called stemming \cite{porter-97}.
+			During the indexing process, analyzers are applied against the text.  These may, for instance, remove the suffix of words; a process called stemming \cite{porter-97}.
 			
 			\begin{ex}[Porter Stemmer]
 				A course may have ``mathematics'' or even ``mathematical'' in the title.  By utilizing a stemmer, we match both.  The Porter stemming algorithm returns ``mathemat'' as the root word for both of the examples.
@@ -310,7 +310,7 @@
 					\q = \query(\text{``entities'', ``subject|math''}) \cap \query(\text{``\_\_type\_\_'', ``entity''})
 				\]
 				
-				Would yield the results \(x_1, x_2\).
+				Yields the results \(x_1, x_2\).
 			\end{ex}
 		
 		\subsubsection{Breadth-First Search}
@@ -320,7 +320,7 @@
 				Given a graph \(G = (V, E)\) and a distinguished source vertex \(s\), breadth-first search systematically explores the edges of \(G\) to ``discover'' every vertex that is reachable from \(s\). It computes the distance (smallest number of edges) from \(s\) to each reachable vertex. It also produces a ``breadth-first tree'' with root \(s\) that contains all reachable vertices. For any vertex \(v\) reachable from \(s\), the path in the breadth-first tree from \(s\) to \(v\) corresponds to a ``shortest path'' from \(s\) to \(v\) in \(G\), that is, a path containing the smallest number of edges. The algorithm works on both directed and undirected graphs.
 			\end{displayquote}
 			
-			Essentially \gls{bfs} populates the frontier before exploring the next hop.  Thus \gls{bfs} is able to explore a large, sparsely connected graph quickly.  However, if the graph is dense, \gls{bfs} would consume a substantial amount of memory, making an algorithm such as \gls{dfs} more suitable.
+			\gls{bfs} populates the frontier before exploring the next hop.  As a result, \gls{bfs} is able to explore a large, sparsely connected graph quickly.  If the graph is dense, \gls{bfs} would consume a substantial amount of memory, making an algorithm such as \gls{dfs} more suitable.
 			
 		\subsubsection{Functional \gls{bfs}}
 			The simple nature of \gls{bfs} makes it ideal to implement in a functional manner.  There is minimal shared state or side effects, allowing the search to be conducted recursively.  Newly discovered vertices are conjoined with the existing queue to form a new queue.  Due to Clojure's persistent data structures, this operation is more efficient than intuition would dictate.

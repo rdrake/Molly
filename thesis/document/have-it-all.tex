@@ -60,7 +60,7 @@
 		\end{claim}
 		
 		\begin{proof}
-			Given \(\text{V}(\egraph)\), we must reconstruct \(\text{E}(\egraph)\) in order to complete \(\egraph\).
+			Given \(\text{V}(\egraph)\), we must reconstruct \(\text{E}(\egraph)\) to complete \(\egraph\).
 			
 			Choose any \((\tuple, \tuple') \in \text{V}(\egraph)\).	If \((\relations{\tuple}, \relations{\tuple'}) \in \sgraph{\db}\), then \((\tuple, \tuple')\) is an edge in \(\egraph\).
 			
@@ -69,7 +69,7 @@
 		
 	\section{Encoding an Entity Group as a Document Group}
 	\label{sec:encoding-entity-group-as-document-group}
-		Given an entity group \(\egraph\), we construct two or more documents in order to represent the entity group in the document model.
+		Given an entity group \(\egraph\), we construct two or more documents to represent the entity group in the document model.
 		
 		For every \(\tuple \in \text{V}(\egraph)\), we construct a document \(\docs{\tuple}\).  We construct an additional document, called the indexing document, which is the concatenation of all unique identifiers for every tuple in \(\text{V}(\egraph)\).
 		
