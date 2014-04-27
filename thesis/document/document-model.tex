@@ -43,7 +43,7 @@
 	
 	\subsection{Vectorization of Documents}
 	\label{sec:vectorization-of-documents}
-		One of the most fundamental approaches for searching documents is to treat documents as high-dimensional vectors, and the document collection as a subset in a vector space.  Search queries become a nearest neighbour search in a vector space using a distance metric.
+		The most fundamental approach for searching documents is to treat documents as high-dimensional vectors, and the document collection as a subset in a vector space.  Search queries become a nearest neighbour search in a vector space using a distance metric.
 		
 		The first step is to convert a bag of terms into vectors.  The standard technique \cite{ir-08} uses a scoring function that measures the relative importance of terms in documents.
 		
@@ -98,7 +98,7 @@
 		\end{defn}
 		
 		\begin{ex}
-			The documents in \cref{ex:documents} would produce the following vectors.
+			The documents in \cref{ex:documents} produce the following vectors.
 			\[
 				\vec{\doc_n} = 
 					\left[
@@ -305,7 +305,7 @@
 			\]
 		\end{ex}
 		
-		We use \(n\)-grams in order to permit approximate string matching.
+		We use \(n\)-grams to permit approximate string matching.
 		
 		\begin{ex}
 		\label{ex:n-gram-comparison}
@@ -352,7 +352,7 @@
 		There are numerous reasons to use the document model.  The most significant reason is that it allows users without domain knowledge and working knowledge of a complex query language such as \gls{sql} to find information.
 		
 		\begin{ex}[Simple Queries]
-			Find all documents related to ``mathematics'' or ``lecture''.  The result of the query \(\q\) would be
+			Find all documents related to ``mathematics'' or ``lecture''.  The result of the query \(\q\) is
 			\[
 				\query(\text{``mathematics''}) \cup \query(\text{``lecture''}) \rightarrow \{\doc_2, \doc_3\}
 			\]
@@ -362,7 +362,7 @@
 		
 		\begin{ex}[\texttt{AND} Query]
 		\label{ex:and-query}
-			Find all documents containing both ``mathematics'' and ``lecture''.  This query would return the following set of documents
+			Find all documents containing both ``mathematics'' and ``lecture''.  This query returns the following set of documents
 			\[
 				\query(\text{``mathematics''}) \cap \query(\text{``lecture''}) \rightarrow \{\doc_3\}
 			\]
@@ -371,7 +371,7 @@
 		\end{ex}
 		
 		\begin{ex}[\texttt{NOT} Query]
-			Find all documents containing ``mathematics'' but not ``lecture''.  This query would return different results than \cref{ex:and-query}.
+			Find all documents containing ``mathematics'' but not ``lecture''.  This query returns different results than \cref{ex:and-query}.
 			\[
 				\query(\text{``mathematics''})\neg\query(\text{``lecture''}) \rightarrow \emptyset
 			\]
@@ -387,7 +387,7 @@
 			\]
 		\end{ex}
 		
-		Not only does the document model provide a familiar interface to search for information with, it also ranks the results.  In the relational model a search for ``mathematics'' would return all named tuples that contained that term.  In the document model, documents are ranked against the query \(\q\) and the top-\(k\) documents are returned in descending order by score.
+		Not only does the document model provide a familiar interface to search for information with, it also ranks the results.  In the relational model a search for ``mathematics'' returns all named tuples that contain that term.  In the document model, documents are ranked against the query \(\q\) and the top-\(k\) documents are returned in descending order by score.
 		
 		The advantage is that users have the result of \(\q\) already ranked so only the most relevant documents may be explored.	 As the number of documents matching \(\q\) for a large corpus can be high, showing only the top-\(k\) relevant documents may save the user a substantial amount of time.
 		

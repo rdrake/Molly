@@ -17,22 +17,22 @@
 	\subsection{Text Data and Keyword Search:  1970 -- 2014}
 		Parallel to the development of the relational data base technology, research in information retrieval has been focusing on text data \cite{salton-88, jones-72}.  Unlike relational data, text data does not have a rigid structure.  As a result, it is not immediately possible to design a rich set of data operators (as was the case for relational algebra).  Consequently, for text data, there is no structured query language like \gls{sql}.
 		
-		The research, thus, has focused primarily on pattern matching queries using keyword search.  Though the semantics of keyword search is very simple, the statistical methods developed by the information retrieval community \cite{salton-88, robertson-09, dumais-88} have been extremely effective.  In fact, one can argue that the modern World Wide Web and its related commercial successes founded on the ideas of text databases and keyword search over large-scale data sets.
+		The research, thus, has focused primarily on pattern matching queries using keyword search.  Though the semantics of keyword search is simple, the statistical methods developed by the information retrieval community \cite{salton-88, robertson-09, dumais-88} have been effective.  In fact, one can argue that the modern World Wide Web and its related commercial successes founded on the ideas of text databases and keyword search over large-scale data sets.
 		
 	\subsection{Semi-structured Data and Query Languages:  1990 -- 2010}
-		The growth of the World Wide Web popularized the usage of markup languages (such as \gls{html} and \gls{xml}) as the underlying Web content description.  Thus, researchers have designed data models \cite{suciu-98} to formalize the semantics of \gls{xml} and related data formats.  Subsequently, the logical characterization of \gls{xml} led the to design and implementation of XQuery \cite{xquery-10}, a navigational based query language for analysis of \gls{xml} data sets.
+		The growth of the World Wide Web popularized the usage of markup languages (such as \gls{html} and \gls{xml}) as the underlying Web content description.  Researchers have designed data models \cite{suciu-98} to formalize the semantics of \gls{xml} and related data formats.  Subsequently, the logical characterization of \gls{xml} led the to design and implementation of XQuery \cite{xquery-10}, a navigational based query language for analysis of \gls{xml} data sets.
 		
-		Interestingly enough, \gls{xml} has proven to be inefficient as a data interchange format \cite{schneider-14}.  Nonetheless, a semi-structured data description language is highly sought after for message passing in large-scale software systems.  Modern Web services are built on the concept of RESTful \gls{api} \cite{restful-11}, with semi-structured data message passing.  In order to minimize network overhead, \gls{xml}-based message passing has been replaced by more efficient data encoding standards such as \gls{json} \cite{json}.
+		\gls{xml} has proven to be inefficient as a data interchange format \cite{schneider-14}.  A semi-structured data description language is highly sought after for message passing in large-scale software systems.  Modern Web services are built on the concept of RESTful \gls{api} \cite{restful-11}, with semi-structured data message passing.  In order to minimize network overhead, \gls{xml}-based message passing has been replaced by more efficient data encoding standards such as \gls{json} \cite{json}.
 		
-		The query language community responded to the popularization of \gls{json} encoded data sets with several query languages \cite{simeon-13} (for example Jaql, \cite{ibm-jaql}) for \gls{json} data sets.
+		The query language community responded to the popularization of \gls{json} encoded data sets with new query languages \cite{simeon-13} (for example Jaql, \cite{ibm-jaql}) for \gls{json} data sets.
 	
 	\subsection{Hybrid Data Models and Query Languages: 2010 -- Present}
-		With the explosive growth of social networks, we are witnessing the emergence of a new type of data sets.  These data sets exhibit the following properties:
+		With the explosive growth of social networks, we are witnessing the emergence of a new class of data sets.  These data sets exhibit the following properties:
 		
 		\begin{itemize}
-			\item The data has relational characteristics: such as relationships of friends on Facebook, their preferences over different Web sites, and their account information
-			\item The data also has many text attributes: such as blog articles, or tweets on Twitter
+			\item The data has relational characteristics (e.g.~relationships of friends on Facebook, their preferences over different Web sites, and their account information)
+			\item The data also has many text attributes (e.g.~blog articles or tweets on Twitter)
 			\item The volume of data is often large-scale
 		\end{itemize}
 		
-		The mixture of relational structure and rich text components of such data sets make them challenging for the purpose of data management and data analytics.  There has been several attempts to integrate keyword search from information retrieval with \gls{sql} \cite{banks-02, fuzzy-11, ir-03}.  However, these methods, thus far, suffer from scalability and restricted search capabilities.
+		The mixture of relational structure and rich text components of such data sets make them challenging for the purpose of data management and data analytics.  There has been several attempts to integrate keyword search from information retrieval with \gls{sql} \cite{banks-02, fuzzy-11, ir-03}.  These methods, thus far, suffer from scalability and restricted search capabilities.

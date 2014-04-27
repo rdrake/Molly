@@ -4,12 +4,12 @@
 	
 	\section{Implementation}
 	\label{sec:implementation}
-		The system was implemented in Clojure, which \textcquote{clj-home}{is a dynamic programming language that targets the \gls{jvm}}.  Clojure was chosen due to its rich, immutable, and persistent data structures, excellent concurrency support, and seamless \gls{jvm} interoperability.  These features were discussed in detail in \cref{sec:features-of-clojure}.
+		The system was implemented in Clojure, which \textcquote{clj-home}{is a dynamic programming language that targets the \gls{jvm}}.  Clojure was chosen due to its rich, immutable, and persistent data structures, first-class concurrency support, and seamless \gls{jvm} interoperability.  These features were discussed in detail in \cref{sec:features-of-clojure}.
 		
 		\subsection{Code Base Statistics}
 			The system consists of over 800 lines of Clojure, along with approximately 550 lines of Python.  The Python code is used to construct the data set by crawling the course information site, as well as to aggregate the benchmark data produced by the system, producing graphs.
 			
-			All development has occurred on GitHub \cite{molly-repo}.  The use of Git and GitHub permits collaboration between researchers.  With the code publicly available, future researchers may study, run, and/or build upon it.
+			All development has occurred on GitHub \cite{molly-repo}.  The use of Git and GitHub permits collaboration between researchers.  With the code publicly available, future researchers may study, run, and, build upon it.
 	
 	\section{The Data Corpus}
 	\label{sec:data-corpus}
@@ -48,12 +48,12 @@
 			
 			\begin{itemize}
 				\item Statistical processing of multiple evaluations
-				\item Inclusion of a warm-up period, designed to allow the JIT compiler to optimize its code
+				\item Inclusion of a warm-up period which is intended to allow the JIT compiler to translate the Java byte code into native instructions
 				\item Purging of the garbage collector before testing, to isolate timings from GC state prior to testing
 				\item A final forced garbage collection after testing to estimate impact of cleanup on the timing results
 			\end{itemize}
-		
-			This requires a much longer runtime as each function must be invoked numerous times.
+			
+			As each function is invoked numerous times, this greatly increases the runtime.
 			
 			During evaluation, Criterium collects performance metrics.  Upon completion of the evaluation, it performs statistical analysis of these metrics using the bootstrap procedure developed by \citeauthor{efron-87} \cite{efron-87}.  These metrics include mean, samples, variance, quartiles, outliers, and more.
 		
@@ -61,7 +61,7 @@
 			\label{sec:data-collection}
 				The performance metrics computed by Criterium are returned as a Clojure map data structure.  The evaluation process may take several hours to complete, necessitating a separation between data collection and post-processing.  These metrics are stored offline for further processing.
 				
-				In order to utilize the Clojure output in Python, a data interchange format (\gls{json}) is used.  The benchmark function writes the Criterium performance analysis out as a \gls{json} string to stdout and the output is captured by the benchmark script.  An example of this \gls{json} output is given in \cref{fig:criterium-json-output}.
+				A data interchange format (\gls{json}) is used to utilize the Clojure output in Python.  The benchmark function writes the Criterium performance analysis out as a \gls{json} string to stdout and the output is captured by the benchmark script.  An example of this \gls{json} output is given in \cref{fig:criterium-json-output}.
 				
 				\begin{figure}
 					\centering % Pointless, but who knows in the future.
@@ -84,7 +84,7 @@
 		
 		\subsection{Performance}
 		\label{sec:performance}
-			Performance was measured for the various system components.  An analysis of the metrics collected is presented in this section.
+			Performance was measured for the system components.  An analysis of the metrics collected is presented in this section.
 			
 			\subsubsection{Indexing}
 				The indexing process is computationally intensive but short lived.  After the initial \gls{jvm} warmup period, the time required to construct the index scales with the number of named tuples and relations between them.
@@ -105,7 +105,7 @@
 					\label{tbl:index-growth-entity-groups}
 				\end{table}
 				
-				We see in \cref{tbl:index-growth-entity-groups} the indexing time increases minimally between 0 and 1 group.  The number of entity groups added by the first entity schema is relatively small.  Contrast this to the indexing time between 1 and 2 groups, which increases considerably.  The number of entity groups also grew considerably, explaining the time increase.
+				We see in \cref{tbl:index-growth-entity-groups} the indexing time increases minimally between 0 and 1 group.  Few entity groups are created by the first entity schema.  Contrast this to the indexing time between 1 and 2 groups, which increases considerably.  The number of entity groups also grew considerably, explaining the time increase.
 			
 			\subsubsection{Graph Search}
 				The worst-case performance of \gls{bfs} is \(\mathcal{O}(n^2)\).  This is reflected in \cref{fig:growth} which follows an exponential growth curve.  In an attempt to mitigate the rapid increase in search time, concurrent variants of \gls{bfs} were also implemented and benchmarked.
@@ -194,7 +194,7 @@
 	
 	\section{Threats to Validity}
 	\label{sec:threats-to-validity}
-		No experiment is without its flaws.  In this section we discuss the various factors that may affect the validity of the experimental evaluation.  These factors are referred to as threats to validity.  These threats may be categorized as internal, external, construct, and conclusion.
+		No experiment is without its flaws.  In this section we discuss the factors that may affect the validity of the experimental evaluation.  These factors are referred to as threats to validity.  These threats are categorized as internal, external, construct, and conclusion.
 		
 		\subsection{Internal Validity}
 		\label{sec:internal-validity}
@@ -208,7 +208,7 @@
 				The external validity is concerned with generalization.
 			\end{displayquote}
 			
-			We used a non-standard dataset to evaluate the system.  This dataset was originally chosen due to its reasonable size, as well as the fact that it originated from a relational database.  A standard dataset, such as DBLP\footnote{\url{http://dblp.uni-trier.de/}}, is semi-structured and thus unsuitable to demonstrate the transformation from relational data.  The choice of a non-standard dataset makes it difficult to compare performance across systems.
+			We used a non-standard dataset to evaluate the system.  This dataset was originally chosen due to its reasonable size.  It also originated from a relational database.  A standard dataset, such as DBLP\footnote{\url{http://dblp.uni-trier.de/}}, is semi-structured and thus unsuitable to demonstrate the transformation from relational data.  The choice of a non-standard dataset makes it difficult to compare performance across systems.
 			
 			The use of a single dataset presents another issue.  By only using one dataset, it is difficult to generalize the results.  Ideally multiple datasets, each with varying characteristics, would have been used for evaluation.  This is potential area for future work to be done.
 		
