@@ -20,6 +20,7 @@
 	\end{defn}
 	
 	\begin{ex}
+	\label{ex:relation}
 		An example Course relation, \(\relation\), would be
 		\[
 			\relation = \left\{
@@ -32,7 +33,7 @@
 		\]
 	\end{ex}
 		
-	Relations are typically represented as tables, as shown in \cref{tbl:course-relation}.
+	Relations are typically referred to, and represented, as tables.  \cref{ex:relation} is shown in its tabular form in \cref{tbl:course-relation}.
 	
 	\begin{table}
 		\centering
@@ -63,6 +64,7 @@
 	
 	\begin{defn}[Foreign Keys]
 	\label{def:foreign-keys}
+		\glsreset{fk} % Want to spell it out in the definition
 		A \gls{fk} constraint applies to two relations, \(\relation_1, \relation_2\).  It asserts that values of certain attributes of \(\relation_1\) must appear as values of some corresponding attributes of \(\relation_2\).  A \gls{fk} constraint is written as
 		\[
 			\theta = \relation_1(\attribute_{1,1}, \attribute_{1,2}, \dotsc, \attribute_{1,k}) \rightarrow \relation_2(\attribute_{2,1}, \attribute_{2,2}, \dotsc, \attribute_{2,k})
@@ -97,7 +99,7 @@
 	\subsection{Schema Group}
 		\begin{defn}[Schema Graph]
 		\label{def:schema-graph}
-			If we view relations as vertices, and foreign key constraints as edges, a database \(\db\) can be viewed as a schema graph, \(\sgraph{}\), formally defined as
+			If we view relations as vertices, and \gls{fk} constraints as edges, a database \(\db\) can be viewed as a schema graph, \(\sgraph{}\), formally defined as
 			\begin{align}
 				\text{vertices} &: \text{V}(\sgraph) = \relations{\db} \\
 				\text{edges} &: \text{E}(\sgraph) = \fks{\db}
@@ -177,7 +179,7 @@ WHERE  subject.name = 'Community Development & Policy Studies';
 					\end{pygments}
 				\end{singlespaced}
 				
-				\caption{Query to find section CRNs for a subject name}
+				\caption{\gls{sql} query to find section CRNs for a subject name}
 				\label{fig:query-section-crns}
 			\end{figure}
 			
@@ -357,4 +359,4 @@ WHERE  title LIKE '%man%';
 			
 			There are a couple of limitations to the \texttt{LIKE} predicate.  First, it only supports basic substring matching.  If a user accidentally searches for all courses with a title containing ``men,'' nothing would be found.
 			
-			Second, unless the predicate is applied to the end of the string and the column is indexed, performance will be poor.  The database must scan the entire table in order to answer the query, resulting in performance of \(\mathcal{O}(n)\), where \(n\) is the number of named tuples in the relation.
+			Second, unless the predicate is applied to the end of the string and the column is indexed, performance will be poor.  The \gls{rdbms} must scan the entire relation in order to answer the query, resulting in performance of \(\mathcal{O}(n)\), where \(n\) is the number of named tuples in the relation.
