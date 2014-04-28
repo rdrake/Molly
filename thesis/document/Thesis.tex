@@ -1,5 +1,5 @@
 % !TEX root = Thesis.tex
-\documentclass[grad]{uoit-thesis}
+\documentclass[grad,openright]{uoit-thesis}
 
 \input{preamble.tex}
 
@@ -27,9 +27,9 @@
 		
 		\addcontentsline{toc}{chapter}{Abstract}
 		\chapter*{Abstract}
-			\todo[inline]{Write me}
-		%\\ \\
-		\textbf{Keywords}:  relational database, full-text search, graph search, algorithms
+			Vast amounts of data are stored in relational databases.  Traditionally, querying this data required a deep understanding of the underlying schema in addition to knowledge of a query language such as \gls{sql}.  We present a framework for the automatic, lossless transformation of data from the relational model to the document model.    By performing this transformation, users may locate information by using simple keyword queries.  We further this by implementing graph search, allowing users to automatically discover related facts of information.  The effects of performing graph search concurrently are explored.
+			\\ \\
+			\textbf{Keywords}:  relational database, full-text search, graph search, algorithms
 
 		\tableofcontents
 		
@@ -66,6 +66,4 @@
 	\include{data-corpus}
 	
 	\printbibliography
-	
-	\listoftodos
 \end{document}

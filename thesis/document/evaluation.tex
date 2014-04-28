@@ -175,8 +175,6 @@
 					\label{fig:distribution-hops}
 				\end{figure}
 				
-				\todo{All captions must be at least 10pt}
-				
 				The difference in rate of growth is further illustrated in \cref{fig:distribution-hops}.  As seen previously, \cref{subfig:1-hop} shows little difference in runtime between the three methods.  The difference becomes clearer in \cref{subfig:2-hops}, and by \cref{subfig:8-hops}, the difference is obvious.
 				
 				By using a profiling tool\footnote{\url{http://yourkit.com/}}, we see the behaviour of Clojure's concurrency implementation.
@@ -226,8 +224,10 @@
 	
 	\section{Summary}
 	\label{sec:eval-summary}
-		In evaluating the system, we came to several conclusions.
+		The system was implemented primarily in Clojure with supporting code written in Python.  The Python code was used to produce the mycampus dataset which was used in the evaluation.  It was also used to orchestrate the execution of benchmarks.
+		
+		In \cref{sec:runtime-evaluation} we described the experimental methodology and data collection.  We then evaluated the performance of the system using said methodology.  The results demonstrated that the growth of \gls{bfs} can be mitigated by the use of concurrency.  Clojure facilitated a natural transition from a classical implementation of \gls{bfs} to a highly concurrent one.
+		
+		The assessment of system performance was not without its flaws.  These were discussed in \cref{sec:threats-to-validity}.  The primary threat to validity was the lack of comparison between other systems and datasets.  It is difficult to generalize the results as a result.
 		
 		Benchmarking any code is difficult.  The process may not have exclusive control over the processor, memory is paged in and out, disk I/O is cached, etc.  The \gls{jvm} complicates matters with \gls{jit} compilation and garbage collection.
-		
-		The growth of \gls{bfs} can be mitigated by the use of concurrency.  Clojure facilitated a natural transition from a classical implementation of \gls{bfs} to a highly concurrent one.
