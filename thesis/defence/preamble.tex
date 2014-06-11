@@ -1,0 +1,54 @@
+% !TEX root = Presentation.tex
+\usepackage{fontspec}
+\usepackage{graphicx}
+
+% Nicer math
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{unicode-math}
+\usepackage{subdepth}
+
+% Pretty tables
+\usepackage{booktabs}
+
+% Complain when we do bad things
+\usepackage{nag}
+
+\usepackage{hyperref}
+
+% Make the text worth looking at
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont[
+	Kerning=Uppercase
+]{Garamond Premier Pro}
+%\setsansfont{Garamond Premier Pro}
+\setmathfont{XITS Math}
+%\setmathfont[range=\mathbfsfit/{greek,Greek,latin,Latin}]{Source Sans Pro}
+\setmonofont[Scale=0.9]{Consolas}
+\setsansfont{Source Sans Pro}
+
+% amsldoc, Section 4.14.2
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+
+% Simplify some of our function declarations
+\DeclareMathOperator{\similarity}{similarity}
+\DeclareMathOperator{\df}{df}
+\DeclareMathOperator{\tfidf}{tf-idf}
+\DeclareMathOperator{\tf}{tf}
+\DeclareMathOperator{\idf}{idf}
+\DeclareMathOperator{\score}{score}
+\DeclareMathOperator{\freq}{freq}
+\DeclareMathOperator{\query}{query}
+
+\definecolor{dark-gray}{gray}{0.50}
+
+%\newcommand{\jeremycomm}[1]{\todo[color=green!40]{#1}}
+%\newcommand{\markcomm}[1]{\todo[color=red!40]{#1}}
+%\newcommand{\kencomm}[1]{\todo[color=blue!40]{#1}}
+%\newcommand{\masoudcomm}[1]{\todo[color=yellow!40]{#1}}
+%\newcommand{\toreviewers}[1]{\todo[color=purple!40,inline]{#1}}
+
+\setbeamertemplate{navigation symbols}{}
