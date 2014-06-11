@@ -2,27 +2,27 @@
 	It is important to understand the evolution of modern data models.  By understanding the advantages and limitations of each data model, one is in a better position to understand the motivation behind this work.
 	
 	\subsection{Structured Data and Structured Language:  1970 -- 2000}
-		The proliferation of database system research and development started with the disruptive invention of the relational data model by Edgar F.~Codd \cite{codd-79}.
+		The proliferation of database systems research and development started with the disruptive invention of the relational data model by Edgar F.~Codd \cite{codd-79}.
 		
-		The invention of the relational data model was a significant achievement.  It decoupled the task of data analytics from any one language, precisely and accurately described data sets across a variety of storage and analytical systems, and lead to the creation of the structured data analytics language known as \gls{sql}.
+		The invention of the relational data model was a significant achievement.  It decoupled the task of data analytics from any one language, precisely and accurately described data sets across a variety of storage and analytical systems, and lead to the creation of the structured data analytics language known as \acrfull{sql}.
 		
 		\gls{sql} itself deserves further discussion.  The relational data model provided a foundation upon which languages for data manipulation were designed.  One can describe their data set and operations using first-order logic and relational algebra, then realize it using \gls{sql}.
 		
-		The success of the relational model can only be appreciated when one looks at the continuous success of a \gls{rdbms}, such as Oracle and IBM DB2, which span over 3 decades of use without any significant decline.
+		The success of the relational model can only be appreciated when one looks at the continuous success of a \gls{rdbms}, such as Oracle\footnote{\url{https://www.oracle.com/database/}} and IBM DB2\footnote{\url{http://www.ibm.com/software/data/db2/}}, which span over 3 decades of use without any significant decline.
 		
-		Since the 90s, the emergence of business intelligence \cite{bikm-02} furthered the development of \gls{rdbms} by specializing the relational data model to a multidimensional data model \cite{colliat-96}.  The family of databases known as \gls{olap} produced a new query language known as \gls{mdx}.
+		Since the 1990s, the emergence of business intelligence \cite{bikm-02} furthered the development of \gls{rdbms} by specializing the relational data model to a multidimensional data model \cite{colliat-96}.  The family of databases known as \gls{olap} produced a new query language known as \gls{mdx}.
 		
-		Both \gls{sql} and \gls{mdx} are highly structured query languages: they are completely described by their respective grammar and operational semantics.  Users who wish to harness the power of \gls{sql} and \gls{mdx} must be well versed in the languages themselves, and understand precisely the semantics of each syntactic constructs.
+		Both \gls{sql} and \gls{mdx} are highly structured query languages: they are completely described by their respective grammars and operational semantics.  Users who wish to harness the power of \gls{sql} and \gls{mdx} must be well versed in the languages themselves, and understand precisely the semantics of each language's syntactic constructs.
 		
 	\subsection{Text Data and Keyword Search:  1970 -- 2014}
 		Parallel to the development of the relational data base technology, research in information retrieval has been focusing on text data \cite{salton-88, jones-72}.  Unlike relational data, text data does not have a rigid structure.  As a result, it is not immediately possible to design a rich set of data operators (as was the case for relational algebra).  Consequently, for text data, there is no structured query language like \gls{sql}.
 		
-		The research, thus, has focused primarily on pattern matching queries using keyword search.  Though the semantics of keyword search is simple, the statistical methods developed by the information retrieval community \cite{salton-88, robertson-09, dumais-88} have been effective.  In fact, one can argue that the modern World Wide Web and its related commercial successes founded on the ideas of text databases and keyword search over large-scale data sets.
+		The research, thus, has focused primarily on pattern matching queries using keyword search.  Though the semantics of keyword search is simple, the statistical methods developed by the information retrieval community \cite{salton-88, robertson-09, dumais-88} have been effective.  In fact, one can argue that the modern World Wide Web and its related commercial successes are founded on the ideas of text databases and keyword search over large-scale data sets.
 		
 	\subsection{Semi-structured Data and Query Languages:  1990 -- 2010}
 		The growth of the World Wide Web popularized the usage of markup languages (such as \gls{html} and \gls{xml}) as the underlying Web content description.  Researchers have designed data models \cite{suciu-98} to formalize the semantics of \gls{xml} and related data formats.  Subsequently, the logical characterization of \gls{xml} led the to design and implementation of XQuery \cite{xquery-10}, a navigational based query language for analysis of \gls{xml} data sets.
 		
-		\gls{xml} has proven to be inefficient as a data interchange format \cite{schneider-14}.  A semi-structured data description language is highly sought after for message passing in large-scale software systems.  Modern Web services are built on the concept of RESTful \gls{api} \cite{restful-11}, with semi-structured data message passing.  To minimize network overhead, \gls{xml}-based message passing has been replaced by more efficient data encoding standards such as \gls{json} \cite{json}.
+		Due to its verbose nature, \gls{xml} has proven to be inefficient as a data interchange format \cite{schneider-14}.  A semi-structured data description language is highly sought after for message passing in large-scale software systems.  Modern Web services are built on the concept of RESTful \gls{api} \cite{restful-11}, with semi-structured data message passing.  To minimize network overhead, \gls{xml}-based message passing has been replaced by more efficient data encoding standards such as \gls{json} \cite{json}.
 		
 		The query language community responded to the popularization of \gls{json} encoded data sets with new query languages \cite{simeon-13} (for example Jaql, \cite{ibm-jaql}) for \gls{json} data sets.
 	
