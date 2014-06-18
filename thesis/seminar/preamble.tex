@@ -1,8 +1,6 @@
 % !TEX root = Presentation.tex
-%\usepackage{morewrites}
-%\usepackage{fontspec}
+\usepackage{fontspec}
 \usepackage{graphicx}
-%\usepackage{todonotes}
 
 % Nicer math
 \usepackage{amsmath}
@@ -12,75 +10,22 @@
 \usepackage{unicode-math}
 \usepackage{subdepth}
 
-% Algorithms
-%\usepackage{algorithm}
-%\usepackage{algorithmic}
-
-% Syntax highlighting
-%\usepackage{pythontex}
-%\setpygmentsfv{numbers=left,frame=topline,frame=lines,framesep=2mm}
-
-% Diagrams
-%\usepackage[outputdir={figures/graphs/dot/}]{dot2texi}
-%\usepackage{tikz}
-%\usepackage{pgf}
-%\input tikz
-%\usetikzlibrary{fit,shapes,arrows}
-
 % Pretty tables
 \usepackage{booktabs}
 
 % Complain when we do bad things
 \usepackage{nag}
 
-% Proper quotation environments
-%\usepackage[autopunct=true]{csquotes}
-
-% Create sub-figures/sub-tables/etc.
-%\usepackage{subcaption}
-
-% Comment out large sections of code
-\usepackage{comment}
-
-% References
-\usepackage{varioref}
-%\usepackage[linktocpage=true,colorlinks=true,urlcolor=dark-gray,linkcolor=dark-gray,citecolor=dark-gray]{hyperref}
 \usepackage{hyperref}
-\usepackage[capitalize]{cleveref}
-
-% Glossaries, list of nomenclature, etc. (must go after hyperref)
-\usepackage[acronym,style=tree,sanitize={name=false,description=false,symbol=false}]{glossaries}
-
-% Use and configure bibliography
-\usepackage[backend=biber,style=trad-alpha]{biblatex}
-\addbibresource{../document/Thesis.bib}
-
-% Define a new environment for Clojure code
-%\newmintedfile[cljcode]{clj}{linenos,frame=topline,frame=lines,framesep=2mm}
-% SQL too!
-%\newminted{sql}{linenos,frame=topline,frame=lines,framesep=2mm}
-
-% Define new theorem environments
-\theoremstyle{definition}
-\newtheorem{defn}{Definition}
-\newtheorem{ex}{Example}
-\newtheorem{remark}{Remark}
-\newtheorem{claim}{Claim}
-
-\newglossary{symbols}{sym}{sbl}{List of Symbols}
-%\makeglossaries
-
-% Change the image path prefix
-%\graphicspath{{figures/images/}}
 
 % Make the text worth looking at
 \defaultfontfeatures{Ligatures=TeX}
-%\setmainfont[
-%	Kerning=Uppercase
-%]{Garamond Premier Pro}
+\setmainfont[
+	Kerning=Uppercase
+]{Garamond Premier Pro}
 %\setsansfont{Garamond Premier Pro}
 \setmathfont{XITS Math}
-\setmathfont[range=\mathbfsfit/{greek,Greek,latin,Latin}]{Source Sans Pro}
+%\setmathfont[range=\mathbfsfit/{greek,Greek,latin,Latin}]{Source Sans Pro}
 \setmonofont[Scale=0.9]{Consolas}
 \setsansfont{Source Sans Pro}
 

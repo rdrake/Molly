@@ -34,7 +34,8 @@ class BoxPlot(Graph):
             plt.ylabel(self.ylabel)
             
             plt.boxplot([map(float, samples) for (max_hops, samples) in self.data[method].iteritems()])
-
+            
+            # Consider figsize=(3.5, 2.5) for presentation and papers
             fig.set_size_inches(*self.figsize)
             plt.savefig(os.path.join(self.args.output_path, "boxplot-{}.pgf".format(method)))
             plt.close()
