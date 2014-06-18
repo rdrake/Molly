@@ -54,7 +54,7 @@
 	
 	\begin{defn}[Keys]
 	\label{def:keys}
-		Keys are constraints imposed on relations.	A key constraint \(\key\) on a relation \(\relation\) is a subset of \(\attributes{\relation}\) which may uniquely identify a tuple.	Formally, we say \(\relation\) satisfies the key constraint \(\key\), denoted as \(\relation \models \key\), subject to
+		Keys are constraints imposed on relations.	A key constraint \(\key\) on a relation \(\relation\) is a subset of \(\attributes{\relation}\) which must uniquely identify a tuple.	Formally, we say \(\relation\) satisfies the key constraint \(\key\), denoted as \(\relation \models \key\), subject to
 		\[
 			\forall \tuple, \tuple' \in \relation, \tuple \not= \tuple' \implies \tuple\lbrack\key\rbrack \not= \tuple'\lbrack\key\rbrack
 		\]
@@ -299,7 +299,7 @@ WHERE  id = 'CDPS';
 			The above examples are some of the most important reasons for choosing the relational model over others.	Unfortunately, the relational model is not without its downsides.
 		
 		\subsubsection{Cons}
-			While the relational model excels at ensuring data consistency, aggregation, and reporting; it is not suitable for every task.	A user must be familiar with the schema to issue queries.	 This requires specific domain knowledge of the data.  An example of a complicated query involving two joins is given in \cref{fig:query-section-crns}.
+			While the relational model excels at ensuring data consistency, aggregation, and reporting; it is not suitable for every task.	A user must be familiar with the schema to issue queries.  This requires specific domain knowledge of the data.
 			
 			A casual user is unlikely to determine the correct join path, know the exact name of the tables and attributes, etc.  This is in contrast to the document model where the data is semi-structured or unstructured, requiring minimal domain knowledge.
 

@@ -1,17 +1,27 @@
 import argparse
-import json
+import pickle
 import sys
 
 import matplotlib.pyplot as plt
 
 METHODS = {
     "bfs": "Breadth-First Search (BFS)",
-    "bfs_atom": "BFS w/Atoms",
-    "bfs_ref": "BFS w/References",
-    "ford_fulkerson": "Ford-Fulkerson"
+    "bfs-atom": "BFS w/Atoms",
+    "bfs-ref": "BFS w/References"
 }
 
-class Graph:
+TARGETS = {
+    "instructors|75": 8,
+    "schedules|schedules|4125sections|1636teaches|1139": 7,
+    "courses|csci_4100u": 6,
+    "schedules|schedules|11068sections|4263teaches|3619": 5,
+    "instructors|375": 4,
+    "schedules|schedules|19657sections|10081teaches|9551": 3,
+    "courses|engr_3960u": 2,
+    "schedules|schedules|1731sections|610teaches|338": 1
+}
+
+class Graph(object):
     def __init__(self, title, description, xlabel, ylabel, args=[]):
         # Initialize variables
         self.title = title
@@ -24,17 +34,10 @@ class Graph:
         self.args = self.parse_args()
 
         # Parse data
-        self.data = self.parse_data(self.args.results)
+        self.data = self.parse_data(open(self.args.results, "rb"))
 
     def parse_data(self, results_file):
-        data = []
-        json_data = json.load(results_file)
-
-        for result in json_data:
-            mean = "%.5f" % result["results"]["mean"][0]
-            print(result["max-hops"], result["method"], mean)
-
-        return json_data
+        return pickle.load(results_file)
 
     def parse_args(self):
         """
@@ -42,10 +45,10 @@ class Graph:
         argument and the second element the keyword arguments
         """
         parser = argparse.ArgumentParser(description=self.description)
-
-        parser.add_argument("--results", dest="results", nargs="?", type=argparse.FileType("r"), default=sys.stdin, help="path to results file")
+        
+        # , type=argparse.FileType("r+b"), default=sys.stdin
+        parser.add_argument("--results", dest="results", nargs="?", help="path to results file")
         parser.add_argument("--output-dir", dest="output_path", required=True, help="path to output charts to")
-        parser.add_argument("--ident", dest="ident", required=True, help="identifier for plot(s)")
 
         for arg in self.args:
             parser.add_argument(args[0], **args[1])

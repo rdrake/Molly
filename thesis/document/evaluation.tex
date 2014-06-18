@@ -112,7 +112,32 @@
 				
 				\begin{figure}
 					\centering
-					\includegraphics[scale=0.9]{figures/charts/growth.pdf}
+					
+					\input{figures/charts/boxplot-bfs.pgf}
+					\caption{Growth of \gls{bfs}}
+					\label{fig:growth-bfs}
+				\end{figure}
+				
+				\begin{figure}
+					\centering
+					
+					\input{figures/charts/boxplot-bfs-atom.pgf}
+					\caption{Growth of \gls{bfs} using atoms}
+					\label{fig:growth-bfs-atoms}
+				\end{figure}
+				
+				\begin{figure}
+					\centering
+					
+					\input{figures/charts/boxplot-bfs-ref.pgf}
+					\caption{Growth of \gls{bfs} using references}
+					\label{fig:growth-bfs-ref}
+				\end{figure}
+				
+				\begin{figure}
+					\centering
+					%\includegraphics[scale=0.9]{figures/charts/growth.pdf}
+					\input{figures/charts/growth.pgf}
 					\caption{Growth of each graph search algorithm implementation by number of hops}
 					\label{fig:growth}
 				\end{figure}
