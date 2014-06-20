@@ -58,7 +58,7 @@
 			
 			Before becoming a document, named tuples are transformed into an internal representation.  The internal representation adds flexibility to the system; so long as functions exist to convert between the internal representation and other forms, the source of the data is irrelevant.
 			
-			Clojure permits the annotation of data with metadata.  Named tuples are returned as maps, with key-value pairs representing attributes and values for the tuple.  Metadata may be associated with a named tuple.  The metadata does not affect its key-value pairs.
+			Clojure permits the annotation of data with metadata (\cref{clj:with-meta-internal-rep}).  Named tuples are returned as maps, with key-value pairs representing attributes and values for the tuple.  Metadata may be associated with a named tuple.  The metadata does not affect its key-value pairs.
 			
 			The map of attributes and values of a named tuple is annotated with the function \texttt{(with-meta obj map)}.  The \texttt{obj} parameter is the named tuple, while \texttt{map} is a map of metadata as defined by the system.  The keys of \texttt{map} for each type (value, entity, or entity group) are defined in \cref{tbl:type-metadata}.  The internal representation of the named tuple given in \cref{tbl:hmr-properties-rel} is given in \cref{clj:with-meta-internal-rep}.
 			
@@ -116,9 +116,9 @@
 				\begin{singlespaced}
 					\begin{pygments}{clj}
 (with-meta
-  {:code    "CDPS 101"
+  {:code    "cdps 101"
    :title   "Human-Mutant Relations"
-   :subject "CDPS"}
+   :subject "cdps"}
   {:type  :entity
    :class :course
    :id    "course|cdps_101"})
@@ -149,7 +149,7 @@
 					\bottomrule
 				\end{tabular}
 				
-				\caption{Document of internal representation from \cref{clj:with-meta-internal-rep}}
+				\caption{Internal representation from \cref{clj:with-meta-internal-rep} in document form}
 				\label{tbl:internal-rep-to-document}
 			\end{table}
 		
@@ -162,10 +162,10 @@
 	\label{sec:keyword-search-document-space}
 		With the entity graph encoded into the document model, users may begin issuing search queries.  Every query follows the following pattern:  users look up values (optionally using fuzzy search), these values are used to locate entities, and once two entities are selected, the system attempts to connect the two.
 		
-		\subsubsection{Fuzzy Value Search}
+		\subsubsection{Approximate String Matching Using \(n\)-grams}
 			Recall that entity values are stored as their \(n\)-gram (\cref{sec:n-gram}).  This allows users to make character substitutions, deletions, or additions, and still return values they may have intended on finding.  Without the use of \(n\)-grams, a misspelling on the user's part may result in an empty set of values being returned.  Values that are approximately matched would be assigned a lower score than those which are fully matched, but they would at least appear in the results.
 			
-			Rather than guessing the user's intention, the system presents the user with a list of values to give them the option of substituting their entry for an approximate match.  This autosuggest feature is intended to improve the user experience by eliminating a source of frustration -- irrelevant results as a result of a simple spelling error.
+			Rather than guessing the user's intention, the system presents the user with a list of values to give them the option of substituting their entry for an approximate match.  This autosuggest feature is intended to improve the user experience by eliminating a source of frustration -- irrelevant results as a result of a simple spelling error.  This list of values is created by applying \(n\)-gram analysis on the user query and searching the resulting stream of tokens against the collection of value documents.
 		
 		\subsubsection{Flexible Keyword Search \gls{api}}
 			The system provides a simple -- yet flexible -- keyword search \gls{api}.  Recall the extended query (\cref{ex:extended-query}) is in the form
@@ -181,13 +181,13 @@
 			Another function, \texttt{boolean-query}, accepts one or more \(\query\) functions as well as a boolean operator for each and returns the result.  The symbols \texttt{:and}, \texttt{:or}, and \texttt{:not} provide \(\cap\), \(\cup\), and \(\neg\), respectively.
 			
 			\begin{ex}[\texttt{boolean-query}]
-				For example, the query in \cref{ex:extended-query} is given in \cref{clj:boolean-query}.
+				For example, a query to find all documents with a subject of ``MATH'' (\cref{ex:extended-query}) would require two queries joined by \texttt{boolean-query}, as shown in \cref{clj:boolean-query}.
 				
 				\begin{figure}
 					\begin{singlespaced}
 						\begin{pygments}{clj}
 (boolean-query
- [[:and (query :subject ``MATH'')]
+ [[:and (query :subject ``math'')]
   [:and (query :text ``class'')]])
 						\end{pygments}
 					\end{singlespaced}
@@ -292,7 +292,7 @@
 				A course may have ``mathematics'' or even ``mathematical'' in the title.  By utilizing a stemmer, we match both.  The Porter stemming algorithm returns ``mathemat'' as the root word for both of the examples.
 			\end{ex}
 			
-			Other analyzers may remove stop words.  Stop words may include ``and'', ``or'', ``not'', etc.  These are functional words that may be removed from the text corpus without adversely affecting the meaning whose presence may otherwise affect the quality of search results \cite{silva-03}.
+			Other analyzers may remove stop words.  Stop words may include ``and'', ``or'', and ``not''.  These are functional words that may be removed from the text corpus without adversely affecting the meaning whose presence may otherwise affect the quality of search results \cite{silva-03}.
 			
 			Our implementation uses a document to represent edges in the entity graph.  By using the document model, we are able to quickly locate all other vertices connected to a specific vertex.
 			
@@ -305,13 +305,17 @@
 					x_3[\text{``entities''}] &= \{\text{course|cdps\_101}, \text{subject|cdps}\} \\
 				\end{align*}
 				
-				A query, \(\q\) for entities in the subject ``math''.
+				A query, \(\q\) for all entities related to the subject ``math''.
 				\[
-					\q = \query(\text{``entities'', ``subject|math''}) \cap \query(\text{``\_\_type\_\_'', ``entity''})
+					\q = \query(\text{``entities'', ``subject|math''}) \cap \query(\text{``\_\_type\_\_'', ``group''})
 				\]
 				
 				Yields the results \(x_1, x_2\).
 			\end{ex}
+			
+			\begin{remark}
+				The \_\_type\_\_ field indicates whether the document represents a value, entity, or entity group.
+			\end{remark}
 		
 		\subsubsection{Breadth-First Search}
 			\citeauthor*{cormen-09} define \gls{bfs} as follows

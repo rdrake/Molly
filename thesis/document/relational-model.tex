@@ -215,10 +215,10 @@ digraph G {
 			\end{figure}
 		\end{ex}
 
-	\subsection{Pros and Cons of the Relational Model}
+	\subsection{Benefits and Drawbacks of the Relational Model}
 		To better understand the motivation behind this work, it is important to examine both the strong and weak points of the relational model.
 		
-		\subsubsection{Pros}
+		\subsubsection{Benefits}
 			The enforcement of constraints is essential to the relational model.  Types of constraints include uniqueness and \glspl{fk}.  The first constraint maintains uniqueness.
 			
 			The Course relation (\cref{tbl:course-relation}) has the attribute \texttt{code} as its primary key.	In order for other relations to reference a specific named tuple, the \texttt{code} attribute must be unique.
@@ -298,7 +298,7 @@ WHERE  id = 'CDPS';
 			
 			The above examples are some of the most important reasons for choosing the relational model over others.	Unfortunately, the relational model is not without its downsides.
 		
-		\subsubsection{Cons}
+		\subsubsection{Drawbacks}
 			While the relational model excels at ensuring data consistency, aggregation, and reporting; it is not suitable for every task.	A user must be familiar with the schema to issue queries.  This requires specific domain knowledge of the data.
 			
 			A casual user is unlikely to determine the correct join path, know the exact name of the tables and attributes, etc.  This is in contrast to the document model where the data is semi-structured or unstructured, requiring minimal domain knowledge.

@@ -17,12 +17,10 @@
 		We denote the document encoding of \(\tuple\) as \(\docs{\tuple}\).
 		
 		\begin{ex}
-			Given the tuple
+			Given the tuple, \(\tuple\), we produce the document encoding \(\docs{\tuple}\) in \cref{tbl:docs-tuple}.
 			\[
 				\tuple = \{\text{code}: \text{``CDPS 101''}, \text{title}: \text{``Human-Mutant Relations''}, \text{subject}: \text{``CDPS''}\}
 			\]
-			
-			we produce the document encoding \(\docs{\tuple}\) in \cref{tbl:docs-tuple}.
 			
 			\begin{table}
 				\centering
@@ -62,9 +60,9 @@
 		\begin{proof}
 			Given \(\text{V}(\egraph)\), we must reconstruct \(\text{E}(\egraph)\) to complete \(\egraph\).
 			
-			Choose any \((\tuple, \tuple') \in \text{V}(\egraph)\).	If \((\relations{\tuple}, \relations{\tuple'}) \in \sgraph{\db}\), then \((\tuple, \tuple')\) is an edge in \(\egraph\).
+			Choose any \((\tuple, \tuple') \in \text{V}(\egraph)\).	If \((\relations{\tuple}, \relations{\tuple'}) \in \sgraph(\db)\), then \((\tuple, \tuple')\) is an edge in \(\egraph\).
 			
-			Recall our earlier assertion that \(\sgraph{\db}\) is cycle-free and foreign keys must be unique.
+			Recall our earlier assertion that the schema graph of \(\db\), \(\sgraph(\db)\), is cycle-free and foreign keys must be unique.
 		\end{proof}
 		
 	\section{Encoding an Entity Group as a Document Group}

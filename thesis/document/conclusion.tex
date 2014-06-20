@@ -16,9 +16,9 @@
 		
 		We introduced our first contribution in \cref{chap:best-of-both-worlds}, providing a formal definition of a framework for the translation between the relational and document data models.  We describe how this transformation preserves relational information, making the process reversible.  In addition, we demonstrate how this relational information may be utilized to perform graph search over documents.
 		
-		Our implementation, written in Clojure, was introduced in \cref{chap:along-came-clojure}.  We demonstrated the benefit of implementing the system in a functional language.  We utilized the core concepts functional programming paradigm to provide a concurrent implementation of graph search algorithms.
+		Our implementation, written in Clojure, was introduced in \cref{chap:along-came-clojure}.  We demonstrated the benefit of implementing the system in a functional language.  We utilized the core concepts of the functional programming paradigm to provide a concurrent implementation of graph search algorithms.
 		
-		We evaluated our implementation in \cref{chap:experimental-evaluation}.  The data corpus was introduced and the methodology explained.  We presented our findings which confirmed our hypothesis that a concurrent graph search implementation would produce a noticeable reduction in graph search time.  Finally, we discussed several potential threats to validity of the results.
+		We evaluated our implementation in \cref{chap:experimental-evaluation}.  The data corpus was introduced and the methodology explained.  Our findings confirmed our hypothesis that a concurrent graph search implementation would produce a noticeable \todo{Not precise} reduction in graph search time.  Finally, we discussed several potential threats to validity of the results.
 	
 	\section{Limitations}
 	\label{sec:limitations}
@@ -26,7 +26,7 @@
 		
 		\begin{itemize}
 			\item The document database must be re-constructed every time the relational database is updated, it is currently not possible to partially update the document database if a change occurs in the relational database.
-			\item The initial configuration is daunting, requiring the manual specification of all entities, attributes, values, and entity groups.
+			\item The initial configuration is daunting, requiring the manual specification of all entities, attributes, values, and entity groups.  If the database schema is modified, the configuration must be updated accordingly.
 		\end{itemize}
 		
 		Threats to validity were identified in \cref{sec:threats-to-validity}.  These are not necessarily limitations of the system, but of the work itself.
@@ -43,6 +43,8 @@
 		
 		Automatically generating a configuration for a user to start from would be a far simpler task.  The system would require knowledge of the particular \gls{rdbms}.  With this, it would be possible to locate relations, their attributes, and any key constraints.
 		
+		Another potential avenue for future work would be to address the generalization threat to validity.  A new dataset would need to be found and benchmarked, rather than using a non-standard dataset.  This would permit a more fair comparison between systems.
+		
 	\section{Lessons Learned}
 		The system evaluation in \cref{chap:experimental-evaluation} yielded several important insights.
 		
@@ -50,5 +52,5 @@
 			\item We have found that the simplest algorithms are the easiest to parallelize.  The reduced complexity, and thus state, reduces the amount of shared data that must be synchronized.  This allows for higher concurrency.
 			\item Clojure's \gls{stm} implementation is simple to use and effective.  A few simple functions provide a powerful concurrency model.
 			\item Sometimes a simpler approach to concurrency is the most appropriate one.  In our evaluation, atoms provided better performance than references.  Atoms allow for finer granularity in concurrency, reducing the overhead associated with references.  This is desirable in situations that do not require much shared state.
-			\item Clojure is a powerful language that encouraged us to write correct code first, then optimize it later.  The transition to a concurrent implementation of \gls{bfs} was trivial.  The switch from atoms to references was also trivial.
+			\item Clojure is a powerful language that encouraged us to write correct code first, then optimize it later.  The transition to a concurrent implementation of \gls{bfs} was relatively straight forward, as was the switch from atoms to references.
 		\end{itemize}

@@ -1,9 +1,9 @@
 % !TEX root = Thesis.tex
 \section{Document Model}
 \label{sec:document-model}
-	In contrast to the relational model, the document model represents semi-structured as well as unstructured data.  Examples of information suitable to the document model includes emails, memos, book chapters, etc.
+	In contrast to the relational model, the document model represents semi-structured as well as unstructured data.  Examples of information suitable to the document model includes emails, memos, and book chapters.
 	
-	These pieces, or units, of information are broken into documents.  Groups of related documents, e.g., a library catalogue, are referred to as a document collection.
+	These pieces, or units, of information are broken into documents.  Groups of related documents (e.g.~a library catalogue) are referred to as a document collection.
 
 	\begin{defn}[Terms and Documents]
 	\label{def:document}
@@ -26,8 +26,8 @@
 		Consider the following short phrases
 		
 		\begin{enumerate}
-			\item math 360 is a math class
-			\item cdps 101 is a boring lecture
+			\item MATH 360 is a math class
+			\item CDPS 101 is a boring lecture
 			\item mathematics lecture was great
 		\end{enumerate}
 		
@@ -83,7 +83,7 @@
 		\end{ex}
 
 		\begin{defn}[Document Vector]
-			Given a document collection \(\dc\) with \(M\) unique terms \(\terms = [\term_1, \term_2, \dotsc, \term_n ]\), each document \(\doc\) can be represented by an \(M\)-dimensional vector.
+			Given a document collection \(\dc\) with \(M\) unique terms \(\terms = [\term_1, \term_2, \dotsc, \term_M ]\), each document \(\doc\) can be represented by an \(M\)-dimensional vector.
 			\[
 				\vec{\doc} = 
 				\left[
@@ -91,7 +91,7 @@
 					\tfidf(\term_1, \doc) \\
 					\tfidf(\term_2, \doc) \\
 					\vdots \\
-					\tfidf(\term_n, \doc)
+					\tfidf(\term_M, \doc)
 				\end{array}
 				\right]
 			\]
@@ -173,7 +173,7 @@
 		
 		\begin{defn}[Search Query]
 		\label{def:search-query}
-			A search query \(\q\) is simply a document (\cref{def:document}).  The top-\(k\) answers to \(\q\) with respect to a collection \(\dc\) is defined as the \(k\) documents, \(\{\doc_1, \doc_2, \dotsc, d_k\}\) in \(\dc\), such that \(\{\vec{\doc_1}, \vec{\doc_2}, \dotsc, \vec{d_k}\}\) are the closest vectors to \(\vec{\q}\) using a Euclidean distance measure in \(\mathbb{R}^N\).
+			A search query \(\q\) is simply a document (\cref{def:document}).  The top-\(k\) answers to \(\q\) with respect to a collection \(\dc\) is defined as the \(k\) documents, \(\{\doc_1, \doc_2, \dotsc, d_k\}\) in \(\dc\), such that \(\{\vec{\doc_1}, \vec{\doc_2}, \dotsc, \vec{d_k}\}\) are the closest vectors to \(\vec{\q}\) using the Euclidean distance measure in \(\mathbb{R}^N\).
 		\end{defn}
 		
 		\begin{ex}
@@ -347,9 +347,9 @@
 			\end{figure}
 		\end{ex}
 			
-	\subsection{Pros and Cons of the Document Model}
-	\label{sec:pros-cons-document-model}
-		There are numerous reasons to use the document model.  The most significant reason is that it allows users without domain knowledge and working knowledge of a complex query language such as \gls{sql} to find information.
+	\subsection{Benefits and Drawbacks of the Document Model}
+	\label{sec:benefits-drawbacks-document-model}
+		There are numerous reasons to use the document model.  The most significant reason is that it allows users without domain knowledge and working knowledge of a complex query language such as \gls{sql} to find information.  Another major advantage is that in the document model we do not need to design a database schema to store information.
 		
 		\begin{ex}[Simple Queries]
 			Find all documents related to ``mathematics'' or ``lecture''.  The result of the query \(\q\) is

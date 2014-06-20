@@ -5,14 +5,14 @@
 	
 	In this chapter we provide background and motivation for this thesis.  We will discuss the evolution of data models and their corresponding query languages.  We feel that modern day data sets call for a new data model with a new query language.
 	
-	We provide a formal definition of the relational data model, discuss its merits, its shortcomings, and contrast it to the document data model.  The document model, contrary to the relational model, permits fast and flexible keyword search without requiring explicit domain knowledge of the data.
+	We provide a formal definition of the relational data model, discuss its merits, its shortcomings, and contrast it to the document data model.  The document model, contrary to the relational model, permits fast and flexible keyword search without requiring explicit domain knowledge of the data, such as the join path between two entities.
 	
 	\input{background}
 	\input{relational-model}
 	\input{document-model}
 	
 	\section{Problem}
-		Each of these data models has its own pros and cons.
+		Each of these data models has its own benefits and drawbacks.
 		
 		\begin{itemize}
 			\item The relational model is built upon the enforcement of constraints.  These constraints exist to protect the integrity of the data.
@@ -22,11 +22,11 @@
 		
 		One must choose between highly normalized, structured data and fast, flexible keyword search.
 		
-		What is needed is a system that is capable of automatically transforming data from the relational model to the document model.  This would provide the benefits of both models.  Such a system would require some initial configuration, but would require little user intervention afterwards.
+		What is needed is a system that is capable of \textit{automatically transforming data from the relational model to the document model}.  This would provide the benefits of both models.  Such a system would require some initial configuration, but would require little user intervention afterwards.
 	
 	\section{Thesis Statement \& Scope of Research}
 		\begin{displayquote}
-			\textbf{Thesis Statement:}  A system could be built that is capable of transforming data from the relational model to the document model.  The transformation is reversible, allowing the original data model to be recovered.  This system would use the keyword search capabilities, along with the relational information, to quickly discover related fragments of information.
+			\textbf{Thesis Statement:}  A system could be built that is capable of transforming data from the relational model to the document model.  The transformation is reversible, allowing the original data model to be recovered.  This system would use the keyword search capabilities of the document model, along with the relational information, to quickly discover related fragments of information.
 		\end{displayquote}
 		
 		To achieve the goal of our thesis statement, we must
@@ -40,15 +40,15 @@
 	 \section{Contributions}
 	 	We provide a formal definition for a system that is capable of transforming data from the relational model to the document model.  By performing this transformation, we gain the flexible search characteristics of the document model.
 	 	
-	 	This transformation is done in such a way that it is reversible.  The relational information is encoded in a document form, making the transformation reversible.  This allows us to perform graph search over documents.
+	 	This transformation is done in such a way that it is reversible.  The relational information is encoded in a document form, making it possible to transform back from the document model to the relational model.
 	 	
-	 	In addition, we investigate the effect a concurrent graph search implementation has on the performance.  We believe that the rate of growth of the search time will be reduced by performing the graph search concurrently.
+	 	The encoding of this relational information allows us to perform graph search over documents.  As graph search is slow, we investigate the effect a concurrent graph search implementation has on the performance.  We believe that the rate of growth of the search time will be reduced by performing the graph search concurrently.
 	
 	\section{Outline of Thesis}
-		\cref{chap:best-of-both-worlds} presents a framework for the transformation between the two document models.  It demonstrates how to encode named tuples as documents.  It further describes a method of encoding relational data in the document data model, permitting iterative graph search.
+		\cref{chap:best-of-both-worlds} presents a framework for the transformation between the relational and document models.  It demonstrates how to encode named tuples as documents.  It further describes a method of encoding relational data in the document data model, thus permitting iterative graph search.
 		
-		\cref{chap:along-came-clojure} describes the details of our implementation the data transformation and query operators for graph search in the linked document space.  Our choice of utilizing a modern functional programming language for our implementation makes high degree of concurrency possible.
+		\cref{chap:along-came-clojure} describes the details of our implementation, including the data transformation and query operators for graph search in the linked document space.  Our choice of utilizing a modern functional programming language for our implementation makes high degree of concurrency possible.
 		
-		\cref{chap:experimental-evaluation} provides further justification to our choice of data model mapping and the choice of programming language used.  Through a series of experiments, we see that our proposal allows a tight integration of the relational database engines and keyword search libraries.  Furthermore, the implementation enjoys a linear speed up with respect to the number of processors available.
+		\cref{chap:experimental-evaluation} provides further justification to our data model mapping approach and the choice of programming language used.  Through a series of experiments, we see that our proposal allows a tight integration of the relational database engines and keyword search libraries.  Furthermore, the implementation enjoys a linear speed up with respect to the number of processors available.
 		
 		Finally, in \cref{chap:conclusion} we present a summary of our findings.  We highlight limitations of the work and suggest topics for future research.  We provide an account of the lessons learned while performing this research and building the system.

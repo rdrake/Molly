@@ -55,6 +55,17 @@
 	%- using document model to perform graph based search
 	
 	\section{Introduction}
+		\begin{frame}{Background}
+			\begin{itemize}
+				\item Vast quantities of information
+				\item Much of it in in unstructured or semi-structured form
+					\begin{itemize}
+						\item e.g.~books, web pages
+					\end{itemize}
+				\item Increasing amount in relational databases
+			\end{itemize}
+		\end{frame}
+		
 		\begin{frame}{Motivation}
 			\begin{itemize}
 				\item Two important data models:
@@ -188,6 +199,118 @@
 			Where \(\egraph\) is the entity group, and \(V(\egraph)\) is the set of named tuples in the entity group.
 		\end{frame}
 		
+		\begin{frame}{Example Transformation}
+			Encode the following named tuples into an entity group
+			
+			\begin{columns}[T]
+				\begin{column}{.5\textwidth}
+					\begin{table}
+						\centering
+						
+						\begin{tabular}{ll}
+							\toprule
+							Attribute & Value \\
+							\midrule
+							id & MATH \\
+							name & Mathematics \\
+							\bottomrule
+						\end{tabular}
+						
+						\caption{Sample named tuple from the \alert{Subject} relation}
+					\end{table}
+				\end{column}
+				\hfill
+				\begin{column}{.5\textwidth}
+					\begin{table}
+						\centering
+						
+						\begin{tabular}{ll}
+							\toprule
+							Attribute & Value \\
+							\midrule
+							code & MATH 360 \\
+							title & Complex Analysis \\
+							subject & MATH \\
+							\bottomrule
+						\end{tabular}
+						
+						\caption{Sample named tuple from the \alert{Course} relation}
+					\end{table}
+				\end{column}
+			\end{columns}
+		\end{frame}
+		
+		\begin{frame}{Example Transformation:  Conversion}
+			Perform analysis on every attribute value and store in a field in a document
+			
+			\begin{columns}[T]
+				\begin{column}{.5\textwidth}
+					\begin{table}
+						\centering
+						
+						\begin{tabular}{ll}
+							\toprule
+							Field & Terms \\
+							\midrule
+							\_\_id\_\_ & \{subject|math\} \\
+							\_\_class\_\_ & \{subject\} \\
+							\_\_type\_\_ & \{entity\} \\
+							id & \{math\} \\
+							name & \{mathematics\} \\
+							\bottomrule
+						\end{tabular}
+						
+						\caption{Document representing named tuple from the \alert{Subject} relation on previous slide}
+					\end{table}
+				\end{column}
+				\hfill
+				\begin{column}{.5\textwidth}
+					\begin{table}
+						\centering
+						
+						\begin{tabular}{ll}
+							\toprule
+							Field & Terms \\
+							\midrule
+							\_\_id\_\_ & \{course|math\_360\} \\
+							\_\_class\_\_ & \{course\} \\
+							\_\_type\_\_ & \{entity\} \\
+							code & \{math, 360\} \\
+							title & \{complex, analysis\} \\
+							subject & \{math\} \\
+							\bottomrule
+						\end{tabular}
+						
+						\caption{Sample named tuple from the \alert{Course} relation}
+					\end{table}
+				\end{column}
+			\end{columns}
+		\end{frame}
+		
+		\begin{frame}{Example Transformation:  Encoding}
+			\begin{itemize}
+				\item Newly transformed documents joined by a foreign key
+					\begin{itemize}
+						\item \(\theta = \text{Course(subject)} \rightarrow \text{Subject(id)}\)
+					\end{itemize}
+				\item Require an indexing document to encode this relationship
+			\end{itemize}
+			
+			\begin{table}
+				\begin{tabular}{ll}
+					\toprule
+					Field & Terms \\
+					\midrule
+					\_\_class\_\_ & course\_subject \\
+					\_\_type\_\_ & group \\
+					entities & \{course|math\_360, subject|math\} \\
+					\bottomrule
+				\end{tabular}
+				
+				\caption{Indexing document, \(x\), of previous documents}
+			\end{table}
+		\end{frame}
+		
 		\begin{frame}{Fuzzy Search at Tuple-Level}
 			The encoding allows us to perform the following:
 			
@@ -207,6 +330,20 @@
 			\begin{verbatim}
 (boolean-query [[(query :type :group) :and]
                 [(query :entities id) :and]])
+			\end{verbatim}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Graph Search Over Document Space}
+			Example query to find entity groups related to UID ``subject|math''
+			
+			\[
+				\text{+type:group +entities:subject|math}
+			\]
+			
+			\begin{verbatim}
+(boolean-query [[(query :type :group) :and]
+                [(query :entities ``subject|math'') :and]])
+=> #{``course|math_360''}
 			\end{verbatim}
 		\end{frame}
 		
@@ -263,11 +400,17 @@
 			\end{itemize}
 		\end{frame}
 		
+		\begin{frame}{Benchmarking Query Example}
+			\[
+				\text{Instructor} \xrightarrow{1} \text{Schedule} \xrightarrow{2} \text{Section} \xrightarrow{3} \text{Course} \xrightarrow{4} \ldots \xrightarrow{n} \ldots
+			\]
+		\end{frame}
+		
 		\begin{frame}{Results}
 			\begin{figure}
 				\centering
 				\input{figures/boxplot-bfs.pgf}
-				\caption{Growth of runtime of BFS, by hops}
+				%\caption{Growth of runtime of BFS, by hops}
 			\end{figure}
 		\end{frame}
 		
@@ -275,7 +418,7 @@
 			\begin{figure}
 				\centering
 				\input{figures/boxplot-bfs-atom.pgf}
-				\caption{Growth of runtime of BFS with atoms, by hops}
+				%\caption{Growth of runtime of BFS with atoms, by hops}
 			\end{figure}
 		\end{frame}
 		
@@ -283,7 +426,7 @@
 			\begin{figure}
 				\centering
 				\input{figures/boxplot-bfs-ref.pgf}
-				\caption{Growth of runtime of BFS with references, by hops}
+				%\caption{Growth of runtime of BFS with references, by hops}
 			\end{figure}
 		\end{frame}
 		
@@ -337,4 +480,12 @@
 	\section*{}
 	
 	\frame{\titlepage}
+	
+	\begin{frame}{Persistent Data Structures}
+			\begin{figure}
+				\centering
+				
+				\includegraphics[scale=0.25]{../document/figures/diagrams/persistent-data-structure}
+			\end{figure}
+		\end{frame}
 \end{document}
