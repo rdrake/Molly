@@ -129,7 +129,7 @@
 				\label{clj:with-meta-internal-rep}
 			\end{figure}
 			
-			Once the internal representation is constructed, it may be transformed into a document.  The mapping of a map to document is trivial; a field is created for every key in the map and the value corresponding to the key is the value of the field.  Unfortunately Lucene does not facilitate the storage of metadata.  Therefore the system must deal with metadata in a different way.
+			Once the internal representation is constructed, it may be transformed into a document.  The mapping of a map to document is simple; a field is created for every key in the map and the value corresponding to the key is the value of the field.  Unfortunately Lucene does not facilitate the storage of metadata.  Therefore the system must deal with metadata in a different way.
 			
 			The system modifies each key of the metadata; two underscores are prepended and appended to the key name.  This allows the system to differentiate between metadata and attributes.  The transformation from internal representation to document is given in \cref{tbl:internal-rep-to-document}.
 			

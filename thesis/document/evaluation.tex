@@ -108,90 +108,75 @@
 				We see in \cref{tbl:index-growth-entity-groups} the indexing time increases minimally between 0 and 1 group.  Few entity groups are created by the first entity schema.  Contrast this to the indexing time between 1 and 2 groups, which increases considerably.  The number of entity groups also grew considerably, explaining the time increase.
 			
 			\subsubsection{Graph Search}
-				The worst-case performance of \gls{bfs} is \(\mathcal{O}(n^2)\).  This is reflected in \cref{fig:growth} which follows an exponential growth curve.  In an attempt to mitigate the rapid increase in search time, concurrent variants of \gls{bfs} were also implemented and benchmarked.
+				The worst-case performance of \gls{bfs} is \(\mathcal{O}(n^2)\).  This is reflected in \cref{fig:growth} which follows a polynomial growth curve.  In an attempt to mitigate the rapid increase in search time, concurrent variants of \gls{bfs} were also implemented and benchmarked.
 				
 				\begin{figure}
 					\centering
-					
-					\input{figures/charts/boxplot-bfs.pgf}
-					\caption{Growth of \gls{bfs}}
-					\label{fig:growth-bfs}
-				\end{figure}
-				
-				\begin{figure}
-					\centering
-					
-					\input{figures/charts/boxplot-bfs-atom.pgf}
-					\caption{Growth of \gls{bfs} using atoms}
-					\label{fig:growth-bfs-atoms}
-				\end{figure}
-				
-				\begin{figure}
-					\centering
-					
-					\input{figures/charts/boxplot-bfs-ref.pgf}
-					\caption{Growth of \gls{bfs} using references}
-					\label{fig:growth-bfs-ref}
-				\end{figure}
-				
-				\begin{figure}
-					\centering
-					%\includegraphics[scale=0.9]{figures/charts/growth.pdf}
-					\input{figures/charts/growth.pgf}
+					\input{figures/charts/lineplot.pgf}
 					\caption{Growth of each graph search algorithm implementation by number of hops}
 					\label{fig:growth}
 				\end{figure}
 				
-				We see in \cref{fig:growth} the rate of growth of \gls{bfs} is as expected.  The rate of growth of \gls{bfs} with references and \gls{bfs} with atoms is nearly linear.  The atom implementation is slightly more performant as it lacks some of the overhead associated with references.
+				We see in \cref{fig:growth-bfs} the rate of growth of \gls{bfs} is as expected.  The rate of growth of \gls{bfs} with references (\cref{fig:growth-bfs-refs}) and \gls{bfs} with atoms (\cref{fig:growth-bfs-atoms}) is nearly linear.  The atom implementation is slightly more performant as it lacks some of the overhead associated with references.
+				
+				\begin{figure}
+					\begin{subfigure}[b]{1.0\linewidth}
+						\input{figures/charts/boxplot-bfs.pgf}
+						\caption{Growth of \gls{bfs}}
+						\label{fig:growth-bfs}
+					\end{subfigure}
+					\begin{subfigure}[b]{1.0\linewidth}
+						\input{figures/charts/boxplot-bfs-atom.pgf}
+						\caption{Growth of \gls{bfs} using atoms}
+						\label{fig:growth-bfs-atoms}
+					\end{subfigure}
+					\begin{subfigure}[b]{1.0\linewidth}
+						\input{figures/charts/boxplot-bfs-ref.pgf}
+						\caption{Growth of \gls{bfs} using references}
+						\label{fig:growth-bfs-refs}
+					\end{subfigure}
+				\end{figure}
+				
+				The difference in rate of growth is further illustrated in \cref{fig:distribution-hops}.  As seen previously, \cref{subfig:1-hop} shows little difference in runtime between the three methods.  The difference becomes clearer in \cref{subfig:2-hops}, and by \cref{subfig:8-hops}, the difference is obvious.
 				
 				\begin{figure}
 					\begin{subfigure}[b]{.5\linewidth}
-						\includegraphics[scale=0.45]{figures/charts/1_hops.pdf}
+						\input{figures/charts/boxplot-1-hops.pgf}
 						\caption{1 Hop}
 						\label{subfig:1-hop}
 					\end{subfigure}
 					\begin{subfigure}[b]{.5\linewidth}
-						\includegraphics[scale=0.45]{figures/charts/2_hops.pdf}
+						\input{figures/charts/boxplot-2-hops.pgf}
 						\caption{2 Hops}
 						\label{subfig:2-hops}
 					\end{subfigure}
-				\end{figure}
-				\begin{figure}
-					\ContinuedFloat
 					\begin{subfigure}[b]{.5\linewidth}
-						\includegraphics[scale=0.45]{figures/charts/3_hops.pdf}
+						\input{figures/charts/boxplot-3-hops.pgf}
 						\caption{3 Hops}
 						\label{subfig:3-hops}
 					\end{subfigure}
 					\begin{subfigure}[b]{.5\linewidth}
-						\includegraphics[scale=0.45]{figures/charts/4_hops.pdf}
+						\input{figures/charts/boxplot-4-hops.pgf}
 						\caption{4 Hops}
 						\label{subfig:4-hops}
 					\end{subfigure}
-				\end{figure}
-				
-				\begin{figure}
-					\ContinuedFloat
 					\begin{subfigure}[b]{.5\linewidth}
-						\includegraphics[scale=0.45]{figures/charts/5_hops.pdf}
+						\input{figures/charts/boxplot-5-hops.pgf}
 						\caption{5 Hops}
 						\label{subfig:5-hops}
 					\end{subfigure}
 					\begin{subfigure}[b]{.5\linewidth}
-						\includegraphics[scale=0.45]{figures/charts/6_hops.pdf}
+						\input{figures/charts/boxplot-6-hops.pgf}
 						\caption{6 Hops}
 						\label{subfig:6-hops}
 					\end{subfigure}
-				\end{figure}
-				\begin{figure}
-					\ContinuedFloat
 					\begin{subfigure}[b]{.5\linewidth}
-						\includegraphics[scale=0.45]{figures/charts/7_hops.pdf}
+						\input{figures/charts/boxplot-7-hops.pgf}
 						\caption{7 Hops}
 						\label{subfig:7-hops}
 					\end{subfigure}
 					\begin{subfigure}[b]{.5\linewidth}
-						\includegraphics[scale=0.45]{figures/charts/8_hops.pdf}
+						\input{figures/charts/boxplot-8-hops.pgf}
 						\caption{8 Hops}
 						\label{subfig:8-hops}
 					\end{subfigure}
@@ -199,8 +184,6 @@
 					\caption{Distribution of samples per method, broken down by hops}
 					\label{fig:distribution-hops}
 				\end{figure}
-				
-				The difference in rate of growth is further illustrated in \cref{fig:distribution-hops}.  As seen previously, \cref{subfig:1-hop} shows little difference in runtime between the three methods.  The difference becomes clearer in \cref{subfig:2-hops}, and by \cref{subfig:8-hops}, the difference is obvious.
 				
 				By using a profiling tool\footnote{\url{http://yourkit.com/}}, we see the behaviour of Clojure's concurrency implementation.
 				

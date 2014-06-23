@@ -52,7 +52,7 @@ class LinePlot(Graph):
         plt.legend(loc="best")
 
         fig.set_size_inches(*self.figsize)
-        plt.savefig(os.path.join(self.args.output_path, "lineplot.pdf"))
+        plt.savefig(os.path.join(self.args.output_path, "lineplot.pgf"))
 
 if __name__ == "__main__":
     plot = LinePlot("wut", "Line plots for all samples", "Maximum Number of Hops", "Elapsed Time (s)")

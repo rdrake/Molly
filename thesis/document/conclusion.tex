@@ -18,7 +18,7 @@
 		
 		Our implementation, written in Clojure, was introduced in \cref{chap:along-came-clojure}.  We demonstrated the benefit of implementing the system in a functional language.  We utilized the core concepts of the functional programming paradigm to provide a concurrent implementation of graph search algorithms.
 		
-		We evaluated our implementation in \cref{chap:experimental-evaluation}.  The data corpus was introduced and the methodology explained.  Our findings confirmed our hypothesis that a concurrent graph search implementation would produce a noticeable \todo{Not precise} reduction in graph search time.  Finally, we discussed several potential threats to validity of the results.
+		We evaluated our implementation in \cref{chap:experimental-evaluation}.  The data corpus was introduced and the methodology explained.  Our findings confirmed our hypothesis that a concurrent graph search implementation would produce a noticeable (polynomial to linear) reduction in graph search time.  Finally, we discussed several potential threats to validity of the results.
 	
 	\section{Limitations}
 	\label{sec:limitations}
@@ -49,7 +49,7 @@
 		The system evaluation in \cref{chap:experimental-evaluation} yielded several important insights.
 		
 		\begin{itemize}
-			\item We have found that the simplest algorithms are the easiest to parallelize.  The reduced complexity, and thus state, reduces the amount of shared data that must be synchronized.  This allows for higher concurrency.
+			\item Some algorithms are naturally parallelizable, while others are inherently sequential.  Those that are natural to parallelize tend to have little shared state.  Less shared state reduces the amount of synchronization, permitting higher concurrency.
 			\item Clojure's \gls{stm} implementation is simple to use and effective.  A few simple functions provide a powerful concurrency model.
 			\item Sometimes a simpler approach to concurrency is the most appropriate one.  In our evaluation, atoms provided better performance than references.  Atoms allow for finer granularity in concurrency, reducing the overhead associated with references.  This is desirable in situations that do not require much shared state.
 			\item Clojure is a powerful language that encouraged us to write correct code first, then optimize it later.  The transition to a concurrent implementation of \gls{bfs} was relatively straight forward, as was the switch from atoms to references.
