@@ -135,6 +135,8 @@
 						\caption{Growth of \gls{bfs} using references}
 						\label{fig:growth-bfs-refs}
 					\end{subfigure}
+					
+					\caption{Growth of various \gls{bfs} implementations}
 				\end{figure}
 				
 				The difference in rate of growth is further illustrated in \cref{fig:distribution-hops}.  As seen previously, \cref{subfig:1-hop} shows little difference in runtime between the three methods.  The difference becomes clearer in \cref{subfig:2-hops}, and by \cref{subfig:8-hops}, the difference is obvious.
@@ -198,6 +200,12 @@
 				
 				In \cref{fig:runtime-threads} we see that a number of threads are created and destroyed.  Recall a new thread is created every time the frontier is populated.
 	
+	\section{Complexity Analysis}
+	\label{sec:complexity-analysis}
+		The initial part of the search operation, retrieval of one or more records, requires searching through a hash table.  In the best-case scenario, the time complexity lookup is constant time (\(\mathcal{O}(1)\)), while in the worst-case it is linear (\(\mathcal{O}(n)\)).
+		
+		The second part of the search operation, graph search, uses \gls{bfs}.  In the worst-case scenario, every vertex and edge in the graph must be visited, leading to a time complexity of \(\mathcal{O}(\abs{V} + \abs{E})\).  Depending on the sparsity of the graph, the complexity may be closer to \(\mathcal{O}(n^2)\).  This is clearly visible in \cref{fig:growth-bfs} which shows the growth of \gls{bfs}.
+	
 	\section{Threats to Validity}
 	\label{sec:threats-to-validity}
 		No experiment is without its flaws.  In this section we discuss the factors that may affect the validity of the experimental evaluation.  These factors are referred to as threats to validity.
@@ -215,5 +223,3 @@
 		The assessment of system performance was not without its flaws.  These were discussed in \cref{sec:threats-to-validity}.  The primary threat to validity was the lack of comparison between other systems and datasets.  It is difficult to generalize the results as a result.
 		
 		Benchmarking any code is difficult.  The process may not have exclusive control over the processor, memory is paged in and out, disk I/O is cached, etc.  The \gls{jvm} complicates matters with \gls{jit} compilation and garbage collection.
-		
-		\todo{Big data, complexity analysis, one dataset/experiment, no related works}

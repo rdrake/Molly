@@ -1,12 +1,5 @@
 \chapter{Conclusion}
 \label{chap:conclusion}
-
-% We provide a formal definition for a system that is capable of transforming data from the relational model to the document model.  By performing this transformation, we gain the flexible search characteristics of the document model.
-% 	 	
-% This transformation is done in such a way that it is reversible.  In order to be reversible, the relational information is encoded in a document form.  This allows us to perform graph search over documents.
-% 	 	
-% In addition, we investigate the effect a concurrent graph search implementation has on the performance.  We believe that the rate of growth of the search time will be reduced by performing the graph search concurrently.
-
 	\section{Summary}
 		While the relational model is a powerful and well understood method of storing data, it is not without its shortcomings.  The rigidity of the relational model comes at the cost of usability.  A change to the data model may require a rewrite of queries to account for the different join paths, increasing the cognitive burden on users.
 		
@@ -39,7 +32,7 @@
 	\section{Future Work}
 		Several limitations of the tool were identified in \cref{sec:limitations}.  These limitations are ideal candidates for future work.
 		
-		In our work, we re-constructed the document database every time a change occurred to the relational database.  A future system could listen for changes to the relational database and mirror those on the document database.  With currently full-text search databases, this would require the deletion and possibly re-insertion of documents.  As no foreign key constraints are enforced on documents by the document database, it would be difficult to ensure correctness.
+		In our work, we re-constructed the document database every time a change occurred to the relational database.  A future system could listen for changes to the relational database and mirror those on the document database.  With currently full-text search databases, this would require the deletion and possibly re-insertion of documents.  As no foreign key constraints are enforced on documents by the document database, it would be difficult to ensure correctness.  This limits the system's usefulness in ``big data.''
 		
 		Automatically generating a configuration for a user to start from would be a far simpler task.  The system would require knowledge of the particular \gls{rdbms}.  With this, it would be possible to locate relations, their attributes, and any key constraints.
 		
